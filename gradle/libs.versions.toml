@@ -1,0 +1,27 @@
+[versions]
+unstyled = "1.49.6"
+kotlin = "2.3.21"
+kotlinXDate = "0.7.1"
+compose = "1.10.3"
+hotreload = "1.1.0"
+ktorClient = "3.3.1"
+iconsLucide = "1.1.1"
+navigation = "2.9.0-beta03"
+agp = "9.1.0"
+android-compile-sdk = "37"
+android-min-sdk = "21"
+
+[libraries]
+composables-unstyled = { module = "com.composables:core", version.ref = "unstyled" }
+composables-icons-lucide = { module = "com.composables:icons-lucide", version.ref = "iconsLucide" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorClient" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinXDate" }
+compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose" }
+androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
+
+[plugins]
+compose = { id = "org.jetbrains.compose", version.ref = "compose" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+compose-hotreload = { id = "org.jetbrains.compose.hot-reload", version.ref = "hotreload" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+android-library = { id = "com.android.library", version.ref = "agp" }
