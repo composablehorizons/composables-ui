@@ -20,11 +20,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Sun
-import com.composables.one.components.Card
-import com.composables.one.components.Icon
-import com.composables.one.components.OutlinedButton
-import com.composables.one.components.PrimaryButton
-import com.composables.one.components.Text
+import com.composables.one.Card
+import com.composables.one.Icon
+import com.composables.one.OutlinedButton
+import com.composables.one.PrimaryButton
+import com.composables.one.Text
 import com.composables.one.styling.accent
 import com.composables.one.styling.colors
 import com.composables.one.styling.onAccent

@@ -8,8 +8,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.composables.one.components.TextField
-import com.composables.one.components.Text
+import com.composables.one.TextField
+import com.composables.one.Text
 
 @Composable
 fun TextFieldExample() {

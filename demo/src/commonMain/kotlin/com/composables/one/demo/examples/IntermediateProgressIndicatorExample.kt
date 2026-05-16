@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.composables.one.components.IntermediateProgressIndicator
-import com.composables.one.components.Text
+import com.composables.one.IntermediateProgressIndicator
+import com.composables.one.Text
 
 @Composable
 fun IntermediateProgressIndicatorExample() {

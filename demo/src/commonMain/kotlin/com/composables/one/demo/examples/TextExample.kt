@@ -1,7 +1,7 @@
 package com.composables.one.demo.examples
 
 import androidx.compose.runtime.Composable
-import com.composables.one.components.Text
+import com.composables.one.Text
 
 @Composable
 fun TextExample() {

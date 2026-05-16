@@ -20,12 +20,12 @@ import com.composables.icons.lucide.House
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.PersonStanding
 import com.composables.icons.lucide.Search
-import com.composables.one.components.BottomNavigationBar
-import com.composables.one.components.Icon
-import com.composables.one.components.PrimaryTab
-import com.composables.one.components.TabGroup
-import com.composables.one.components.TabPanel
-import com.composables.one.components.Text
+import com.composables.one.BottomNavigationBar
+import com.composables.one.Icon
+import com.composables.one.PrimaryTab
+import com.composables.one.TabGroup
+import com.composables.one.TabPanel
+import com.composables.one.Text
 import com.composables.one.styling.title
 import com.composeunstyled.theme.Theme
 

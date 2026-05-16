@@ -11,11 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.CircleAlert
 import com.composables.icons.lucide.Lucide
-import com.composables.one.components.CenteredAlert
-import com.composables.one.components.Icon
-import com.composables.one.components.OutlinedButton
-import com.composables.one.components.PrimaryButton
-import com.composables.one.components.Text
+import com.composables.one.CenteredAlert
+import com.composables.one.Icon
+import com.composables.one.OutlinedButton
+import com.composables.one.PrimaryButton
+import com.composables.one.Text
 
 @Composable
 fun CenteredAlertExample() {

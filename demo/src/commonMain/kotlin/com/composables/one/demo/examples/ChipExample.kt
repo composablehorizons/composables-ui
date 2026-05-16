@@ -6,13 +6,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.composables.one.components.Icon
-import com.composables.one.components.Chip
+import com.composables.one.Icon
+import com.composables.one.Chip
 import com.composables.icons.lucide.Bath
 import com.composables.icons.lucide.BedDouble
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Ruler
-import com.composables.one.components.Text
+import com.composables.one.Text
 
 @Composable
 fun ChipExample() {

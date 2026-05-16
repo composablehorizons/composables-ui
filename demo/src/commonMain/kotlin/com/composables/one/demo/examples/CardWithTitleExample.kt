@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.composables.one.components.Card
-import com.composables.one.components.OutlinedButton
-import com.composables.one.components.Text
+import com.composables.one.Card
+import com.composables.one.OutlinedButton
+import com.composables.one.Text
 
 @Composable
 fun CardWithTitleExample() {

@@ -6,8 +6,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Pencil
-import com.composables.one.components.Icon
-import com.composables.one.components.IconButton
+import com.composables.one.Icon
+import com.composables.one.IconButton
 
 @Composable
 fun IconButtonExample() {

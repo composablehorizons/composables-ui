@@ -15,11 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.ArrowLeft
 import com.composables.icons.lucide.Lucide
-import com.composables.one.components.AppScaffold
-import com.composables.one.components.Icon
-import com.composables.one.components.IconButton
-import com.composables.one.components.Text
-import com.composables.one.components.TopAppBar
+import com.composables.one.AppScaffold
+import com.composables.one.Icon
+import com.composables.one.IconButton
+import com.composables.one.Text
+import com.composables.one.TopAppBar
 import com.composables.one.styling.OneTheme
 import kotlinx.coroutines.delay
 

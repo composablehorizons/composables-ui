@@ -13,12 +13,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.composables.one.components.Dialog
-import com.composables.one.components.OutlinedButton
-import com.composables.one.components.PrimaryButton
-import com.composables.one.components.TextField
+import com.composables.one.Dialog
+import com.composables.one.OutlinedButton
+import com.composables.one.PrimaryButton
+import com.composables.one.TextField
 import com.composables.one.styling.title
-import com.composables.one.components.Text
+import com.composables.one.Text
 import com.composeunstyled.theme.Theme
 import com.composables.one.styling.textStyles
 

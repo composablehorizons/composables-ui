@@ -1,14 +1,14 @@
 package com.composables.one.demo.examples
 
 import androidx.compose.runtime.Composable
-import com.composables.one.components.Icon
+import com.composables.one.Icon
 import com.composables.icons.lucide.Bell
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Menu
 import com.composables.icons.lucide.Search
-import com.composables.one.components.IconButton
-import com.composables.one.components.TopAppBar
-import com.composables.one.components.Text
+import com.composables.one.IconButton
+import com.composables.one.TopAppBar
+import com.composables.one.Text
 
 @Composable
 fun TopAppBarExample() {

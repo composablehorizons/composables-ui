@@ -18,13 +18,13 @@ import com.composables.icons.lucide.Cog
 import com.composables.icons.lucide.House
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Package
-import com.composables.one.components.BottomNavigationBar
-import com.composables.one.components.Icon
-import com.composables.one.components.PrimaryTab
-import com.composables.one.components.SideBar
-import com.composables.one.components.SideBarItem
-import com.composables.one.components.Text
-import com.composables.one.scaffolds.ScreenScaffold
+import com.composables.one.BottomNavigationBar
+import com.composables.one.Icon
+import com.composables.one.PrimaryTab
+import com.composables.one.SideBar
+import com.composables.one.SideBarItem
+import com.composables.one.Text
+import com.composables.one.ScreenScaffold
 
 @Composable
 fun ScreenScaffoldExample() {

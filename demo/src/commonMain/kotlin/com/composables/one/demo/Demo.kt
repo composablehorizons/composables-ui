@@ -33,10 +33,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.composables.icons.lucide.ArrowLeft
 import com.composables.icons.lucide.Lucide
-import com.composables.one.components.Icon
-import com.composables.one.components.IconButton
-import com.composables.one.components.Text
-import com.composables.one.components.TopAppBar
+import com.composables.one.Icon
+import com.composables.one.IconButton
+import com.composables.one.Text
+import com.composables.one.TopAppBar
 import com.composables.one.demo.examples.AlertExample
 import com.composables.one.demo.examples.AppScaffoldExample
 import com.composables.one.demo.examples.AuthScreenScaffoldExample

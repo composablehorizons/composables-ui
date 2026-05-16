@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.composables.one.components.Avatar
+import com.composables.one.Avatar
 import composables_one.demo.generated.resources.Res
 import composables_one.demo.generated.resources.woman_1
 import org.jetbrains.compose.resources.painterResource

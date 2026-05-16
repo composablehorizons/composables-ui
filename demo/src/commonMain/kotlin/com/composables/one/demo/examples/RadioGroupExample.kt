@@ -14,10 +14,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.composables.one.components.PrimaryButton
-import com.composables.one.components.RadioButton
-import com.composables.one.components.RadioGroup
-import com.composables.one.components.Text
+import com.composables.one.PrimaryButton
+import com.composables.one.RadioButton
+import com.composables.one.RadioGroup
+import com.composables.one.Text
 
 @Composable
 fun RadioGroupExample() {

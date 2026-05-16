@@ -11,8 +11,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.composables.one.components.Text
-import com.composables.one.components.TimePicker
+import com.composables.one.Text
+import com.composables.one.TimePicker
 import com.composables.one.styling.textStyles
 import com.composables.one.styling.title
 import com.composeunstyled.theme.Theme

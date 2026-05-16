@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.composables.one.components.Picker
+import com.composables.one.Picker
 
 @Composable
 fun PickerExample() {

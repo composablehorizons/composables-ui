@@ -8,7 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.composables.one.components.LinearProgressIndicator
+import com.composables.one.LinearProgressIndicator
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 

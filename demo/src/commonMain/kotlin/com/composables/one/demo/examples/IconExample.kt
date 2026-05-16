@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.House
 import com.composables.icons.lucide.Lucide
-import com.composables.one.components.Icon
+import com.composables.one.Icon
 
 @Composable
 fun IconExample() {
