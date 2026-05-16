@@ -59,7 +59,7 @@ fun GhostButton(
     }
     val indication = if (isBright(overriddenBackgroundColor)) Theme[indications][bright] else Theme[indications][dim]
 
-    UnstyledButton(
+    OneButton(
         onClick = onClick,
         shape = shape,
         backgroundColor = overriddenBackgroundColor,
@@ -80,4 +80,3 @@ fun GhostButton(
         }
     }
 }
-

@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -40,8 +42,14 @@ import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.minimumInteractiveComponentSize
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
-import com.composeunstyled.UnstyledRadioButton
 import com.composeunstyled.UnstyledRadioGroup
+import com.composeunstyled.RadioButton as UnstyledRadioButton
+import com.composeunstyled.RadioGroupScope as UnstyledRadioGroupScope
+
+class RadioGroupScope internal constructor(
+    private val columnScope: ColumnScope,
+    internal val unstyledScope: UnstyledRadioGroupScope,
+) : ColumnScope by columnScope
 
 
 @Sample("RadioGroupExample")
@@ -52,7 +60,7 @@ fun RadioGroup(
     modifier: Modifier = Modifier,
     title: (@Composable () -> Unit)? = null,
     contentDescription: String? = null,
-    content: @Composable ColumnScope.() -> Unit,
+    content: @Composable RadioGroupScope.() -> Unit,
 ) {
     Column(modifier) {
         if (title != null) {
@@ -64,18 +72,18 @@ fun RadioGroup(
         UnstyledRadioGroup(
             value = value,
             onValueChange = onValueChange,
-            contentDescription = contentDescription,
+            accessibilityLabel = contentDescription,
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                content()
+                RadioGroupScope(this, this@UnstyledRadioGroup).content()
             }
         }
     }
 }
 
 @Composable
-fun RadioButton(
+fun RadioGroupScope.RadioButton(
     option: String,
     selected: Boolean,
     content: @Composable () -> Unit,
@@ -84,19 +92,24 @@ fun RadioButton(
     val focused by interactionSource.collectIsFocusedAsState()
     val outlineColor = if (focused) Theme[colors][focusRing] else Theme[colors][outline]
 
-    UnstyledRadioButton(
-        value = option,
-        shape = Theme[shapes][medium],
-        backgroundColor = Theme[colors][card],
-        contentColor = Theme[colors][onCard],
-        modifier = Modifier.fillMaxWidth().outline(2.dp, outlineColor, Theme[shapes][medium]).minimumInteractiveComponentSize(),
-        contentPadding = PaddingValues(16.dp),
-        interactionSource = interactionSource,
-    ) {
-        RadioIcon(selected)
-        Spacer(Modifier.width(16.dp))
-        Column {
-            content()
+    with(unstyledScope) {
+        UnstyledRadioButton(
+            value = option,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Theme[colors][card], Theme[shapes][medium])
+                .outline(2.dp, outlineColor, Theme[shapes][medium])
+                .minimumInteractiveComponentSize()
+                .padding(PaddingValues(16.dp)),
+            interactionSource = interactionSource,
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                RadioIcon(selected)
+                Spacer(Modifier.width(16.dp))
+                Column {
+                    content()
+                }
+            }
         }
     }
 }

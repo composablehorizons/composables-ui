@@ -58,7 +58,7 @@ fun SecondaryButton(
     val overriddenBackgroundColor = backgroundColor.mutate(enabled)
     val indication = if (isBright(backgroundColor)) Theme[indications][dim] else Theme[indications][bright]
 
-    UnstyledButton(
+    OneButton(
         enabled = enabled,
         contentPadding = contentPadding,
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),

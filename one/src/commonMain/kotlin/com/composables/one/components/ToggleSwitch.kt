@@ -1,9 +1,11 @@
 package com.composables.one.components
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -35,11 +37,11 @@ import com.composables.one.styling.primary
 import com.composables.one.styling.shadows
 import com.composables.one.styling.shapes
 import com.composables.one.styling.subtle
-import com.composeunstyled.UnstyledThumb
-import com.composeunstyled.UnstyledToggleSwitch
 import com.composeunstyled.focusRing
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
+import com.composeunstyled.SwitchThumb
+import com.composeunstyled.UnstyledSwitch
 
 @Sample("ToggleSwitchExample")
 @Composable
@@ -63,23 +65,25 @@ fun ToggleSwitch(
         verticalAlignment = Alignment.CenterVertically
     ) {
         val thumbSize = 24.dp
-        UnstyledToggleSwitch(
+        UnstyledSwitch(
             enabled = enabled,
-            toggled = toggled,
-            onToggled = onToggled,
-            shape = shape,
-            backgroundColor = toggleBackgroundColor,
-            contentPadding = PaddingValues(2.dp),
+            checked = toggled,
+            onCheckedChange = onToggled,
             interactionSource = interactionSource,
             modifier = Modifier.width(thumbSize * 2)
+                .background(toggleBackgroundColor, shape)
+                .padding(2.dp)
                 .focusRing(interactionSource, 2.dp, color = Theme[colors][focusRing], shape)
                 .outline(1.dp, Theme[colors][outline], shape),
         ) {
-            UnstyledThumb(
-                shape = CircleShape,
-                color = Theme[colors][onAccent],
-                modifier = Modifier.size(thumbSize).dropShadow(shape = CircleShape, shadow = Theme[shadows][subtle])
-            )
+            SwitchThumb {
+                Box(
+                    Modifier
+                        .size(thumbSize)
+                        .dropShadow(shape = CircleShape, shadow = Theme[shadows][subtle])
+                        .background(Theme[colors][onAccent], CircleShape),
+                )
+            }
         }
     }
 }

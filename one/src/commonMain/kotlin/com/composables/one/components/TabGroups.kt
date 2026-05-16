@@ -1,6 +1,7 @@
 package com.composables.one.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
@@ -37,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -66,18 +68,28 @@ import com.composables.one.styling.shadows
 import com.composables.one.styling.shapes
 import com.composables.one.styling.small
 import com.composables.one.styling.textStyles
-import com.composeunstyled.UnstyledButton
 import com.composeunstyled.LocalContentColor
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.ProvideTextStyle
-import com.composeunstyled.UnstyledTab
-import com.composeunstyled.TabKey
-import com.composeunstyled.UnstyledTabList
 import com.composeunstyled.buildModifier
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 import com.composeunstyled.UnstyledTabGroup
-import com.composeunstyled.UnstyledTabPanel
+import com.composeunstyled.Tab as UnstyledTab
+import com.composeunstyled.TabList as UnstyledTabList
+import com.composeunstyled.TabPanel as UnstyledTabPanel
+import com.composeunstyled.TabGroupScope as UnstyledTabGroupScope
+import com.composeunstyled.TabListScope as UnstyledTabListScope
+
+class TabGroupScope internal constructor(
+    private val columnScope: ColumnScope,
+    internal val unstyledScope: UnstyledTabGroupScope<String>,
+) : ColumnScope by columnScope
+
+class TabListScope internal constructor(
+    private val rowScope: RowScope,
+    val unstyledScope: UnstyledTabListScope<String>,
+) : RowScope by rowScope
 
 @Sample("BottomNavigationBarExample")
 @Sample("TabBarExample")
@@ -85,20 +97,70 @@ import com.composeunstyled.UnstyledTabPanel
 fun TabGroup(
     selectedTab: String,
     tabs: List<String>,
+    onSelectedTabChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit,
+    content: @Composable TabGroupScope.() -> Unit,
 ) {
-    UnstyledTabGroup(selectedTab = selectedTab, tabs = tabs, modifier = modifier, content = content)
+    UnstyledTabGroup(
+        selectedTab = selectedTab,
+        onSelectedTabChange = onSelectedTabChange,
+        tabs = tabs,
+        modifier = modifier,
+    ) {
+        Column {
+            TabGroupScope(this, this@UnstyledTabGroup).content()
+        }
+    }
 }
 
 @Composable
-fun TabPanel(
-    key: TabKey,
+fun TabGroupScope.TabPanel(
+    key: String,
     modifier: Modifier = Modifier,
     contentAlignment: Alignment = Alignment.TopStart,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    UnstyledTabPanel(key, modifier = modifier, contentAlignment = contentAlignment, content = content)
+    with(unstyledScope) {
+        UnstyledTabPanel(key, modifier = modifier) {
+            Box(contentAlignment = contentAlignment, content = content)
+        }
+    }
+}
+
+@Composable
+fun TabGroupScope.BottomNavigationBar(
+    modifier: Modifier = Modifier,
+    shape: Shape = RectangleShape,
+    backgroundColor: Color = Theme[colors][navigation],
+    contentColor: Color = Theme[colors][onNavigation],
+    content: @Composable TabListScope.() -> Unit,
+) {
+    with(unstyledScope) {
+        UnstyledTabList(
+        modifier = modifier
+            .dropShadow(shape, Theme[shadows][elevated])
+            .outline(Dp.Hairline, Theme[colors][outline])
+            .zIndex(5f)
+            .fillMaxWidth(),
+    ) {
+            ProvideContentColor(contentColor) {
+                Row(
+                    Modifier
+                        .clip(shape)
+                        .background(backgroundColor, shape)
+                        .padding(4.dp)
+                        .navigationBarsPadding()
+                        .height(64.dp),
+                ) {
+                    DisableFontScaling {
+                        with(TabListScope(this@Row, this@UnstyledTabList)) {
+                            content()
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Composable
@@ -109,18 +171,19 @@ fun BottomNavigationBar(
     contentColor: Color = Theme[colors][onNavigation],
     content: @Composable RowScope.() -> Unit,
 ) {
-    UnstyledTabList(
-        modifier = modifier
-            .dropShadow(shape, Theme[shadows][elevated])
-            .outline(Dp.Hairline, Theme[colors][outline])
-            .zIndex(5f)
-            .fillMaxWidth(),
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
-        contentPadding = PaddingValues(4.dp),
-        shape = shape,
-    ) {
-        Row(Modifier.navigationBarsPadding().height(64.dp)) {
+    ProvideContentColor(contentColor) {
+        Row(
+            modifier
+                .dropShadow(shape, Theme[shadows][elevated])
+                .outline(Dp.Hairline, Theme[colors][outline])
+                .zIndex(5f)
+                .fillMaxWidth()
+                .clip(shape)
+                .background(backgroundColor, shape)
+                .padding(4.dp)
+                .navigationBarsPadding()
+                .height(64.dp),
+        ) {
             DisableFontScaling {
                 content()
             }
@@ -136,7 +199,7 @@ fun DisableFontScaling(content: @Composable () -> Unit) {
 }
 
 @Composable
-fun PrimaryTab(
+fun TabListScope.PrimaryTab(
     key: String,
     selected: Boolean,
     onSelected: () -> Unit,
@@ -149,24 +212,26 @@ fun PrimaryTab(
     val focused by interactionSource.collectIsFocusedAsState()
     val outlineColor = if (focused) Theme[colors][focusRing] else Color.Transparent
 
-    UnstyledTab(
-        key = key,
-        selected = selected,
-        onSelected = onSelected,
-        activateOnFocus = false,
-        modifier = modifier.outline(2.dp, outlineColor, Theme[shapes][medium]),
-        shape = Theme[shapes][medium],
-        contentPadding = PaddingValues(8.dp),
-        contentColor = if (selected) Theme[colors][primary] else LocalContentColor.current,
-        interactionSource = interactionSource,
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
-            icon()
-            if (title != null) {
-                Spacer(Modifier.height(4.dp))
-                title()
+    with(unstyledScope) {
+            UnstyledTab(
+                key = key,
+                activateOnFocus = false,
+                modifier = modifier
+                    .outline(2.dp, outlineColor, Theme[shapes][medium])
+                    .clip(Theme[shapes][medium])
+                    .padding(8.dp),
+                interactionSource = interactionSource,
+            ) {
+                ProvideContentColor(if (selected) Theme[colors][primary] else LocalContentColor.current) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+                        icon()
+                        if (title != null) {
+                            Spacer(Modifier.height(4.dp))
+                            title()
+                        }
+                    }
+                }
             }
-        }
     }
 }
 
@@ -183,13 +248,16 @@ fun PrimaryTab(
     val focused by interactionSource.collectIsFocusedAsState()
     val outlineColor = if (focused) Theme[colors][focusRing] else Color.Transparent
 
-    UnstyledButton(
+    OneButton(
         onClick = onSelected,
         modifier = modifier.outline(2.dp, outlineColor, Theme[shapes][medium]),
         shape = Theme[shapes][medium],
         contentPadding = PaddingValues(8.dp),
         contentColor = if (selected) Theme[colors][accent] else LocalContentColor.current,
         interactionSource = interactionSource,
+        backgroundColor = Color.Transparent,
+        borderWidth = Dp.Hairline,
+        indication = null,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
             icon()
@@ -203,30 +271,40 @@ fun PrimaryTab(
 
 
 @Composable
-fun TabBar(
+fun TabGroupScope.TabBar(
     modifier: Modifier = Modifier,
     shape: Shape = RectangleShape,
     backgroundColor: Color = Theme[colors][navigation],
     contentColor: Color = Theme[colors][onNavigation],
-    content: @Composable RowScope.() -> Unit,
+    content: @Composable TabListScope.() -> Unit,
 ) {
-    UnstyledTabList(
+    with(unstyledScope) {
+        UnstyledTabList(
         modifier = modifier
             .zIndex(5f)
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState()),
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
-        contentPadding = PaddingValues(horizontal = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        shape = shape,
+        orientation = Orientation.Horizontal,
     ) {
-        content()
+            ProvideContentColor(contentColor) {
+                Row(
+                    modifier = Modifier
+                        .clip(shape)
+                        .background(backgroundColor, shape)
+                        .padding(horizontal = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    with(TabListScope(this@Row, this@UnstyledTabList)) {
+                        content()
+                    }
+                }
+            }
+        }
     }
 }
 
 @Composable
-fun SecondaryTab(
+fun TabListScope.SecondaryTab(
     key: String,
     selected: Boolean,
     onSelected: () -> Unit,
@@ -243,22 +321,22 @@ fun SecondaryTab(
         // visually balance the bottom indicator
         Spacer(Modifier.height(10.dp))
 
-        UnstyledTab(
-            key = key,
-            selected = selected,
-            onSelected = onSelected,
-            activateOnFocus = true,
-            modifier = Modifier.outline(2.dp, outlineColor, shape),
-            shape = shape,
-            contentColor = if (selected) Theme[colors][primary] else LocalContentColor.current,
-            contentPadding = PaddingValues(8.dp),
-            interactionSource = interactionSource,
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
-            ) {
+        with(this@SecondaryTab.unstyledScope) {
+                UnstyledTab(
+                    key = key,
+                    activateOnFocus = true,
+                    modifier = Modifier
+                        .outline(2.dp, outlineColor, shape)
+                        .clip(shape)
+                        .padding(8.dp),
+                    interactionSource = interactionSource,
+                ) {
+                    ProvideContentColor(if (selected) Theme[colors][primary] else LocalContentColor.current) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
                 val normalTextStyle = Theme[textStyles][body]
                 val selectedTextStyle = Theme[textStyles][body].merge(fontWeight = FontWeight.SemiBold)
                 val actualTextStyle = if (selected) selectedTextStyle else normalTextStyle
@@ -291,7 +369,9 @@ fun SecondaryTab(
                         title()
                     }
                 }
-            }
+                        }
+                    }
+                }
         }
         Box(
             Modifier

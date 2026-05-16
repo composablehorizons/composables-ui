@@ -1,5 +1,5 @@
 [versions]
-unstyled = "1.49.9"
+unstyled = "2.0.0"
 kotlin = "2.3.21"
 kotlinXDate = "0.7.1"
 compose = "1.11.0"
@@ -11,7 +11,28 @@ android-compile-sdk = "37"
 android-min-sdk = "21"
 
 [libraries]
-composables-unstyled = { module = "com.composables:core", version.ref = "unstyled" }
+composables-unstyled-bottom-sheet = { module = "com.composables:composeunstyled-bottom-sheet", version.ref = "unstyled" }
+composables-unstyled-build-modifier = { module = "com.composables:composeunstyled-build-modifier", version.ref = "unstyled" }
+composables-unstyled-button = { module = "com.composables:composeunstyled-button", version.ref = "unstyled" }
+composables-unstyled-checkbox = { module = "com.composables:composeunstyled-checkbox", version.ref = "unstyled" }
+composables-unstyled-colored-indication = { module = "com.composables:composeunstyled-colored-indication", version.ref = "unstyled" }
+composables-unstyled-dialog = { module = "com.composables:composeunstyled-dialog", version.ref = "unstyled" }
+composables-unstyled-dropdown-menu = { module = "com.composables:composeunstyled-dropdown-menu", version.ref = "unstyled" }
+composables-unstyled-focus-ring = { module = "com.composables:composeunstyled-focus-ring", version.ref = "unstyled" }
+composables-unstyled-icon = { module = "com.composables:composeunstyled-icon", version.ref = "unstyled" }
+composables-unstyled-modal-bottom-sheet = { module = "com.composables:composeunstyled-modal-bottom-sheet", version.ref = "unstyled" }
+composables-unstyled-modal = { module = "com.composables:composeunstyled-modal", version.ref = "unstyled" }
+composables-unstyled-outline = { module = "com.composables:composeunstyled-outline", version.ref = "unstyled" }
+composables-unstyled-progress = { module = "com.composables:composeunstyled-progress", version.ref = "unstyled" }
+composables-unstyled-radio-group = { module = "com.composables:composeunstyled-radio-group", version.ref = "unstyled" }
+composables-unstyled-scrim = { module = "com.composables:composeunstyled-scrim", version.ref = "unstyled" }
+composables-unstyled-separators = { module = "com.composables:composeunstyled-separators", version.ref = "unstyled" }
+composables-unstyled-slider = { module = "com.composables:composeunstyled-slider", version.ref = "unstyled" }
+composables-unstyled-tab-group = { module = "com.composables:composeunstyled-tab-group", version.ref = "unstyled" }
+composables-unstyled-text-field = { module = "com.composables:composeunstyled-text-field", version.ref = "unstyled" }
+composables-unstyled-theming = { module = "com.composables:composeunstyled-theming", version.ref = "unstyled" }
+composables-unstyled-toggle-switch = { module = "com.composables:composeunstyled-toggle-switch", version.ref = "unstyled" }
+composables-unstyled-window-container-size = { module = "com.composables:composeunstyled-window-container-size", version.ref = "unstyled" }
 composables-icons-lucide = { module = "com.composables:icons-lucide", version.ref = "iconsLucide" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorClient" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinXDate" }

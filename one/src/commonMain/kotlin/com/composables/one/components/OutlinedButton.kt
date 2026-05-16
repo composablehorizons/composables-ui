@@ -59,7 +59,7 @@ fun OutlinedButton(
     val overriddenBackgroundColor = backgroundColor.mutate(enabled)
     val indication = if (isBright(overriddenBackgroundColor)) Theme[indications][bright] else Theme[indications][dim]
 
-    UnstyledButton(
+    OneButton(
         onClick = onClick,
         shape = shape,
         borderColor = borderColor,

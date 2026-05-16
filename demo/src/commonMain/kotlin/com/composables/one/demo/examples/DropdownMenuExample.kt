@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.composables.one.components.DropdownMenu
 import com.composables.one.components.DropdownMenuItem
-import com.composables.one.components.DropdownMenuPanel
 import com.composables.one.components.OutlinedButton
 import com.composables.one.components.Text
 
@@ -21,21 +20,20 @@ fun DropdownMenuExample() {
 
     val options = listOf("Refresh", "Settings", "Help", "Delete")
 
-    DropdownMenu(onExpandRequest = { expanded = true }) {
-        OutlinedButton(onClick = { expanded = true }) {
-            Text("Show Options")
-        }
-
-        DropdownMenuPanel(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier.width(140.dp)
-        ) {
+    DropdownMenu(
+        expanded = expanded,
+        onExpandedChange = { expanded = it },
+        panelModifier = Modifier.width(140.dp),
+        panelContent = {
             options.forEach { option ->
                 DropdownMenuItem(onClick = { expanded = false }, modifier = Modifier.fillMaxWidth()) {
                     Text(option)
                 }
             }
+        },
+    ) {
+        OutlinedButton(onClick = { expanded = true }) {
+            Text("Show Options")
         }
     }
 }

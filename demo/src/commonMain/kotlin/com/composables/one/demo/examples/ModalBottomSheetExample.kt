@@ -12,11 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import com.composables.one.components.Icon
-import com.composables.core.SheetDetent
-import com.composables.core.rememberModalBottomSheetState
 import com.composables.one.components.GhostButton
 import com.composables.one.components.ModalBottomSheet
 import com.composables.one.components.PrimaryButton
+import com.composables.one.components.SheetDetent
 import com.composables.one.styling.destructive
 import com.composables.icons.lucide.Link2
 import com.composables.icons.lucide.Lucide
@@ -24,6 +23,7 @@ import com.composables.icons.lucide.Pencil
 import com.composables.icons.lucide.Share2
 import com.composables.icons.lucide.Trash2
 import com.composables.one.components.Text
+import com.composables.one.components.rememberModalBottomSheetState
 import com.composables.one.styling.colors
 import com.composeunstyled.theme.Theme
 

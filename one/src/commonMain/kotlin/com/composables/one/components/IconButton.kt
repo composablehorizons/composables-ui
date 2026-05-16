@@ -63,7 +63,7 @@ fun IconButton(
         else -> borderColor.copy(alpha = 0.50f)
     }
     val indication = if (isBright(overriddenBackgroundColor)) Theme[indications][bright] else Theme[indications][dim]
-    UnstyledButton(
+    OneButton(
         onClick = onClick,
         shape = shape,
         backgroundColor = overriddenBackgroundColor,

@@ -11,10 +11,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.composables.one.components.Text
 import com.composables.one.components.TimePicker
 import com.composables.one.styling.textStyles
 import com.composables.one.styling.title
-import com.composeunstyled.UnstyledText
 import com.composeunstyled.theme.Theme
 import kotlinx.datetime.LocalTime
 
@@ -23,7 +23,7 @@ fun TimePickerExample() {
     var time by remember { mutableStateOf(LocalTime(12, 0)) }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        UnstyledText("Set Alarm", style = Theme[textStyles][title])
+        Text("Set Alarm", style = Theme[textStyles][title])
         Spacer(Modifier.height(18.dp))
         TimePicker(
             time = time,

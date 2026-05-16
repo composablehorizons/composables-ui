@@ -22,7 +22,7 @@ import com.composables.one.styling.onSecondary
 import com.composables.one.styling.outline
 import com.composables.one.styling.secondary
 import com.composables.one.styling.shapes
-import com.composeunstyled.UnstyledText
+import com.composeunstyled.Text as UnstyledText
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 

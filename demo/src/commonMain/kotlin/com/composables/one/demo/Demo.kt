@@ -3,24 +3,19 @@ package com.composables.one.demo
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.verticalScroll
@@ -39,6 +34,9 @@ import androidx.navigation.compose.rememberNavController
 import com.composables.icons.lucide.ArrowLeft
 import com.composables.icons.lucide.Lucide
 import com.composables.one.components.Icon
+import com.composables.one.components.IconButton
+import com.composables.one.components.Text
+import com.composables.one.components.TopAppBar
 import com.composables.one.demo.examples.AlertExample
 import com.composables.one.demo.examples.AppScaffoldExample
 import com.composables.one.demo.examples.AuthScreenScaffoldExample
@@ -78,7 +76,6 @@ import com.composables.one.demo.examples.ToggleSwitchExample
 import com.composables.one.demo.examples.TopAppBarExample
 import com.composables.one.demo.examples.VerticalDividerExample
 import com.composables.one.styling.OneTheme
-import com.composeunstyled.UnstyledButton
 
 private data class DemoItem(
     val name: String,
@@ -180,7 +177,14 @@ private fun DemoRoute(
     onBack: () -> Unit,
 ) {
     Column(Modifier.fillMaxSize()) {
-        AppBar(onUpClick = onBack, title = demo.name)
+        TopAppBar(
+            navigation = {
+                IconButton(onClick = onBack) {
+                    Icon(Lucide.ArrowLeft, contentDescription = "Go back")
+                }
+            },
+            title = { Text(demo.name) },
+        )
         DemoContainer(
             padding = if (demo.edgeToEdge) PaddingValues(0.dp) else PaddingValues(24.dp),
         ) {
@@ -228,39 +232,16 @@ private fun DemoSection(
 }
 
 @Composable
-private fun AppBar(onUpClick: () -> Unit, title: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(WindowInsets.statusBars.asPaddingValues())
-            .padding(4.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        UnstyledButton(
-            onClick = onUpClick,
-            modifier = Modifier.clip(CircleShape),
-        ) {
-            Box(Modifier.padding(12.dp)) {
-                Icon(Lucide.ArrowLeft, contentDescription = "Go back")
-            }
-        }
-        Spacer(Modifier.width(8.dp))
-        BasicText(title)
-    }
-}
-
-@Composable
 private fun DemoListButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
-    UnstyledButton(
-        onClick = onClick,
+    Box(
         modifier = modifier
             .sizeIn(minWidth = 40.dp, minHeight = 48.dp)
-            .clip(RoundedCornerShape(8.dp)),
+            .clip(RoundedCornerShape(8.dp))
+            .clickable(onClick = onClick),
     ) {
         Box(
             modifier = Modifier

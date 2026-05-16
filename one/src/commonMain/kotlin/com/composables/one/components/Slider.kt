@@ -19,25 +19,25 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.composables.core.androidx.annotation.IntRange
+import androidx.annotation.IntRange
 import com.composables.one.Sample
 import com.composables.one.styling.card
 import com.composables.one.styling.colors
 import com.composables.one.styling.primary
 import com.composables.one.styling.shadows
 import com.composables.one.styling.subtle
-import com.composeunstyled.UnstyledThumb
 import com.composeunstyled.minimumInteractiveComponentSize
 import com.composeunstyled.theme.Theme
 import com.composeunstyled.UnstyledSlider
-import com.composeunstyled.SliderState as UnstyledSliderState
 
 @Composable
 fun rememberSliderState(
@@ -50,13 +50,19 @@ fun rememberSliderState(
     }
 }
 
-class SliderState internal constructor(initialValue: Float, valueRange: ClosedFloatingPointRange<Float>, steps: Int) {
-    val unstyledSliderState = UnstyledSliderState(
-        initialValue = initialValue, valueRange = valueRange, steps = steps
-    )
+class SliderState internal constructor(
+    initialValue: Float,
+    internal val valueRange: ClosedFloatingPointRange<Float>,
+    @IntRange(from = 0) internal val steps: Int,
+) {
+    var value: Float by mutableStateOf(initialValue)
+        internal set
 
-    val value: Float
-        get() = unstyledSliderState.value
+    internal val progress: Float
+        get() {
+            val distance = valueRange.endInclusive - valueRange.start
+            return if (distance == 0f) 0f else ((value - valueRange.start) / distance).coerceIn(0f, 1f)
+        }
 }
 
 @Sample("SliderExample")
@@ -74,7 +80,10 @@ fun Slider(
 
     UnstyledSlider(
         modifier = modifier,
-        state = state.unstyledSliderState,
+        value = state.value,
+        onValueChange = { state.value = it },
+        valueRange = state.valueRange,
+        steps = state.steps,
         interactionSource = interactionSource,
         track = {
             Box(
@@ -86,7 +95,7 @@ fun Slider(
                 )
                 // the 'completed' part of the track
                 Box(
-                    Modifier.fillMaxHeight().fillMaxWidth(state.value).background(filledTrackColor)
+                    Modifier.fillMaxHeight().fillMaxWidth(state.progress).background(filledTrackColor)
                 )
             }
         },
@@ -103,12 +112,12 @@ fun Slider(
                 modifier = Modifier.size(36.dp).clip(CircleShape).background(glowColor),
                 contentAlignment = Alignment.Center
             ) {
-                UnstyledThumb(
-                    color = thumbColor,
-                    modifier = Modifier.size(thumbSize)
+                Box(
+                    modifier = Modifier
+                        .size(thumbSize)
                         .dropShadow(CircleShape, Theme[shadows][subtle])
-                        .hoverable(thumbInteractionSource),
-                    shape = CircleShape,
+                        .hoverable(thumbInteractionSource)
+                        .background(thumbColor, CircleShape),
                 )
             }
         }

@@ -1,6 +1,7 @@
 package com.composables.one.components
 
 import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -39,6 +40,7 @@ import com.composeunstyled.minimumInteractiveComponentSize
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 import com.composeunstyled.UnstyledCheckbox
+import com.composeunstyled.CheckedIndicator
 
 @Sample("CheckboxExample")
 @Composable
@@ -60,17 +62,17 @@ fun Checkbox(
 
     UnstyledCheckbox(
         checked = checked,
-        enabled = enabled,
-        onCheckedChange = onCheckedChange,
+        enabled = enabled && onCheckedChange != null,
+        onCheckedChange = onCheckedChange ?: {},
         modifier = modifier
             .size(24.dp)
+            .background(bgColor.mutate(enabled), shape)
             .outline(1.dp, outlineColor, shape),
-        shape = shape,
-        backgroundColor = bgColor.mutate(enabled),
-        contentColor = contentColor.mutate(enabled),
         interactionSource = interactionSource
     ) {
-        Icon(Lucide.Check, null)
+        CheckedIndicator {
+            Icon(Lucide.Check, null, tint = contentColor.mutate(enabled))
+        }
     }
 }
 

@@ -25,8 +25,8 @@ import com.composables.one.components.Icon
 import com.composables.one.components.PrimaryTab
 import com.composables.one.components.TabGroup
 import com.composables.one.components.TabPanel
+import com.composables.one.components.Text
 import com.composables.one.styling.title
-import com.composeunstyled.UnstyledText
 import com.composeunstyled.theme.Theme
 
 @Composable
@@ -40,7 +40,12 @@ fun BottomNavigationBarExample() {
     var selectedTab by remember { mutableStateOf(Home.key) }
     val categories = listOf(Home, Search, Profile)
 
-    TabGroup(selectedTab = selectedTab, tabs = categories.map { it.key }, modifier = Modifier.fillMaxWidth()) {
+    TabGroup(
+        selectedTab = selectedTab,
+        tabs = categories.map { it.key },
+        onSelectedTabChange = { selectedTab = it },
+        modifier = Modifier.fillMaxWidth(),
+    ) {
         categories.forEach { category ->
             TabPanel(
                 key = category.key,
@@ -54,7 +59,7 @@ fun BottomNavigationBarExample() {
                         modifier = Modifier.size(96.dp).alpha(0.4f)
                     )
                     Spacer(Modifier.height(8.dp))
-                    UnstyledText(category.key, style = Theme[textStyles][title])
+                    Text(category.key, style = Theme[textStyles][title])
                 }
             }
         }
@@ -68,7 +73,7 @@ fun BottomNavigationBarExample() {
                     onSelected = { selectedTab = category.key },
                     modifier = Modifier.weight(1f),
                     icon = { Icon(category.icon, contentDescription = null) },
-                    title = { UnstyledText(category.key) }
+                    title = { Text(category.key) }
                 )
             }
         }

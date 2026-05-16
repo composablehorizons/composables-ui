@@ -1,8 +1,10 @@
 package com.composables.one.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
@@ -32,49 +34,74 @@ import com.composables.one.styling.onCard
 import com.composables.one.styling.outline
 import com.composables.one.styling.shadows
 import com.composables.one.styling.shapes
-import com.composeunstyled.DropdownPanelAnchor
+import com.composeunstyled.AnchorAlignment
+import com.composeunstyled.AnchorSide
 import com.composeunstyled.LocalContentColor
+import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.minimumInteractiveComponentSize
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
-import com.composeunstyled.UnstyledButton
 import com.composeunstyled.UnstyledDropdownMenu
-import com.composeunstyled.UnstyledDropdownMenuPanel
+import com.composeunstyled.DropdownMenuPanel as UnstyledDropdownMenuPanel
+
+enum class DropdownMenuAnchor {
+    BottomStart,
+    BottomEnd,
+    TopStart,
+    TopEnd,
+}
 
 @Sample("DropdownMenuExample")
 @Composable
 fun DropdownMenu(
-    onExpandRequest: () -> Unit,
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
+    anchor: DropdownMenuAnchor = DropdownMenuAnchor.BottomStart,
+    panelModifier: Modifier = Modifier,
+    panelContent: @Composable ColumnScope.() -> Unit,
+    anchorContent: @Composable () -> Unit,
 ) {
-    UnstyledDropdownMenu(modifier = modifier, onExpandRequest = onExpandRequest) {
-        content()
-    }
+    UnstyledDropdownMenu(
+        expanded = expanded,
+        onExpandedChange = onExpandedChange,
+        modifier = modifier,
+        side = anchor.toAnchorSide(),
+        alignment = anchor.toAnchorAlignment(),
+        sideOffset = 4.dp,
+        panel = {
+            UnstyledDropdownMenuPanel(
+                modifier = panelModifier.padding(vertical = 4.dp)
+                    .dropShadow(shape = Theme[shapes][medium], shadow = Theme[shadows][modal])
+                    .outline(Dp.Hairline, Theme[colors][outline], Theme[shapes][medium]),
+            ) {
+                ProvideContentColor(Theme[colors][onCard]) {
+                    Column(
+                        modifier = Modifier
+                            .background(Theme[colors][card], Theme[shapes][medium])
+                            .padding(4.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        content = panelContent,
+                    )
+                }
+            }
+        },
+        anchor = anchorContent,
+    )
 }
 
-@Composable
-fun DropdownMenuPanel(
-    expanded: Boolean,
-    onDismissRequest: () -> Unit,
-    modifier: Modifier = Modifier,
-    anchor: DropdownPanelAnchor = DropdownPanelAnchor.BottomStart,
-    content: @Composable ColumnScope.() -> Unit,
-) {
-    UnstyledDropdownMenuPanel(
-        expanded = expanded,
-        onDismissRequest = onDismissRequest,
-        backgroundColor = Theme[colors][card],
-        contentColor = Theme[colors][onCard],
-        shape = Theme[shapes][medium],
-        contentPadding = PaddingValues(4.dp),
-        anchor = anchor,
-        modifier = modifier.padding(vertical = 4.dp)
-            .dropShadow(shape = Theme[shapes][medium], shadow = Theme[shadows][modal])
-            .outline(Dp.Hairline, Theme[colors][outline], Theme[shapes][medium]),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
-        content = content
-    )
+private fun DropdownMenuAnchor.toAnchorSide() = when (this) {
+    DropdownMenuAnchor.BottomStart,
+    DropdownMenuAnchor.BottomEnd -> AnchorSide.Bottom
+    DropdownMenuAnchor.TopStart,
+    DropdownMenuAnchor.TopEnd -> AnchorSide.Top
+}
+
+private fun DropdownMenuAnchor.toAnchorAlignment() = when (this) {
+    DropdownMenuAnchor.BottomStart,
+    DropdownMenuAnchor.TopStart -> AnchorAlignment.Start
+    DropdownMenuAnchor.BottomEnd,
+    DropdownMenuAnchor.TopEnd -> AnchorAlignment.End
 }
 
 
@@ -95,7 +122,7 @@ fun DropdownMenuItem(
     } else {
         Theme[indications][dim]
     }
-    UnstyledButton(
+    OneButton(
         onClick = onClick,
         shape = Theme[shapes][medium],
         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
@@ -103,6 +130,7 @@ fun DropdownMenuItem(
         horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
         backgroundColor = backgroundColor,
         contentColor = contentColor,
+        borderWidth = Dp.Hairline,
         interactionSource = interactionSource,
         indication = indication,
     ) {

@@ -41,7 +41,12 @@ fun TabBarExample() {
     var selectedTab by remember { mutableStateOf(Home.key) }
     val categories = listOf(Home, Search, Profile)
 
-    TabGroup(selectedTab = selectedTab, tabs = categories.map { it.key }, modifier = Modifier.fillMaxSize()) {
+    TabGroup(
+        selectedTab = selectedTab,
+        tabs = categories.map { it.key },
+        onSelectedTabChange = { selectedTab = it },
+        modifier = Modifier.fillMaxSize(),
+    ) {
         TabBar {
             categories.forEach { category ->
                 SecondaryTab(

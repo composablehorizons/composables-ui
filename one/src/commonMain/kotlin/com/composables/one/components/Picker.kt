@@ -49,7 +49,7 @@ import com.composables.one.styling.medium
 import com.composables.one.styling.shapes
 import com.composables.one.styling.textStyles
 import com.composables.one.styling.title
-import com.composeunstyled.UnstyledText
+import com.composeunstyled.Text as UnstyledText
 import com.composeunstyled.focusRing
 import com.composeunstyled.theme.Theme
 import kotlinx.coroutines.flow.distinctUntilChanged

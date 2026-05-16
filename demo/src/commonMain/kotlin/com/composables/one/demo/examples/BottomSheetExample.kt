@@ -22,8 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.composables.core.SheetDetent
-import com.composables.core.rememberBottomSheetState
 import com.composables.icons.lucide.Clock3
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Navigation
@@ -34,7 +32,9 @@ import com.composables.one.components.BottomSheet
 import com.composables.one.components.Icon
 import com.composables.one.components.PrimaryButton
 import com.composables.one.components.SecondaryButton
+import com.composables.one.components.SheetDetent
 import com.composables.one.components.Text
+import com.composables.one.components.rememberBottomSheetState
 import com.composables.one.styling.medium
 import com.composables.one.styling.shapes
 import com.composables.one.styling.textStyles
