@@ -26,7 +26,7 @@ import com.composables.one.components.PrimaryTab
 import com.composables.one.components.TabGroup
 import com.composables.one.components.TabPanel
 import com.composables.one.styling.title
-import com.composeunstyled.Text
+import com.composeunstyled.UnstyledText
 import com.composeunstyled.theme.Theme
 
 @Composable
@@ -54,7 +54,7 @@ fun BottomNavigationBarExample() {
                         modifier = Modifier.size(96.dp).alpha(0.4f)
                     )
                     Spacer(Modifier.height(8.dp))
-                    Text(category.key, style = Theme[textStyles][title])
+                    UnstyledText(category.key, style = Theme[textStyles][title])
                 }
             }
         }
@@ -68,7 +68,7 @@ fun BottomNavigationBarExample() {
                     onSelected = { selectedTab = category.key },
                     modifier = Modifier.weight(1f),
                     icon = { Icon(category.icon, contentDescription = null) },
-                    title = { Text(category.key) }
+                    title = { UnstyledText(category.key) }
                 )
             }
         }

@@ -1,13 +1,12 @@
 [versions]
-unstyled = "1.49.6"
+unstyled = "1.49.9"
 kotlin = "2.3.21"
 kotlinXDate = "0.7.1"
-compose = "1.10.3"
-hotreload = "1.1.0"
+compose = "1.11.0"
 ktorClient = "3.3.1"
 iconsLucide = "1.1.1"
-navigation = "2.9.0-beta03"
-agp = "9.1.0"
+navigation = "2.9.2"
+agp = "9.2.1"
 android-compile-sdk = "37"
 android-min-sdk = "21"
 
@@ -22,6 +21,5 @@ androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navi
 [plugins]
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-compose-hotreload = { id = "org.jetbrains.compose.hot-reload", version.ref = "hotreload" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-android-library = { id = "com.android.library", version.ref = "agp" }
+android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }

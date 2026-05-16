@@ -31,7 +31,7 @@ import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.focusRing
 import com.composeunstyled.minimumInteractiveComponentSize
 import com.composeunstyled.theme.Theme
-import com.composeunstyled.Button as UnstyledButton
+import com.composeunstyled.UnstyledButton
 
 @Sample("GhostButtonExample")
 @Composable

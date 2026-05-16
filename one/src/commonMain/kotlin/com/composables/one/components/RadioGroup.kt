@@ -40,8 +40,8 @@ import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.minimumInteractiveComponentSize
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
-import com.composeunstyled.RadioButton as UnstyledRadioButton
-import com.composeunstyled.RadioGroup as UnstyledRadioGroup
+import com.composeunstyled.UnstyledRadioButton
+import com.composeunstyled.UnstyledRadioGroup
 
 
 @Sample("RadioGroupExample")

@@ -22,8 +22,8 @@ import com.composables.one.styling.primary
 import com.composables.one.styling.secondary
 import com.composables.one.styling.shapes
 import com.composables.one.styling.small
-import com.composeunstyled.ProgressBar
-import com.composeunstyled.ProgressIndicator
+import com.composeunstyled.UnstyledProgressBar
+import com.composeunstyled.UnstyledProgressIndicator
 import com.composeunstyled.theme.Theme
 
 @Sample("LinearProgressIndicatorExample")
@@ -39,14 +39,14 @@ fun LinearProgressIndicator(
         animationSpec = tween(durationMillis = 750, easing = LinearEasing)
     )
 
-    ProgressIndicator(
+    UnstyledProgressIndicator(
         progress = animateFloat,
         shape = Theme[shapes][small],
         backgroundColor = trackColor,
         contentColor = fillColor,
         modifier = modifier.height(4.dp)
     ) {
-        ProgressBar()
+        UnstyledProgressBar()
     }
 }
 

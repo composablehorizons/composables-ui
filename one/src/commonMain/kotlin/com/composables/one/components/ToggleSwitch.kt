@@ -35,8 +35,8 @@ import com.composables.one.styling.primary
 import com.composables.one.styling.shadows
 import com.composables.one.styling.shapes
 import com.composables.one.styling.subtle
-import com.composeunstyled.Thumb
-import com.composeunstyled.ToggleSwitch
+import com.composeunstyled.UnstyledThumb
+import com.composeunstyled.UnstyledToggleSwitch
 import com.composeunstyled.focusRing
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
@@ -63,7 +63,7 @@ fun ToggleSwitch(
         verticalAlignment = Alignment.CenterVertically
     ) {
         val thumbSize = 24.dp
-        ToggleSwitch(
+        UnstyledToggleSwitch(
             enabled = enabled,
             toggled = toggled,
             onToggled = onToggled,
@@ -75,7 +75,7 @@ fun ToggleSwitch(
                 .focusRing(interactionSource, 2.dp, color = Theme[colors][focusRing], shape)
                 .outline(1.dp, Theme[colors][outline], shape),
         ) {
-            Thumb(
+            UnstyledThumb(
                 shape = CircleShape,
                 color = Theme[colors][onAccent],
                 modifier = Modifier.size(thumbSize).dropShadow(shape = CircleShape, shadow = Theme[shadows][subtle])
@@ -114,9 +114,7 @@ fun ToggleSwitch(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (label != null) {
-            label()
-        }
+        label()
         ToggleSwitch(
             interactionSource = interactionSource,
             enabled = enabled,

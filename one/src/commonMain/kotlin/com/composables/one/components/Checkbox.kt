@@ -38,7 +38,7 @@ import com.composables.one.styling.small
 import com.composeunstyled.minimumInteractiveComponentSize
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
-import com.composeunstyled.Checkbox as UnstyledCheckbox
+import com.composeunstyled.UnstyledCheckbox
 
 @Sample("CheckboxExample")
 @Composable
@@ -105,9 +105,7 @@ fun Checkbox(
             .padding(1.dp)
         ,
     ) {
-        if (label != null) {
-            label()
-        }
+        label()
 
         Checkbox(
             checked = checked,

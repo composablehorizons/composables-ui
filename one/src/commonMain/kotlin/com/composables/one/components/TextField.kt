@@ -37,7 +37,7 @@ import com.composeunstyled.TextInput
 import com.composeunstyled.minimumInteractiveComponentSize
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
-import com.composeunstyled.TextField as UnstyledTextField
+import com.composeunstyled.UnstyledTextField
 
 private val ButtonDefaultPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
 

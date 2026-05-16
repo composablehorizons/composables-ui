@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.compose)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.android.library)
+    alias(libs.plugins.android.kotlin.multiplatform.library)
 }
 
 java {
@@ -29,14 +29,17 @@ kotlin {
         browser()
     }
 
-    androidTarget {
-        publishLibraryVariants("debug")
+    android {
+        namespace = "com.composables.one"
+        compileSdk = libs.versions.android.compile.sdk.get().toInt()
+        minSdk = libs.versions.android.min.sdk.get().toInt()
+
         compilerOptions {
             jvmTarget = JvmTarget.JVM_17
         }
     }
 
-    listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
+    listOf(iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposablesOne"
             isStatic = true
@@ -54,13 +57,5 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.composables.icons.lucide)
         }
-    }
-}
-
-android {
-    namespace = "com.composables.one"
-    compileSdk = libs.versions.android.compile.sdk.get().toInt()
-    defaultConfig {
-        minSdk = libs.versions.android.min.sdk.get().toInt()
     }
 }

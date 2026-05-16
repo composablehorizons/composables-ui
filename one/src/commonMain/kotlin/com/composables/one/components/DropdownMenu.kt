@@ -37,9 +37,9 @@ import com.composeunstyled.LocalContentColor
 import com.composeunstyled.minimumInteractiveComponentSize
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
-import com.composeunstyled.Button as UnstyledButton
-import com.composeunstyled.DropdownMenu as UnstyledDropdownMenu
-import com.composeunstyled.DropdownMenuPanel as UnstyledDropdownMenuPanel
+import com.composeunstyled.UnstyledButton
+import com.composeunstyled.UnstyledDropdownMenu
+import com.composeunstyled.UnstyledDropdownMenuPanel
 
 @Sample("DropdownMenuExample")
 @Composable

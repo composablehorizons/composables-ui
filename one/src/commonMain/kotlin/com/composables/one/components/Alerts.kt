@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,7 +16,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.composables.core.rememberDialogState
 import com.composables.one.Sample
 import com.composables.one.styling.textStyles
 import com.composeunstyled.LocalTextStyle
@@ -35,11 +33,6 @@ fun Alert(
     negativeButton: (@Composable () -> Unit)? = null,
     neutralButtons: (@Composable () -> Unit)? = null,
 ) {
-    val dialogState = rememberDialogState()
-    SideEffect {
-        dialogState.visible = visible
-    }
-
     Dialog(visible = visible) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             if (icon != null) {
@@ -90,11 +83,6 @@ fun CenteredAlert(
     negativeButton: (@Composable () -> Unit)? = null,
     neutralButtons: (@Composable () -> Unit)? = null,
 ) {
-    val dialogState = rememberDialogState()
-    SideEffect {
-        dialogState.visible = visible
-    }
-
     Dialog(visible = visible) {
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             if (icon != null) {

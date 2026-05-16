@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.composables.one.styling.Appearance.Dark
 import com.composables.one.styling.Appearance.Light
 import com.composables.one.styling.Appearance.System
+import com.composeunstyled.ComposeUnstyledFlags
 import com.composeunstyled.theme.ComponentInteractiveSize
 import com.composeunstyled.theme.ThemeProperty
 import com.composeunstyled.theme.ThemeToken
@@ -142,6 +143,9 @@ val DarkPalette = mapOf(
 
 
 val OneTheme = buildTheme {
+    ComposeUnstyledFlags.strictTextColorResolutionOrder = true
+    ComposeUnstyledFlags.noDefaultThemeIndication = true
+
     val defaultFontFamily = FontFamily.Default
 
     defaultComponentInteractiveSize = ComponentInteractiveSize(

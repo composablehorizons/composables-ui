@@ -33,10 +33,10 @@ import com.composables.one.styling.colors
 import com.composables.one.styling.primary
 import com.composables.one.styling.shadows
 import com.composables.one.styling.subtle
-import com.composeunstyled.Thumb
+import com.composeunstyled.UnstyledThumb
 import com.composeunstyled.minimumInteractiveComponentSize
 import com.composeunstyled.theme.Theme
-import com.composeunstyled.Slider as UnstyledSlider
+import com.composeunstyled.UnstyledSlider
 import com.composeunstyled.SliderState as UnstyledSliderState
 
 @Composable
@@ -103,7 +103,7 @@ fun Slider(
                 modifier = Modifier.size(36.dp).clip(CircleShape).background(glowColor),
                 contentAlignment = Alignment.Center
             ) {
-                Thumb(
+                UnstyledThumb(
                     color = thumbColor,
                     modifier = Modifier.size(thumbSize)
                         .dropShadow(CircleShape, Theme[shadows][subtle])

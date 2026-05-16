@@ -17,9 +17,6 @@ import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.composables.core.DialogPanel
-import com.composables.core.Scrim
-import com.composables.core.rememberDialogState
 import com.composables.one.Sample
 import com.composables.one.styling.card
 import com.composables.one.styling.colors
@@ -30,9 +27,12 @@ import com.composables.one.styling.outline
 import com.composables.one.styling.scrim
 import com.composables.one.styling.shadows
 import com.composables.one.styling.shapes
+import com.composeunstyled.UnstyledDialog
+import com.composeunstyled.UnstyledDialogPanel
+import com.composeunstyled.UnstyledScrim
 import com.composeunstyled.outline
+import com.composeunstyled.rememberDialogState
 import com.composeunstyled.theme.Theme
-import com.composables.core.Dialog as UnstyledDialog
 
 @Sample("DialogExample")
 @Composable
@@ -42,9 +42,9 @@ fun Dialog(visible: Boolean, content: @Composable () -> Unit) {
     SideEffect { state.visible = visible }
 
     UnstyledDialog(state) {
-        Scrim(enter = fadeIn(tween(300)), exit = fadeOut(tween(300)), scrimColor = Theme[colors][scrim])
+        UnstyledScrim(enter = fadeIn(tween(300)), exit = fadeOut(tween(300)), scrimColor = Theme[colors][scrim])
 
-        DialogPanel(
+        UnstyledDialogPanel(
             modifier = Modifier
                 .zIndex(10f)
                 .padding(16.dp)

@@ -14,7 +14,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import com.composables.one.Sample
 import com.composeunstyled.LocalTextStyle
-import com.composeunstyled.Text as UnstyledText
+import com.composeunstyled.UnstyledText
 
 @Sample("TextExample")
 @Composable

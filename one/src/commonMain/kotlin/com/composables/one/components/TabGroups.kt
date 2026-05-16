@@ -66,18 +66,18 @@ import com.composables.one.styling.shadows
 import com.composables.one.styling.shapes
 import com.composables.one.styling.small
 import com.composables.one.styling.textStyles
-import com.composeunstyled.Button
+import com.composeunstyled.UnstyledButton
 import com.composeunstyled.LocalContentColor
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.ProvideTextStyle
-import com.composeunstyled.Tab
+import com.composeunstyled.UnstyledTab
 import com.composeunstyled.TabKey
-import com.composeunstyled.TabList
+import com.composeunstyled.UnstyledTabList
 import com.composeunstyled.buildModifier
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
-import com.composeunstyled.TabGroup as UnstyledTabGroup
-import com.composeunstyled.TabPanel as UnstyledTabPanel
+import com.composeunstyled.UnstyledTabGroup
+import com.composeunstyled.UnstyledTabPanel
 
 @Sample("BottomNavigationBarExample")
 @Sample("TabBarExample")
@@ -109,7 +109,7 @@ fun BottomNavigationBar(
     contentColor: Color = Theme[colors][onNavigation],
     content: @Composable RowScope.() -> Unit,
 ) {
-    TabList(
+    UnstyledTabList(
         modifier = modifier
             .dropShadow(shape, Theme[shadows][elevated])
             .outline(Dp.Hairline, Theme[colors][outline])
@@ -149,7 +149,7 @@ fun PrimaryTab(
     val focused by interactionSource.collectIsFocusedAsState()
     val outlineColor = if (focused) Theme[colors][focusRing] else Color.Transparent
 
-    Tab(
+    UnstyledTab(
         key = key,
         selected = selected,
         onSelected = onSelected,
@@ -183,7 +183,7 @@ fun PrimaryTab(
     val focused by interactionSource.collectIsFocusedAsState()
     val outlineColor = if (focused) Theme[colors][focusRing] else Color.Transparent
 
-    Button(
+    UnstyledButton(
         onClick = onSelected,
         modifier = modifier.outline(2.dp, outlineColor, Theme[shapes][medium]),
         shape = Theme[shapes][medium],
@@ -210,7 +210,7 @@ fun TabBar(
     contentColor: Color = Theme[colors][onNavigation],
     content: @Composable RowScope.() -> Unit,
 ) {
-    TabList(
+    UnstyledTabList(
         modifier = modifier
             .zIndex(5f)
             .fillMaxWidth()
@@ -243,7 +243,7 @@ fun SecondaryTab(
         // visually balance the bottom indicator
         Spacer(Modifier.height(10.dp))
 
-        Tab(
+        UnstyledTab(
             key = key,
             selected = selected,
             onSelected = onSelected,
