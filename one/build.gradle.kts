@@ -48,35 +48,16 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.composables.unstyled.bottom.sheet)
-            implementation(libs.composables.unstyled.build.modifier)
             implementation(libs.composables.unstyled.button)
-            implementation(libs.composables.unstyled.checkbox)
             implementation(libs.composables.unstyled.colored.indication)
-            implementation(libs.composables.unstyled.dialog)
-            implementation(libs.composables.unstyled.dropdown.menu)
             implementation(libs.composables.unstyled.focus.ring)
-            implementation(libs.composables.unstyled.icon)
-            implementation(libs.composables.unstyled.modal)
-            implementation(libs.composables.unstyled.modal.bottom.sheet)
             implementation(libs.composables.unstyled.outline)
-            implementation(libs.composables.unstyled.progress)
-            implementation(libs.composables.unstyled.radio.group)
-            implementation(libs.composables.unstyled.scrim)
-            implementation(libs.composables.unstyled.separators)
-            implementation(libs.composables.unstyled.slider)
-            implementation(libs.composables.unstyled.tab.group)
-            implementation(libs.composables.unstyled.text.field)
+            implementation(libs.composables.unstyled.platformtheme)
             api(libs.composables.unstyled.theming)
-            implementation(libs.composables.unstyled.toggle.switch)
-            implementation(libs.composables.unstyled.window.container.size)
-            api(libs.kotlinx.datetime)
 
             api(compose.foundation)
             implementation(compose.ui)
             implementation(compose.runtime)
-            implementation(libs.ktor.client.core)
-            implementation(libs.composables.icons.lucide)
         }
     }
 }

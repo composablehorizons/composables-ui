@@ -23,6 +23,7 @@ composables-unstyled-icon = { module = "com.composables:composeunstyled-icon", v
 composables-unstyled-modal-bottom-sheet = { module = "com.composables:composeunstyled-modal-bottom-sheet", version.ref = "unstyled" }
 composables-unstyled-modal = { module = "com.composables:composeunstyled-modal", version.ref = "unstyled" }
 composables-unstyled-outline = { module = "com.composables:composeunstyled-outline", version.ref = "unstyled" }
+composables-unstyled-platformtheme = { module = "com.composables:composeunstyled-platformtheme", version.ref = "unstyled" }
 composables-unstyled-progress = { module = "com.composables:composeunstyled-progress", version.ref = "unstyled" }
 composables-unstyled-radio-group = { module = "com.composables:composeunstyled-radio-group", version.ref = "unstyled" }
 composables-unstyled-scrim = { module = "com.composables:composeunstyled-scrim", version.ref = "unstyled" }

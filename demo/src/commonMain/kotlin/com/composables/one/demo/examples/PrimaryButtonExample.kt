@@ -2,7 +2,7 @@ package com.composables.one.demo.examples
 
 import androidx.compose.runtime.Composable
 import com.composables.one.PrimaryButton
-import com.composables.one.Text
+import com.composeunstyled.Text
 
 @Composable
 fun PrimaryButtonExample() {

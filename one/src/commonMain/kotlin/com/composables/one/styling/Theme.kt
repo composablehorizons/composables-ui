@@ -4,7 +4,6 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Indication
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
@@ -18,20 +17,31 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.composables.one.styling.Appearance.Dark
 import com.composables.one.styling.Appearance.Light
 import com.composables.one.styling.Appearance.System
+import com.composeunstyled.platformtheme.buildPlatformTheme
+import com.composeunstyled.platformtheme.bright as platformBright
+import com.composeunstyled.platformtheme.dimmed as platformDimmed
+import com.composeunstyled.platformtheme.heading6 as platformHeading6
+import com.composeunstyled.platformtheme.indications as platformIndications
+import com.composeunstyled.platformtheme.interactiveSizes as platformInteractiveSizes
+import com.composeunstyled.platformtheme.roundedLarge as platformRoundedLarge
+import com.composeunstyled.platformtheme.roundedMedium as platformRoundedMedium
+import com.composeunstyled.platformtheme.roundedSmall as platformRoundedSmall
+import com.composeunstyled.platformtheme.shapes as platformShapes
+import com.composeunstyled.platformtheme.sizeDefault as platformSizeDefault
+import com.composeunstyled.platformtheme.sizeMinimum as platformSizeMinimum
+import com.composeunstyled.platformtheme.text4 as platformText4
+import com.composeunstyled.platformtheme.text7 as platformText7
+import com.composeunstyled.platformtheme.textStyles as platformTextStyles
 import com.composeunstyled.theme.ComponentInteractiveSize
 import com.composeunstyled.theme.ThemeProperty
 import com.composeunstyled.theme.ThemeToken
-import com.composeunstyled.theme.buildTheme
-import com.composeunstyled.theme.rememberColoredIndication
 
 // properties
 val colors = ThemeProperty<Color>("colors")
@@ -141,12 +151,10 @@ val DarkPalette = mapOf(
 )
 
 
-val OneTheme = buildTheme {
-    val defaultFontFamily = FontFamily.Default
-
+val OneTheme = buildPlatformTheme {
     defaultComponentInteractiveSize = ComponentInteractiveSize(
-        nonTouchInteractionSize = 32.dp,
-        touchInteractionSize = 48.dp
+        nonTouchInteractionSize = properties[platformInteractiveSizes][platformSizeMinimum],
+        touchInteractionSize = properties[platformInteractiveSizes][platformSizeDefault],
     )
     defaultTextSelectionColors = rememberTextSelectionColors(Color(0xFF3B82F6))
 
@@ -158,43 +166,25 @@ val OneTheme = buildTheme {
 
     properties[colors] = animateColorPalette(targetPalette)
     properties[shapes] = mapOf(
-        small to RoundedCornerShape(6.dp),
-        medium to RoundedCornerShape(8.dp),
-        bottomSheet to RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+        small to properties[platformShapes][platformRoundedMedium],
+        medium to properties[platformShapes][platformRoundedLarge],
+        bottomSheet to properties[platformShapes][platformRoundedLarge],
     )
 
-    val bodyStyle = TextStyle(
-        fontFamily = defaultFontFamily,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
-    )
+    val bodyStyle = properties[platformTextStyles][platformText4]
     defaultTextStyle = bodyStyle
 
     properties[textStyles] = mapOf(
-        title to TextStyle(
-            fontFamily = defaultFontFamily,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 22.sp,
-        ),
+        title to properties[platformTextStyles][platformHeading6].copy(fontWeight = FontWeight.SemiBold),
         body to bodyStyle,
-        caption to TextStyle(
-            fontFamily = defaultFontFamily,
-            fontWeight = FontWeight.Normal,
-            fontSize = 12.sp
-        )
+        caption to properties[platformTextStyles][platformText7],
     )
 
-    val brightIndication = rememberColoredIndication(
-        hoveredColor = Color.White.copy(alpha = 0.1f),
-        pressedColor = Color.White.copy(alpha = 0.3f),
-    )
+    val brightIndication = properties[platformIndications][platformBright]
     defaultIndication = brightIndication
     properties[indications] = mapOf(
         bright to brightIndication,
-        dim to rememberColoredIndication(
-            hoveredColor = Color(0xFFa1a1aa).copy(alpha = 0.1f),
-            pressedColor = Color(0xFFa1a1aa).copy(alpha = 0.3f),
-        ),
+        dim to properties[platformIndications][platformDimmed],
     )
     properties[shadows] = mapOf(
         subtle to Shadow(

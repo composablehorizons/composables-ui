@@ -24,9 +24,10 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":one"))
-            implementation(libs.compose.components.resources)
-            implementation(libs.composables.icons.lucide)
             implementation(libs.androidx.navigation.compose)
+            implementation(libs.composables.icons.lucide)
+            implementation(libs.composables.unstyled.button)
+            implementation(libs.composables.unstyled.icon)
         }
 
         val desktopMain by getting {

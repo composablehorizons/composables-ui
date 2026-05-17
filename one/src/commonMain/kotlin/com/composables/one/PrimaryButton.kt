@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.composables.one.Sample
 import com.composables.one.styling.body
 import com.composables.one.styling.bright
 import com.composables.one.styling.colors
@@ -31,10 +30,8 @@ import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.focusRing
 import com.composeunstyled.minimumInteractiveComponentSize
 import com.composeunstyled.theme.Theme
-import com.composeunstyled.UnstyledButton
 
 val DefaultButtonPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
-val DefaultIconButtonPadding = PaddingValues(8.dp)
 
 @Sample("PrimaryButtonExample")
 @Composable
