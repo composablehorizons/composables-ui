@@ -1,11 +1,15 @@
 package com.composables.one.demo
 
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.CubicBezierEasing
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,10 +39,16 @@ import com.composables.one.Button
 import com.composables.one.ButtonStyle
 import com.composables.one.Icon
 import com.composables.one.IconButton
+import com.composables.one.ScreenScaffold
 import com.composables.one.Text
 import com.composables.one.Toolbar
 import com.composables.one.ToolbarSize
-import com.composables.one.demo.examples.ButtonsExample
+import com.composables.one.demo.examples.DestructiveButtonExample
+import com.composables.one.demo.examples.GhostButtonExample
+import com.composables.one.demo.examples.OutlinedButtonExample
+import com.composables.one.demo.examples.PrimaryButtonExample
+import com.composables.one.demo.examples.SecondaryButtonExample
+import com.composables.one.demo.examples.ButtonSizesExample
 import com.composables.one.demo.examples.CenteredToolbarExample
 import com.composables.one.demo.examples.LargeToolbarExample
 import com.composables.one.demo.examples.ToolbarWithActionsExample
@@ -59,7 +70,12 @@ private data class PreviewOptions(
 )
 
 private val componentDemos = listOf(
-    DemoItem("Buttons", "buttons", content = { ButtonsExample() }),
+    DemoItem("Button (Primary)", "button-primary", content = { PrimaryButtonExample() }),
+    DemoItem("Button (Secondary)", "button-secondary", content = { SecondaryButtonExample() }),
+    DemoItem("Button (Outlined)", "button-outlined", content = { OutlinedButtonExample() }),
+    DemoItem("Button (Destructive)", "button-destructive", content = { DestructiveButtonExample() }),
+    DemoItem("Button (Ghost)", "button-ghost", content = { GhostButtonExample() }),
+    DemoItem("Button (Sizes)", "button-sizes", content = { ButtonSizesExample() }),
     DemoItem(
         name = "Toolbar (Large)",
         id = "large-toolbar",
@@ -95,6 +111,11 @@ private val themingDemos = listOf(
 
 private val demos = themingDemos + componentDemos
 
+private const val NavigationTransitionDurationMillis = 350
+private const val NavigationParallaxDivisor = 5
+private const val NavigationDimmedAlpha = 0.86f
+private val NavigationTransitionEasing = CubicBezierEasing(0.32f, 0.72f, 0f, 1f)
+
 @Composable
 fun Demo() {
     val navController = rememberNavController()
@@ -102,42 +123,82 @@ fun Demo() {
     val currentRoute = currentBackStackEntry?.destination?.route
     val currentDemo = demos.firstOrNull { it.id == currentRoute }
     AppScaffold {
-        Column(Modifier.fillMaxSize()) {
-            if (currentRoute != null && currentRoute != "home") {
-                Toolbar(
-                    leading = {
-                        IconButton(
-                            onClick = { navController.navigateUp() },
-                            style = ButtonStyle.Ghost,
-                        ) {
-                            Icon(Lucide.ArrowLeft, contentDescription = "Go back")
-                        }
-                        Text(currentDemo?.name ?: "")
-                    },
+        NavHost(
+            navController = navController,
+            startDestination = "home",
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black),
+            enterTransition = {
+                slideInHorizontally(
+                    animationSpec = tween(
+                        durationMillis = NavigationTransitionDurationMillis,
+                        easing = NavigationTransitionEasing,
+                    ),
+                    initialOffsetX = { it },
                 )
-            } else {
-                Toolbar(
-                    title = { Text("Composables One") },
-                    size = ToolbarSize.Large,
+            },
+            exitTransition = {
+                slideOutHorizontally(
+                    animationSpec = tween(
+                        durationMillis = NavigationTransitionDurationMillis,
+                        easing = NavigationTransitionEasing,
+                    ),
+                    targetOffsetX = { -it / NavigationParallaxDivisor },
+                ) + fadeOut(
+                    animationSpec = tween(
+                        durationMillis = NavigationTransitionDurationMillis,
+                        easing = NavigationTransitionEasing,
+                    ),
+                    targetAlpha = NavigationDimmedAlpha,
                 )
-            }
-            NavHost(
-                navController = navController,
-                startDestination = "home",
-                modifier = Modifier.weight(1f),
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None },
-                popEnterTransition = { EnterTransition.None },
-                popExitTransition = { ExitTransition.None },
-            ) {
-                composable("home") {
-                    DemoList(onSelectDemo = { navController.navigate(it.id) })
-                }
-
-                demos.forEach { demo ->
-                    composable(demo.id) {
-                        DemoRoute(demo)
+            },
+            popEnterTransition = {
+                slideInHorizontally(
+                    animationSpec = tween(
+                        durationMillis = NavigationTransitionDurationMillis,
+                        easing = NavigationTransitionEasing,
+                    ),
+                    initialOffsetX = { -it / NavigationParallaxDivisor },
+                ) + fadeIn(
+                    animationSpec = tween(
+                        durationMillis = NavigationTransitionDurationMillis,
+                        easing = NavigationTransitionEasing,
+                    ),
+                    initialAlpha = NavigationDimmedAlpha,
+                )
+            },
+            popExitTransition = {
+                slideOutHorizontally(
+                    animationSpec = tween(
+                        durationMillis = NavigationTransitionDurationMillis,
+                        easing = NavigationTransitionEasing,
+                    ),
+                    targetOffsetX = { it },
+                )
+            },
+        ) {
+            composable("home") {
+                ScreenScaffold {
+                    Column(Modifier.fillMaxSize()) {
+                        Toolbar(
+                            title = { Text("Composables One") },
+                            size = ToolbarSize.Large,
+                        )
+                        DemoList(
+                            onSelectDemo = { navController.navigate(it.id) },
+                            modifier = Modifier.weight(1f),
+                        )
                     }
+                }
+            }
+
+            demos.forEach { demo ->
+                composable(demo.id) {
+                    DemoRoute(
+                        demo = demo,
+                        onBack = { navController.navigateUp() },
+                    )
                 }
             }
         }
@@ -147,8 +208,9 @@ fun Demo() {
 @Composable
 private fun DemoList(
     onSelectDemo: (DemoItem) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopStart) {
+    Box(modifier.fillMaxSize(), contentAlignment = Alignment.TopStart) {
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
@@ -167,29 +229,31 @@ private fun DemoList(
 @Composable
 private fun DemoRoute(
     demo: DemoItem,
+    onBack: () -> Unit,
 ) {
-    Column(Modifier.fillMaxSize()) {
-        DemoContainer(
-            previewOptions = demo.previewOptions,
-        ) {
-            demo.content()
+    ScreenScaffold(backgroundColor = Color.White) {
+        Column(Modifier.fillMaxSize()) {
+            Toolbar(
+                leading = {
+                    IconButton(
+                        onClick = onBack,
+                        style = ButtonStyle.Ghost,
+                    ) {
+                        Icon(Lucide.ArrowLeft, contentDescription = "Go back")
+                    }
+                    Text(demo.name)
+                },
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .padding(demo.previewOptions.padding),
+                contentAlignment = demo.previewOptions.contentAlignment,
+            ) {
+                demo.content()
+            }
         }
-    }
-}
-
-@Composable
-private fun ColumnScope.DemoContainer(
-    previewOptions: PreviewOptions,
-    content: @Composable () -> Unit,
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f)
-            .padding(previewOptions.padding),
-        contentAlignment = previewOptions.contentAlignment,
-    ) {
-        content()
     }
 }
 

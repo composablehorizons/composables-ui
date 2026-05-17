@@ -1,14 +1,9 @@
 package com.composables.one.demo.examples
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,60 +18,46 @@ import com.composables.one.IconButton
 import com.composables.one.Text
 
 @Composable
-fun ButtonsExample() {
-    BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(24.dp),
-    ) {
-        if (maxWidth < 600.dp) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(32.dp),
-                horizontalAlignment = Alignment.Start,
-            ) {
-                ButtonSizeColumn("Small", ButtonSize.Small)
-                ButtonSizeColumn("Regular", ButtonSize.Regular)
-                ButtonSizeColumn("Large", ButtonSize.Large)
-            }
-        } else {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(
-                    space = 32.dp,
-                    alignment = Alignment.CenterHorizontally,
-                ),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                ButtonSizeColumn("Small", ButtonSize.Small)
-                ButtonSizeColumn("Regular", ButtonSize.Regular)
-                ButtonSizeColumn("Large", ButtonSize.Large)
-            }
-        }
-    }
+fun PrimaryButtonExample() {
+    ButtonStyleRow(ButtonStyle.Primary)
 }
 
 @Composable
-private fun ButtonSizeColumn(
-    label: String,
-    buttonSize: ButtonSize,
-) {
+fun SecondaryButtonExample() {
+    ButtonStyleRow(ButtonStyle.Secondary)
+}
+
+@Composable
+fun OutlinedButtonExample() {
+    ButtonStyleRow(ButtonStyle.Outlined)
+}
+
+@Composable
+fun DestructiveButtonExample() {
+    ButtonStyleRow(ButtonStyle.Destructive)
+}
+
+@Composable
+fun GhostButtonExample() {
+    ButtonStyleRow(ButtonStyle.Ghost)
+}
+
+@Composable
+fun ButtonSizesExample() {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalAlignment = Alignment.Start,
     ) {
-        Text(label)
-        ButtonStyleRow(ButtonStyle.Primary, buttonSize)
-        ButtonStyleRow(ButtonStyle.Secondary, buttonSize)
-        ButtonStyleRow(ButtonStyle.Outlined, buttonSize)
-        ButtonStyleRow(ButtonStyle.Destructive, buttonSize)
-        ButtonStyleRow(ButtonStyle.Ghost, buttonSize)
+        ButtonStyleRow(ButtonStyle.Secondary, ButtonSize.Small)
+        ButtonStyleRow(ButtonStyle.Secondary, ButtonSize.Regular)
+        ButtonStyleRow(ButtonStyle.Secondary, ButtonSize.Large)
     }
 }
 
 @Composable
 private fun ButtonStyleRow(
     style: ButtonStyle,
-    buttonSize: ButtonSize,
+    buttonSize: ButtonSize = ButtonSize.Default,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
