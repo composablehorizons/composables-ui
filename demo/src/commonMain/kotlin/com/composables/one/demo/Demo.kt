@@ -1,7 +1,5 @@
 package com.composables.one.demo
 
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -94,10 +92,6 @@ fun Demo() {
                     navController = navController,
                     startDestination = "home",
                     modifier = Modifier.weight(1f),
-                    enterTransition = { EnterTransition.None },
-                    exitTransition = { ExitTransition.None },
-                    popEnterTransition = { EnterTransition.None },
-                    popExitTransition = { ExitTransition.None },
                 ) {
                     composable("home") {
                         DemoList(onSelectDemo = { navController.navigate(it.id) })
