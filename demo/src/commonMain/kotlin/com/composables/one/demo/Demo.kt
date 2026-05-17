@@ -25,11 +25,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,13 +38,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.composables.icons.lucide.ArrowLeft
-import com.composables.icons.lucide.Hand
 import com.composables.icons.lucide.Lucide
-import com.composables.icons.lucide.MousePointer
 import com.composables.one.AppScaffold
 import com.composables.one.Icon
-import com.composables.one.InteractionTarget
-import com.composables.one.LocalInteractionTarget
 import com.composables.one.demo.examples.ButtonsExample
 import com.composables.one.demo.examples.TypographyExample
 import com.composeunstyled.UnstyledButton
@@ -71,44 +63,33 @@ private val demos = themingDemos + componentDemos
 
 @Composable
 fun Demo() {
-    var interactionTarget by remember { mutableStateOf(InteractionTarget.NonTouch) }
+    val navController = rememberNavController()
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
+    val currentDemo = demos.firstOrNull { it.id == currentRoute }
+    AppScaffold {
+        Column(Modifier.fillMaxSize()) {
+            DemoTopBar(
+                title = currentDemo?.name ?: "Composables One",
+                canGoBack = currentRoute != null && currentRoute != "home",
+                onBack = { navController.navigateUp() },
+            )
+            NavHost(
+                navController = navController,
+                startDestination = "home",
+                modifier = Modifier.weight(1f),
+                enterTransition = { EnterTransition.None },
+                exitTransition = { ExitTransition.None },
+                popEnterTransition = { EnterTransition.None },
+                popExitTransition = { ExitTransition.None },
+            ) {
+                composable("home") {
+                    DemoList(onSelectDemo = { navController.navigate(it.id) })
+                }
 
-    CompositionLocalProvider(LocalInteractionTarget provides interactionTarget) {
-        val navController = rememberNavController()
-        val currentBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = currentBackStackEntry?.destination?.route
-        val currentDemo = demos.firstOrNull { it.id == currentRoute }
-        AppScaffold {
-            Column(Modifier.fillMaxSize()) {
-                DemoTopBar(
-                    title = currentDemo?.name ?: "Composables One",
-                    canGoBack = currentRoute != null && currentRoute != "home",
-                    interactionTarget = interactionTarget,
-                    onBack = { navController.navigateUp() },
-                    onToggleInteractionTarget = {
-                        interactionTarget = when (interactionTarget) {
-                            InteractionTarget.NonTouch -> InteractionTarget.Touch
-                            InteractionTarget.Touch -> InteractionTarget.NonTouch
-                        }
-                    },
-                )
-                NavHost(
-                    navController = navController,
-                    startDestination = "home",
-                    modifier = Modifier.weight(1f),
-                    enterTransition = { EnterTransition.None },
-                    exitTransition = { ExitTransition.None },
-                    popEnterTransition = { EnterTransition.None },
-                    popExitTransition = { ExitTransition.None },
-                ) {
-                    composable("home") {
-                        DemoList(onSelectDemo = { navController.navigate(it.id) })
-                    }
-
-                    demos.forEach { demo ->
-                        composable(demo.id) {
-                            DemoRoute(demo = demo)
-                        }
+                demos.forEach { demo ->
+                    composable(demo.id) {
+                        DemoRoute(demo = demo)
                     }
                 }
             }
@@ -142,7 +123,7 @@ private fun DemoRoute(
 ) {
     Column(Modifier.fillMaxSize()) {
         DemoContainer(
-            padding = PaddingValues(24.dp),
+            padding = PaddingValues(0.dp),
         ) {
             demo.content()
         }
@@ -153,9 +134,7 @@ private fun DemoRoute(
 private fun DemoTopBar(
     title: String,
     canGoBack: Boolean,
-    interactionTarget: InteractionTarget,
     onBack: () -> Unit,
-    onToggleInteractionTarget: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -179,23 +158,6 @@ private fun DemoTopBar(
         }
         BasicText(title)
         Spacer(Modifier.weight(1f))
-        UnstyledButton(
-            onClick = onToggleInteractionTarget,
-            modifier = Modifier.clip(RoundedCornerShape(8.dp)),
-        ) {
-            Box(Modifier.padding(12.dp)) {
-                Icon(
-                    imageVector = when (interactionTarget) {
-                        InteractionTarget.NonTouch -> Lucide.MousePointer
-                        InteractionTarget.Touch -> Lucide.Hand
-                    },
-                    contentDescription = when (interactionTarget) {
-                        InteractionTarget.NonTouch -> "Current mode: pointer"
-                        InteractionTarget.Touch -> "Current mode: touch"
-                    },
-                )
-            }
-        }
     }
 }
 

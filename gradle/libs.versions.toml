@@ -8,7 +8,8 @@ iconsLucide = "1.1.1"
 navigation = "2.9.2"
 agp = "9.2.1"
 android-compile-sdk = "37"
-android-min-sdk = "21"
+android-min-sdk = "23"
+activityCompose = "1.13.0"
 
 [libraries]
 composables-unstyled-bottom-sheet = { module = "com.composables:composeunstyled-bottom-sheet", version.ref = "unstyled" }
@@ -27,6 +28,7 @@ composables-unstyled-progress = { module = "com.composables:composeunstyled-prog
 composables-unstyled-radio-group = { module = "com.composables:composeunstyled-radio-group", version.ref = "unstyled" }
 composables-unstyled-scrim = { module = "com.composables:composeunstyled-scrim", version.ref = "unstyled" }
 composables-unstyled-separators = { module = "com.composables:composeunstyled-separators", version.ref = "unstyled" }
+composables-unstyled-stack = { module = "com.composables:composeunstyled-stack", version.ref = "unstyled" }
 composables-unstyled-slider = { module = "com.composables:composeunstyled-slider", version.ref = "unstyled" }
 composables-unstyled-tab-group = { module = "com.composables:composeunstyled-tab-group", version.ref = "unstyled" }
 composables-unstyled-text-field = { module = "com.composables:composeunstyled-text-field", version.ref = "unstyled" }
@@ -38,9 +40,11 @@ ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorCli
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinXDate" }
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose" }
 androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 
 [plugins]
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+android-application = { id = "com.android.application", version.ref = "agp" }

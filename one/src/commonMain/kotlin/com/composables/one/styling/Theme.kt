@@ -4,15 +4,11 @@ import androidx.compose.foundation.Indication
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.composables.one.InteractionTarget
-import com.composables.one.LocalInteractionTarget
 import com.composeunstyled.platformtheme.buildPlatformTheme
-import com.composeunstyled.theme.ComponentInteractiveSize
 import com.composeunstyled.theme.ThemeProperty
 import com.composeunstyled.theme.ThemeToken
 import com.composeunstyled.platformtheme.bright as platformBright
@@ -49,15 +45,10 @@ val body = ThemeToken<TextStyle>("body")
 val buttonLabel = ThemeToken<TextStyle>("button_label")
 
 val buttonHeight = ThemeToken<Dp>("button_height")
+val buttonHorizontalPadding = ThemeToken<Dp>("button_horizontal_padding")
 val iconButtonSize = ThemeToken<Dp>("icon_button_size")
 
 val OneTheme = buildPlatformTheme {
-    val interactiveSize = when (LocalInteractionTarget.current) {
-        InteractionTarget.NonTouch -> 36.dp
-        InteractionTarget.Touch -> 40.dp
-    }
-    defaultComponentInteractiveSize = ComponentInteractiveSize(interactiveSize)
-
     properties[colors] = mapOf(
         background to Color(0xFFFAFAFA),
         onBackground to Color(0XFF0C0A09),
@@ -73,8 +64,9 @@ val OneTheme = buildPlatformTheme {
         buttonShape to RoundedCornerShape(6.dp),
     )
     properties[componentSizes] = mapOf(
-        buttonHeight to interactiveSize,
-        iconButtonSize to interactiveSize,
+        buttonHeight to 36.dp,
+        buttonHorizontalPadding to 16.dp,
+        iconButtonSize to 36.dp,
     )
 
     val bodyStyle = properties[platformTextStyles][platformText4]
@@ -85,17 +77,8 @@ val OneTheme = buildPlatformTheme {
         buttonLabel to bodyStyle.copy(fontWeight = FontWeight.Medium),
     )
 
-    val brightIndication = properties[platformIndications][platformBright]
-    defaultIndication = brightIndication
     properties[indications] = mapOf(
-        bright to brightIndication,
+        bright to properties[platformIndications][platformBright],
         dim to properties[platformIndications][platformDimmed],
     )
 }
-
-internal fun Color.mutate(enabled: Boolean): Color {
-    if (this == Color.Transparent || this == Color.Unspecified) return this
-    return if (enabled) return this else this.copy(alpha = 0.6f)
-}
-
-internal fun isBright(color: Color): Boolean = color.luminance() > 0.5f

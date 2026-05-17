@@ -24,19 +24,21 @@ fun OutlinedButton(
     enabled: Boolean = true,
     contentColor: Color = Theme[colors][onBackground],
     shape: Shape = Theme[shapes][buttonShape],
-    contentPadding: PaddingValues = DefaultButtonPadding,
+    buttonSize: ButtonSize = ButtonSize.Default,
+    contentPadding: PaddingValues = buttonPaddingFor(buttonSize),
     borderColor: Color = Theme[colors][border],
     borderWidth: Dp = 1.dp,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     content: @Composable RowScope.() -> Unit,
 ) {
-    PrimaryButton(
+    ButtonSkeleton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
         backgroundColor = Color.Transparent,
         contentColor = contentColor,
         shape = shape,
+        buttonSize = buttonSize,
         contentPadding = contentPadding,
         borderColor = borderColor,
         borderWidth = borderWidth,

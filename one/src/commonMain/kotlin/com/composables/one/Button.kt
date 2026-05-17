@@ -11,35 +11,34 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.composables.one.styling.buttonShape
-import com.composables.one.styling.colors
-import com.composables.one.styling.onBackground
 import com.composables.one.styling.shapes
 import com.composeunstyled.theme.Theme
 
 @Composable
-fun GhostButton(
+fun Button(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    contentColor: Color = Theme[colors][onBackground],
+    style: ButtonStyle = ButtonStyle.Primary,
     shape: Shape = Theme[shapes][buttonShape],
     buttonSize: ButtonSize = ButtonSize.Default,
     contentPadding: PaddingValues = buttonPaddingFor(buttonSize),
-    borderColor: Color = Color.Unspecified,
     borderWidth: Dp = 1.dp,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     content: @Composable RowScope.() -> Unit,
 ) {
+    val styleDefaults = buttonStyleDefaults(style)
+
     ButtonSkeleton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        backgroundColor = Color.Transparent,
-        contentColor = contentColor,
+        backgroundColor = styleDefaults.backgroundColor,
+        contentColor = styleDefaults.contentColor,
         shape = shape,
         buttonSize = buttonSize,
         contentPadding = contentPadding,
-        borderColor = borderColor,
+        borderColor = styleDefaults.borderColor,
         borderWidth = borderWidth,
         interactionSource = interactionSource,
         content = content,

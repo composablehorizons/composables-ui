@@ -25,19 +25,21 @@ fun DestructiveButton(
     backgroundColor: Color = Theme[colors][destructive],
     contentColor: Color = Theme[colors][onDestructive],
     shape: Shape = Theme[shapes][buttonShape],
-    contentPadding: PaddingValues = DefaultButtonPadding,
+    buttonSize: ButtonSize = ButtonSize.Default,
+    contentPadding: PaddingValues = buttonPaddingFor(buttonSize),
     borderColor: Color = Color.Unspecified,
     borderWidth: Dp = 1.dp,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     content: @Composable RowScope.() -> Unit,
 ) {
-    PrimaryButton(
+    ButtonSkeleton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
         backgroundColor = backgroundColor,
         contentColor = contentColor,
         shape = shape,
+        buttonSize = buttonSize,
         contentPadding = contentPadding,
         borderColor = borderColor,
         borderWidth = borderWidth,
