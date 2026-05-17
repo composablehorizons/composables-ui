@@ -18,7 +18,6 @@ composables-unstyled-checkbox = { module = "com.composables:composeunstyled-chec
 composables-unstyled-colored-indication = { module = "com.composables:composeunstyled-colored-indication", version.ref = "unstyled" }
 composables-unstyled-dialog = { module = "com.composables:composeunstyled-dialog", version.ref = "unstyled" }
 composables-unstyled-dropdown-menu = { module = "com.composables:composeunstyled-dropdown-menu", version.ref = "unstyled" }
-composables-unstyled-focus-ring = { module = "com.composables:composeunstyled-focus-ring", version.ref = "unstyled" }
 composables-unstyled-icon = { module = "com.composables:composeunstyled-icon", version.ref = "unstyled" }
 composables-unstyled-modal-bottom-sheet = { module = "com.composables:composeunstyled-modal-bottom-sheet", version.ref = "unstyled" }
 composables-unstyled-modal = { module = "com.composables:composeunstyled-modal", version.ref = "unstyled" }

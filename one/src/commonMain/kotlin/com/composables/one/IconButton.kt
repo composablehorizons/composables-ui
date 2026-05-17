@@ -2,14 +2,9 @@ package com.composables.one
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -20,60 +15,52 @@ import androidx.compose.ui.platform.LocalInputModeManager
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.composables.one.styling.bright
-import com.composables.one.styling.buttonLabel
-import com.composables.one.styling.buttonHeight
-import com.composables.one.styling.buttonTouchHeight
-import com.composables.one.styling.componentSizes
 import com.composables.one.styling.colors
+import com.composables.one.styling.componentSizes
 import com.composables.one.styling.dim
+import com.composables.one.styling.iconButtonSize
+import com.composables.one.styling.iconButtonTouchSize
 import com.composables.one.styling.indications
 import com.composables.one.styling.isBright
 import com.composables.one.styling.mutate
-import com.composables.one.styling.onPrimary
-import com.composables.one.styling.primary
+import com.composables.one.styling.onBackground
 import com.composables.one.styling.shapes
 import com.composables.one.styling.small
-import com.composables.one.styling.textStyles
 import com.composeunstyled.ProvideContentColor
-import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.UnstyledButton
 import com.composeunstyled.buildModifier
 import com.composeunstyled.minimumInteractiveComponentSize
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 
-internal val DefaultButtonPadding = PaddingValues(horizontal = 12.dp)
-internal val NoButtonPadding = PaddingValues(0.dp)
-
 @Composable
-fun PrimaryButton(
+fun IconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    backgroundColor: Color = Theme[colors][primary],
-    contentColor: Color = Theme[colors][onPrimary],
+    backgroundColor: Color = Color.Transparent,
+    contentColor: Color = Theme[colors][onBackground],
     shape: Shape = Theme[shapes][small],
-    contentPadding: PaddingValues = DefaultButtonPadding,
     borderColor: Color = Color.Unspecified,
     borderWidth: Dp = 1.dp,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    content: @Composable RowScope.() -> Unit,
+    content: @Composable () -> Unit,
 ) {
     val overriddenBackgroundColor = backgroundColor.mutate(enabled)
     val indication = if (isBright(backgroundColor)) Theme[indications][dim] else Theme[indications][bright]
     val inputModeManager = LocalInputModeManager.current
-    val minHeight = if (inputModeManager.inputMode == InputMode.Touch) {
-        Theme[componentSizes][buttonTouchHeight]
+    val size = if (inputModeManager.inputMode == InputMode.Touch) {
+        Theme[componentSizes][iconButtonTouchSize]
     } else {
-        Theme[componentSizes][buttonHeight]
+        Theme[componentSizes][iconButtonSize]
     }
 
     UnstyledButton(
         onClick = onClick,
         enabled = enabled,
-        contentPadding = contentPadding,
+        contentPadding = NoButtonPadding,
         modifier = modifier
-            .heightIn(min = minHeight)
+            .size(size)
             .minimumInteractiveComponentSize()
             .clip(shape)
             .background(overriddenBackgroundColor, shape)
@@ -86,14 +73,7 @@ fun PrimaryButton(
         indication = indication,
     ) {
         ProvideContentColor(contentColor) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                ProvideTextStyle(Theme[textStyles][buttonLabel]) {
-                    content()
-                }
-            }
+            content()
         }
     }
 }

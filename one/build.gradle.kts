@@ -50,7 +50,8 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.composables.unstyled.button)
             implementation(libs.composables.unstyled.colored.indication)
-            implementation(libs.composables.unstyled.focus.ring)
+            implementation(libs.composables.unstyled.build.modifier)
+            implementation(libs.composables.unstyled.icon)
             implementation(libs.composables.unstyled.outline)
             implementation(libs.composables.unstyled.platformtheme)
             api(libs.composables.unstyled.theming)

@@ -38,8 +38,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.composables.icons.lucide.ArrowLeft
 import com.composables.icons.lucide.Lucide
-import com.composables.one.demo.examples.PrimaryButtonExample
-import com.composables.one.styling.OneTheme
+import com.composables.one.AppScaffold
+import com.composables.one.demo.examples.ButtonsExample
+import com.composables.one.demo.examples.TypographyExample
 import com.composeunstyled.UnstyledButton
 import com.composeunstyled.UnstyledIcon
 
@@ -50,12 +51,18 @@ private data class DemoItem(
 )
 
 private val componentDemos = listOf(
-    DemoItem("Primary Button", "primary-button") { PrimaryButtonExample() },
+    DemoItem("Buttons", "buttons") { ButtonsExample() },
 )
+
+private val themingDemos = listOf(
+    DemoItem("Typography", "typography") { TypographyExample() },
+)
+
+private val demos = themingDemos + componentDemos
 
 @Composable
 fun Demo() {
-    OneTheme {
+    AppScaffold {
         val navController = rememberNavController()
         NavHost(
             navController = navController,
@@ -69,7 +76,7 @@ fun Demo() {
                 DemoList(onSelectDemo = { navController.navigate(it.id) })
             }
 
-            componentDemos.forEach { demo ->
+            demos.forEach { demo ->
                 composable(demo.id) {
                     DemoRoute(
                         demo = demo,
@@ -85,7 +92,7 @@ fun Demo() {
 private fun DemoList(
     onSelectDemo: (DemoItem) -> Unit,
 ) {
-    Box(Modifier.fillMaxSize().background(Color(0xFFFAFAFA)), contentAlignment = Alignment.TopStart) {
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopStart) {
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
@@ -95,6 +102,8 @@ private fun DemoList(
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             Spacer(Modifier.height(8.dp))
+            DemoSection("Theming", themingDemos, onSelectDemo)
+            Spacer(Modifier.height(12.dp))
             DemoSection("Components", componentDemos, onSelectDemo)
         }
     }
