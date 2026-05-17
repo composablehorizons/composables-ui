@@ -49,6 +49,7 @@ import com.composables.one.demo.examples.OutlinedButtonExample
 import com.composables.one.demo.examples.PrimaryButtonExample
 import com.composables.one.demo.examples.SecondaryButtonExample
 import com.composables.one.demo.examples.ButtonSizesExample
+import com.composables.one.demo.examples.AlertDialogExample
 import com.composables.one.demo.examples.CenteredToolbarExample
 import com.composables.one.demo.examples.LargeToolbarExample
 import com.composables.one.demo.examples.ToolbarWithActionsExample
@@ -76,6 +77,7 @@ private val componentDemos = listOf(
     DemoItem("Button (Destructive)", "button-destructive", content = { DestructiveButtonExample() }),
     DemoItem("Button (Ghost)", "button-ghost", content = { GhostButtonExample() }),
     DemoItem("Button (Sizes)", "button-sizes", content = { ButtonSizesExample() }),
+    DemoItem("AlertDialog", "alert-dialog", content = { AlertDialogExample() }),
     DemoItem(
         name = "Toolbar (Large)",
         id = "large-toolbar",

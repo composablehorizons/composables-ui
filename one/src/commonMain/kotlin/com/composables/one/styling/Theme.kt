@@ -32,6 +32,8 @@ val dim = ThemeToken<Indication>("dim")
 // colors
 val background = ThemeToken<Color>("background")
 val onBackground = ThemeToken<Color>("on_background")
+val panel = ThemeToken<Color>("panel_background")
+val onPanel = ThemeToken<Color>("on_panel_background")
 val primary = ThemeToken<Color>("primary")
 val onPrimary = ThemeToken<Color>("on_primary")
 val secondary = ThemeToken<Color>("secondary")
@@ -41,6 +43,7 @@ val onDestructive = ThemeToken<Color>("on_destructive")
 val border = ThemeToken<Color>("border")
 
 val buttonShape = ThemeToken<Shape>("button_shape")
+val alertDialogShape = ThemeToken<Shape>("alert_dialog_shape")
 
 val body = ThemeToken<TextStyle>("body")
 val title = ThemeToken<TextStyle>("title")
@@ -55,6 +58,8 @@ val OneTheme = buildPlatformTheme {
     properties[colors] = mapOf(
         background to Color(0xFFFAFAFA),
         onBackground to Color(0XFF0C0A09),
+        panel to Color.White,
+        onPanel to Color.Black,
         primary to Color(0XFF0C0A09),
         onPrimary to Color.White,
         secondary to Color(0xFFf4f4f5),
@@ -65,6 +70,7 @@ val OneTheme = buildPlatformTheme {
     )
     properties[shapes] = mapOf(
         buttonShape to RoundedCornerShape(6.dp),
+        alertDialogShape to RoundedCornerShape(16.dp),
     )
     properties[componentSizes] = mapOf(
         buttonHeight to 36.dp,
