@@ -14,7 +14,7 @@ import com.composables.one.styling.border
 import com.composables.one.styling.colors
 import com.composables.one.styling.onBackground
 import com.composables.one.styling.shapes
-import com.composables.one.styling.small
+import com.composables.one.styling.buttonShape
 import com.composeunstyled.theme.Theme
 
 @Composable
@@ -23,7 +23,7 @@ fun OutlinedButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     contentColor: Color = Theme[colors][onBackground],
-    shape: Shape = Theme[shapes][small],
+    shape: Shape = Theme[shapes][buttonShape],
     contentPadding: PaddingValues = DefaultButtonPadding,
     borderColor: Color = Theme[colors][border],
     borderWidth: Dp = 1.dp,

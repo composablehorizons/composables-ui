@@ -14,7 +14,7 @@ import com.composables.one.styling.colors
 import com.composables.one.styling.destructive
 import com.composables.one.styling.onDestructive
 import com.composables.one.styling.shapes
-import com.composables.one.styling.small
+import com.composables.one.styling.buttonShape
 import com.composeunstyled.theme.Theme
 
 @Composable
@@ -24,7 +24,7 @@ fun DestructiveButton(
     enabled: Boolean = true,
     backgroundColor: Color = Theme[colors][destructive],
     contentColor: Color = Theme[colors][onDestructive],
-    shape: Shape = Theme[shapes][small],
+    shape: Shape = Theme[shapes][buttonShape],
     contentPadding: PaddingValues = DefaultButtonPadding,
     borderColor: Color = Color.Unspecified,
     borderWidth: Dp = 1.dp,

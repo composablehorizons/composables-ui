@@ -25,7 +25,7 @@ import com.composables.one.styling.isBright
 import com.composables.one.styling.mutate
 import com.composables.one.styling.onBackground
 import com.composables.one.styling.shapes
-import com.composables.one.styling.small
+import com.composables.one.styling.buttonShape
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.UnstyledButton
 import com.composeunstyled.buildModifier
@@ -40,7 +40,7 @@ fun IconButton(
     enabled: Boolean = true,
     backgroundColor: Color = Color.Transparent,
     contentColor: Color = Theme[colors][onBackground],
-    shape: Shape = Theme[shapes][small],
+    shape: Shape = Theme[shapes][buttonShape],
     borderColor: Color = Color.Unspecified,
     borderWidth: Dp = 1.dp,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },

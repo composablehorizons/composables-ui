@@ -1,6 +1,7 @@
 package com.composables.one.styling
 
 import androidx.compose.foundation.Indication
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.luminance
@@ -16,8 +17,6 @@ import com.composeunstyled.platformtheme.bright as platformBright
 import com.composeunstyled.platformtheme.dimmed as platformDimmed
 import com.composeunstyled.platformtheme.indications as platformIndications
 import com.composeunstyled.platformtheme.interactiveSizes as platformInteractiveSizes
-import com.composeunstyled.platformtheme.roundedMedium as platformRoundedMedium
-import com.composeunstyled.platformtheme.shapes as platformShapes
 import com.composeunstyled.platformtheme.sizeDefault as platformSizeDefault
 import com.composeunstyled.platformtheme.sizeMinimum as platformSizeMinimum
 import com.composeunstyled.platformtheme.text4 as platformText4
@@ -45,7 +44,7 @@ val destructive = ThemeToken<Color>("destructive")
 val onDestructive = ThemeToken<Color>("on_destructive")
 val border = ThemeToken<Color>("border")
 
-val small = ThemeToken<Shape>("small")
+val buttonShape = ThemeToken<Shape>("button_shape")
 
 val body = ThemeToken<TextStyle>("body")
 val buttonLabel = ThemeToken<TextStyle>("button_label")
@@ -73,7 +72,7 @@ val OneTheme = buildPlatformTheme {
         border to Color(0xFF1F2328).copy(alpha = 0.15f),
     )
     properties[shapes] = mapOf(
-        small to properties[platformShapes][platformRoundedMedium],
+        buttonShape to RoundedCornerShape(6.dp),
     )
     properties[componentSizes] = mapOf(
         buttonHeight to 36.dp,

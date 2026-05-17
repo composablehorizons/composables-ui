@@ -15,7 +15,7 @@ import com.composables.one.styling.colors
 import com.composables.one.styling.onSecondary
 import com.composables.one.styling.secondary
 import com.composables.one.styling.shapes
-import com.composables.one.styling.small
+import com.composables.one.styling.buttonShape
 import com.composeunstyled.theme.Theme
 
 @Composable
@@ -25,7 +25,7 @@ fun SecondaryButton(
     enabled: Boolean = true,
     backgroundColor: Color = Theme[colors][secondary],
     contentColor: Color = Theme[colors][onSecondary],
-    shape: Shape = Theme[shapes][small],
+    shape: Shape = Theme[shapes][buttonShape],
     contentPadding: PaddingValues = DefaultButtonPadding,
     borderColor: Color = Theme[colors][border],
     borderWidth: Dp = 1.dp,

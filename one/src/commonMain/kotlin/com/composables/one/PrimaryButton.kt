@@ -33,7 +33,7 @@ import com.composables.one.styling.mutate
 import com.composables.one.styling.onPrimary
 import com.composables.one.styling.primary
 import com.composables.one.styling.shapes
-import com.composables.one.styling.small
+import com.composables.one.styling.buttonShape
 import com.composables.one.styling.textStyles
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.ProvideTextStyle
@@ -52,7 +52,7 @@ fun PrimaryButton(
     enabled: Boolean = true,
     backgroundColor: Color = Theme[colors][primary],
     contentColor: Color = Theme[colors][onPrimary],
-    shape: Shape = Theme[shapes][small],
+    shape: Shape = Theme[shapes][buttonShape],
     contentPadding: PaddingValues = DefaultButtonPadding,
     borderColor: Color = Color.Unspecified,
     borderWidth: Dp = 1.dp,
