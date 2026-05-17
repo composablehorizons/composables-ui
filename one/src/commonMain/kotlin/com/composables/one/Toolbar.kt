@@ -28,9 +28,11 @@ import com.composeunstyled.buildModifier
 import com.composeunstyled.theme.Theme
 import kotlin.jvm.JvmName
 
-enum class ToolbarSize {
-    Medium,
-    Large,
+class ToolbarSize private constructor() {
+    companion object {
+        val Medium = ToolbarSize()
+        val Large = ToolbarSize()
+    }
 }
 
 @Composable
@@ -43,19 +45,21 @@ fun Toolbar(
     leading: @Composable (RowScope.() -> Unit)? = null,
     trailing: @Composable (RowScope.() -> Unit)? = null,
 ) {
-    when (size) {
-        ToolbarSize.Medium -> MediumTitleToolbar(
+    if (size == ToolbarSize.Large) {
+        LargeTitleToolbar(
             modifier = modifier,
             backgroundColor = backgroundColor,
             title = title,
+            size = size,
             leading = leading,
             trailing = trailing,
         )
-
-        ToolbarSize.Large -> LargeTitleToolbar(
+    } else {
+        MediumTitleToolbar(
             modifier = modifier,
             backgroundColor = backgroundColor,
             title = title,
+            size = size,
             leading = leading,
             trailing = trailing,
         )
@@ -67,13 +71,14 @@ private fun MediumTitleToolbar(
     modifier: Modifier,
     backgroundColor: Color,
     title: @Composable RowScope.() -> Unit,
+    size: ToolbarSize,
     leading: @Composable (RowScope.() -> Unit)?,
     trailing: @Composable (RowScope.() -> Unit)?,
 ) {
     ToolbarContainer(
         modifier = modifier,
         backgroundColor = backgroundColor,
-        height = 64.dp,
+        height = toolbarHeightFor(size),
     ) {
         Row(
             modifier = Modifier.align(Alignment.CenterStart),
@@ -105,13 +110,14 @@ private fun LargeTitleToolbar(
     modifier: Modifier,
     backgroundColor: Color,
     title: @Composable RowScope.() -> Unit,
+    size: ToolbarSize,
     leading: @Composable (RowScope.() -> Unit)?,
     trailing: @Composable (RowScope.() -> Unit)?,
 ) {
     ToolbarContainer(
         modifier = modifier,
         backgroundColor = backgroundColor,
-        height = 112.dp,
+        height = toolbarHeightFor(size),
     ) {
         if (leading != null) {
             Row(
@@ -191,6 +197,11 @@ fun Toolbar(
             )
         }
     }
+}
+
+private fun toolbarHeightFor(size: ToolbarSize): Dp = when (size) {
+    ToolbarSize.Large -> 112.dp
+    else -> 64.dp
 }
 
 @Composable

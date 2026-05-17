@@ -52,11 +52,13 @@ enum class ButtonStyle {
     Ghost,
 }
 
-enum class ButtonSize {
-    Default,
-    Small,
-    Regular,
-    Large,
+class ButtonSize private constructor() {
+    companion object {
+        val Small = ButtonSize()
+        val Regular = ButtonSize()
+        val Large = ButtonSize()
+        val Default = Regular
+    }
 }
 
 @Composable
@@ -134,17 +136,15 @@ internal fun buttonPaddingFor(buttonSize: ButtonSize): PaddingValues {
 }
 
 private fun buttonHeightFor(buttonSize: ButtonSize): Dp = when (buttonSize) {
-    ButtonSize.Default -> buttonHeightFor(ButtonSize.Regular)
     ButtonSize.Small -> 40.dp
-    ButtonSize.Regular -> 44.dp
     ButtonSize.Large -> 48.dp
+    else -> 44.dp
 }
 
 private fun buttonHorizontalPaddingFor(buttonSize: ButtonSize): Dp = when (buttonSize) {
-    ButtonSize.Default -> buttonHorizontalPaddingFor(ButtonSize.Regular)
     ButtonSize.Small -> 12.dp
-    ButtonSize.Regular -> 16.dp
     ButtonSize.Large -> 20.dp
+    else -> 16.dp
 }
 
 private val NoButtonPadding = PaddingValues(0.dp)
