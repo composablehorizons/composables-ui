@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Plus
 import com.composables.one.DestructiveButton
+import com.composables.one.GhostButton
 import com.composables.one.Icon
 import com.composables.one.IconButton
 import com.composables.one.OutlinedButton
@@ -53,6 +54,9 @@ fun ButtonsExample() {
             Text("Button")
         }
         DestructiveButton(onClick = { /* TODO */ }) {
+            Text("Button")
+        }
+        GhostButton(onClick = { /* TODO */ }) {
             Text("Button")
         }
     }

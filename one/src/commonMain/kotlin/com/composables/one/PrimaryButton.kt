@@ -40,7 +40,7 @@ import com.composeunstyled.buildModifier
 import com.composeunstyled.minimumInteractiveComponentSize
 import com.composeunstyled.theme.Theme
 
-internal val DefaultButtonPadding = PaddingValues(horizontal = 12.dp)
+internal val DefaultButtonPadding = PaddingValues(horizontal = 16.dp)
 internal val NoButtonPadding = PaddingValues(0.dp)
 
 @Composable

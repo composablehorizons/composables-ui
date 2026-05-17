@@ -54,7 +54,7 @@ val iconButtonSize = ThemeToken<Dp>("icon_button_size")
 val OneTheme = buildPlatformTheme {
     val interactiveSize = when (LocalInteractionTarget.current) {
         InteractionTarget.NonTouch -> 36.dp
-        InteractionTarget.Touch -> 48.dp
+        InteractionTarget.Touch -> 40.dp
     }
     defaultComponentInteractiveSize = ComponentInteractiveSize(interactiveSize)
 
