@@ -1,5 +1,6 @@
 package com.composables.one
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -45,13 +46,17 @@ fun IconButton(
 ) {
     val overriddenBackgroundColor = backgroundColor.mutate(enabled)
     val indication = if (isBright(backgroundColor)) Theme[indications][dim] else Theme[indications][bright]
+    val iconButtonSize = animateDpAsState(
+        targetValue = Theme[componentSizes][iconButtonSize],
+        label = "Icon button size",
+    ).value
 
     UnstyledButton(
         onClick = onClick,
         enabled = enabled,
         contentPadding = NoButtonPadding,
         modifier = modifier
-            .size(Theme[componentSizes][iconButtonSize])
+            .size(iconButtonSize)
             .minimumInteractiveComponentSize()
             .clip(shape)
             .background(overriddenBackgroundColor, shape)

@@ -1,5 +1,6 @@
 package com.composables.one
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -58,13 +59,17 @@ fun PrimaryButton(
 ) {
     val overriddenBackgroundColor = backgroundColor.mutate(enabled)
     val indication = if (isBright(backgroundColor)) Theme[indications][dim] else Theme[indications][bright]
+    val buttonHeight = animateDpAsState(
+        targetValue = Theme[componentSizes][buttonHeight],
+        label = "Button height",
+    ).value
 
     UnstyledButton(
         onClick = onClick,
         enabled = enabled,
         contentPadding = contentPadding,
         modifier = modifier
-            .heightIn(min = Theme[componentSizes][buttonHeight])
+            .heightIn(min = buttonHeight)
             .minimumInteractiveComponentSize()
             .clip(shape)
             .background(overriddenBackgroundColor, shape)

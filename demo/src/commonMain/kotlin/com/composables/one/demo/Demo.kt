@@ -1,5 +1,7 @@
 package com.composables.one.demo
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,14 +42,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.composables.icons.lucide.ArrowLeft
+import com.composables.icons.lucide.Hand
 import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.MousePointer
 import com.composables.one.AppScaffold
+import com.composables.one.Icon
 import com.composables.one.InteractionTarget
 import com.composables.one.LocalInteractionTarget
 import com.composables.one.demo.examples.ButtonsExample
 import com.composables.one.demo.examples.TypographyExample
 import com.composeunstyled.UnstyledButton
-import com.composeunstyled.UnstyledIcon
 
 private data class DemoItem(
     val name: String,
@@ -92,6 +96,10 @@ fun Demo() {
                     navController = navController,
                     startDestination = "home",
                     modifier = Modifier.weight(1f),
+                    enterTransition = { EnterTransition.None },
+                    exitTransition = { ExitTransition.None },
+                    popEnterTransition = { EnterTransition.None },
+                    popExitTransition = { ExitTransition.None },
                 ) {
                     composable("home") {
                         DemoList(onSelectDemo = { navController.navigate(it.id) })
@@ -154,7 +162,8 @@ private fun DemoTopBar(
             .fillMaxWidth()
             .background(Color.White)
             .padding(WindowInsets.statusBars.asPaddingValues())
-            .padding(4.dp),
+            .height(56.dp)
+            .padding(horizontal = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (canGoBack) {
@@ -163,7 +172,7 @@ private fun DemoTopBar(
                 modifier = Modifier.clip(CircleShape),
             ) {
                 Box(Modifier.padding(12.dp)) {
-                    UnstyledIcon(Lucide.ArrowLeft, contentDescription = "Go back")
+                    Icon(Lucide.ArrowLeft, contentDescription = "Go back")
                 }
             }
             Spacer(Modifier.width(8.dp))
@@ -174,12 +183,16 @@ private fun DemoTopBar(
             onClick = onToggleInteractionTarget,
             modifier = Modifier.clip(RoundedCornerShape(8.dp)),
         ) {
-            Box(Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
-                BasicText(
-                    when (interactionTarget) {
-                        InteractionTarget.NonTouch -> "Pointer"
-                        InteractionTarget.Touch -> "Touch"
-                    }
+            Box(Modifier.padding(12.dp)) {
+                Icon(
+                    imageVector = when (interactionTarget) {
+                        InteractionTarget.NonTouch -> Lucide.MousePointer
+                        InteractionTarget.Touch -> Lucide.Hand
+                    },
+                    contentDescription = when (interactionTarget) {
+                        InteractionTarget.NonTouch -> "Current mode: pointer"
+                        InteractionTarget.Touch -> "Current mode: touch"
+                    },
                 )
             }
         }
