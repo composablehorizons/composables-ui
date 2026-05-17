@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -40,10 +39,16 @@ import androidx.navigation.compose.rememberNavController
 import com.composables.icons.lucide.ArrowLeft
 import com.composables.icons.lucide.Lucide
 import com.composables.one.AppScaffold
+import com.composables.one.Button
+import com.composables.one.ButtonStyle
 import com.composables.one.Icon
+import com.composables.one.Text
 import com.composables.one.demo.examples.ButtonsExample
 import com.composables.one.demo.examples.TypographyExample
+import com.composables.one.styling.body
+import com.composables.one.styling.textStyles
 import com.composeunstyled.UnstyledButton
+import com.composeunstyled.theme.Theme
 
 private data class DemoItem(
     val name: String,
@@ -194,7 +199,10 @@ private fun DemoSection(
             onClick = { onClick(demo) },
             modifier = Modifier.fillMaxWidth(),
         ) {
-            BasicText(demo.name)
+            Text(
+                text = demo.name,
+                style = Theme[textStyles][body],
+            )
         }
     }
 }
@@ -205,16 +213,14 @@ private fun DemoListButton(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
-    UnstyledButton(
+    Button(
         onClick = onClick,
+        style = ButtonStyle.Ghost,
         modifier = modifier
-            .sizeIn(minWidth = 40.dp, minHeight = 48.dp)
             .clip(RoundedCornerShape(8.dp)),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+            modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.CenterStart,
         ) {
             content()
