@@ -1,6 +1,7 @@
 package com.composables.one
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.heightIn
@@ -39,7 +40,6 @@ import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.UnstyledButton
 import com.composeunstyled.buildModifier
 import com.composeunstyled.minimumInteractiveComponentSize
-import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 
 internal val DefaultButtonPadding = PaddingValues(horizontal = 12.dp)
@@ -79,7 +79,7 @@ fun PrimaryButton(
             .background(overriddenBackgroundColor, shape)
             .then(buildModifier {
                 if (borderColor.isSpecified && borderColor != Color.Transparent && borderWidth > Dp.Hairline) {
-                    add(Modifier.outline(borderWidth, borderColor, shape))
+                    add(Modifier.border(borderWidth, borderColor, shape))
                 }
             }),
         interactionSource = interactionSource,

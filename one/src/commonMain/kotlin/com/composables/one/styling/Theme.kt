@@ -39,6 +39,11 @@ val background = ThemeToken<Color>("background")
 val onBackground = ThemeToken<Color>("on_background")
 val primary = ThemeToken<Color>("primary")
 val onPrimary = ThemeToken<Color>("on_primary")
+val secondary = ThemeToken<Color>("secondary")
+val onSecondary = ThemeToken<Color>("on_secondary")
+val destructive = ThemeToken<Color>("destructive")
+val onDestructive = ThemeToken<Color>("on_destructive")
+val border = ThemeToken<Color>("border")
 
 val small = ThemeToken<Shape>("small")
 
@@ -61,6 +66,11 @@ val OneTheme = buildPlatformTheme {
         onBackground to Color(0XFF0C0A09),
         primary to Color(0XFF0C0A09),
         onPrimary to Color.White,
+        secondary to Color(0xFFf4f4f5),
+        onSecondary to Color(0XFF0C0A09),
+        destructive to Color(0xFFDC2626),
+        onDestructive to Color.White,
+        border to Color(0xFF1F2328).copy(alpha = 0.15f),
     )
     properties[shapes] = mapOf(
         small to properties[platformShapes][platformRoundedMedium],
