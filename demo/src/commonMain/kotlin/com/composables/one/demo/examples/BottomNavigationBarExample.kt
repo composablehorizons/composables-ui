@@ -31,24 +31,24 @@ import com.composeunstyled.theme.Theme
 
 @Composable
 fun BottomNavigationBarExample() {
-    class Category(val key: String, val icon: ImageVector)
+    data class Category(val label: String, val icon: ImageVector)
 
     val Home = Category("Home", Lucide.House)
     val Search = Category("Search", Lucide.Search)
     val Profile = Category("Profile", Lucide.PersonStanding)
 
-    var selectedTab by remember { mutableStateOf(Home.key) }
+    var selectedTab by remember { mutableStateOf(Home) }
     val categories = listOf(Home, Search, Profile)
 
     TabGroup(
         selectedTab = selectedTab,
-        tabs = categories.map { it.key },
+        tabs = categories,
         onSelectedTabChange = { selectedTab = it },
         modifier = Modifier.fillMaxWidth(),
     ) {
         categories.forEach { category ->
             TabPanel(
-                key = category.key,
+                key = category,
                 modifier = Modifier.weight(1f).fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
@@ -59,21 +59,21 @@ fun BottomNavigationBarExample() {
                         modifier = Modifier.size(96.dp).alpha(0.4f)
                     )
                     Spacer(Modifier.height(8.dp))
-                    Text(category.key, style = Theme[textStyles][title])
+                    Text(category.label, style = Theme[textStyles][title])
                 }
             }
         }
 
         BottomNavigationBar(Modifier.fillMaxWidth()) {
             categories.forEach { category ->
-                val selected = selectedTab == category.key
+                val selected = selectedTab == category
                 PrimaryTab(
-                    key = category.key,
+                    key = category,
                     selected = selected,
-                    onSelected = { selectedTab = category.key },
+                    onSelected = { selectedTab = category },
                     modifier = Modifier.weight(1f),
                     icon = { Icon(category.icon, contentDescription = null) },
-                    title = { Text(category.key) }
+                    title = { Text(category.label) }
                 )
             }
         }

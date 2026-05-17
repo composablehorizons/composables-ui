@@ -32,38 +32,38 @@ import com.composeunstyled.theme.Theme
 
 @Composable
 fun TabBarExample() {
-    class Category(val key: String, val icon: ImageVector)
+    data class Category(val label: String, val icon: ImageVector)
 
     val Home = Category("Home", Lucide.House)
     val Search = Category("Search", Lucide.Search)
     val Profile = Category("Profile", Lucide.PersonStanding)
 
-    var selectedTab by remember { mutableStateOf(Home.key) }
+    var selectedTab by remember { mutableStateOf(Home) }
     val categories = listOf(Home, Search, Profile)
 
     TabGroup(
         selectedTab = selectedTab,
-        tabs = categories.map { it.key },
+        tabs = categories,
         onSelectedTabChange = { selectedTab = it },
         modifier = Modifier.fillMaxSize(),
     ) {
         TabBar {
             categories.forEach { category ->
                 SecondaryTab(
-                    key = category.key,
-                    selected = selectedTab == category.key,
-                    onSelected = { selectedTab = category.key },
-                    title = { Text(category.key) },
+                    key = category,
+                    selected = selectedTab == category,
+                    onSelected = { selectedTab = category },
+                    title = { Text(category.label) },
                     icon = { Icon(category.icon, contentDescription = null, modifier = Modifier.size(16.dp)) },
                 )
             }
         }
         categories.forEach { category ->
-            TabPanel(category.key, modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
+            TabPanel(category, modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(category.icon, contentDescription = null, modifier = Modifier.size(96.dp).alpha(0.4f))
                     Spacer(Modifier.height(8.dp))
-                    Text(category.key, style = Theme[textStyles][title])
+                    Text(category.label, style = Theme[textStyles][title])
                 }
             }
         }

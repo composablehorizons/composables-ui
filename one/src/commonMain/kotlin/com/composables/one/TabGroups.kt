@@ -81,25 +81,25 @@ import com.composeunstyled.TabPanel as UnstyledTabPanel
 import com.composeunstyled.TabGroupScope as UnstyledTabGroupScope
 import com.composeunstyled.TabListScope as UnstyledTabListScope
 
-class TabGroupScope internal constructor(
+class TabGroupScope<T> internal constructor(
     private val columnScope: ColumnScope,
-    internal val unstyledScope: UnstyledTabGroupScope<String>,
+    internal val unstyledScope: UnstyledTabGroupScope<T>,
 ) : ColumnScope by columnScope
 
-class TabListScope internal constructor(
+class TabListScope<T> internal constructor(
     private val rowScope: RowScope,
-    val unstyledScope: UnstyledTabListScope<String>,
+    val unstyledScope: UnstyledTabListScope<T>,
 ) : RowScope by rowScope
 
 @Sample("BottomNavigationBarExample")
 @Sample("TabBarExample")
 @Composable
-fun TabGroup(
-    selectedTab: String,
-    tabs: List<String>,
-    onSelectedTabChange: (String) -> Unit,
+fun <T> TabGroup(
+    selectedTab: T,
+    tabs: List<T>,
+    onSelectedTabChange: (T) -> Unit,
     modifier: Modifier = Modifier,
-    content: @Composable TabGroupScope.() -> Unit,
+    content: @Composable TabGroupScope<T>.() -> Unit,
 ) {
     UnstyledTabGroup(
         selectedTab = selectedTab,
@@ -114,8 +114,8 @@ fun TabGroup(
 }
 
 @Composable
-fun TabGroupScope.TabPanel(
-    key: String,
+fun <T> TabGroupScope<T>.TabPanel(
+    key: T,
     modifier: Modifier = Modifier,
     contentAlignment: Alignment = Alignment.TopStart,
     content: @Composable BoxScope.() -> Unit,
@@ -128,12 +128,12 @@ fun TabGroupScope.TabPanel(
 }
 
 @Composable
-fun TabGroupScope.BottomNavigationBar(
+fun <T> TabGroupScope<T>.BottomNavigationBar(
     modifier: Modifier = Modifier,
     shape: Shape = RectangleShape,
     backgroundColor: Color = Theme[colors][navigation],
     contentColor: Color = Theme[colors][onNavigation],
-    content: @Composable TabListScope.() -> Unit,
+    content: @Composable TabListScope<T>.() -> Unit,
 ) {
     with(unstyledScope) {
         UnstyledTabList(
@@ -199,8 +199,8 @@ fun DisableFontScaling(content: @Composable () -> Unit) {
 }
 
 @Composable
-fun TabListScope.PrimaryTab(
-    key: String,
+fun <T> TabListScope<T>.PrimaryTab(
+    key: T,
     selected: Boolean,
     onSelected: () -> Unit,
     icon: @Composable () -> Unit,
@@ -271,12 +271,12 @@ fun PrimaryTab(
 
 
 @Composable
-fun TabGroupScope.TabBar(
+fun <T> TabGroupScope<T>.TabBar(
     modifier: Modifier = Modifier,
     shape: Shape = RectangleShape,
     backgroundColor: Color = Theme[colors][navigation],
     contentColor: Color = Theme[colors][onNavigation],
-    content: @Composable TabListScope.() -> Unit,
+    content: @Composable TabListScope<T>.() -> Unit,
 ) {
     with(unstyledScope) {
         UnstyledTabList(
@@ -304,8 +304,8 @@ fun TabGroupScope.TabBar(
 }
 
 @Composable
-fun TabListScope.SecondaryTab(
-    key: String,
+fun <T> TabListScope<T>.SecondaryTab(
+    key: T,
     selected: Boolean,
     onSelected: () -> Unit,
     modifier: Modifier = Modifier,
