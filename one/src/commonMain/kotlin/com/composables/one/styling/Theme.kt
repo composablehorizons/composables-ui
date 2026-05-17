@@ -18,9 +18,6 @@ import com.composeunstyled.theme.ThemeToken
 import com.composeunstyled.platformtheme.bright as platformBright
 import com.composeunstyled.platformtheme.dimmed as platformDimmed
 import com.composeunstyled.platformtheme.indications as platformIndications
-import com.composeunstyled.platformtheme.interactiveSizes as platformInteractiveSizes
-import com.composeunstyled.platformtheme.sizeDefault as platformSizeDefault
-import com.composeunstyled.platformtheme.sizeMinimum as platformSizeMinimum
 import com.composeunstyled.platformtheme.text4 as platformText4
 import com.composeunstyled.platformtheme.textStyles as platformTextStyles
 
@@ -56,8 +53,8 @@ val iconButtonSize = ThemeToken<Dp>("icon_button_size")
 
 val OneTheme = buildPlatformTheme {
     val interactiveSize = when (LocalInteractionTarget.current) {
-        InteractionTarget.NonTouch -> properties[platformInteractiveSizes][platformSizeMinimum]
-        InteractionTarget.Touch -> properties[platformInteractiveSizes][platformSizeDefault]
+        InteractionTarget.NonTouch -> 36.dp
+        InteractionTarget.Touch -> 48.dp
     }
     defaultComponentInteractiveSize = ComponentInteractiveSize(interactiveSize)
 
