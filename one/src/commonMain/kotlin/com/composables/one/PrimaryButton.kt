@@ -16,14 +16,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.isSpecified
-import androidx.compose.ui.input.InputMode
-import androidx.compose.ui.platform.LocalInputModeManager
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.composables.one.styling.bright
 import com.composables.one.styling.buttonLabel
 import com.composables.one.styling.buttonHeight
-import com.composables.one.styling.buttonTouchHeight
+import com.composables.one.styling.buttonShape
 import com.composables.one.styling.componentSizes
 import com.composables.one.styling.colors
 import com.composables.one.styling.dim
@@ -33,7 +31,6 @@ import com.composables.one.styling.mutate
 import com.composables.one.styling.onPrimary
 import com.composables.one.styling.primary
 import com.composables.one.styling.shapes
-import com.composables.one.styling.buttonShape
 import com.composables.one.styling.textStyles
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.ProvideTextStyle
@@ -61,19 +58,13 @@ fun PrimaryButton(
 ) {
     val overriddenBackgroundColor = backgroundColor.mutate(enabled)
     val indication = if (isBright(backgroundColor)) Theme[indications][dim] else Theme[indications][bright]
-    val inputModeManager = LocalInputModeManager.current
-    val minHeight = if (inputModeManager.inputMode == InputMode.Touch) {
-        Theme[componentSizes][buttonTouchHeight]
-    } else {
-        Theme[componentSizes][buttonHeight]
-    }
 
     UnstyledButton(
         onClick = onClick,
         enabled = enabled,
         contentPadding = contentPadding,
         modifier = modifier
-            .heightIn(min = minHeight)
+            .heightIn(min = Theme[componentSizes][buttonHeight])
             .minimumInteractiveComponentSize()
             .clip(shape)
             .background(overriddenBackgroundColor, shape)

@@ -9,6 +9,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.composables.one.InteractionTarget
+import com.composables.one.LocalInteractionTarget
 import com.composeunstyled.platformtheme.buildPlatformTheme
 import com.composeunstyled.theme.ComponentInteractiveSize
 import com.composeunstyled.theme.ThemeProperty
@@ -50,15 +52,13 @@ val body = ThemeToken<TextStyle>("body")
 val buttonLabel = ThemeToken<TextStyle>("button_label")
 
 val buttonHeight = ThemeToken<Dp>("button_height")
-val buttonTouchHeight = ThemeToken<Dp>("button_touch_height")
 val iconButtonSize = ThemeToken<Dp>("icon_button_size")
-val iconButtonTouchSize = ThemeToken<Dp>("icon_button_touch_size")
 
 val OneTheme = buildPlatformTheme {
-    defaultComponentInteractiveSize = ComponentInteractiveSize(
-        nonTouchInteractionSize = properties[platformInteractiveSizes][platformSizeMinimum],
-        touchInteractionSize = properties[platformInteractiveSizes][platformSizeDefault],
-    )
+    defaultComponentInteractiveSize = when (LocalInteractionTarget.current) {
+        InteractionTarget.NonTouch -> ComponentInteractiveSize(properties[platformInteractiveSizes][platformSizeMinimum])
+        InteractionTarget.Touch -> ComponentInteractiveSize(properties[platformInteractiveSizes][platformSizeDefault])
+    }
 
     properties[colors] = mapOf(
         background to Color(0xFFFAFAFA),
@@ -76,9 +76,7 @@ val OneTheme = buildPlatformTheme {
     )
     properties[componentSizes] = mapOf(
         buttonHeight to 36.dp,
-        buttonTouchHeight to properties[platformInteractiveSizes][platformSizeDefault],
         iconButtonSize to 36.dp,
-        iconButtonTouchSize to properties[platformInteractiveSizes][platformSizeDefault],
     )
 
     val bodyStyle = properties[platformTextStyles][platformText4]

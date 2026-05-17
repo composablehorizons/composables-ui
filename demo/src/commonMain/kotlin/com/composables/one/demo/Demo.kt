@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -26,6 +25,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,10 +39,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.composables.icons.lucide.ArrowLeft
 import com.composables.icons.lucide.Lucide
 import com.composables.one.AppScaffold
+import com.composables.one.InteractionTarget
+import com.composables.one.LocalInteractionTarget
 import com.composables.one.demo.examples.ButtonsExample
 import com.composables.one.demo.examples.TypographyExample
 import com.composeunstyled.UnstyledButton
@@ -62,26 +69,45 @@ private val demos = themingDemos + componentDemos
 
 @Composable
 fun Demo() {
-    AppScaffold {
-        val navController = rememberNavController()
-        NavHost(
-            navController = navController,
-            startDestination = "home",
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None },
-            popEnterTransition = { EnterTransition.None },
-            popExitTransition = { ExitTransition.None },
-        ) {
-            composable("home") {
-                DemoList(onSelectDemo = { navController.navigate(it.id) })
-            }
+    var interactionTarget by remember { mutableStateOf(InteractionTarget.NonTouch) }
 
-            demos.forEach { demo ->
-                composable(demo.id) {
-                    DemoRoute(
-                        demo = demo,
-                        onBack = { navController.navigateUp() },
-                    )
+    CompositionLocalProvider(LocalInteractionTarget provides interactionTarget) {
+        val navController = rememberNavController()
+        val currentBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = currentBackStackEntry?.destination?.route
+        val currentDemo = demos.firstOrNull { it.id == currentRoute }
+        AppScaffold {
+            Column(Modifier.fillMaxSize()) {
+                DemoTopBar(
+                    title = currentDemo?.name ?: "Composables One",
+                    canGoBack = currentRoute != null && currentRoute != "home",
+                    interactionTarget = interactionTarget,
+                    onBack = { navController.navigateUp() },
+                    onToggleInteractionTarget = {
+                        interactionTarget = when (interactionTarget) {
+                            InteractionTarget.NonTouch -> InteractionTarget.Touch
+                            InteractionTarget.Touch -> InteractionTarget.NonTouch
+                        }
+                    },
+                )
+                NavHost(
+                    navController = navController,
+                    startDestination = "home",
+                    modifier = Modifier.weight(1f),
+                    enterTransition = { EnterTransition.None },
+                    exitTransition = { ExitTransition.None },
+                    popEnterTransition = { EnterTransition.None },
+                    popExitTransition = { ExitTransition.None },
+                ) {
+                    composable("home") {
+                        DemoList(onSelectDemo = { navController.navigate(it.id) })
+                    }
+
+                    demos.forEach { demo ->
+                        composable(demo.id) {
+                            DemoRoute(demo = demo)
+                        }
+                    }
                 }
             }
         }
@@ -96,7 +122,6 @@ private fun DemoList(
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
-                .systemBarsPadding()
                 .padding(8.dp)
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -112,10 +137,8 @@ private fun DemoList(
 @Composable
 private fun DemoRoute(
     demo: DemoItem,
-    onBack: () -> Unit,
 ) {
     Column(Modifier.fillMaxSize()) {
-        DemoTopBar(title = demo.name, onBack = onBack)
         DemoContainer(
             padding = PaddingValues(24.dp),
         ) {
@@ -127,7 +150,10 @@ private fun DemoRoute(
 @Composable
 private fun DemoTopBar(
     title: String,
+    canGoBack: Boolean,
+    interactionTarget: InteractionTarget,
     onBack: () -> Unit,
+    onToggleInteractionTarget: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -137,16 +163,32 @@ private fun DemoTopBar(
             .padding(4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        if (canGoBack) {
+            UnstyledButton(
+                onClick = onBack,
+                modifier = Modifier.clip(CircleShape),
+            ) {
+                Box(Modifier.padding(12.dp)) {
+                    UnstyledIcon(Lucide.ArrowLeft, contentDescription = "Go back")
+                }
+            }
+            Spacer(Modifier.width(8.dp))
+        }
+        BasicText(title)
+        Spacer(Modifier.weight(1f))
         UnstyledButton(
-            onClick = onBack,
-            modifier = Modifier.clip(CircleShape),
+            onClick = onToggleInteractionTarget,
+            modifier = Modifier.clip(RoundedCornerShape(8.dp)),
         ) {
-            Box(Modifier.padding(12.dp)) {
-                UnstyledIcon(Lucide.ArrowLeft, contentDescription = "Go back")
+            Box(Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
+                BasicText(
+                    when (interactionTarget) {
+                        InteractionTarget.NonTouch -> "Pointer"
+                        InteractionTarget.Touch -> "Touch"
+                    }
+                )
             }
         }
-        Spacer(Modifier.width(8.dp))
-        BasicText(title)
     }
 }
 
