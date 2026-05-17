@@ -13,7 +13,9 @@ import androidx.compose.ui.unit.dp
 import com.composables.one.Text
 import com.composables.one.styling.body
 import com.composables.one.styling.buttonLabel
+import com.composables.one.styling.header
 import com.composables.one.styling.textStyles
+import com.composables.one.styling.title
 import com.composeunstyled.theme.Theme
 
 @Composable
@@ -26,6 +28,14 @@ fun TypographyExample() {
             .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
+        Text(
+            text = "Header",
+            style = Theme[textStyles][header],
+        )
+        Text(
+            text = "Title",
+            style = Theme[textStyles][title],
+        )
         Text(
             text = "Body",
             style = Theme[textStyles][body],

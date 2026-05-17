@@ -2,33 +2,24 @@ package com.composables.one.demo
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -42,26 +33,64 @@ import com.composables.one.AppScaffold
 import com.composables.one.Button
 import com.composables.one.ButtonStyle
 import com.composables.one.Icon
+import com.composables.one.IconButton
 import com.composables.one.Text
+import com.composables.one.Toolbar
+import com.composables.one.ToolbarSize
 import com.composables.one.demo.examples.ButtonsExample
+import com.composables.one.demo.examples.CenteredToolbarExample
+import com.composables.one.demo.examples.LargeToolbarExample
+import com.composables.one.demo.examples.ToolbarWithActionsExample
 import com.composables.one.demo.examples.TypographyExample
 import com.composables.one.styling.body
 import com.composables.one.styling.textStyles
-import com.composeunstyled.UnstyledButton
 import com.composeunstyled.theme.Theme
 
 private data class DemoItem(
     val name: String,
     val id: String,
     val content: @Composable () -> Unit,
+    val previewOptions: PreviewOptions = PreviewOptions(),
+)
+
+private data class PreviewOptions(
+    val contentAlignment: Alignment = Alignment.Center,
+    val padding: PaddingValues = PaddingValues(0.dp),
 )
 
 private val componentDemos = listOf(
-    DemoItem("Buttons", "buttons") { ButtonsExample() },
+    DemoItem("Buttons", "buttons", content = { ButtonsExample() }),
+    DemoItem(
+        name = "Toolbar (Large)",
+        id = "large-toolbar",
+        content = { LargeToolbarExample() },
+        previewOptions = PreviewOptions(
+            contentAlignment = Alignment.TopCenter,
+            padding = PaddingValues(vertical = 24.dp),
+        ),
+    ),
+    DemoItem(
+        name = "Toolbar (Actions)",
+        id = "toolbar-actions",
+        content = { ToolbarWithActionsExample() },
+        previewOptions = PreviewOptions(
+            contentAlignment = Alignment.TopCenter,
+            padding = PaddingValues(vertical = 24.dp),
+        ),
+    ),
+    DemoItem(
+        name = "Toolbar (Centered)",
+        id = "centered-toolbar",
+        content = { CenteredToolbarExample() },
+        previewOptions = PreviewOptions(
+            contentAlignment = Alignment.TopCenter,
+            padding = PaddingValues(vertical = 24.dp),
+        ),
+    ),
 )
 
 private val themingDemos = listOf(
-    DemoItem("Typography", "typography") { TypographyExample() },
+    DemoItem("Typography", "typography", content = { TypographyExample() }),
 )
 
 private val demos = themingDemos + componentDemos
@@ -74,11 +103,24 @@ fun Demo() {
     val currentDemo = demos.firstOrNull { it.id == currentRoute }
     AppScaffold {
         Column(Modifier.fillMaxSize()) {
-            DemoTopBar(
-                title = currentDemo?.name ?: "Composables One",
-                canGoBack = currentRoute != null && currentRoute != "home",
-                onBack = { navController.navigateUp() },
-            )
+            if (currentRoute != null && currentRoute != "home") {
+                Toolbar(
+                    leading = {
+                        IconButton(
+                            onClick = { navController.navigateUp() },
+                            style = ButtonStyle.Ghost,
+                        ) {
+                            Icon(Lucide.ArrowLeft, contentDescription = "Go back")
+                        }
+                        Text(currentDemo?.name ?: "")
+                    },
+                )
+            } else {
+                Toolbar(
+                    title = { Text("Composables One") },
+                    size = ToolbarSize.Large,
+                )
+            }
             NavHost(
                 navController = navController,
                 startDestination = "home",
@@ -94,7 +136,7 @@ fun Demo() {
 
                 demos.forEach { demo ->
                     composable(demo.id) {
-                        DemoRoute(demo = demo)
+                        DemoRoute(demo)
                     }
                 }
             }
@@ -128,7 +170,7 @@ private fun DemoRoute(
 ) {
     Column(Modifier.fillMaxSize()) {
         DemoContainer(
-            padding = PaddingValues(0.dp),
+            previewOptions = demo.previewOptions,
         ) {
             demo.content()
         }
@@ -136,48 +178,16 @@ private fun DemoRoute(
 }
 
 @Composable
-private fun DemoTopBar(
-    title: String,
-    canGoBack: Boolean,
-    onBack: () -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(WindowInsets.statusBars.asPaddingValues())
-            .height(56.dp)
-            .padding(horizontal = 4.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        if (canGoBack) {
-            UnstyledButton(
-                onClick = onBack,
-                modifier = Modifier.clip(CircleShape),
-            ) {
-                Box(Modifier.padding(12.dp)) {
-                    Icon(Lucide.ArrowLeft, contentDescription = "Go back")
-                }
-            }
-            Spacer(Modifier.width(8.dp))
-        }
-        BasicText(title)
-        Spacer(Modifier.weight(1f))
-    }
-}
-
-@Composable
 private fun ColumnScope.DemoContainer(
-    padding: PaddingValues,
+    previewOptions: PreviewOptions,
     content: @Composable () -> Unit,
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .weight(1f)
-            .background(Color.White)
-            .padding(padding),
-        contentAlignment = Alignment.Center,
+            .padding(previewOptions.padding),
+        contentAlignment = previewOptions.contentAlignment,
     ) {
         content()
     }
@@ -189,7 +199,7 @@ private fun DemoSection(
     demos: List<DemoItem>,
     onClick: (DemoItem) -> Unit,
 ) {
-    BasicText(
+    Text(
         text = title,
         modifier = Modifier.padding(horizontal = 16.dp),
         style = TextStyle(fontWeight = FontWeight.SemiBold),

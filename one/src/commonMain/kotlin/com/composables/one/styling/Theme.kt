@@ -8,6 +8,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.composeunstyled.platformtheme.buildPlatformTheme
 import com.composeunstyled.theme.ThemeProperty
 import com.composeunstyled.theme.ThemeToken
@@ -42,6 +43,8 @@ val border = ThemeToken<Color>("border")
 val buttonShape = ThemeToken<Shape>("button_shape")
 
 val body = ThemeToken<TextStyle>("body")
+val title = ThemeToken<TextStyle>("title")
+val header = ThemeToken<TextStyle>("header")
 val buttonLabel = ThemeToken<TextStyle>("button_label")
 
 val buttonHeight = ThemeToken<Dp>("button_height")
@@ -74,6 +77,14 @@ val OneTheme = buildPlatformTheme {
 
     properties[textStyles] = mapOf(
         body to bodyStyle,
+        title to bodyStyle.copy(
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Medium,
+        ),
+        header to bodyStyle.copy(
+            fontSize = 26.sp,
+            fontWeight = FontWeight.SemiBold,
+        ),
         buttonLabel to bodyStyle.copy(fontWeight = FontWeight.Medium),
     )
 

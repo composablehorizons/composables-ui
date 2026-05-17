@@ -1,6 +1,7 @@
 package com.composables.one.demo.examples
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,45 +21,37 @@ import com.composables.one.ButtonStyle
 import com.composables.one.Icon
 import com.composables.one.IconButton
 import com.composables.one.Text
-import com.composeunstyled.CrossAxisAlignment
-import com.composeunstyled.MainAxisArrangement
-import com.composeunstyled.Stack
-import com.composeunstyled.StackOrientation
-import com.composeunstyled.currentWindowContainerSize
 
 @Composable
 fun ButtonsExample() {
-    val windowSize = currentWindowContainerSize()
-    val isCompact = windowSize.width < 600.dp
-    val stackOrientation = if (isCompact) {
-        StackOrientation.Vertical
-    } else {
-        StackOrientation.Horizontal
-    }
-
-    val mainAxisArrangement = if (isCompact) {
-        MainAxisArrangement.Start
-    } else
-        MainAxisArrangement.Center
-
-    val crossAxisAlignment = if (isCompact) {
-        CrossAxisAlignment.Start
-    } else
-        CrossAxisAlignment.Center
-
-    Stack(
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(24.dp),
-        orientation = stackOrientation,
-        mainAxisArrangement = mainAxisArrangement,
-        crossAxisAlignment = crossAxisAlignment,
-        spacing = 32.dp,
     ) {
-        ButtonSizeColumn("Small", ButtonSize.Small)
-        ButtonSizeColumn("Regular", ButtonSize.Regular)
-        ButtonSizeColumn("Large", ButtonSize.Large)
+        if (maxWidth < 600.dp) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(32.dp),
+                horizontalAlignment = Alignment.Start,
+            ) {
+                ButtonSizeColumn("Small", ButtonSize.Small)
+                ButtonSizeColumn("Regular", ButtonSize.Regular)
+                ButtonSizeColumn("Large", ButtonSize.Large)
+            }
+        } else {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(
+                    space = 32.dp,
+                    alignment = Alignment.CenterHorizontally,
+                ),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                ButtonSizeColumn("Small", ButtonSize.Small)
+                ButtonSizeColumn("Regular", ButtonSize.Regular)
+                ButtonSizeColumn("Large", ButtonSize.Large)
+            }
+        }
     }
 }
 
