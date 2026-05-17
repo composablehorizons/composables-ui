@@ -55,10 +55,11 @@ val buttonHeight = ThemeToken<Dp>("button_height")
 val iconButtonSize = ThemeToken<Dp>("icon_button_size")
 
 val OneTheme = buildPlatformTheme {
-    defaultComponentInteractiveSize = when (LocalInteractionTarget.current) {
-        InteractionTarget.NonTouch -> ComponentInteractiveSize(properties[platformInteractiveSizes][platformSizeMinimum])
-        InteractionTarget.Touch -> ComponentInteractiveSize(properties[platformInteractiveSizes][platformSizeDefault])
+    val interactiveSize = when (LocalInteractionTarget.current) {
+        InteractionTarget.NonTouch -> properties[platformInteractiveSizes][platformSizeMinimum]
+        InteractionTarget.Touch -> properties[platformInteractiveSizes][platformSizeDefault]
     }
+    defaultComponentInteractiveSize = ComponentInteractiveSize(interactiveSize)
 
     properties[colors] = mapOf(
         background to Color(0xFFFAFAFA),
@@ -75,8 +76,8 @@ val OneTheme = buildPlatformTheme {
         buttonShape to RoundedCornerShape(6.dp),
     )
     properties[componentSizes] = mapOf(
-        buttonHeight to 36.dp,
-        iconButtonSize to 36.dp,
+        buttonHeight to interactiveSize,
+        iconButtonSize to interactiveSize,
     )
 
     val bodyStyle = properties[platformTextStyles][platformText4]
