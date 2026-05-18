@@ -2,6 +2,10 @@ package com.composables.one
 
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.core.CubicBezierEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +44,14 @@ import com.composeunstyled.UnstyledDialog
 import com.composeunstyled.theme.Theme
 import com.composables.one.styling.title as titleTextStyle
 
+private const val DialogEnterDurationMillis = 400
+private const val DialogExitDurationMillis = 200
+private const val DialogEnterFadeDurationMillis = 150
+private const val DialogExitFadeDurationMillis = 100
+
+private val EmphasizedDecelerateEasing = CubicBezierEasing(0.05f, 0.7f, 0.1f, 1f)
+private val EmphasizedAccelerateEasing = CubicBezierEasing(0.3f, 0f, 0.8f, 0.15f)
+
 @Composable
 fun AlertDialog(
     visible: Boolean,
@@ -56,39 +68,62 @@ fun AlertDialog(
     borderColor: Color = Theme[colors][border],
     properties: DialogProperties = DialogProperties(),
 ) {
-    val titleContent = title
-
     UnstyledDialog(
         visible = visible,
         onDismissRequest = onDismissRequest,
         properties = properties,
         overlay = {
             // TODO update unstyled and use dialog scrim
+            Box(Modifier.fillMaxSize().background(Color.Black.copy(0.3f)))
         },
     ) {
-        DialogPanel(
-            modifier = Modifier.fillMaxSize(),
-            paneTitle = "Alert dialog",
-            enter = fadeIn(),
-            exit = fadeOut(),
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp)
+                .padding(vertical = 24.dp),
+            contentAlignment = Alignment.Center,
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 24.dp)
-                    .padding(vertical = 24.dp),
-                contentAlignment = Alignment.Center,
+            DialogPanel(
+                modifier = modifier
+                    .widthIn(min = 280.dp, max = 560.dp)
+                    .fillMaxWidth()
+                    .heightIn(max = 560.dp)
+                    .clip(shape)
+                    .background(backgroundColor, shape)
+                    .border(1.dp, borderColor, shape)
+                    .padding(24.dp),
+                paneTitle = "Alert dialog",
+                enter = scaleIn(
+                    initialScale = 0.92f,
+                    transformOrigin = androidx.compose.ui.graphics.TransformOrigin.Center,
+                    animationSpec = tween(
+                        durationMillis = DialogEnterDurationMillis,
+                        easing = EmphasizedDecelerateEasing,
+                    ),
+                ) + fadeIn(
+                    animationSpec = tween(
+                        durationMillis = DialogEnterFadeDurationMillis,
+                        easing = EmphasizedDecelerateEasing,
+                    ),
+                ),
+                exit = scaleOut(
+                    targetScale = 0.92f,
+                    transformOrigin = androidx.compose.ui.graphics.TransformOrigin.Center,
+                    animationSpec = tween(
+                        durationMillis = DialogExitDurationMillis,
+                        easing = EmphasizedAccelerateEasing,
+                    ),
+                ) + fadeOut(
+                    animationSpec = tween(
+                        durationMillis = DialogExitFadeDurationMillis,
+                        easing = EmphasizedAccelerateEasing,
+                    ),
+                ),
             ) {
                 ProvideContentColor(contentColor) {
                     Column(
-                        modifier = modifier
-                            .widthIn(min = 280.dp, max = 560.dp)
-                            .fillMaxWidth()
-                            .heightIn(max = 560.dp)
-                            .clip(shape)
-                            .background(backgroundColor, shape)
-                            .border(1.dp, borderColor, shape)
-                            .padding(24.dp),
+                        modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
                         if (icon != null) {
@@ -102,13 +137,13 @@ fun AlertDialog(
                             }
                         }
 
-                        if (titleContent != null) {
+                        if (title != null) {
                             ProvideTextStyle(Theme[textStyles][titleTextStyle]) {
                                 Box(
                                     modifier = Modifier.fillMaxWidth(),
                                     contentAlignment = if (icon == null) Alignment.CenterStart else Alignment.Center,
                                 ) {
-                                    titleContent()
+                                    title()
                                 }
                             }
                         }
