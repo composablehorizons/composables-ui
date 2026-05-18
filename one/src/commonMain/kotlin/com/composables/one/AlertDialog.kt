@@ -60,8 +60,9 @@ fun AlertDialog(
     icon: (@Composable () -> Unit)? = null,
     title: (@Composable () -> Unit)? = null,
     text: @Composable () -> Unit,
-    confirmButton: @Composable () -> Unit,
-    dismissButton: (@Composable () -> Unit)? = null,
+    positiveButton: @Composable () -> Unit,
+    neutralButton: (@Composable () -> Unit)? = null,
+    negativeButton: (@Composable () -> Unit)? = null,
     shape: Shape = Theme[shapes][alertDialogShape],
     backgroundColor: Color = Theme[colors][panel],
     contentColor: Color = Theme[colors][onPanel],
@@ -167,9 +168,12 @@ fun AlertDialog(
                             modifier = Modifier.fillMaxWidth(),
                             verticalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
-                            confirmButton()
-                            if (dismissButton != null) {
-                                dismissButton()
+                            positiveButton()
+                            if (neutralButton != null) {
+                                neutralButton()
+                            }
+                            if (negativeButton != null) {
+                                negativeButton()
                             }
                         }
                     }

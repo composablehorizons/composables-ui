@@ -50,6 +50,8 @@ import com.composables.one.demo.examples.PrimaryButtonExample
 import com.composables.one.demo.examples.SecondaryButtonExample
 import com.composables.one.demo.examples.ButtonSizesExample
 import com.composables.one.demo.examples.AlertDialogExample
+import com.composables.one.demo.examples.AlertDialogThreeActionsExample
+import com.composables.one.demo.examples.AlertDialogWithIconExample
 import com.composables.one.demo.examples.CenteredToolbarExample
 import com.composables.one.demo.examples.LargeToolbarExample
 import com.composables.one.demo.examples.ToolbarWithActionsExample
@@ -78,6 +80,8 @@ private val componentDemos = listOf(
     DemoItem("Button (Ghost)", "button-ghost", content = { GhostButtonExample() }),
     DemoItem("Button (Sizes)", "button-sizes", content = { ButtonSizesExample() }),
     DemoItem("AlertDialog", "alert-dialog", content = { AlertDialogExample() }),
+    DemoItem("AlertDialog (Icon)", "alert-dialog-icon", content = { AlertDialogWithIconExample() }),
+    DemoItem("AlertDialog (3 Actions)", "alert-dialog-3-actions", content = { AlertDialogThreeActionsExample() }),
     DemoItem(
         name = "Toolbar (Large)",
         id = "large-toolbar",
