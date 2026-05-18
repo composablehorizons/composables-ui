@@ -7,12 +7,9 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -27,11 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.unit.dp
 import com.composables.one.styling.alertDialogShape
 import com.composables.one.styling.body
-import com.composables.one.styling.border
 import com.composables.one.styling.colors
+import com.composables.one.styling.muted
 import com.composables.one.styling.onPanel
 import com.composables.one.styling.panel
 import com.composables.one.styling.shapes
@@ -41,6 +39,7 @@ import com.composeunstyled.DialogProperties
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.UnstyledDialog
+import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 import com.composables.one.styling.title as titleTextStyle
 
@@ -51,6 +50,7 @@ private const val DialogExitFadeDurationMillis = 100
 
 private val EmphasizedDecelerateEasing = CubicBezierEasing(0.05f, 0.7f, 0.1f, 1f)
 private val EmphasizedAccelerateEasing = CubicBezierEasing(0.3f, 0f, 0.8f, 0.15f)
+private val DialogOutlineColor = Color.Black.copy(alpha = 0.1f)
 
 @Composable
 fun AlertDialog(
@@ -60,12 +60,12 @@ fun AlertDialog(
     icon: (@Composable () -> Unit)? = null,
     title: (@Composable () -> Unit)? = null,
     text: @Composable () -> Unit,
-    confirmButton: @Composable RowScope.() -> Unit,
-    dismissButton: (@Composable RowScope.() -> Unit)? = null,
+    confirmButton: @Composable () -> Unit,
+    dismissButton: (@Composable () -> Unit)? = null,
     shape: Shape = Theme[shapes][alertDialogShape],
     backgroundColor: Color = Theme[colors][panel],
     contentColor: Color = Theme[colors][onPanel],
-    borderColor: Color = Theme[colors][border],
+    supportingTextColor: Color = Theme[colors][muted],
     properties: DialogProperties = DialogProperties(),
 ) {
     UnstyledDialog(
@@ -74,7 +74,7 @@ fun AlertDialog(
         properties = properties,
         overlay = {
             // TODO update unstyled and use dialog scrim
-            Box(Modifier.fillMaxSize().background(Color.Black.copy(0.3f)))
+            Box(Modifier.fillMaxSize().background(Color.Black.copy(0.12f)))
         },
     ) {
         Box(
@@ -89,14 +89,14 @@ fun AlertDialog(
                     .widthIn(min = 280.dp, max = 560.dp)
                     .fillMaxWidth()
                     .heightIn(max = 560.dp)
+                    .outline(1.dp, DialogOutlineColor, shape)
                     .clip(shape)
                     .background(backgroundColor, shape)
-                    .border(1.dp, borderColor, shape)
                     .padding(24.dp),
                 paneTitle = "Alert dialog",
                 enter = scaleIn(
                     initialScale = 0.92f,
-                    transformOrigin = androidx.compose.ui.graphics.TransformOrigin.Center,
+                    transformOrigin = TransformOrigin.Center,
                     animationSpec = tween(
                         durationMillis = DialogEnterDurationMillis,
                         easing = EmphasizedDecelerateEasing,
@@ -109,7 +109,7 @@ fun AlertDialog(
                 ),
                 exit = scaleOut(
                     targetScale = 0.92f,
-                    transformOrigin = androidx.compose.ui.graphics.TransformOrigin.Center,
+                    transformOrigin = TransformOrigin.Center,
                     animationSpec = tween(
                         durationMillis = DialogExitDurationMillis,
                         easing = EmphasizedAccelerateEasing,
@@ -124,6 +124,7 @@ fun AlertDialog(
                 ProvideContentColor(contentColor) {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
                         if (icon != null) {
@@ -141,7 +142,7 @@ fun AlertDialog(
                             ProvideTextStyle(Theme[textStyles][titleTextStyle]) {
                                 Box(
                                     modifier = Modifier.fillMaxWidth(),
-                                    contentAlignment = if (icon == null) Alignment.CenterStart else Alignment.Center,
+                                    contentAlignment = Alignment.Center,
                                 ) {
                                     title()
                                 }
@@ -150,23 +151,26 @@ fun AlertDialog(
 
                         Box(
                             modifier = Modifier
+                                .fillMaxWidth()
                                 .weight(1f, fill = false)
                                 .verticalScroll(rememberScrollState()),
+                            contentAlignment = Alignment.Center,
                         ) {
-                            ProvideTextStyle(Theme[textStyles][body]) {
-                                text()
+                            ProvideContentColor(supportingTextColor) {
+                                ProvideTextStyle(Theme[textStyles][body]) {
+                                    text()
+                                }
                             }
                         }
 
-                        Row(
+                        Column(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End),
-                            verticalAlignment = Alignment.CenterVertically,
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
+                            confirmButton()
                             if (dismissButton != null) {
                                 dismissButton()
                             }
-                            confirmButton()
                         }
                     }
                 }

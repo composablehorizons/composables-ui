@@ -34,6 +34,7 @@ val background = ThemeToken<Color>("background")
 val onBackground = ThemeToken<Color>("on_background")
 val panel = ThemeToken<Color>("panel_background")
 val onPanel = ThemeToken<Color>("on_panel_background")
+val muted = ThemeToken<Color>("muted")
 val primary = ThemeToken<Color>("primary")
 val onPrimary = ThemeToken<Color>("on_primary")
 val secondary = ThemeToken<Color>("secondary")
@@ -60,6 +61,7 @@ val OneTheme = buildPlatformTheme {
         onBackground to Color(0XFF0C0A09),
         panel to Color.White,
         onPanel to Color.Black,
+        muted to Color.Black.copy(alpha = 0.6f),
         primary to Color(0XFF0C0A09),
         onPrimary to Color.White,
         secondary to Color(0xFFf4f4f5),
