@@ -59,6 +59,7 @@ kotlin {
             implementation(libs.composables.unstyled.modal)
             implementation(libs.composables.unstyled.outline)
             implementation(libs.composables.unstyled.platformtheme)
+            implementation(libs.composables.unstyled.text.field)
             api(libs.composables.unstyled.theming)
 
             api(compose.foundation)

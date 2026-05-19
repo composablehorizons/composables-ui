@@ -1,28 +1,39 @@
 package com.composables.one.demo
 
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
 import androidx.compose.animation.core.CubicBezierEasing
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +43,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.composables.icons.lucide.ArrowLeft
+import com.composables.icons.lucide.ChevronRight
 import com.composables.icons.lucide.Lucide
 import com.composables.one.AppScaffold
 import com.composables.one.Button
@@ -42,30 +54,52 @@ import com.composables.one.ScreenScaffold
 import com.composables.one.Text
 import com.composables.one.Toolbar
 import com.composables.one.ToolbarSize
-import com.composables.one.demo.examples.DestructiveButtonExample
-import com.composables.one.demo.examples.GhostButtonExample
-import com.composables.one.demo.examples.OutlinedButtonExample
-import com.composables.one.demo.examples.PrimaryButtonExample
-import com.composables.one.demo.examples.SecondaryButtonExample
-import com.composables.one.demo.examples.ButtonSizesExample
 import com.composables.one.demo.examples.AlertDialogExample
 import com.composables.one.demo.examples.AlertDialogThreeActionsExample
 import com.composables.one.demo.examples.AlertDialogWithIconExample
 import com.composables.one.demo.examples.BottomSheetExample
+import com.composables.one.demo.examples.ButtonSizesExample
 import com.composables.one.demo.examples.CenteredToolbarExample
+import com.composables.one.demo.examples.DefaultTextFieldExample
+import com.composables.one.demo.examples.DestructiveButtonExample
+import com.composables.one.demo.examples.DisabledTextFieldExample
 import com.composables.one.demo.examples.DropdownMenuExample
+import com.composables.one.demo.examples.GhostButtonExample
 import com.composables.one.demo.examples.LargeToolbarExample
+import com.composables.one.demo.examples.MultilineTextFieldExample
+import com.composables.one.demo.examples.OutlinedButtonExample
+import com.composables.one.demo.examples.PrimaryButtonExample
+import com.composables.one.demo.examples.ReadOnlyTextFieldExample
+import com.composables.one.demo.examples.SearchTextFieldExample
+import com.composables.one.demo.examples.SecondaryButtonExample
 import com.composables.one.demo.examples.ToolbarWithActionsExample
 import com.composables.one.demo.examples.TypographyExample
 import com.composables.one.styling.body
+import com.composables.one.styling.colors
+import com.composables.one.styling.componentSizes
+import com.composables.one.styling.focusRing
+import com.composables.one.styling.focusRingOffset
+import com.composables.one.styling.focusRingWidth
+import com.composables.one.styling.muted
 import com.composables.one.styling.textStyles
+import com.composeunstyled.DisclosedContent
+import com.composeunstyled.DisclosureButton
+import com.composeunstyled.UnstyledDisclosure
+import com.composeunstyled.focusRing
 import com.composeunstyled.theme.Theme
 
 private data class DemoItem(
     val name: String,
     val id: String,
     val content: @Composable () -> Unit,
+    val listName: String = name,
     val previewOptions: PreviewOptions = PreviewOptions(),
+)
+
+private data class DemoGroup(
+    val name: String,
+    val id: String,
+    val demos: List<DemoItem>,
 )
 
 private data class PreviewOptions(
@@ -73,49 +107,150 @@ private data class PreviewOptions(
     val padding: PaddingValues = PaddingValues(0.dp),
 )
 
-private val componentDemos = listOf(
-    DemoItem("AlertDialog", "alert-dialog", content = { AlertDialogExample() }),
-    DemoItem("AlertDialog (3 Actions)", "alert-dialog-3-actions", content = { AlertDialogThreeActionsExample() }),
-    DemoItem("AlertDialog (Icon)", "alert-dialog-icon", content = { AlertDialogWithIconExample() }),
-    DemoItem("BottomSheet", "bottom-sheet", content = { BottomSheetExample() }),
-    DemoItem("Button (Destructive)", "button-destructive", content = { DestructiveButtonExample() }),
-    DemoItem("Button (Ghost)", "button-ghost", content = { GhostButtonExample() }),
-    DemoItem("Button (Outlined)", "button-outlined", content = { OutlinedButtonExample() }),
-    DemoItem("Button (Primary)", "button-primary", content = { PrimaryButtonExample() }),
-    DemoItem("Button (Secondary)", "button-secondary", content = { SecondaryButtonExample() }),
-    DemoItem("Button (Sizes)", "button-sizes", content = { ButtonSizesExample() }),
-    DemoItem("DropdownMenu", "dropdown-menu", content = { DropdownMenuExample() }),
-    DemoItem(
-        name = "Toolbar (Actions)",
-        id = "toolbar-actions",
-        content = { ToolbarWithActionsExample() },
-        previewOptions = PreviewOptions(
-            contentAlignment = Alignment.TopCenter,
-            padding = PaddingValues(vertical = 24.dp),
+private val componentDemoGroups = listOf(
+    DemoGroup(
+        name = "AlertDialog",
+        id = "alert-dialog",
+        demos = listOf(
+            DemoItem("AlertDialog", "alert-dialog", content = { AlertDialogExample() }, listName = "Default"),
+            DemoItem(
+                "AlertDialog (3 Actions)",
+                "alert-dialog-3-actions",
+                content = { AlertDialogThreeActionsExample() },
+                listName = "3 Actions",
+            ),
+            DemoItem(
+                "AlertDialog (Icon)",
+                "alert-dialog-icon",
+                content = { AlertDialogWithIconExample() },
+                listName = "Icon"
+            ),
         ),
     ),
-    DemoItem(
-        name = "Toolbar (Centered)",
-        id = "centered-toolbar",
-        content = { CenteredToolbarExample() },
-        previewOptions = PreviewOptions(
-            contentAlignment = Alignment.TopCenter,
-            padding = PaddingValues(vertical = 24.dp),
+    DemoGroup(
+        name = "BottomSheet",
+        id = "bottom-sheet",
+        demos = listOf(
+            DemoItem("BottomSheet", "bottom-sheet", content = { BottomSheetExample() }, listName = "Default"),
         ),
     ),
-    DemoItem(
-        name = "Toolbar (Large)",
-        id = "large-toolbar",
-        content = { LargeToolbarExample() },
-        previewOptions = PreviewOptions(
-            contentAlignment = Alignment.TopCenter,
-            padding = PaddingValues(vertical = 24.dp),
+    DemoGroup(
+        name = "Button",
+        id = "button",
+        demos = listOf(
+            DemoItem(
+                "Button (Destructive)",
+                "button-destructive",
+                content = { DestructiveButtonExample() },
+                listName = "Destructive"
+            ),
+            DemoItem("Button (Ghost)", "button-ghost", content = { GhostButtonExample() }, listName = "Ghost"),
+            DemoItem(
+                "Button (Outlined)",
+                "button-outlined",
+                content = { OutlinedButtonExample() },
+                listName = "Outlined"
+            ),
+            DemoItem("Button (Primary)", "button-primary", content = { PrimaryButtonExample() }, listName = "Primary"),
+            DemoItem(
+                "Button (Secondary)",
+                "button-secondary",
+                content = { SecondaryButtonExample() },
+                listName = "Secondary"
+            ),
+            DemoItem("Button (Sizes)", "button-sizes", content = { ButtonSizesExample() }, listName = "Sizes"),
+        ),
+    ),
+    DemoGroup(
+        name = "DropdownMenu",
+        id = "dropdown-menu",
+        demos = listOf(
+            DemoItem("DropdownMenu", "dropdown-menu", content = { DropdownMenuExample() }, listName = "Default"),
+        ),
+    ),
+    DemoGroup(
+        name = "TextField",
+        id = "text-field",
+        demos = listOf(
+            DemoItem("TextField", "text-field", content = { DefaultTextFieldExample() }, listName = "Default"),
+            DemoItem(
+                "TextField (Search)",
+                "text-field-search",
+                content = { SearchTextFieldExample() },
+                listName = "Search"
+            ),
+            DemoItem(
+                "TextField (Multiline)",
+                "text-field-multiline",
+                content = { MultilineTextFieldExample() },
+                listName = "Multiline"
+            ),
+            DemoItem(
+                "TextField (Disabled)",
+                "text-field-disabled",
+                content = { DisabledTextFieldExample() },
+                listName = "Disabled"
+            ),
+            DemoItem(
+                "TextField (Read-only)",
+                "text-field-read-only",
+                content = { ReadOnlyTextFieldExample() },
+                listName = "Read-only"
+            ),
+        ),
+    ),
+    DemoGroup(
+        name = "Toolbar",
+        id = "toolbar",
+        demos = listOf(
+            DemoItem(
+                name = "Toolbar (Actions)",
+                id = "toolbar-actions",
+                content = { ToolbarWithActionsExample() },
+                listName = "Actions",
+                previewOptions = PreviewOptions(
+                    contentAlignment = Alignment.TopCenter,
+                    padding = PaddingValues(vertical = 24.dp),
+                ),
+            ),
+            DemoItem(
+                name = "Toolbar (Centered)",
+                id = "centered-toolbar",
+                content = { CenteredToolbarExample() },
+                listName = "Centered",
+                previewOptions = PreviewOptions(
+                    contentAlignment = Alignment.TopCenter,
+                    padding = PaddingValues(vertical = 24.dp),
+                ),
+            ),
+            DemoItem(
+                name = "Toolbar (Large)",
+                id = "large-toolbar",
+                content = { LargeToolbarExample() },
+                listName = "Large",
+                previewOptions = PreviewOptions(
+                    contentAlignment = Alignment.TopCenter,
+                    padding = PaddingValues(vertical = 24.dp),
+                ),
+            ),
         ),
     ),
 )
 
+private val componentDemos = componentDemoGroups.flatMap { it.demos }
+
 private val themingDemos = listOf(
     DemoItem("Typography", "typography", content = { TypographyExample() }),
+)
+
+private val themingDemoGroups = listOf(
+    DemoGroup(
+        name = "Typography",
+        id = "typography",
+        demos = listOf(
+            DemoItem("Typography", "typography", content = { TypographyExample() }, listName = "Default"),
+        ),
+    ),
 )
 
 private val demos = componentDemos + themingDemos
@@ -223,14 +358,13 @@ private fun DemoList(
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
-                .padding(8.dp)
+                .padding(horizontal = 8.dp, vertical = 12.dp)
                 .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
+            DemoSection("Theming", themingDemoGroups, onSelectDemo)
             Spacer(Modifier.height(8.dp))
-            DemoSection("Theming", themingDemos, onSelectDemo)
-            Spacer(Modifier.height(12.dp))
-            DemoSection("Components", componentDemos, onSelectDemo)
+            DemoSection("Components", componentDemoGroups, onSelectDemo)
         }
     }
 }
@@ -269,24 +403,117 @@ private fun DemoRoute(
 @Composable
 private fun DemoSection(
     title: String,
-    demos: List<DemoItem>,
+    groups: List<DemoGroup>,
     onClick: (DemoItem) -> Unit,
 ) {
+    val expandedGroups = remember { mutableStateMapOf<String, Boolean>() }
+
     Text(
         text = title,
         modifier = Modifier.padding(horizontal = 16.dp),
         style = TextStyle(fontWeight = FontWeight.SemiBold),
     )
-    demos.forEach { demo ->
-        DemoListButton(
-            onClick = { onClick(demo) },
+    groups.forEach { group ->
+        if (group.demos.size == 1) {
+            val demo = group.demos.first()
+            DemoListButton(
+                onClick = { onClick(demo) },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(
+                    text = group.name,
+                    style = Theme[textStyles][body],
+                )
+            }
+            return@forEach
+        }
+
+        val expanded = expandedGroups[group.id] ?: false
+        val interactionSource = remember { MutableInteractionSource() }
+        UnstyledDisclosure(
+            expanded = expanded,
+            onExpandedChange = { expandedGroups[group.id] = it },
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(
-                text = demo.name,
-                style = Theme[textStyles][body],
-            )
+            Column(Modifier.fillMaxWidth()) {
+                DisclosureButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRing(
+                            interactionSource = interactionSource,
+                            width = Theme[componentSizes][focusRingWidth],
+                            color = Theme[colors][focusRing],
+                            shape = RoundedCornerShape(8.dp),
+                            offset = Theme[componentSizes][focusRingOffset],
+                        ),
+                    interactionSource = interactionSource,
+                    contentAlignment = Alignment.CenterStart,
+                ) {
+                    DemoGroupHeader(
+                        name = group.name,
+                        expanded = expanded,
+                    )
+                }
+                DisclosedContent(
+                    enter = expandVertically(
+                        animationSpec = spring(
+                            stiffness = Spring.StiffnessMediumLow,
+                        ),
+                    ),
+                    exit = shrinkVertically(),
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .padding(start = 24.dp)
+                            .fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                    ) {
+                        group.demos.forEach { demo ->
+                            DemoListButton(
+                                onClick = { onClick(demo) },
+                                modifier = Modifier.fillMaxWidth(),
+                            ) {
+                                Text(
+                                    text = demo.listName,
+                                    style = Theme[textStyles][body],
+                                )
+                            }
+                        }
+                    }
+                }
+            }
         }
+    }
+}
+
+@Composable
+private fun DemoGroupHeader(
+    name: String,
+    expanded: Boolean,
+) {
+    val iconRotation by animateFloatAsState(
+        targetValue = if (expanded) 90f else 0f,
+    )
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 10.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            imageVector = Lucide.ChevronRight,
+            contentDescription = null,
+            modifier = Modifier
+                .size(16.dp)
+                .rotate(iconRotation),
+            tint = Theme[colors][muted],
+        )
+        Text(
+            text = name,
+            style = Theme[textStyles][body],
+        )
     }
 }
 

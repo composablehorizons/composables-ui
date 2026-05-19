@@ -34,6 +34,8 @@ kotlin {
             implementation(libs.androidx.navigation.compose)
             implementation(libs.composables.icons.lucide)
             implementation(libs.composables.unstyled.button)
+            implementation(libs.composables.unstyled.disclosure)
+            implementation(libs.composables.unstyled.focus.ring)
             implementation(libs.composables.unstyled.icon)
             implementation(libs.composables.unstyled.stack)
             implementation(libs.composables.unstyled.window.container.size)

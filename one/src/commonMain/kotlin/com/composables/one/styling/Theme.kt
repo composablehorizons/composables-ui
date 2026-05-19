@@ -43,6 +43,12 @@ val onSecondary = ThemeToken<Color>("on_secondary")
 val destructive = ThemeToken<Color>("destructive")
 val onDestructive = ThemeToken<Color>("on_destructive")
 val border = ThemeToken<Color>("border")
+val input = ThemeToken<Color>("input")
+val onInput = ThemeToken<Color>("on_input")
+val inputPlaceholder = ThemeToken<Color>("input_placeholder")
+val inputDisabled = ThemeToken<Color>("input_disabled")
+val textSelectionHandle = ThemeToken<Color>("text_selection_handle")
+val textSelectionBackground = ThemeToken<Color>("text_selection_background")
 val scrim = ThemeToken<Color>("scrim")
 val focusRing = ThemeToken<Color>("focus_ring")
 
@@ -50,6 +56,7 @@ val buttonShape = ThemeToken<Shape>("button_shape")
 val alertDialogShape = ThemeToken<Shape>("alert_dialog_shape")
 val bottomSheetShape = ThemeToken<Shape>("bottom_sheet_shape")
 val dropdownMenuShape = ThemeToken<Shape>("dropdown_menu_shape")
+val textFieldShape = ThemeToken<Shape>("text_field_shape")
 
 val dropdownMenuShadow = ThemeToken<Shadow>("dropdown_menu_shadow")
 
@@ -57,10 +64,13 @@ val body = ThemeToken<TextStyle>("body")
 val title = ThemeToken<TextStyle>("title")
 val header = ThemeToken<TextStyle>("header")
 val buttonLabel = ThemeToken<TextStyle>("button_label")
+val textFieldInput = ThemeToken<TextStyle>("text_field_input")
 
 val buttonHeight = ThemeToken<Dp>("button_height")
 val buttonHorizontalPadding = ThemeToken<Dp>("button_horizontal_padding")
 val iconButtonSize = ThemeToken<Dp>("icon_button_size")
+val textFieldHeight = ThemeToken<Dp>("text_field_height")
+val textFieldHorizontalPadding = ThemeToken<Dp>("text_field_horizontal_padding")
 val focusRingWidth = ThemeToken<Dp>("focus_ring_width")
 val focusRingOffset = ThemeToken<Dp>("focus_ring_offset")
 
@@ -78,6 +88,12 @@ val OneTheme = buildPlatformTheme {
         destructive to Color(0xFFDC2626),
         onDestructive to Color.White,
         border to Color(0xFF1F2328).copy(alpha = 0.15f),
+        input to Color.White,
+        onInput to Color(0XFF0C0A09),
+        inputPlaceholder to Color.Black.copy(alpha = 0.48f),
+        inputDisabled to Color(0xFFf4f4f5),
+        textSelectionHandle to Color(0XFF0C0A09),
+        textSelectionBackground to Color(0XFF0C0A09).copy(alpha = 0.24f),
         scrim to Color.Black.copy(alpha = 0.12f),
         focusRing to Color(0xFF44403C),
     )
@@ -86,6 +102,7 @@ val OneTheme = buildPlatformTheme {
         alertDialogShape to RoundedCornerShape(16.dp),
         bottomSheetShape to RoundedCornerShape(28.dp),
         dropdownMenuShape to RoundedCornerShape(6.dp),
+        textFieldShape to RoundedCornerShape(6.dp),
     )
     properties[shadows] = mapOf(
         dropdownMenuShadow to Shadow(
@@ -99,6 +116,8 @@ val OneTheme = buildPlatformTheme {
         buttonHeight to 36.dp,
         buttonHorizontalPadding to 16.dp,
         iconButtonSize to 36.dp,
+        textFieldHeight to 40.dp,
+        textFieldHorizontalPadding to 12.dp,
         focusRingWidth to 2.dp,
         focusRingOffset to 2.dp,
     )
@@ -117,6 +136,7 @@ val OneTheme = buildPlatformTheme {
             fontWeight = FontWeight.SemiBold,
         ),
         buttonLabel to bodyStyle.copy(fontWeight = FontWeight.Medium),
+        textFieldInput to bodyStyle,
     )
 
     properties[indications] = mapOf(

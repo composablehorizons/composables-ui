@@ -1,5 +1,6 @@
 [versions]
 unstyled = "2.2.0"
+unstyledOutline = "2.2.1"
 kotlin = "2.3.21"
 kotlinXDate = "0.7.1"
 compose = "1.11.0"
@@ -18,12 +19,13 @@ composables-unstyled-button = { module = "com.composables:composeunstyled-button
 composables-unstyled-checkbox = { module = "com.composables:composeunstyled-checkbox", version.ref = "unstyled" }
 composables-unstyled-colored-indication = { module = "com.composables:composeunstyled-colored-indication", version.ref = "unstyled" }
 composables-unstyled-dialog = { module = "com.composables:composeunstyled-dialog", version.ref = "unstyled" }
+composables-unstyled-disclosure = { module = "com.composables:composeunstyled-disclosure", version.ref = "unstyled" }
 composables-unstyled-dropdown-menu = { module = "com.composables:composeunstyled-dropdown-menu", version.ref = "unstyled" }
 composables-unstyled-focus-ring = { module = "com.composables:composeunstyled-focus-ring", version.ref = "unstyled" }
 composables-unstyled-icon = { module = "com.composables:composeunstyled-icon", version.ref = "unstyled" }
 composables-unstyled-modal-bottom-sheet = { module = "com.composables:composeunstyled-modal-bottom-sheet", version.ref = "unstyled" }
 composables-unstyled-modal = { module = "com.composables:composeunstyled-modal", version.ref = "unstyled" }
-composables-unstyled-outline = { module = "com.composables:composeunstyled-outline", version.ref = "unstyled" }
+composables-unstyled-outline = { module = "com.composables:composeunstyled-outline", version.ref = "unstyledOutline" }
 composables-unstyled-platformtheme = { module = "com.composables:composeunstyled-platformtheme", version.ref = "unstyled" }
 composables-unstyled-progress = { module = "com.composables:composeunstyled-progress", version.ref = "unstyled" }
 composables-unstyled-radio-group = { module = "com.composables:composeunstyled-radio-group", version.ref = "unstyled" }
