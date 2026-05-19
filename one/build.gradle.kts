@@ -53,6 +53,7 @@ kotlin {
             implementation(libs.composables.unstyled.build.modifier)
             implementation(libs.composables.unstyled.dialog)
             implementation(libs.composables.unstyled.dropdown.menu)
+            implementation(libs.composables.unstyled.focus.ring)
             implementation(libs.composables.unstyled.icon)
             implementation(libs.composables.unstyled.modal)
             implementation(libs.composables.unstyled.outline)

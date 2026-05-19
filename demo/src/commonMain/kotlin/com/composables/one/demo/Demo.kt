@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -298,8 +297,8 @@ private fun DemoListButton(
     Button(
         onClick = onClick,
         style = ButtonStyle.Ghost,
-        modifier = modifier
-            .clip(RoundedCornerShape(8.dp)),
+        modifier = modifier,
+        shape = RoundedCornerShape(8.dp),
     ) {
         Box(
             modifier = Modifier.fillMaxWidth(),

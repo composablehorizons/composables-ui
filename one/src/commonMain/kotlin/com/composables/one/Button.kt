@@ -1,6 +1,5 @@
 package com.composables.one
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -25,9 +24,13 @@ import com.composables.one.styling.bright
 import com.composables.one.styling.border
 import com.composables.one.styling.buttonLabel
 import com.composables.one.styling.buttonShape
+import com.composables.one.styling.componentSizes
 import com.composables.one.styling.colors
 import com.composables.one.styling.destructive
 import com.composables.one.styling.dim
+import com.composables.one.styling.focusRing
+import com.composables.one.styling.focusRingOffset
+import com.composables.one.styling.focusRingWidth
 import com.composables.one.styling.indications
 import com.composables.one.styling.onBackground
 import com.composables.one.styling.onDestructive
@@ -41,6 +44,7 @@ import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.UnstyledButton
 import com.composeunstyled.buildModifier
+import com.composeunstyled.focusRing
 import com.composeunstyled.theme.Theme
 
 enum class ButtonStyle {
@@ -79,16 +83,25 @@ fun Button(
     ButtonSkeleton(
         onClick = onClick,
         modifier = modifier,
+        sizingModifier = Modifier.heightIn(min = buttonHeightFor(buttonSize)),
         enabled = enabled,
         backgroundColor = styleDefaults.backgroundColor,
         contentColor = styleDefaults.contentColor,
         shape = shape,
-        buttonSize = buttonSize,
         contentPadding = contentPadding,
         borderColor = styleDefaults.borderColor,
         borderWidth = borderWidth,
         interactionSource = interactionSource,
-        content = content,
+        content = {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                ProvideTextStyle(Theme[textStyles][buttonLabel]) {
+                    content()
+                }
+            }
+        },
     )
 }
 
@@ -105,30 +118,21 @@ fun IconButton(
     content: @Composable () -> Unit,
 ) {
     val styleDefaults = buttonStyleDefaults(style)
-    val overriddenBackgroundColor = styleDefaults.backgroundColor.mutate(enabled)
-    val indication = buttonIndicationFor(styleDefaults.backgroundColor)
 
-    UnstyledButton(
+    ButtonSkeleton(
         onClick = onClick,
+        modifier = modifier,
+        sizingModifier = Modifier.size(buttonHeightFor(buttonSize)),
         enabled = enabled,
+        backgroundColor = styleDefaults.backgroundColor,
+        contentColor = styleDefaults.contentColor,
+        shape = shape,
         contentPadding = NoButtonPadding,
-        modifier = modifier
-            .animateContentSize()
-            .size(buttonHeightFor(buttonSize))
-            .clip(shape)
-            .background(overriddenBackgroundColor, shape)
-            .then(buildModifier {
-                if (styleDefaults.borderColor.isSpecified && styleDefaults.borderColor != Color.Transparent && borderWidth > Dp.Hairline) {
-                    add(Modifier.border(borderWidth, styleDefaults.borderColor, shape))
-                }
-            }),
+        borderColor = styleDefaults.borderColor,
+        borderWidth = borderWidth,
         interactionSource = interactionSource,
-        indication = indication,
-    ) {
-        ProvideContentColor(styleDefaults.contentColor) {
-            content()
-        }
-    }
+        content = content,
+    )
 }
 
 internal fun buttonPaddingFor(buttonSize: ButtonSize): PaddingValues {
@@ -196,16 +200,16 @@ private fun buttonStyleDefaults(style: ButtonStyle): ButtonStyleDefaults {
 private fun ButtonSkeleton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    sizingModifier: Modifier,
     enabled: Boolean = true,
     backgroundColor: Color,
     contentColor: Color,
     shape: Shape,
-    buttonSize: ButtonSize,
     contentPadding: PaddingValues,
     borderColor: Color,
     borderWidth: Dp,
     interactionSource: MutableInteractionSource,
-    content: @Composable RowScope.() -> Unit,
+    content: @Composable () -> Unit,
 ) {
     val overriddenBackgroundColor = backgroundColor.mutate(enabled)
     val indication = buttonIndicationFor(backgroundColor)
@@ -215,8 +219,14 @@ private fun ButtonSkeleton(
         enabled = enabled,
         contentPadding = contentPadding,
         modifier = modifier
-            .animateContentSize()
-            .heightIn(min = buttonHeightFor(buttonSize))
+            .then(sizingModifier)
+            .focusRing(
+                interactionSource = interactionSource,
+                width = Theme[componentSizes][focusRingWidth],
+                color = Theme[colors][focusRing],
+                shape = shape,
+                offset = Theme[componentSizes][focusRingOffset],
+            )
             .clip(shape)
             .background(overriddenBackgroundColor, shape)
             .then(buildModifier {
@@ -228,14 +238,7 @@ private fun ButtonSkeleton(
         indication = indication,
     ) {
         ProvideContentColor(contentColor) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                ProvideTextStyle(Theme[textStyles][buttonLabel]) {
-                    content()
-                }
-            }
+            content()
         }
     }
 }

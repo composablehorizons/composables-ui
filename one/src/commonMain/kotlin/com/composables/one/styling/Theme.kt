@@ -46,6 +46,7 @@ val destructive = ThemeToken<Color>("destructive")
 val onDestructive = ThemeToken<Color>("on_destructive")
 val border = ThemeToken<Color>("border")
 val scrim = ThemeToken<Color>("scrim")
+val focusRing = ThemeToken<Color>("focus_ring")
 
 val buttonShape = ThemeToken<Shape>("button_shape")
 val alertDialogShape = ThemeToken<Shape>("alert_dialog_shape")
@@ -61,6 +62,8 @@ val buttonLabel = ThemeToken<TextStyle>("button_label")
 val buttonHeight = ThemeToken<Dp>("button_height")
 val buttonHorizontalPadding = ThemeToken<Dp>("button_horizontal_padding")
 val iconButtonSize = ThemeToken<Dp>("icon_button_size")
+val focusRingWidth = ThemeToken<Dp>("focus_ring_width")
+val focusRingOffset = ThemeToken<Dp>("focus_ring_offset")
 
 val OneTheme = buildPlatformTheme {
     properties[colors] = mapOf(
@@ -77,6 +80,7 @@ val OneTheme = buildPlatformTheme {
         onDestructive to Color.White,
         border to Color(0xFF1F2328).copy(alpha = 0.15f),
         scrim to Color.Black.copy(alpha = 0.12f),
+        focusRing to Color(0xFF44403C),
     )
     properties[shapes] = mapOf(
         buttonShape to RoundedCornerShape(6.dp),
@@ -95,6 +99,8 @@ val OneTheme = buildPlatformTheme {
         buttonHeight to 36.dp,
         buttonHorizontalPadding to 16.dp,
         iconButtonSize to 36.dp,
+        focusRingWidth to 2.dp,
+        focusRingOffset to 2.dp,
     )
 
     val bodyStyle = properties[platformTextStyles][platformText4]
