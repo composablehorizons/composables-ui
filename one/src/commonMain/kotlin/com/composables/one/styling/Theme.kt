@@ -4,9 +4,11 @@ import androidx.compose.foundation.Indication
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.composeunstyled.platformtheme.buildPlatformTheme
@@ -21,6 +23,7 @@ import com.composeunstyled.platformtheme.textStyles as platformTextStyles
 // properties
 val colors = ThemeProperty<Color>("colors")
 val shapes = ThemeProperty<Shape>("shapes")
+val shadows = ThemeProperty<Shadow>("shadows")
 val textStyles = ThemeProperty<TextStyle>("textStyles")
 val indications = ThemeProperty<Indication>("indications")
 val componentSizes = ThemeProperty<Dp>("componentSizes")
@@ -46,6 +49,9 @@ val scrim = ThemeToken<Color>("scrim")
 
 val buttonShape = ThemeToken<Shape>("button_shape")
 val alertDialogShape = ThemeToken<Shape>("alert_dialog_shape")
+val dropdownMenuShape = ThemeToken<Shape>("dropdown_menu_shape")
+
+val dropdownMenuShadow = ThemeToken<Shadow>("dropdown_menu_shadow")
 
 val body = ThemeToken<TextStyle>("body")
 val title = ThemeToken<TextStyle>("title")
@@ -75,6 +81,15 @@ val OneTheme = buildPlatformTheme {
     properties[shapes] = mapOf(
         buttonShape to RoundedCornerShape(6.dp),
         alertDialogShape to RoundedCornerShape(16.dp),
+        dropdownMenuShape to RoundedCornerShape(6.dp),
+    )
+    properties[shadows] = mapOf(
+        dropdownMenuShadow to Shadow(
+            radius = 16.dp,
+            color = Color.Black,
+            offset = DpOffset(x = 0.dp, y = 4.dp),
+            alpha = 0.14f,
+        ),
     )
     properties[componentSizes] = mapOf(
         buttonHeight to 36.dp,

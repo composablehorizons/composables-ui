@@ -53,6 +53,7 @@ import com.composables.one.demo.examples.AlertDialogExample
 import com.composables.one.demo.examples.AlertDialogThreeActionsExample
 import com.composables.one.demo.examples.AlertDialogWithIconExample
 import com.composables.one.demo.examples.CenteredToolbarExample
+import com.composables.one.demo.examples.DropdownMenuExample
 import com.composables.one.demo.examples.LargeToolbarExample
 import com.composables.one.demo.examples.ToolbarWithActionsExample
 import com.composables.one.demo.examples.TypographyExample
@@ -82,6 +83,7 @@ private val componentDemos = listOf(
     DemoItem("AlertDialog", "alert-dialog", content = { AlertDialogExample() }),
     DemoItem("AlertDialog (Icon)", "alert-dialog-icon", content = { AlertDialogWithIconExample() }),
     DemoItem("AlertDialog (3 Actions)", "alert-dialog-3-actions", content = { AlertDialogThreeActionsExample() }),
+    DemoItem("DropdownMenu", "dropdown-menu", content = { DropdownMenuExample() }),
     DemoItem(
         name = "Toolbar (Large)",
         id = "large-toolbar",
