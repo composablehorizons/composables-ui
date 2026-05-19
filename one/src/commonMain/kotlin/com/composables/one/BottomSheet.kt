@@ -1,7 +1,5 @@
 package com.composables.one
 
-import androidx.compose.animation.core.CubicBezierEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -13,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,6 +23,7 @@ import com.composables.one.styling.onPanel
 import com.composables.one.styling.panel
 import com.composables.one.styling.scrim
 import com.composables.one.styling.shapes
+import com.composeunstyled.ModalBottomSheetState
 import com.composeunstyled.ModalBottomSheetProperties
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.Scrim
@@ -33,22 +31,25 @@ import com.composeunstyled.Sheet
 import com.composeunstyled.SheetDetent
 import com.composeunstyled.UnstyledModalBottomSheet
 import com.composeunstyled.outline
-import com.composeunstyled.rememberModalBottomSheetState
 import com.composeunstyled.theme.Theme
+import com.composeunstyled.rememberModalBottomSheetState as rememberUnstyledModalBottomSheetState
 
 private val BottomSheetOutlineColor = Color.Black.copy(alpha = 0.1f)
 
-private const val DialogEnterDurationMillis = 400
-private const val DialogExitDurationMillis = 200
-private const val DialogEnterFadeDurationMillis = 150
-private const val DialogExitFadeDurationMillis = 100
-private val EmphasizedDecelerateEasing = CubicBezierEasing(0.05f, 0.7f, 0.1f, 1f)
-private val EmphasizedAccelerateEasing = CubicBezierEasing(0.3f, 0f, 0.8f, 0.15f)
-private val DialogOutlineColor = Color.Black.copy(alpha = 0.1f)
+@Composable
+fun rememberBottomSheetState(
+    initialDetent: SheetDetent = SheetDetent.Hidden,
+    detents: List<SheetDetent> = listOf(SheetDetent.Hidden, SheetDetent.FullyExpanded),
+): ModalBottomSheetState {
+    return rememberUnstyledModalBottomSheetState(
+        initialDetent = initialDetent,
+        detents = detents,
+    )
+}
 
 @Composable
 fun BottomSheet(
-    visible: Boolean,
+    state: ModalBottomSheetState,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     shape: Shape = Theme[shapes][bottomSheetShape],
@@ -57,34 +58,15 @@ fun BottomSheet(
     properties: ModalBottomSheetProperties = ModalBottomSheetProperties(),
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState(
-        initialDetent = if (visible) SheetDetent.FullyExpanded else SheetDetent.Hidden,
-        detents = listOf(SheetDetent.Hidden, SheetDetent.FullyExpanded),
-    )
-
-    LaunchedEffect(visible) {
-        sheetState.targetDetent = if (visible) SheetDetent.FullyExpanded else SheetDetent.Hidden
-    }
-
     UnstyledModalBottomSheet(
-        state = sheetState,
+        state = state,
         properties = properties,
         onDismiss = onDismissRequest,
         overlay = {
             Scrim(
                 scrimColor = Theme[colors][scrim],
-                enter = fadeIn(
-                    animationSpec = tween(
-                        durationMillis = DialogEnterFadeDurationMillis,
-                        easing = EmphasizedDecelerateEasing,
-                    ),
-                ),
-                exit = fadeOut(
-                    animationSpec = tween(
-                        durationMillis = DialogExitFadeDurationMillis,
-                        easing = EmphasizedAccelerateEasing,
-                    ),
-                ),
+                enter = fadeIn(),
+                exit = fadeOut(),
             )
         },
     ) {
