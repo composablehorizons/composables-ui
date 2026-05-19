@@ -51,6 +51,7 @@ import com.composables.one.demo.examples.ButtonSizesExample
 import com.composables.one.demo.examples.AlertDialogExample
 import com.composables.one.demo.examples.AlertDialogThreeActionsExample
 import com.composables.one.demo.examples.AlertDialogWithIconExample
+import com.composables.one.demo.examples.BottomSheetExample
 import com.composables.one.demo.examples.CenteredToolbarExample
 import com.composables.one.demo.examples.DropdownMenuExample
 import com.composables.one.demo.examples.LargeToolbarExample
@@ -73,25 +74,17 @@ private data class PreviewOptions(
 )
 
 private val componentDemos = listOf(
-    DemoItem("Button (Primary)", "button-primary", content = { PrimaryButtonExample() }),
-    DemoItem("Button (Secondary)", "button-secondary", content = { SecondaryButtonExample() }),
-    DemoItem("Button (Outlined)", "button-outlined", content = { OutlinedButtonExample() }),
+    DemoItem("AlertDialog", "alert-dialog", content = { AlertDialogExample() }),
+    DemoItem("AlertDialog (3 Actions)", "alert-dialog-3-actions", content = { AlertDialogThreeActionsExample() }),
+    DemoItem("AlertDialog (Icon)", "alert-dialog-icon", content = { AlertDialogWithIconExample() }),
+    DemoItem("BottomSheet", "bottom-sheet", content = { BottomSheetExample() }),
     DemoItem("Button (Destructive)", "button-destructive", content = { DestructiveButtonExample() }),
     DemoItem("Button (Ghost)", "button-ghost", content = { GhostButtonExample() }),
+    DemoItem("Button (Outlined)", "button-outlined", content = { OutlinedButtonExample() }),
+    DemoItem("Button (Primary)", "button-primary", content = { PrimaryButtonExample() }),
+    DemoItem("Button (Secondary)", "button-secondary", content = { SecondaryButtonExample() }),
     DemoItem("Button (Sizes)", "button-sizes", content = { ButtonSizesExample() }),
-    DemoItem("AlertDialog", "alert-dialog", content = { AlertDialogExample() }),
-    DemoItem("AlertDialog (Icon)", "alert-dialog-icon", content = { AlertDialogWithIconExample() }),
-    DemoItem("AlertDialog (3 Actions)", "alert-dialog-3-actions", content = { AlertDialogThreeActionsExample() }),
     DemoItem("DropdownMenu", "dropdown-menu", content = { DropdownMenuExample() }),
-    DemoItem(
-        name = "Toolbar (Large)",
-        id = "large-toolbar",
-        content = { LargeToolbarExample() },
-        previewOptions = PreviewOptions(
-            contentAlignment = Alignment.TopCenter,
-            padding = PaddingValues(vertical = 24.dp),
-        ),
-    ),
     DemoItem(
         name = "Toolbar (Actions)",
         id = "toolbar-actions",
@@ -110,13 +103,22 @@ private val componentDemos = listOf(
             padding = PaddingValues(vertical = 24.dp),
         ),
     ),
+    DemoItem(
+        name = "Toolbar (Large)",
+        id = "large-toolbar",
+        content = { LargeToolbarExample() },
+        previewOptions = PreviewOptions(
+            contentAlignment = Alignment.TopCenter,
+            padding = PaddingValues(vertical = 24.dp),
+        ),
+    ),
 )
 
 private val themingDemos = listOf(
     DemoItem("Typography", "typography", content = { TypographyExample() }),
 )
 
-private val demos = themingDemos + componentDemos
+private val demos = componentDemos + themingDemos
 
 private const val NavigationTransitionDurationMillis = 350
 private const val NavigationParallaxDivisor = 5

@@ -49,6 +49,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.composables.unstyled.button)
+            api(libs.composables.unstyled.modal.bottom.sheet)
             implementation(libs.composables.unstyled.colored.indication)
             implementation(libs.composables.unstyled.build.modifier)
             implementation(libs.composables.unstyled.dialog)

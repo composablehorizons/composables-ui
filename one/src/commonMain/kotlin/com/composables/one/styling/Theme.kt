@@ -12,11 +12,9 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.composeunstyled.platformtheme.buildPlatformTheme
+import com.composeunstyled.platformtheme.platformIndication
 import com.composeunstyled.theme.ThemeProperty
 import com.composeunstyled.theme.ThemeToken
-import com.composeunstyled.platformtheme.bright as platformBright
-import com.composeunstyled.platformtheme.dimmed as platformDimmed
-import com.composeunstyled.platformtheme.indications as platformIndications
 import com.composeunstyled.platformtheme.text4 as platformText4
 import com.composeunstyled.platformtheme.textStyles as platformTextStyles
 
@@ -50,6 +48,7 @@ val focusRing = ThemeToken<Color>("focus_ring")
 
 val buttonShape = ThemeToken<Shape>("button_shape")
 val alertDialogShape = ThemeToken<Shape>("alert_dialog_shape")
+val bottomSheetShape = ThemeToken<Shape>("bottom_sheet_shape")
 val dropdownMenuShape = ThemeToken<Shape>("dropdown_menu_shape")
 
 val dropdownMenuShadow = ThemeToken<Shadow>("dropdown_menu_shadow")
@@ -85,6 +84,7 @@ val OneTheme = buildPlatformTheme {
     properties[shapes] = mapOf(
         buttonShape to RoundedCornerShape(6.dp),
         alertDialogShape to RoundedCornerShape(16.dp),
+        bottomSheetShape to RoundedCornerShape(28.dp),
         dropdownMenuShape to RoundedCornerShape(6.dp),
     )
     properties[shadows] = mapOf(
@@ -120,7 +120,7 @@ val OneTheme = buildPlatformTheme {
     )
 
     properties[indications] = mapOf(
-        bright to properties[platformIndications][platformBright],
-        dim to properties[platformIndications][platformDimmed],
+        bright to platformIndication(Color.White.copy(alpha = 0.18f)),
+        dim to platformIndication(Color.Black.copy(alpha = 0.08f)),
     )
 }
