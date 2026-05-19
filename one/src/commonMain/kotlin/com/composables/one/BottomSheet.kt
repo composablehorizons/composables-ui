@@ -1,5 +1,9 @@
 package com.composables.one
 
+import androidx.compose.animation.core.CubicBezierEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,9 +24,11 @@ import com.composables.one.styling.bottomSheetShape
 import com.composables.one.styling.colors
 import com.composables.one.styling.onPanel
 import com.composables.one.styling.panel
+import com.composables.one.styling.scrim
 import com.composables.one.styling.shapes
 import com.composeunstyled.ModalBottomSheetProperties
 import com.composeunstyled.ProvideContentColor
+import com.composeunstyled.Scrim
 import com.composeunstyled.Sheet
 import com.composeunstyled.SheetDetent
 import com.composeunstyled.UnstyledModalBottomSheet
@@ -31,6 +37,14 @@ import com.composeunstyled.rememberModalBottomSheetState
 import com.composeunstyled.theme.Theme
 
 private val BottomSheetOutlineColor = Color.Black.copy(alpha = 0.1f)
+
+private const val DialogEnterDurationMillis = 400
+private const val DialogExitDurationMillis = 200
+private const val DialogEnterFadeDurationMillis = 150
+private const val DialogExitFadeDurationMillis = 100
+private val EmphasizedDecelerateEasing = CubicBezierEasing(0.05f, 0.7f, 0.1f, 1f)
+private val EmphasizedAccelerateEasing = CubicBezierEasing(0.3f, 0f, 0.8f, 0.15f)
+private val DialogOutlineColor = Color.Black.copy(alpha = 0.1f)
 
 @Composable
 fun BottomSheet(
@@ -57,7 +71,21 @@ fun BottomSheet(
         properties = properties,
         onDismiss = onDismissRequest,
         overlay = {
-            Box(Modifier.fillMaxSize().background(Color.Black.copy(0.12f)))
+            Scrim(
+                scrimColor = Theme[colors][scrim],
+                enter = fadeIn(
+                    animationSpec = tween(
+                        durationMillis = DialogEnterFadeDurationMillis,
+                        easing = EmphasizedDecelerateEasing,
+                    ),
+                ),
+                exit = fadeOut(
+                    animationSpec = tween(
+                        durationMillis = DialogExitFadeDurationMillis,
+                        easing = EmphasizedAccelerateEasing,
+                    ),
+                ),
+            )
         },
     ) {
         Box(
