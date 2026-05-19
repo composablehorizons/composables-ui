@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,11 +20,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import com.composables.one.styling.bottomSheetShape
+import com.composables.one.styling.border
 import com.composables.one.styling.colors
+import com.composables.one.styling.dim
+import com.composables.one.styling.indications
 import com.composables.one.styling.onPanel
 import com.composables.one.styling.panel
 import com.composables.one.styling.scrim
 import com.composables.one.styling.shapes
+import com.composeunstyled.DragIndication
 import com.composeunstyled.ModalBottomSheetState
 import com.composeunstyled.ModalBottomSheetProperties
 import com.composeunstyled.ProvideContentColor
@@ -82,14 +88,27 @@ fun BottomSheet(
                     .fillMaxWidth()
                     .outline(1.dp, BottomSheetOutlineColor, shape)
                     .clip(shape)
-                    .background(backgroundColor, shape)
-                    .padding(24.dp),
+                    .background(backgroundColor, shape),
             ) {
                 ProvideContentColor(contentColor) {
-                    Column(
+                    Box(
                         modifier = Modifier.fillMaxWidth(),
-                        content = content,
-                    )
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp),
+                            content = content,
+                        )
+                        DragIndication(
+                            modifier = Modifier
+                                .align(Alignment.TopCenter)
+                                .padding(top = 22.dp)
+                                .background(Theme[colors][border], RoundedCornerShape(100))
+                                .size(width = 32.dp, height = 4.dp),
+                            indication = Theme[indications][dim],
+                        )
+                    }
                 }
             }
         }

@@ -58,6 +58,7 @@ import com.composables.one.ToolbarSize
 import com.composables.one.demo.examples.AlertDialogExample
 import com.composables.one.demo.examples.AlertDialogThreeActionsExample
 import com.composables.one.demo.examples.AlertDialogWithIconExample
+import com.composables.one.demo.examples.BottomSheetActionMenuExample
 import com.composables.one.demo.examples.BottomSheetExample
 import com.composables.one.demo.examples.ButtonSizesExample
 import com.composables.one.demo.examples.CenteredToolbarExample
@@ -133,6 +134,12 @@ private val componentDemoGroups = listOf(
         id = "bottom-sheet",
         demos = listOf(
             DemoItem("BottomSheet", "bottom-sheet", content = { BottomSheetExample() }, listName = "Default"),
+            DemoItem(
+                "BottomSheet (Action menu)",
+                "bottom-sheet-action-menu",
+                content = { BottomSheetActionMenuExample() },
+                listName = "Action menu",
+            ),
         ),
     ),
     DemoGroup(
