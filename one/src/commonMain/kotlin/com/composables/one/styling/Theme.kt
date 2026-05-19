@@ -42,6 +42,7 @@ val onSecondary = ThemeToken<Color>("on_secondary")
 val destructive = ThemeToken<Color>("destructive")
 val onDestructive = ThemeToken<Color>("on_destructive")
 val border = ThemeToken<Color>("border")
+val scrim = ThemeToken<Color>("scrim")
 
 val buttonShape = ThemeToken<Shape>("button_shape")
 val alertDialogShape = ThemeToken<Shape>("alert_dialog_shape")
@@ -69,6 +70,7 @@ val OneTheme = buildPlatformTheme {
         destructive to Color(0xFFDC2626),
         onDestructive to Color.White,
         border to Color(0xFF1F2328).copy(alpha = 0.15f),
+        scrim to Color.Black.copy(alpha = 0.12f),
     )
     properties[shapes] = mapOf(
         buttonShape to RoundedCornerShape(6.dp),

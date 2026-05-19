@@ -32,12 +32,14 @@ import com.composables.one.styling.colors
 import com.composables.one.styling.muted
 import com.composables.one.styling.onPanel
 import com.composables.one.styling.panel
+import com.composables.one.styling.scrim
 import com.composables.one.styling.shapes
 import com.composables.one.styling.textStyles
 import com.composeunstyled.DialogPanel
 import com.composeunstyled.DialogProperties
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.ProvideTextStyle
+import com.composeunstyled.Scrim
 import com.composeunstyled.UnstyledDialog
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
@@ -74,8 +76,21 @@ fun AlertDialog(
         onDismissRequest = onDismissRequest,
         properties = properties,
         overlay = {
-            // TODO update unstyled and use dialog scrim
-            Box(Modifier.fillMaxSize().background(Color.Black.copy(0.12f)))
+            Scrim(
+                scrimColor = Theme[colors][scrim],
+                enter = fadeIn(
+                    animationSpec = tween(
+                        durationMillis = DialogEnterFadeDurationMillis,
+                        easing = EmphasizedDecelerateEasing,
+                    ),
+                ),
+                exit = fadeOut(
+                    animationSpec = tween(
+                        durationMillis = DialogExitFadeDurationMillis,
+                        easing = EmphasizedAccelerateEasing,
+                    ),
+                ),
+            )
         },
     ) {
         Box(
