@@ -89,13 +89,14 @@ fun SearchTextFieldExample() {
                     if (state.text.isNotEmpty()) {
                         IconButton(
                             onClick = { state.clearText() },
+                            modifier = Modifier.size(32.dp),
                             style = ButtonStyle.Ghost,
                             buttonSize = ButtonSize.Small,
                         ) {
                             Icon(
                                 imageVector = Lucide.X,
                                 contentDescription = "Clear search",
-                                modifier = Modifier.size(16.dp),
+                                modifier = Modifier.size(14.dp),
                                 tint = Theme[colors][muted],
                             )
                         }

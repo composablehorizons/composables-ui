@@ -19,13 +19,13 @@ fun BottomSheetExample() {
         containerHeight * 0.6f
     }
     val sheetState = rememberBottomSheetState(
-        detents = listOf(SheetDetent.Hidden, peek, SheetDetent.FullyExpanded),
+        detents = listOf(SheetDetent.Hidden, SheetDetent.FullyExpanded),
     )
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Button(onClick = { sheetState.targetDetent = peek }) {
+        Button(onClick = { sheetState.targetDetent = SheetDetent.FullyExpanded }) {
             Text("Show sheet")
         }
 

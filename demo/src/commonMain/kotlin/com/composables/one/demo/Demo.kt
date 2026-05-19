@@ -11,6 +11,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -263,6 +264,8 @@ private val NavigationTransitionEasing = CubicBezierEasing(0.32f, 0.72f, 0f, 1f)
 @Composable
 fun Demo() {
     val navController = rememberNavController()
+    val demoListScrollState = rememberScrollState()
+    val expandedDemoGroups = remember { mutableStateMapOf<String, Boolean>() }
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
     val currentDemo = demos.firstOrNull { it.id == currentRoute }
@@ -331,6 +334,8 @@ fun Demo() {
                         )
                         DemoList(
                             onSelectDemo = { navController.navigate(it.id) },
+                            scrollState = demoListScrollState,
+                            expandedGroups = expandedDemoGroups,
                             modifier = Modifier.weight(1f),
                         )
                     }
@@ -352,19 +357,21 @@ fun Demo() {
 @Composable
 private fun DemoList(
     onSelectDemo: (DemoItem) -> Unit,
+    scrollState: ScrollState,
+    expandedGroups: MutableMap<String, Boolean>,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier.fillMaxSize(), contentAlignment = Alignment.TopStart) {
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
                 .padding(horizontal = 8.dp, vertical = 12.dp)
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            DemoSection("Theming", themingDemoGroups, onSelectDemo)
+            DemoSection("Theming", themingDemoGroups, expandedGroups, onSelectDemo)
             Spacer(Modifier.height(8.dp))
-            DemoSection("Components", componentDemoGroups, onSelectDemo)
+            DemoSection("Components", componentDemoGroups, expandedGroups, onSelectDemo)
         }
     }
 }
@@ -404,10 +411,9 @@ private fun DemoRoute(
 private fun DemoSection(
     title: String,
     groups: List<DemoGroup>,
+    expandedGroups: MutableMap<String, Boolean>,
     onClick: (DemoItem) -> Unit,
 ) {
-    val expandedGroups = remember { mutableStateMapOf<String, Boolean>() }
-
     Text(
         text = title,
         modifier = Modifier.padding(horizontal = 16.dp),

@@ -2,6 +2,7 @@ package com.composables.one.styling
 
 import androidx.compose.foundation.Indication
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.shadow.Shadow
@@ -25,6 +26,8 @@ val shadows = ThemeProperty<Shadow>("shadows")
 val textStyles = ThemeProperty<TextStyle>("textStyles")
 val indications = ThemeProperty<Indication>("indications")
 val componentSizes = ThemeProperty<Dp>("componentSizes")
+val alphas = ThemeProperty<Float>("alphas")
+val textSelectionColors = ThemeProperty<TextSelectionColors>("textSelectionColors")
 
 // indications
 val bright = ThemeToken<Indication>("bright")
@@ -43,6 +46,8 @@ val onSecondary = ThemeToken<Color>("on_secondary")
 val destructive = ThemeToken<Color>("destructive")
 val onDestructive = ThemeToken<Color>("on_destructive")
 val border = ThemeToken<Color>("border")
+val field = ThemeToken<Color>("field")
+val onField = ThemeToken<Color>("on_field")
 val input = ThemeToken<Color>("input")
 val onInput = ThemeToken<Color>("on_input")
 val inputPlaceholder = ThemeToken<Color>("input_placeholder")
@@ -66,6 +71,8 @@ val header = ThemeToken<TextStyle>("header")
 val buttonLabel = ThemeToken<TextStyle>("button_label")
 val textFieldInput = ThemeToken<TextStyle>("text_field_input")
 
+val textFieldTextSelectionColors = ThemeToken<TextSelectionColors>("text_field_text_selection_colors")
+
 val buttonHeight = ThemeToken<Dp>("button_height")
 val buttonHorizontalPadding = ThemeToken<Dp>("button_horizontal_padding")
 val iconButtonSize = ThemeToken<Dp>("icon_button_size")
@@ -73,8 +80,12 @@ val textFieldHeight = ThemeToken<Dp>("text_field_height")
 val textFieldHorizontalPadding = ThemeToken<Dp>("text_field_horizontal_padding")
 val focusRingWidth = ThemeToken<Dp>("focus_ring_width")
 val focusRingOffset = ThemeToken<Dp>("focus_ring_offset")
+val disabledAlpha = ThemeToken<Float>("disabled_alpha")
 
 val OneTheme = buildPlatformTheme {
+    val textSelectionHandleColor = Color(0XFF0C0A09)
+    val textSelectionBackgroundColor = textSelectionHandleColor.copy(alpha = 0.24f)
+
     properties[colors] = mapOf(
         background to Color(0xFFFAFAFA),
         onBackground to Color(0XFF0C0A09),
@@ -88,14 +99,22 @@ val OneTheme = buildPlatformTheme {
         destructive to Color(0xFFDC2626),
         onDestructive to Color.White,
         border to Color(0xFF1F2328).copy(alpha = 0.15f),
+        field to Color.White,
+        onField to Color(0XFF0C0A09),
         input to Color.White,
         onInput to Color(0XFF0C0A09),
         inputPlaceholder to Color.Black.copy(alpha = 0.48f),
-        inputDisabled to Color(0xFFf4f4f5),
-        textSelectionHandle to Color(0XFF0C0A09),
-        textSelectionBackground to Color(0XFF0C0A09).copy(alpha = 0.24f),
+        inputDisabled to Color.White,
+        textSelectionHandle to textSelectionHandleColor,
+        textSelectionBackground to textSelectionBackgroundColor,
         scrim to Color.Black.copy(alpha = 0.12f),
         focusRing to Color(0xFF44403C),
+    )
+    properties[textSelectionColors] = mapOf(
+        textFieldTextSelectionColors to TextSelectionColors(
+            handleColor = textSelectionHandleColor,
+            backgroundColor = textSelectionBackgroundColor,
+        ),
     )
     properties[shapes] = mapOf(
         buttonShape to RoundedCornerShape(6.dp),
@@ -120,6 +139,10 @@ val OneTheme = buildPlatformTheme {
         textFieldHorizontalPadding to 12.dp,
         focusRingWidth to 2.dp,
         focusRingOffset to 2.dp,
+    )
+
+    properties[alphas] = mapOf(
+        disabledAlpha to 0.65f,
     )
 
     val bodyStyle = properties[platformTextStyles][platformText4]

@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -24,9 +25,11 @@ import com.composables.one.styling.bright
 import com.composables.one.styling.border
 import com.composables.one.styling.buttonLabel
 import com.composables.one.styling.buttonShape
+import com.composables.one.styling.alphas
 import com.composables.one.styling.componentSizes
 import com.composables.one.styling.colors
 import com.composables.one.styling.destructive
+import com.composables.one.styling.disabledAlpha
 import com.composables.one.styling.dim
 import com.composables.one.styling.focusRing
 import com.composables.one.styling.focusRingOffset
@@ -211,7 +214,6 @@ private fun ButtonSkeleton(
     interactionSource: MutableInteractionSource,
     content: @Composable () -> Unit,
 ) {
-    val overriddenBackgroundColor = backgroundColor.mutate(enabled)
     val indication = buttonIndicationFor(backgroundColor)
 
     UnstyledButton(
@@ -228,10 +230,13 @@ private fun ButtonSkeleton(
                 offset = Theme[componentSizes][focusRingOffset],
             )
             .clip(shape)
-            .background(overriddenBackgroundColor, shape)
+            .background(backgroundColor, shape)
             .then(buildModifier {
                 if (borderColor.isSpecified && borderColor != Color.Transparent && borderWidth > Dp.Hairline) {
                     add(Modifier.border(borderWidth, borderColor, shape))
+                }
+                if (!enabled) {
+                    add(Modifier.alpha(Theme[alphas][disabledAlpha]))
                 }
             }),
         interactionSource = interactionSource,
@@ -251,8 +256,3 @@ private fun buttonIndicationFor(backgroundColor: Color) = if (backgroundColor ==
 }
 
 private fun Color.isBright(): Boolean = luminance() > 0.5f
-
-private fun Color.mutate(enabled: Boolean): Color {
-    if (this == Color.Transparent || this == Color.Unspecified) return this
-    return if (enabled) this else copy(alpha = 0.6f)
-}

@@ -19,10 +19,8 @@ import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,22 +41,23 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.composables.one.styling.border
+import com.composables.one.styling.alphas
 import com.composables.one.styling.colors
 import com.composables.one.styling.componentSizes
+import com.composables.one.styling.field
 import com.composables.one.styling.focusRing
 import com.composables.one.styling.focusRingOffset
 import com.composables.one.styling.focusRingWidth
-import com.composables.one.styling.input
-import com.composables.one.styling.inputDisabled
+import com.composables.one.styling.disabledAlpha
 import com.composables.one.styling.inputPlaceholder
-import com.composables.one.styling.onInput
+import com.composables.one.styling.onField
 import com.composables.one.styling.shapes
 import com.composables.one.styling.textFieldHeight
 import com.composables.one.styling.textFieldHorizontalPadding
 import com.composables.one.styling.textFieldInput
 import com.composables.one.styling.textFieldShape
-import com.composables.one.styling.textSelectionBackground
-import com.composables.one.styling.textSelectionHandle
+import com.composables.one.styling.textFieldTextSelectionColors
+import com.composables.one.styling.textSelectionColors
 import com.composables.one.styling.textStyles
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.ProvideTextStyle
@@ -80,17 +79,14 @@ fun TextField(
     leading: (@Composable () -> Unit)? = null,
     trailing: (@Composable () -> Unit)? = null,
     shape: Shape = Theme[shapes][textFieldShape],
-    backgroundColor: Color = if (enabled) Theme[colors][input] else Theme[colors][inputDisabled],
-    contentColor: Color = Theme[colors][onInput],
+    backgroundColor: Color = Theme[colors][field],
+    contentColor: Color = Theme[colors][onField],
     placeholderColor: Color = Theme[colors][inputPlaceholder],
     borderColor: Color = Theme[colors][border],
     contentPadding: PaddingValues = PaddingValues(horizontal = Theme[componentSizes][textFieldHorizontalPadding]),
     minHeight: Dp = Theme[componentSizes][textFieldHeight],
     cursorBrush: Brush = SolidColor(contentColor),
-    selectionColors: TextSelectionColors = TextSelectionColors(
-        handleColor = Theme[colors][textSelectionHandle],
-        backgroundColor = Theme[colors][textSelectionBackground],
-    ),
+    selectionColors: TextSelectionColors = Theme[textSelectionColors][textFieldTextSelectionColors],
     textStyle: TextStyle = Theme[textStyles][textFieldInput],
     textAlign: TextAlign = TextAlign.Unspecified,
     lineHeight: TextUnit = TextUnit.Unspecified,
@@ -108,59 +104,58 @@ fun TextField(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     scrollState: ScrollState = rememberScrollState(),
 ) {
-    CompositionLocalProvider(LocalTextSelectionColors provides selectionColors) {
-        UnstyledTextField(
-            state = state,
-            enabled = enabled,
-            readOnly = readOnly,
-            accessibilityLabel = accessibilityLabel,
-            cursorBrush = cursorBrush,
-            textStyle = textStyle,
-            textAlign = textAlign,
-            lineHeight = lineHeight,
-            fontSize = fontSize,
-            letterSpacing = letterSpacing,
-            fontWeight = fontWeight,
-            fontFamily = fontFamily,
-            textDecoration = textDecoration,
-            lineLimits = lineLimits,
-            inputTransformation = inputTransformation,
-            outputTransformation = outputTransformation,
-            onTextLayout = onTextLayout,
-            onKeyboardAction = onKeyboardAction,
-            keyboardOptions = keyboardOptions,
-            interactionSource = interactionSource,
-            textColor = contentColor,
-            scrollState = scrollState,
-            modifier = modifier
-                .focusRing(
-                    interactionSource = interactionSource,
-                    width = Theme[componentSizes][focusRingWidth],
-                    color = Theme[colors][focusRing],
-                    shape = shape,
-                    offset = Theme[componentSizes][focusRingOffset],
-                )
-                .clip(shape)
-                .background(backgroundColor, shape)
-                .border(1.dp, borderColor, shape)
-                .then(buildModifier {
-                    if (!enabled) {
-                        add(Modifier.alpha(0.65f))
-                    }
-                }),
-        ) {
-            TextFieldContent(
-                placeholder = placeholder,
-                placeholderColor = placeholderColor,
-                contentColor = contentColor,
-                textStyle = textStyle,
-                lineLimits = lineLimits,
-                minHeight = minHeight,
-                contentPadding = contentPadding,
-                leading = leading,
-                trailing = trailing,
+    UnstyledTextField(
+        state = state,
+        enabled = enabled,
+        readOnly = readOnly,
+        accessibilityLabel = accessibilityLabel,
+        cursorBrush = cursorBrush,
+        selectionColors = selectionColors,
+        textStyle = textStyle,
+        textAlign = textAlign,
+        lineHeight = lineHeight,
+        fontSize = fontSize,
+        letterSpacing = letterSpacing,
+        fontWeight = fontWeight,
+        fontFamily = fontFamily,
+        textDecoration = textDecoration,
+        lineLimits = lineLimits,
+        inputTransformation = inputTransformation,
+        outputTransformation = outputTransformation,
+        onTextLayout = onTextLayout,
+        onKeyboardAction = onKeyboardAction,
+        keyboardOptions = keyboardOptions,
+        interactionSource = interactionSource,
+        textColor = contentColor,
+        scrollState = scrollState,
+        modifier = modifier
+            .focusRing(
+                interactionSource = interactionSource,
+                width = Theme[componentSizes][focusRingWidth],
+                color = Theme[colors][focusRing],
+                shape = shape,
+                offset = Theme[componentSizes][focusRingOffset],
             )
-        }
+            .clip(shape)
+            .background(backgroundColor, shape)
+            .border(1.dp, borderColor, shape)
+            .then(buildModifier {
+                if (!enabled) {
+                    add(Modifier.alpha(Theme[alphas][disabledAlpha]))
+                }
+            }),
+    ) {
+        TextFieldContent(
+            placeholder = placeholder,
+            placeholderColor = placeholderColor,
+            contentColor = contentColor,
+            textStyle = textStyle,
+            lineLimits = lineLimits,
+            minHeight = minHeight,
+            contentPadding = contentPadding,
+            leading = leading,
+            trailing = trailing,
+        )
     }
 }
 
