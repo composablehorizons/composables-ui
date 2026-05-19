@@ -59,7 +59,8 @@ import com.composables.one.demo.examples.AlertDialogExample
 import com.composables.one.demo.examples.AlertDialogThreeActionsExample
 import com.composables.one.demo.examples.AlertDialogWithIconExample
 import com.composables.one.demo.examples.BottomSheetActionMenuExample
-import com.composables.one.demo.examples.BottomSheetExample
+import com.composables.one.demo.examples.BottomSheetConfirmationExample
+import com.composables.one.demo.examples.BottomSheetFormExample
 import com.composables.one.demo.examples.ButtonSizesExample
 import com.composables.one.demo.examples.CenteredToolbarExample
 import com.composables.one.demo.examples.DefaultTextFieldExample
@@ -133,12 +134,23 @@ private val componentDemoGroups = listOf(
         name = "BottomSheet",
         id = "bottom-sheet",
         demos = listOf(
-            DemoItem("BottomSheet", "bottom-sheet", content = { BottomSheetExample() }, listName = "Default"),
             DemoItem(
                 "BottomSheet (Action menu)",
                 "bottom-sheet-action-menu",
                 content = { BottomSheetActionMenuExample() },
                 listName = "Action menu",
+            ),
+            DemoItem(
+                "BottomSheet (Confirmation)",
+                "bottom-sheet-confirmation",
+                content = { BottomSheetConfirmationExample() },
+                listName = "Confirmation",
+            ),
+            DemoItem(
+                "BottomSheet (Form)",
+                "bottom-sheet-form",
+                content = { BottomSheetFormExample() },
+                listName = "Form",
             ),
         ),
     ),

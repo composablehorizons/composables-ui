@@ -3,6 +3,8 @@ package com.composables.one
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,17 +24,24 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import com.composables.one.styling.bottomSheetShape
 import com.composables.one.styling.border
+import com.composables.one.styling.componentSizes
 import com.composables.one.styling.colors
 import com.composables.one.styling.dim
+import com.composables.one.styling.focusRing
+import com.composables.one.styling.focusRingOffset
+import com.composables.one.styling.focusRingWidth
 import com.composables.one.styling.indications
 import com.composables.one.styling.onPanel
 import com.composables.one.styling.panel
 import com.composables.one.styling.scrim
 import com.composables.one.styling.shapes
+import com.composables.one.styling.textStyles
+import com.composables.one.styling.title
 import com.composeunstyled.DragIndication
 import com.composeunstyled.ModalBottomSheetState
 import com.composeunstyled.ModalBottomSheetProperties
 import com.composeunstyled.ProvideContentColor
+import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.Scrim
 import com.composeunstyled.Sheet
 import com.composeunstyled.SheetDetent
@@ -58,12 +68,17 @@ fun BottomSheet(
     state: ModalBottomSheetState,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
+    header: (@Composable () -> Unit)? = null,
+    footer: (@Composable ColumnScope.() -> Unit)? = null,
     shape: Shape = Theme[shapes][bottomSheetShape],
     backgroundColor: Color = Theme[colors][panel],
     contentColor: Color = Theme[colors][onPanel],
     properties: ModalBottomSheetProperties = ModalBottomSheetProperties(),
-    content: @Composable ColumnScope.() -> Unit,
+    body: @Composable ColumnScope.() -> Unit,
 ) {
+    val dragIndicationInteractionSource = remember { MutableInteractionSource() }
+    val dragIndicationShape = RoundedCornerShape(100)
+
     UnstyledModalBottomSheet(
         state = state,
         properties = properties,
@@ -79,7 +94,7 @@ fun BottomSheet(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 16.dp),
+                .padding(top = 16.dp),
             contentAlignment = Alignment.TopCenter,
         ) {
             Sheet(
@@ -97,16 +112,47 @@ fun BottomSheet(
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(24.dp),
-                            content = content,
-                        )
+                                .padding(20.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                        ) {
+                            if (header != null) {
+                                ProvideTextStyle(Theme[textStyles][title]) {
+                                    Box(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        contentAlignment = Alignment.Center,
+                                    ) {
+                                        header()
+                                    }
+                                }
+                            }
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                content = body,
+                            )
+                            if (footer != null) {
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                                    content = footer,
+                                )
+                            }
+                        }
                         DragIndication(
                             modifier = Modifier
                                 .align(Alignment.TopCenter)
-                                .padding(top = 22.dp)
-                                .background(Theme[colors][border], RoundedCornerShape(100))
-                                .size(width = 32.dp, height = 4.dp),
+                                .padding(top = 8.dp)
+                                .size(width = 32.dp, height = 4.dp)
+                                .oneFocusRing(
+                                    interactionSource = dragIndicationInteractionSource,
+                                    width = Theme[componentSizes][focusRingWidth],
+                                    color = Theme[colors][focusRing],
+                                    shape = dragIndicationShape,
+                                    offset = Theme[componentSizes][focusRingOffset],
+                                )
+                                .background(Theme[colors][border], dragIndicationShape),
                             indication = Theme[indications][dim],
+                            interactionSource = dragIndicationInteractionSource,
                         )
                     }
                 }

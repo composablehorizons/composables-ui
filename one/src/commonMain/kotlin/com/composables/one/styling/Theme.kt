@@ -119,7 +119,7 @@ val OneTheme = buildPlatformTheme {
     properties[shapes] = mapOf(
         buttonShape to RoundedCornerShape(6.dp),
         alertDialogShape to RoundedCornerShape(16.dp),
-        bottomSheetShape to RoundedCornerShape(28.dp),
+        bottomSheetShape to RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
         dropdownMenuShape to RoundedCornerShape(6.dp),
         textFieldShape to RoundedCornerShape(6.dp),
     )
@@ -137,8 +137,8 @@ val OneTheme = buildPlatformTheme {
         iconButtonSize to 36.dp,
         textFieldHeight to 40.dp,
         textFieldHorizontalPadding to 12.dp,
-        focusRingWidth to 2.dp,
-        focusRingOffset to 2.dp,
+        focusRingWidth to 3.dp,
+        focusRingOffset to 0.dp,
     )
 
     properties[alphas] = mapOf(

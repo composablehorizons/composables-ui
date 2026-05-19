@@ -47,7 +47,6 @@ import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.UnstyledButton
 import com.composeunstyled.buildModifier
-import com.composeunstyled.focusRing
 import com.composeunstyled.theme.Theme
 
 enum class ButtonStyle {
@@ -222,7 +221,7 @@ private fun ButtonSkeleton(
         contentPadding = contentPadding,
         modifier = modifier
             .then(sizingModifier)
-            .focusRing(
+            .oneFocusRing(
                 interactionSource = interactionSource,
                 width = Theme[componentSizes][focusRingWidth],
                 color = Theme[colors][focusRing],
