@@ -24,6 +24,7 @@ import com.composeunstyled.platformtheme.buildPlatformTheme
 import com.composeunstyled.platformtheme.platformIndication
 import com.composeunstyled.theme.ThemeProperty
 import com.composeunstyled.theme.ThemeToken
+import com.composables.interactioncapabilities.currentInteractionCapabilities
 import com.composeunstyled.platformtheme.text4 as platformText4
 import com.composeunstyled.platformtheme.textStyles as platformTextStyles
 
@@ -140,10 +141,21 @@ value class InteractionMode internal constructor(@Suppress("unused") private val
     }
 }
 
-val LocalInteractionMode = staticCompositionLocalOf { InteractionMode.Touch }
+val LocalInteractionMode = staticCompositionLocalOf<InteractionMode?> { null }
 
 @Composable
-fun currentInteractionMode(): InteractionMode = InteractionMode.Touch
+fun currentInteractionMode(): InteractionMode {
+    LocalInteractionMode.current?.let { interactionMode ->
+        return interactionMode
+    }
+
+    val capabilities = currentInteractionCapabilities()
+    return if (capabilities.hasTouch) {
+        InteractionMode.Touch
+    } else {
+        InteractionMode.Pointer
+    }
+}
 
 val OneTheme = buildPlatformTheme {
     val useDarkColors = currentColorScheme() == ColorScheme.Dark
@@ -223,7 +235,7 @@ val OneTheme = buildPlatformTheme {
         animationSpec = colorAnimationSpec,
         label = "FocusRingColor",
     )
-    val useTouchSizes = LocalInteractionMode.current == InteractionMode.Touch
+    val useTouchSizes = currentInteractionMode() == InteractionMode.Touch
     val sizeAnimationSpec = tween<Dp>(
         durationMillis = InteractionModeSizeAnimationDurationMillis,
         easing = FastOutSlowInEasing,

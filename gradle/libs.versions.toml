@@ -10,6 +10,7 @@ agp = "9.2.1"
 android-compile-sdk = "37"
 android-min-sdk = "23"
 activityCompose = "1.13.0"
+interactionCapabilities = "1.0.0"
 
 [libraries]
 composables-unstyled-bottom-sheet = { module = "com.composables:composeunstyled-bottom-sheet", version.ref = "unstyled" }
@@ -38,6 +39,7 @@ composables-unstyled-theming = { module = "com.composables:composeunstyled-themi
 composables-unstyled-toggle-switch = { module = "com.composables:composeunstyled-toggle-switch", version.ref = "unstyled" }
 composables-unstyled-window-container-size = { module = "com.composables:composeunstyled-window-container-size", version.ref = "unstyled" }
 composables-icons-lucide = { module = "com.composables:icons-lucide", version.ref = "iconsLucide" }
+composables-interaction-capabilities = { module = "com.composables:compose-interaction-capabilities", version.ref = "interactionCapabilities" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorClient" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinXDate" }
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose" }
