@@ -1,9 +1,13 @@
 package com.composables.one.styling
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Indication
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -109,6 +113,30 @@ val OneTheme = buildPlatformTheme {
     val textSelectionHandleColor = Color(0XFF0C0A09)
     val textSelectionBackgroundColor = textSelectionHandleColor.copy(alpha = 0.24f)
     val useTouchSizes = LocalInteractionMode.current == InteractionMode.Touch
+    val sizeAnimationSpec = tween<Dp>(
+        durationMillis = InteractionModeSizeAnimationDurationMillis,
+        easing = FastOutSlowInEasing,
+    )
+    val animatedButtonHeight by animateDpAsState(
+        targetValue = if (useTouchSizes) 44.dp else 36.dp,
+        animationSpec = sizeAnimationSpec,
+        label = "ButtonHeight",
+    )
+    val animatedIconButtonSize by animateDpAsState(
+        targetValue = if (useTouchSizes) 44.dp else 36.dp,
+        animationSpec = sizeAnimationSpec,
+        label = "IconButtonSize",
+    )
+    val animatedDropdownMenuItemHeight by animateDpAsState(
+        targetValue = if (useTouchSizes) 44.dp else 32.dp,
+        animationSpec = sizeAnimationSpec,
+        label = "DropdownMenuItemHeight",
+    )
+    val animatedTextFieldHeight by animateDpAsState(
+        targetValue = if (useTouchSizes) 48.dp else 40.dp,
+        animationSpec = sizeAnimationSpec,
+        label = "TextFieldHeight",
+    )
 
     properties[colors] = mapOf(
         background to Color(0xFFFAFAFA),
@@ -156,11 +184,11 @@ val OneTheme = buildPlatformTheme {
         ),
     )
     properties[componentSizes] = mapOf(
-        buttonHeight to if (useTouchSizes) 44.dp else 36.dp,
+        buttonHeight to animatedButtonHeight,
         buttonHorizontalPadding to 16.dp,
-        iconButtonSize to if (useTouchSizes) 44.dp else 36.dp,
-        dropdownMenuItemHeight to if (useTouchSizes) 44.dp else 32.dp,
-        textFieldHeight to if (useTouchSizes) 48.dp else 40.dp,
+        iconButtonSize to animatedIconButtonSize,
+        dropdownMenuItemHeight to animatedDropdownMenuItemHeight,
+        textFieldHeight to animatedTextFieldHeight,
         textFieldHorizontalPadding to 12.dp,
         focusRingWidth to 3.dp,
         focusRingOffset to 0.dp,
@@ -192,3 +220,5 @@ val OneTheme = buildPlatformTheme {
         dim to platformIndication(Color.Black.copy(alpha = 0.08f)),
     )
 }
+
+private const val InteractionModeSizeAnimationDurationMillis = 180
