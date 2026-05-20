@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
         android:allowBackup="false"
-        android:label="Composables One"
+        android:label="Composables UI"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity

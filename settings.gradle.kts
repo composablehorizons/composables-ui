@@ -38,7 +38,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "composables-one"
+rootProject.name = "ui"
 
-include(":one")
+include(":components")
 include(":demo")

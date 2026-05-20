@@ -70,7 +70,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(project(":one"))
+            implementation(project(":components"))
             implementation(libs.androidx.navigation.compose)
             implementation(libs.composables.icons.lucide)
             implementation(libs.composables.unstyled.button)
@@ -97,11 +97,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.composables.one.demo"
+    namespace = "com.composables.ui.demo"
     compileSdk = libs.versions.android.compile.sdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.composables.one.demo"
+        applicationId = "com.composables.ui.demo"
         minSdk = libs.versions.android.min.sdk.get().toInt()
         targetSdk = libs.versions.android.compile.sdk.get().toInt()
         versionCode = 1
@@ -111,11 +111,11 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "com.composables.one.demo.MainKt"
+        mainClass = "com.composables.ui.demo.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "composables-one-demo"
+            packageName = "composables-ui-demo"
             packageVersion = "1.0.0"
         }
     }
