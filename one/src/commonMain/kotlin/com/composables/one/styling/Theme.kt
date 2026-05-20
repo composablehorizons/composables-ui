@@ -89,7 +89,7 @@ val focusRingWidth = ThemeToken<Dp>("focus_ring_width")
 val focusRingOffset = ThemeToken<Dp>("focus_ring_offset")
 val disabledAlpha = ThemeToken<Float>("disabled_alpha")
 
-@JvmInline
+@kotlin.jvm.JvmInline
 value class InteractionMode internal constructor(@Suppress("unused") private val value: Int) {
     override fun toString() =
         when (this) {
