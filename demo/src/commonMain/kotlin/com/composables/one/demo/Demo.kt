@@ -54,7 +54,9 @@ import com.composables.icons.lucide.ArrowLeft
 import com.composables.icons.lucide.ChevronRight
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.MousePointer
+import com.composables.icons.lucide.Moon
 import com.composables.icons.lucide.Pointer
+import com.composables.icons.lucide.Sun
 import com.composables.one.AppScaffold
 import com.composables.one.Button
 import com.composables.one.ButtonStyle
@@ -87,7 +89,9 @@ import com.composables.one.demo.examples.SearchTextFieldExample
 import com.composables.one.demo.examples.SecondaryButtonExample
 import com.composables.one.demo.examples.ToolbarWithActionsExample
 import com.composables.one.demo.examples.TypographyExample
+import com.composables.one.styling.ColorScheme
 import com.composables.one.styling.InteractionMode
+import com.composables.one.styling.LocalColorScheme
 import com.composables.one.styling.LocalInteractionMode
 import com.composables.one.styling.OneTheme
 import com.composables.one.styling.body
@@ -100,6 +104,7 @@ import com.composables.one.styling.focusRingWidth
 import com.composables.one.styling.muted
 import com.composables.one.styling.secondary
 import com.composables.one.styling.textStyles
+import com.composables.one.styling.background as backgroundColor
 import com.composeunstyled.DisclosedContent
 import com.composeunstyled.DisclosureButton
 import com.composeunstyled.UnstyledDisclosure
@@ -328,6 +333,7 @@ fun Demo() {
     val currentRoute = currentBackStackEntry?.destination?.route
     val currentDemo = demos.firstOrNull { it.id == currentRoute }
     var interactionMode by remember { mutableStateOf(InteractionMode.Touch) }
+    var colorScheme by remember { mutableStateOf(ColorScheme.Light) }
 
     CompositionLocalProvider(LocalInteractionMode provides InteractionMode.Pointer) {
         AppScaffold {
@@ -410,6 +416,8 @@ fun Demo() {
                             onBack = { navController.navigateUp() },
                             interactionMode = interactionMode,
                             onInteractionModeChange = { interactionMode = it },
+                            colorScheme = colorScheme,
+                            onColorSchemeChange = { colorScheme = it },
                         )
                     }
                 }
@@ -446,6 +454,8 @@ private fun DemoRoute(
     onBack: () -> Unit,
     interactionMode: InteractionMode,
     onInteractionModeChange: (InteractionMode) -> Unit,
+    colorScheme: ColorScheme,
+    onColorSchemeChange: (ColorScheme) -> Unit,
 ) {
     ScreenScaffold(backgroundColor = Theme[colors][secondary]) {
         Column(Modifier.fillMaxSize()) {
@@ -460,40 +470,76 @@ private fun DemoRoute(
                     Text(demo.name)
                 },
                 trailing = {
+                    ColorSchemeAction(
+                        colorScheme = colorScheme,
+                        onColorSchemeChange = onColorSchemeChange,
+                    )
                     InteractionModeAction(
                         interactionMode = interactionMode,
                         onInteractionModeChange = onInteractionModeChange,
                     )
                 },
             )
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
-                    .background(Color.White)
-                    .border(
-                        width = 1.dp,
-                        color = Theme[colors][border],
-                        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-                    )
-                    .padding(demo.previewOptions.padding),
-                contentAlignment = demo.previewOptions.contentAlignment,
+            CompositionLocalProvider(
+                LocalInteractionMode provides interactionMode,
+                LocalColorScheme provides colorScheme,
             ) {
-                Box(
-                    modifier = Modifier
-                        .widthIn(max = demo.previewOptions.maxWidth ?: Dp.Infinity)
-                        .fillMaxWidth(),
-                    contentAlignment = demo.previewOptions.contentAlignment,
-                ) {
-                    CompositionLocalProvider(LocalInteractionMode provides interactionMode) {
-                        OneTheme {
+                OneTheme {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+                            .background(Theme[colors][backgroundColor])
+                            .border(
+                                width = 1.dp,
+                                color = Theme[colors][border],
+                                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+                            )
+                            .padding(demo.previewOptions.padding),
+                        contentAlignment = demo.previewOptions.contentAlignment,
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .widthIn(max = demo.previewOptions.maxWidth ?: Dp.Infinity)
+                                .fillMaxWidth(),
+                            contentAlignment = demo.previewOptions.contentAlignment,
+                        ) {
                             demo.content()
                         }
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun ColorSchemeAction(
+    colorScheme: ColorScheme,
+    onColorSchemeChange: (ColorScheme) -> Unit,
+) {
+    IconButton(
+        onClick = { onColorSchemeChange(colorScheme.next()) },
+        style = ButtonStyle.Secondary,
+    ) {
+        Icon(
+            imageVector = when (colorScheme) {
+                ColorScheme.Light -> Lucide.Sun
+                else -> Lucide.Moon
+            },
+            contentDescription = when (colorScheme) {
+                ColorScheme.Light -> "Light color scheme"
+                else -> "Dark color scheme"
+            },
+        )
+    }
+}
+
+private fun ColorScheme.next(): ColorScheme {
+    return when (this) {
+        ColorScheme.Light -> ColorScheme.Dark
+        else -> ColorScheme.Light
     }
 }
 

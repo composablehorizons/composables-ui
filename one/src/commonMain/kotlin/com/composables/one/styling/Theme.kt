@@ -1,9 +1,11 @@
 package com.composables.one.styling
 
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Indication
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.runtime.Composable
@@ -90,6 +92,40 @@ val focusRingOffset = ThemeToken<Dp>("focus_ring_offset")
 val disabledAlpha = ThemeToken<Float>("disabled_alpha")
 
 @kotlin.jvm.JvmInline
+value class ColorScheme internal constructor(@Suppress("unused") private val value: Int) {
+    override fun toString() =
+        when (this) {
+            System -> "System"
+            Light -> "Light"
+            Dark -> "Dark"
+            else -> "Error"
+        }
+
+    companion object {
+        val System = ColorScheme(0)
+        val Light = ColorScheme(1)
+        val Dark = ColorScheme(2)
+    }
+}
+
+val LocalColorScheme = staticCompositionLocalOf { ColorScheme.System }
+
+@Composable
+fun currentColorScheme(): ColorScheme {
+    return when (LocalColorScheme.current) {
+        ColorScheme.System -> {
+            if (isSystemInDarkTheme()) {
+                ColorScheme.Dark
+            } else {
+                ColorScheme.Light
+            }
+        }
+
+        else -> LocalColorScheme.current
+    }
+}
+
+@kotlin.jvm.JvmInline
 value class InteractionMode internal constructor(@Suppress("unused") private val value: Int) {
     override fun toString() =
         when (this) {
@@ -110,8 +146,83 @@ val LocalInteractionMode = staticCompositionLocalOf { InteractionMode.Touch }
 fun currentInteractionMode(): InteractionMode = InteractionMode.Touch
 
 val OneTheme = buildPlatformTheme {
-    val textSelectionHandleColor = Color(0XFF0C0A09)
+    val useDarkColors = currentColorScheme() == ColorScheme.Dark
+    val textSelectionHandleColor = if (useDarkColors) Color.White else Color(0XFF0C0A09)
     val textSelectionBackgroundColor = textSelectionHandleColor.copy(alpha = 0.24f)
+    val colorAnimationSpec = tween<Color>(
+        durationMillis = ColorSchemeAnimationDurationMillis,
+        easing = FastOutSlowInEasing,
+    )
+    val animatedBackground by animateColorAsState(
+        targetValue = if (useDarkColors) Color(0xFF09090B) else Color(0xFFFAFAFA),
+        animationSpec = colorAnimationSpec,
+        label = "BackgroundColor",
+    )
+    val animatedOnBackground by animateColorAsState(
+        targetValue = if (useDarkColors) Color(0xFFFAFAFA) else Color(0XFF0C0A09),
+        animationSpec = colorAnimationSpec,
+        label = "OnBackgroundColor",
+    )
+    val animatedPanel by animateColorAsState(
+        targetValue = if (useDarkColors) Color(0xFF18181B) else Color.White,
+        animationSpec = colorAnimationSpec,
+        label = "PanelColor",
+    )
+    val animatedOnPanel by animateColorAsState(
+        targetValue = if (useDarkColors) Color(0xFFFAFAFA) else Color.Black,
+        animationSpec = colorAnimationSpec,
+        label = "OnPanelColor",
+    )
+    val animatedMuted by animateColorAsState(
+        targetValue = if (useDarkColors) Color.White.copy(alpha = 0.64f) else Color.Black.copy(alpha = 0.6f),
+        animationSpec = colorAnimationSpec,
+        label = "MutedColor",
+    )
+    val animatedPrimary by animateColorAsState(
+        targetValue = if (useDarkColors) Color.White else Color(0XFF0C0A09),
+        animationSpec = colorAnimationSpec,
+        label = "PrimaryColor",
+    )
+    val animatedOnPrimary by animateColorAsState(
+        targetValue = if (useDarkColors) Color(0XFF0C0A09) else Color.White,
+        animationSpec = colorAnimationSpec,
+        label = "OnPrimaryColor",
+    )
+    val animatedSecondary by animateColorAsState(
+        targetValue = if (useDarkColors) Color(0xFF27272A) else Color(0xFFf4f4f5),
+        animationSpec = colorAnimationSpec,
+        label = "SecondaryColor",
+    )
+    val animatedOnSecondary by animateColorAsState(
+        targetValue = if (useDarkColors) Color(0xFFFAFAFA) else Color(0XFF0C0A09),
+        animationSpec = colorAnimationSpec,
+        label = "OnSecondaryColor",
+    )
+    val animatedBorder by animateColorAsState(
+        targetValue = if (useDarkColors) Color.White.copy(alpha = 0.14f) else Color(0xFF1F2328).copy(alpha = 0.15f),
+        animationSpec = colorAnimationSpec,
+        label = "BorderColor",
+    )
+    val animatedField by animateColorAsState(
+        targetValue = if (useDarkColors) Color(0xFF18181B) else Color.White,
+        animationSpec = colorAnimationSpec,
+        label = "FieldColor",
+    )
+    val animatedOnField by animateColorAsState(
+        targetValue = if (useDarkColors) Color(0xFFFAFAFA) else Color(0XFF0C0A09),
+        animationSpec = colorAnimationSpec,
+        label = "OnFieldColor",
+    )
+    val animatedInputPlaceholder by animateColorAsState(
+        targetValue = if (useDarkColors) Color.White.copy(alpha = 0.48f) else Color.Black.copy(alpha = 0.48f),
+        animationSpec = colorAnimationSpec,
+        label = "InputPlaceholderColor",
+    )
+    val animatedFocusRing by animateColorAsState(
+        targetValue = if (useDarkColors) Color(0xFFA1A1AA) else Color(0xFF44403C),
+        animationSpec = colorAnimationSpec,
+        label = "FocusRingColor",
+    )
     val useTouchSizes = LocalInteractionMode.current == InteractionMode.Touch
     val sizeAnimationSpec = tween<Dp>(
         durationMillis = InteractionModeSizeAnimationDurationMillis,
@@ -139,28 +250,28 @@ val OneTheme = buildPlatformTheme {
     )
 
     properties[colors] = mapOf(
-        background to Color(0xFFFAFAFA),
-        onBackground to Color(0XFF0C0A09),
-        panel to Color.White,
-        onPanel to Color.Black,
-        muted to Color.Black.copy(alpha = 0.6f),
-        primary to Color(0XFF0C0A09),
-        onPrimary to Color.White,
-        secondary to Color(0xFFf4f4f5),
-        onSecondary to Color(0XFF0C0A09),
+        background to animatedBackground,
+        onBackground to animatedOnBackground,
+        panel to animatedPanel,
+        onPanel to animatedOnPanel,
+        muted to animatedMuted,
+        primary to animatedPrimary,
+        onPrimary to animatedOnPrimary,
+        secondary to animatedSecondary,
+        onSecondary to animatedOnSecondary,
         destructive to Color(0xFFDC2626),
         onDestructive to Color.White,
-        border to Color(0xFF1F2328).copy(alpha = 0.15f),
-        field to Color.White,
-        onField to Color(0XFF0C0A09),
-        input to Color.White,
-        onInput to Color(0XFF0C0A09),
-        inputPlaceholder to Color.Black.copy(alpha = 0.48f),
-        inputDisabled to Color.White,
+        border to animatedBorder,
+        field to animatedField,
+        onField to animatedOnField,
+        input to animatedField,
+        onInput to animatedOnField,
+        inputPlaceholder to animatedInputPlaceholder,
+        inputDisabled to animatedField,
         textSelectionHandle to textSelectionHandleColor,
         textSelectionBackground to textSelectionBackgroundColor,
         scrim to Color.Black.copy(alpha = 0.12f),
-        focusRing to Color(0xFF44403C),
+        focusRing to animatedFocusRing,
     )
     properties[textSelectionColors] = mapOf(
         textFieldTextSelectionColors to TextSelectionColors(
@@ -222,3 +333,4 @@ val OneTheme = buildPlatformTheme {
 }
 
 private const val InteractionModeSizeAnimationDurationMillis = 180
+private const val ColorSchemeAnimationDurationMillis = 180
