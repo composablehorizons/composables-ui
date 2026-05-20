@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.composables.one.styling.bright
 import com.composables.one.styling.border
+import com.composables.one.styling.buttonHeight
+import com.composables.one.styling.buttonHorizontalPadding
 import com.composables.one.styling.buttonLabel
 import com.composables.one.styling.buttonShape
 import com.composables.one.styling.alphas
@@ -34,6 +36,7 @@ import com.composables.one.styling.dim
 import com.composables.one.styling.focusRing
 import com.composables.one.styling.focusRingOffset
 import com.composables.one.styling.focusRingWidth
+import com.composables.one.styling.iconButtonSize
 import com.composables.one.styling.indications
 import com.composables.one.styling.onBackground
 import com.composables.one.styling.onDestructive
@@ -124,7 +127,7 @@ fun IconButton(
     ButtonSkeleton(
         onClick = onClick,
         modifier = modifier,
-        sizingModifier = Modifier.size(buttonHeightFor(buttonSize)),
+        sizingModifier = Modifier.size(iconButtonSizeFor(buttonSize)),
         enabled = enabled,
         backgroundColor = styleDefaults.backgroundColor,
         contentColor = styleDefaults.contentColor,
@@ -137,20 +140,30 @@ fun IconButton(
     )
 }
 
+@Composable
 internal fun buttonPaddingFor(buttonSize: ButtonSize): PaddingValues {
     return PaddingValues(horizontal = buttonHorizontalPaddingFor(buttonSize))
 }
 
+@Composable
 private fun buttonHeightFor(buttonSize: ButtonSize): Dp = when (buttonSize) {
-    ButtonSize.Small -> 40.dp
-    ButtonSize.Large -> 48.dp
-    else -> 44.dp
+    ButtonSize.Small -> Theme[componentSizes][buttonHeight] - 4.dp
+    ButtonSize.Large -> Theme[componentSizes][buttonHeight] + 4.dp
+    else -> Theme[componentSizes][buttonHeight]
 }
 
+@Composable
+private fun iconButtonSizeFor(buttonSize: ButtonSize): Dp = when (buttonSize) {
+    ButtonSize.Small -> Theme[componentSizes][iconButtonSize] - 4.dp
+    ButtonSize.Large -> Theme[componentSizes][iconButtonSize] + 4.dp
+    else -> Theme[componentSizes][iconButtonSize]
+}
+
+@Composable
 private fun buttonHorizontalPaddingFor(buttonSize: ButtonSize): Dp = when (buttonSize) {
-    ButtonSize.Small -> 12.dp
-    ButtonSize.Large -> 20.dp
-    else -> 16.dp
+    ButtonSize.Small -> Theme[componentSizes][buttonHorizontalPadding] - 4.dp
+    ButtonSize.Large -> Theme[componentSizes][buttonHorizontalPadding] + 4.dp
+    else -> Theme[componentSizes][buttonHorizontalPadding]
 }
 
 private val NoButtonPadding = PaddingValues(0.dp)

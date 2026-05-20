@@ -3,6 +3,9 @@ package com.composables.one.styling
 import androidx.compose.foundation.Indication
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.TextSelectionColors
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.shadow.Shadow
@@ -76,15 +79,36 @@ val textFieldTextSelectionColors = ThemeToken<TextSelectionColors>("text_field_t
 val buttonHeight = ThemeToken<Dp>("button_height")
 val buttonHorizontalPadding = ThemeToken<Dp>("button_horizontal_padding")
 val iconButtonSize = ThemeToken<Dp>("icon_button_size")
+val dropdownMenuItemHeight = ThemeToken<Dp>("dropdown_menu_item_height")
 val textFieldHeight = ThemeToken<Dp>("text_field_height")
 val textFieldHorizontalPadding = ThemeToken<Dp>("text_field_horizontal_padding")
 val focusRingWidth = ThemeToken<Dp>("focus_ring_width")
 val focusRingOffset = ThemeToken<Dp>("focus_ring_offset")
 val disabledAlpha = ThemeToken<Float>("disabled_alpha")
 
-val OneTheme = buildPlatformTheme {
+class OneInputMode private constructor() {
+    companion object {
+        val Touch = OneInputMode()
+        val Pointer = OneInputMode()
+    }
+}
+
+private val LocalOneInputMode = staticCompositionLocalOf { OneInputMode.Touch }
+
+@Composable
+fun OneTheme(
+    inputMode: OneInputMode = OneInputMode.Touch,
+    content: @Composable () -> Unit,
+) {
+    CompositionLocalProvider(LocalOneInputMode provides inputMode) {
+        BaseOneTheme(content)
+    }
+}
+
+private val BaseOneTheme = buildPlatformTheme {
     val textSelectionHandleColor = Color(0XFF0C0A09)
     val textSelectionBackgroundColor = textSelectionHandleColor.copy(alpha = 0.24f)
+    val useTouchSizes = LocalOneInputMode.current == OneInputMode.Touch
 
     properties[colors] = mapOf(
         background to Color(0xFFFAFAFA),
@@ -132,10 +156,11 @@ val OneTheme = buildPlatformTheme {
         ),
     )
     properties[componentSizes] = mapOf(
-        buttonHeight to 36.dp,
+        buttonHeight to if (useTouchSizes) 44.dp else 36.dp,
         buttonHorizontalPadding to 16.dp,
-        iconButtonSize to 36.dp,
-        textFieldHeight to 40.dp,
+        iconButtonSize to if (useTouchSizes) 44.dp else 36.dp,
+        dropdownMenuItemHeight to if (useTouchSizes) 44.dp else 32.dp,
+        textFieldHeight to if (useTouchSizes) 48.dp else 40.dp,
         textFieldHorizontalPadding to 12.dp,
         focusRingWidth to 3.dp,
         focusRingOffset to 0.dp,

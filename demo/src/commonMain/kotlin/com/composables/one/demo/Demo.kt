@@ -13,6 +13,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,9 +33,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -48,6 +52,8 @@ import androidx.navigation.compose.rememberNavController
 import com.composables.icons.lucide.ArrowLeft
 import com.composables.icons.lucide.ChevronRight
 import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.MousePointer
+import com.composables.icons.lucide.Pointer
 import com.composables.one.AppScaffold
 import com.composables.one.Button
 import com.composables.one.ButtonStyle
@@ -81,13 +87,17 @@ import com.composables.one.demo.examples.SecondaryButtonExample
 import com.composables.one.demo.examples.ToolbarWithActionsExample
 import com.composables.one.demo.examples.TypographyExample
 import com.composables.one.styling.body
+import com.composables.one.styling.border
 import com.composables.one.styling.colors
 import com.composables.one.styling.componentSizes
 import com.composables.one.styling.focusRing
 import com.composables.one.styling.focusRingOffset
 import com.composables.one.styling.focusRingWidth
 import com.composables.one.styling.muted
+import com.composables.one.styling.OneInputMode
+import com.composables.one.styling.secondary
 import com.composables.one.styling.textStyles
+import com.composables.one.styling.OneTheme
 import com.composeunstyled.DisclosedContent
 import com.composeunstyled.DisclosureButton
 import com.composeunstyled.UnstyledDisclosure
@@ -315,7 +325,9 @@ fun Demo() {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
     val currentDemo = demos.firstOrNull { it.id == currentRoute }
-    AppScaffold {
+    var inputMode by remember { mutableStateOf(OneInputMode.Touch) }
+
+    AppScaffold(inputMode = OneInputMode.Pointer) {
         NavHost(
             navController = navController,
             startDestination = "home",
@@ -393,6 +405,8 @@ fun Demo() {
                     DemoRoute(
                         demo = demo,
                         onBack = { navController.navigateUp() },
+                        inputMode = inputMode,
+                        onInputModeChange = { inputMode = it },
                     )
                 }
             }
@@ -426,8 +440,10 @@ private fun DemoList(
 private fun DemoRoute(
     demo: DemoItem,
     onBack: () -> Unit,
+    inputMode: OneInputMode,
+    onInputModeChange: (OneInputMode) -> Unit,
 ) {
-    ScreenScaffold(backgroundColor = Color.White) {
+    ScreenScaffold(backgroundColor = Theme[colors][secondary]) {
         Column(Modifier.fillMaxSize()) {
             Toolbar(
                 leading = {
@@ -439,11 +455,24 @@ private fun DemoRoute(
                     }
                     Text(demo.name)
                 },
+                trailing = {
+                    InputModeAction(
+                        inputMode = inputMode,
+                        onInputModeChange = onInputModeChange,
+                    )
+                },
             )
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
+                    .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+                    .background(Color.White)
+                    .border(
+                        width = 1.dp,
+                        color = Theme[colors][border],
+                        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+                    )
                     .padding(demo.previewOptions.padding),
                 contentAlignment = demo.previewOptions.contentAlignment,
             ) {
@@ -459,10 +488,44 @@ private fun DemoRoute(
                         .fillMaxWidth(),
                     contentAlignment = demo.previewOptions.contentAlignment,
                 ) {
-                    demo.content()
+                    OneTheme(inputMode = inputMode) {
+                        demo.content()
+                    }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun InputModeAction(
+    inputMode: OneInputMode,
+    onInputModeChange: (OneInputMode) -> Unit,
+) {
+    IconButton(
+        onClick = {
+            onInputModeChange(
+                if (inputMode == OneInputMode.Touch) {
+                    OneInputMode.Pointer
+                } else {
+                    OneInputMode.Touch
+                },
+            )
+        },
+        style = ButtonStyle.Secondary,
+    ) {
+        Icon(
+            imageVector = if (inputMode == OneInputMode.Touch) {
+                Lucide.Pointer
+            } else {
+                Lucide.MousePointer
+            },
+            contentDescription = if (inputMode == OneInputMode.Touch) {
+                "Touch preview mode"
+            } else {
+                "Pointer preview mode"
+            },
+        )
     }
 }
 

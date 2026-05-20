@@ -43,9 +43,11 @@ import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.composables.one.styling.border
+import com.composables.one.styling.componentSizes
 import com.composables.one.styling.colors
 import com.composables.one.styling.destructive
 import com.composables.one.styling.dim
+import com.composables.one.styling.dropdownMenuItemHeight
 import com.composables.one.styling.dropdownMenuShadow
 import com.composables.one.styling.dropdownMenuShape
 import com.composables.one.styling.indications
@@ -279,7 +281,7 @@ fun DropdownMenuPanelContentScope.DropdownMenuItem(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(min = 32.dp)
+                        .heightIn(min = Theme[componentSizes][dropdownMenuItemHeight])
                         .padding(horizontal = 8.dp, vertical = 6.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically,
