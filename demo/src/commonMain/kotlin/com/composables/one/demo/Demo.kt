@@ -209,30 +209,40 @@ private val componentDemoGroups = listOf(
         name = "TextField",
         id = "text-field",
         demos = listOf(
-            DemoItem("TextField", "text-field", content = { DefaultTextFieldExample() }, listName = "Default"),
+            DemoItem(
+                "TextField",
+                "text-field",
+                content = { DefaultTextFieldExample() },
+                listName = "Default",
+                previewOptions = PreviewOptions(maxWidth = 360.dp),
+            ),
             DemoItem(
                 "TextField (Search)",
                 "text-field-search",
                 content = { SearchTextFieldExample() },
-                listName = "Search"
+                listName = "Search",
+                previewOptions = PreviewOptions(maxWidth = 360.dp),
             ),
             DemoItem(
                 "TextField (Multiline)",
                 "text-field-multiline",
                 content = { MultilineTextFieldExample() },
-                listName = "Multiline"
+                listName = "Multiline",
+                previewOptions = PreviewOptions(maxWidth = 360.dp),
             ),
             DemoItem(
                 "TextField (Disabled)",
                 "text-field-disabled",
                 content = { DisabledTextFieldExample() },
-                listName = "Disabled"
+                listName = "Disabled",
+                previewOptions = PreviewOptions(maxWidth = 360.dp),
             ),
             DemoItem(
                 "TextField (Read-only)",
                 "text-field-read-only",
                 content = { ReadOnlyTextFieldExample() },
-                listName = "Read-only"
+                listName = "Read-only",
+                previewOptions = PreviewOptions(maxWidth = 360.dp),
             ),
         ),
     ),
@@ -447,6 +457,7 @@ private fun DemoRoute(
                             },
                         )
                         .fillMaxWidth(),
+                    contentAlignment = demo.previewOptions.contentAlignment,
                 ) {
                     demo.content()
                 }
