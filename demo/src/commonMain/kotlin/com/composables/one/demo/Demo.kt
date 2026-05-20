@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -38,6 +39,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -67,6 +69,7 @@ import com.composables.one.demo.examples.DefaultTextFieldExample
 import com.composables.one.demo.examples.DestructiveButtonExample
 import com.composables.one.demo.examples.DisabledTextFieldExample
 import com.composables.one.demo.examples.DropdownMenuExample
+import com.composables.one.demo.examples.DropdownMenuToolbarExample
 import com.composables.one.demo.examples.GhostButtonExample
 import com.composables.one.demo.examples.LargeToolbarExample
 import com.composables.one.demo.examples.MultilineTextFieldExample
@@ -108,6 +111,7 @@ private data class DemoGroup(
 private data class PreviewOptions(
     val contentAlignment: Alignment = Alignment.Center,
     val padding: PaddingValues = PaddingValues(0.dp),
+    val maxWidth: Dp? = null,
 )
 
 private val componentDemoGroups = listOf(
@@ -185,7 +189,20 @@ private val componentDemoGroups = listOf(
         name = "DropdownMenu",
         id = "dropdown-menu",
         demos = listOf(
-            DemoItem("DropdownMenu", "dropdown-menu", content = { DropdownMenuExample() }, listName = "Default"),
+            DemoItem(
+                "DropdownMenu (Single selection)",
+                "dropdown-menu",
+                content = { DropdownMenuExample() },
+                listName = "Single selection",
+                previewOptions = PreviewOptions(maxWidth = 390.dp),
+            ),
+            DemoItem(
+                "DropdownMenu (Overflow menu)",
+                "dropdown-menu-toolbar",
+                content = { DropdownMenuToolbarExample() },
+                listName = "Overflow menu",
+                previewOptions = PreviewOptions(maxWidth = 390.dp),
+            ),
         ),
     ),
     DemoGroup(
@@ -420,7 +437,19 @@ private fun DemoRoute(
                     .padding(demo.previewOptions.padding),
                 contentAlignment = demo.previewOptions.contentAlignment,
             ) {
-                demo.content()
+                Box(
+                    modifier = Modifier
+                        .then(
+                            if (demo.previewOptions.maxWidth != null) {
+                                Modifier.widthIn(max = demo.previewOptions.maxWidth)
+                            } else {
+                                Modifier
+                            },
+                        )
+                        .fillMaxWidth(),
+                ) {
+                    demo.content()
+                }
             }
         }
     }

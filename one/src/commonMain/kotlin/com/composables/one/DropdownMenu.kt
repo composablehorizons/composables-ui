@@ -58,7 +58,6 @@ import com.composables.one.styling.shadows
 import com.composables.one.styling.textStyles
 import com.composeunstyled.AnchorAlignment
 import com.composeunstyled.AnchorSide
-import com.composeunstyled.DropdownMenuPanel
 import com.composeunstyled.DropdownMenuPanelScope
 import com.composeunstyled.DropdownMenuScope as UnstyledDropdownMenuScope
 import com.composeunstyled.MenuItem
@@ -68,6 +67,7 @@ import com.composeunstyled.UnstyledDropdownMenu
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 import com.composables.one.styling.body as bodyTextStyle
+import com.composeunstyled.DropdownMenuPanel as UnstyledDropdownMenuPanel
 import com.composables.one.styling.buttonLabel as buttonLabelTextStyle
 
 private const val DropdownMenuEnterDurationMillis = 120
@@ -75,9 +75,11 @@ private const val DropdownMenuExitDurationMillis = 75
 
 class DropdownMenuScope internal constructor(
     internal val unstyledScope: UnstyledDropdownMenuScope,
+    internal val side: DropdownMenuSide,
+    internal val alignment: DropdownMenuAlignment,
 )
 
-class DropdownMenuContentScope internal constructor(
+class DropdownMenuPanelContentScope internal constructor(
     internal val unstyledScope: DropdownMenuPanelScope,
 )
 
@@ -120,8 +122,8 @@ fun DropdownMenu(
     alignment: DropdownMenuAlignment = DropdownMenuAlignment.Start,
     sideOffset: Dp = 4.dp,
     alignmentOffset: Dp = 0.dp,
+    panel: @Composable DropdownMenuScope.() -> Unit,
     anchor: @Composable () -> Unit,
-    content: @Composable DropdownMenuScope.() -> Unit,
 ) {
     UnstyledDropdownMenu(
         expanded = expanded,
@@ -132,14 +134,18 @@ fun DropdownMenu(
         sideOffset = sideOffset,
         alignmentOffset = alignmentOffset,
         panel = {
-            DropdownMenuScope(this).content()
+            DropdownMenuScope(
+                unstyledScope = this,
+                side = side,
+                alignment = alignment,
+            ).panel()
         },
         anchor = anchor,
     )
 }
 
 @Composable
-fun DropdownMenuScope.DropdownMenuContent(
+fun DropdownMenuScope.DropdownMenuPanel(
     modifier: Modifier = Modifier,
     shape: Shape = Theme[shapes][dropdownMenuShape],
     backgroundColor: Color = Theme[colors][panel],
@@ -147,23 +153,19 @@ fun DropdownMenuScope.DropdownMenuContent(
     shadow: Shadow = Theme[shadows][dropdownMenuShadow],
     minWidth: Dp = 160.dp,
     maxWidth: Dp = 320.dp,
-    enter: EnterTransition = scaleIn(
-        animationSpec = tween(
-            durationMillis = DropdownMenuEnterDurationMillis,
-            easing = LinearOutSlowInEasing,
-        ),
-        initialScale = 0.96f,
-        transformOrigin = TransformOrigin(0f, 0f),
-    ) + fadeIn(tween(durationMillis = 30)),
-    exit: ExitTransition = scaleOut(
-        animationSpec = tween(durationMillis = 1, delayMillis = DropdownMenuExitDurationMillis),
-        targetScale = 1f,
-        transformOrigin = TransformOrigin(0f, 0f),
-    ) + fadeOut(tween(durationMillis = DropdownMenuExitDurationMillis)),
-    content: @Composable DropdownMenuContentScope.() -> Unit,
+    enter: EnterTransition? = null,
+    exit: ExitTransition? = null,
+    content: @Composable DropdownMenuPanelContentScope.() -> Unit,
 ) {
+    val transformOrigin = dropdownMenuTransformOrigin(
+        side = side,
+        alignment = alignment,
+    )
+    val enterTransition = enter ?: dropdownMenuEnterTransition(transformOrigin)
+    val exitTransition = exit ?: dropdownMenuExitTransition(transformOrigin)
+
     with(unstyledScope) {
-        DropdownMenuPanel(
+        UnstyledDropdownMenuPanel(
             modifier = modifier
                 .dropShadow(shape, shadow)
                 .width(IntrinsicSize.Max)
@@ -172,15 +174,15 @@ fun DropdownMenuScope.DropdownMenuContent(
                 .clip(shape)
                 .background(backgroundColor, shape)
                 .padding(4.dp),
-            enter = enter,
-            exit = exit,
+            enter = enterTransition,
+            exit = exitTransition,
         ) {
             ProvideContentColor(contentColor) {
                 ProvideTextStyle(Theme[textStyles][bodyTextStyle]) {
-                    val panelScope = this@DropdownMenuPanel
+                    val panelScope = this@UnstyledDropdownMenuPanel
                     Column(
                         modifier = Modifier.fillMaxWidth(),
-                        content = { DropdownMenuContentScope(panelScope).content() },
+                        content = { DropdownMenuPanelContentScope(panelScope).content() },
                     )
                 }
             }
@@ -188,8 +190,61 @@ fun DropdownMenuScope.DropdownMenuContent(
     }
 }
 
+private fun dropdownMenuEnterTransition(transformOrigin: TransformOrigin): EnterTransition {
+    return scaleIn(
+        animationSpec = tween(
+            durationMillis = DropdownMenuEnterDurationMillis,
+            easing = LinearOutSlowInEasing,
+        ),
+        initialScale = 0.96f,
+        transformOrigin = transformOrigin,
+    ) + fadeIn(tween(durationMillis = 30))
+}
+
+private fun dropdownMenuExitTransition(transformOrigin: TransformOrigin): ExitTransition {
+    return scaleOut(
+        animationSpec = tween(durationMillis = 1, delayMillis = DropdownMenuExitDurationMillis),
+        targetScale = 1f,
+        transformOrigin = transformOrigin,
+    ) + fadeOut(tween(durationMillis = DropdownMenuExitDurationMillis))
+}
+
+private fun dropdownMenuTransformOrigin(
+    side: DropdownMenuSide,
+    alignment: DropdownMenuAlignment,
+): TransformOrigin {
+    return when (side) {
+        DropdownMenuSide.Top -> TransformOrigin(
+            pivotFractionX = alignment.transformOriginFraction,
+            pivotFractionY = 1f,
+        )
+
+        DropdownMenuSide.Bottom -> TransformOrigin(
+            pivotFractionX = alignment.transformOriginFraction,
+            pivotFractionY = 0f,
+        )
+
+        DropdownMenuSide.Start -> TransformOrigin(
+            pivotFractionX = 1f,
+            pivotFractionY = alignment.transformOriginFraction,
+        )
+
+        else -> TransformOrigin(
+            pivotFractionX = 0f,
+            pivotFractionY = alignment.transformOriginFraction,
+        )
+    }
+}
+
+private val DropdownMenuAlignment.transformOriginFraction: Float
+    get() = when (this) {
+        DropdownMenuAlignment.Start -> 0f
+        DropdownMenuAlignment.Center -> 0.5f
+        else -> 1f
+    }
+
 @Composable
-fun DropdownMenuContentScope.DropdownMenuItem(
+fun DropdownMenuPanelContentScope.DropdownMenuItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -254,7 +309,7 @@ fun DropdownMenuContentScope.DropdownMenuItem(
 }
 
 @Composable
-fun DropdownMenuContentScope.DropdownMenuLabel(
+fun DropdownMenuPanelContentScope.DropdownMenuLabel(
     modifier: Modifier = Modifier,
     contentColor: Color = Theme[colors][muted],
     content: @Composable RowScope.() -> Unit,
@@ -273,7 +328,7 @@ fun DropdownMenuContentScope.DropdownMenuLabel(
 }
 
 @Composable
-fun DropdownMenuContentScope.DropdownMenuSeparator(
+fun DropdownMenuPanelContentScope.DropdownMenuSeparator(
     modifier: Modifier = Modifier,
 ) {
     Spacer(
