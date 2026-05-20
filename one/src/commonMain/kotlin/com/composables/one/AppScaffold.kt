@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import com.composables.one.styling.OneInputMode
 import com.composables.one.styling.OneTheme
 import com.composables.one.styling.background
 import com.composables.one.styling.body
@@ -18,11 +17,8 @@ import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.theme.Theme
 
 @Composable
-fun AppScaffold(
-    inputMode: OneInputMode = OneInputMode.Touch,
-    content: @Composable BoxScope.() -> Unit,
-) {
-    OneTheme(inputMode = inputMode) {
+fun AppScaffold(content: @Composable BoxScope.() -> Unit) {
+    OneTheme {
         FocusVisibilityProvider {
             ProvideContentColor(Theme[colors][onBackground]) {
                 ProvideTextStyle(Theme[textStyles][body]) {

@@ -4,7 +4,6 @@ import androidx.compose.foundation.Indication
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -86,29 +85,30 @@ val focusRingWidth = ThemeToken<Dp>("focus_ring_width")
 val focusRingOffset = ThemeToken<Dp>("focus_ring_offset")
 val disabledAlpha = ThemeToken<Float>("disabled_alpha")
 
-class OneInputMode private constructor() {
+@JvmInline
+value class InteractionMode internal constructor(@Suppress("unused") private val value: Int) {
+    override fun toString() =
+        when (this) {
+            Touch -> "Touch"
+            Pointer -> "Pointer"
+            else -> "Error"
+        }
+
     companion object {
-        val Touch = OneInputMode()
-        val Pointer = OneInputMode()
+        val Touch = InteractionMode(1)
+        val Pointer = InteractionMode(2)
     }
 }
 
-private val LocalOneInputMode = staticCompositionLocalOf { OneInputMode.Touch }
+val LocalInteractionMode = staticCompositionLocalOf { InteractionMode.Touch }
 
 @Composable
-fun OneTheme(
-    inputMode: OneInputMode = OneInputMode.Touch,
-    content: @Composable () -> Unit,
-) {
-    CompositionLocalProvider(LocalOneInputMode provides inputMode) {
-        BaseOneTheme(content)
-    }
-}
+fun currentInteractionMode(): InteractionMode = InteractionMode.Touch
 
-private val BaseOneTheme = buildPlatformTheme {
+val OneTheme = buildPlatformTheme {
     val textSelectionHandleColor = Color(0XFF0C0A09)
     val textSelectionBackgroundColor = textSelectionHandleColor.copy(alpha = 0.24f)
-    val useTouchSizes = LocalOneInputMode.current == OneInputMode.Touch
+    val useTouchSizes = LocalInteractionMode.current == InteractionMode.Touch
 
     properties[colors] = mapOf(
         background to Color(0xFFFAFAFA),

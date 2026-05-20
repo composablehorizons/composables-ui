@@ -31,6 +31,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
@@ -86,6 +87,9 @@ import com.composables.one.demo.examples.SearchTextFieldExample
 import com.composables.one.demo.examples.SecondaryButtonExample
 import com.composables.one.demo.examples.ToolbarWithActionsExample
 import com.composables.one.demo.examples.TypographyExample
+import com.composables.one.styling.InteractionMode
+import com.composables.one.styling.LocalInteractionMode
+import com.composables.one.styling.OneTheme
 import com.composables.one.styling.body
 import com.composables.one.styling.border
 import com.composables.one.styling.colors
@@ -94,10 +98,8 @@ import com.composables.one.styling.focusRing
 import com.composables.one.styling.focusRingOffset
 import com.composables.one.styling.focusRingWidth
 import com.composables.one.styling.muted
-import com.composables.one.styling.OneInputMode
 import com.composables.one.styling.secondary
 import com.composables.one.styling.textStyles
-import com.composables.one.styling.OneTheme
 import com.composeunstyled.DisclosedContent
 import com.composeunstyled.DisclosureButton
 import com.composeunstyled.UnstyledDisclosure
@@ -325,89 +327,91 @@ fun Demo() {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
     val currentDemo = demos.firstOrNull { it.id == currentRoute }
-    var inputMode by remember { mutableStateOf(OneInputMode.Touch) }
+    var interactionMode by remember { mutableStateOf(InteractionMode.Touch) }
 
-    AppScaffold(inputMode = OneInputMode.Pointer) {
-        NavHost(
-            navController = navController,
-            startDestination = "home",
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black),
-            enterTransition = {
-                slideInHorizontally(
-                    animationSpec = tween(
-                        durationMillis = NavigationTransitionDurationMillis,
-                        easing = NavigationTransitionEasing,
-                    ),
-                    initialOffsetX = { it },
-                )
-            },
-            exitTransition = {
-                slideOutHorizontally(
-                    animationSpec = tween(
-                        durationMillis = NavigationTransitionDurationMillis,
-                        easing = NavigationTransitionEasing,
-                    ),
-                    targetOffsetX = { -it / NavigationParallaxDivisor },
-                ) + fadeOut(
-                    animationSpec = tween(
-                        durationMillis = NavigationTransitionDurationMillis,
-                        easing = NavigationTransitionEasing,
-                    ),
-                    targetAlpha = NavigationDimmedAlpha,
-                )
-            },
-            popEnterTransition = {
-                slideInHorizontally(
-                    animationSpec = tween(
-                        durationMillis = NavigationTransitionDurationMillis,
-                        easing = NavigationTransitionEasing,
-                    ),
-                    initialOffsetX = { -it / NavigationParallaxDivisor },
-                ) + fadeIn(
-                    animationSpec = tween(
-                        durationMillis = NavigationTransitionDurationMillis,
-                        easing = NavigationTransitionEasing,
-                    ),
-                    initialAlpha = NavigationDimmedAlpha,
-                )
-            },
-            popExitTransition = {
-                slideOutHorizontally(
-                    animationSpec = tween(
-                        durationMillis = NavigationTransitionDurationMillis,
-                        easing = NavigationTransitionEasing,
-                    ),
-                    targetOffsetX = { it },
-                )
-            },
-        ) {
-            composable("home") {
-                ScreenScaffold {
-                    Column(Modifier.fillMaxSize()) {
-                        Toolbar(
-                            title = { Text("Composables One") },
-                            size = ToolbarSize.Large,
-                        )
-                        DemoList(
-                            onSelectDemo = { navController.navigate(it.id) },
-                            scrollState = demoListScrollState,
-                            expandedGroups = expandedDemoGroups,
-                            modifier = Modifier.weight(1f),
-                        )
+    CompositionLocalProvider(LocalInteractionMode provides InteractionMode.Pointer) {
+        AppScaffold {
+            NavHost(
+                navController = navController,
+                startDestination = "home",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black),
+                enterTransition = {
+                    slideInHorizontally(
+                        animationSpec = tween(
+                            durationMillis = NavigationTransitionDurationMillis,
+                            easing = NavigationTransitionEasing,
+                        ),
+                        initialOffsetX = { it },
+                    )
+                },
+                exitTransition = {
+                    slideOutHorizontally(
+                        animationSpec = tween(
+                            durationMillis = NavigationTransitionDurationMillis,
+                            easing = NavigationTransitionEasing,
+                        ),
+                        targetOffsetX = { -it / NavigationParallaxDivisor },
+                    ) + fadeOut(
+                        animationSpec = tween(
+                            durationMillis = NavigationTransitionDurationMillis,
+                            easing = NavigationTransitionEasing,
+                        ),
+                        targetAlpha = NavigationDimmedAlpha,
+                    )
+                },
+                popEnterTransition = {
+                    slideInHorizontally(
+                        animationSpec = tween(
+                            durationMillis = NavigationTransitionDurationMillis,
+                            easing = NavigationTransitionEasing,
+                        ),
+                        initialOffsetX = { -it / NavigationParallaxDivisor },
+                    ) + fadeIn(
+                        animationSpec = tween(
+                            durationMillis = NavigationTransitionDurationMillis,
+                            easing = NavigationTransitionEasing,
+                        ),
+                        initialAlpha = NavigationDimmedAlpha,
+                    )
+                },
+                popExitTransition = {
+                    slideOutHorizontally(
+                        animationSpec = tween(
+                            durationMillis = NavigationTransitionDurationMillis,
+                            easing = NavigationTransitionEasing,
+                        ),
+                        targetOffsetX = { it },
+                    )
+                },
+            ) {
+                composable("home") {
+                    ScreenScaffold {
+                        Column(Modifier.fillMaxSize()) {
+                            Toolbar(
+                                title = { Text("Composables One") },
+                                size = ToolbarSize.Large,
+                            )
+                            DemoList(
+                                onSelectDemo = { navController.navigate(it.id) },
+                                scrollState = demoListScrollState,
+                                expandedGroups = expandedDemoGroups,
+                                modifier = Modifier.weight(1f),
+                            )
+                        }
                     }
                 }
-            }
 
-            demos.forEach { demo ->
-                composable(demo.id) {
-                    DemoRoute(
-                        demo = demo,
-                        onBack = { navController.navigateUp() },
-                        inputMode = inputMode,
-                        onInputModeChange = { inputMode = it },
-                    )
+                demos.forEach { demo ->
+                    composable(demo.id) {
+                        DemoRoute(
+                            demo = demo,
+                            onBack = { navController.navigateUp() },
+                            interactionMode = interactionMode,
+                            onInteractionModeChange = { interactionMode = it },
+                        )
+                    }
                 }
             }
         }
@@ -440,8 +444,8 @@ private fun DemoList(
 private fun DemoRoute(
     demo: DemoItem,
     onBack: () -> Unit,
-    inputMode: OneInputMode,
-    onInputModeChange: (OneInputMode) -> Unit,
+    interactionMode: InteractionMode,
+    onInteractionModeChange: (InteractionMode) -> Unit,
 ) {
     ScreenScaffold(backgroundColor = Theme[colors][secondary]) {
         Column(Modifier.fillMaxSize()) {
@@ -456,9 +460,9 @@ private fun DemoRoute(
                     Text(demo.name)
                 },
                 trailing = {
-                    InputModeAction(
-                        inputMode = inputMode,
-                        onInputModeChange = onInputModeChange,
+                    InteractionModeAction(
+                        interactionMode = interactionMode,
+                        onInteractionModeChange = onInteractionModeChange,
                     )
                 },
             )
@@ -478,18 +482,14 @@ private fun DemoRoute(
             ) {
                 Box(
                     modifier = Modifier
-                        .then(
-                            if (demo.previewOptions.maxWidth != null) {
-                                Modifier.widthIn(max = demo.previewOptions.maxWidth)
-                            } else {
-                                Modifier
-                            },
-                        )
+                        .widthIn(max = demo.previewOptions.maxWidth ?: Dp.Infinity)
                         .fillMaxWidth(),
                     contentAlignment = demo.previewOptions.contentAlignment,
                 ) {
-                    OneTheme(inputMode = inputMode) {
-                        demo.content()
+                    CompositionLocalProvider(LocalInteractionMode provides interactionMode) {
+                        OneTheme {
+                            demo.content()
+                        }
                     }
                 }
             }
@@ -498,29 +498,29 @@ private fun DemoRoute(
 }
 
 @Composable
-private fun InputModeAction(
-    inputMode: OneInputMode,
-    onInputModeChange: (OneInputMode) -> Unit,
+private fun InteractionModeAction(
+    interactionMode: InteractionMode,
+    onInteractionModeChange: (InteractionMode) -> Unit,
 ) {
     IconButton(
         onClick = {
-            onInputModeChange(
-                if (inputMode == OneInputMode.Touch) {
-                    OneInputMode.Pointer
+            onInteractionModeChange(
+                if (interactionMode == InteractionMode.Touch) {
+                    InteractionMode.Pointer
                 } else {
-                    OneInputMode.Touch
+                    InteractionMode.Touch
                 },
             )
         },
         style = ButtonStyle.Secondary,
     ) {
         Icon(
-            imageVector = if (inputMode == OneInputMode.Touch) {
+            imageVector = if (interactionMode == InteractionMode.Touch) {
                 Lucide.Pointer
             } else {
                 Lucide.MousePointer
             },
-            contentDescription = if (inputMode == OneInputMode.Touch) {
+            contentDescription = if (interactionMode == InteractionMode.Touch) {
                 "Touch preview mode"
             } else {
                 "Pointer preview mode"
