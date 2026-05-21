@@ -15,11 +15,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.Bell
 import com.composables.icons.lucide.Lucide
-import com.composables.ui.AlertDialog
-import com.composables.ui.Button
-import com.composables.ui.ButtonStyle
-import com.composables.ui.Icon
-import com.composables.ui.Text
+import com.composables.ui.components.AlertDialog
+import com.composables.ui.components.Button
+import com.composables.ui.components.ButtonStyle
+import com.composables.ui.components.Icon
+import com.composables.ui.components.Text
 
 @Composable
 fun AlertDialogExample() {

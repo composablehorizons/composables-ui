@@ -9,12 +9,12 @@ import com.composables.icons.lucide.ArrowLeft
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.EllipsisVertical
 import com.composables.icons.lucide.Share
-import com.composables.ui.ButtonStyle
-import com.composables.ui.Icon
-import com.composables.ui.IconButton
-import com.composables.ui.Text
-import com.composables.ui.Toolbar
-import com.composables.ui.ToolbarSize
+import com.composables.ui.components.ButtonStyle
+import com.composables.ui.components.Icon
+import com.composables.ui.components.IconButton
+import com.composables.ui.components.Text
+import com.composables.ui.components.Toolbar
+import com.composables.ui.components.ToolbarSize
 
 @Composable
 fun LargeToolbarExample() {

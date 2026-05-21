@@ -29,18 +29,18 @@ import com.composables.icons.lucide.Palette
 import com.composables.icons.lucide.Share
 import com.composables.icons.lucide.Sun
 import com.composables.icons.lucide.Trash2
-import com.composables.ui.Button
-import com.composables.ui.ButtonStyle
-import com.composables.ui.DropdownMenu
-import com.composables.ui.DropdownMenuAlignment
-import com.composables.ui.DropdownMenuItem
-import com.composables.ui.DropdownMenuItemStyle
-import com.composables.ui.DropdownMenuPanel
-import com.composables.ui.DropdownMenuSeparator
-import com.composables.ui.Icon
-import com.composables.ui.IconButton
-import com.composables.ui.Text
-import com.composables.ui.Toolbar
+import com.composables.ui.components.Button
+import com.composables.ui.components.ButtonStyle
+import com.composables.ui.components.DropdownMenu
+import com.composables.ui.components.DropdownMenuAlignment
+import com.composables.ui.components.DropdownMenuItem
+import com.composables.ui.components.DropdownMenuItemStyle
+import com.composables.ui.components.DropdownMenuPanel
+import com.composables.ui.components.DropdownMenuSeparator
+import com.composables.ui.components.Icon
+import com.composables.ui.components.IconButton
+import com.composables.ui.components.Text
+import com.composables.ui.components.Toolbar
 
 @Composable
 fun DropdownMenuExample() {

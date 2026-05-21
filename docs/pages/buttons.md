@@ -25,15 +25,29 @@ Copy and paste the following sources into your project:
 
 ## Examples
 
-Primary buttons should be reserved for the main action on a screen.
+### Size
 
-```kotlin
-Button(onClick = onSave) {
-    Text("Save")
-}
-```
+<UiDemo id="button-sizes" />
 
-Use secondary and outlined buttons when the action is available but not the main path.
+### Primary
+
+<UiDemo id="button-primary" />
+
+### Secondary
+
+<UiDemo id="button-secondary" />
+
+### Outlined
+
+<UiDemo id="button-outlined" />
+
+### Ghost
+
+<UiDemo id="button-ghost" />
+
+### Destructive
+
+<UiDemo id="button-destructive" />
 
 ## API Reference
 

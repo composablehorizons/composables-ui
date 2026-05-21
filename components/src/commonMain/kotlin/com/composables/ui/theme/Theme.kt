@@ -1,4 +1,4 @@
-package com.composables.ui.styling
+package com.composables.ui.theme
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.animateColorAsState
@@ -52,6 +52,10 @@ val primary = ThemeToken<Color>("primary")
 val onPrimary = ThemeToken<Color>("on_primary")
 val secondary = ThemeToken<Color>("secondary")
 val onSecondary = ThemeToken<Color>("on_secondary")
+val control = ThemeToken<Color>("control")
+val onControl = ThemeToken<Color>("on_control")
+val selectedControl = ThemeToken<Color>("selected_control")
+val onSelectedControl = ThemeToken<Color>("on_selected_control")
 val destructive = ThemeToken<Color>("destructive")
 val onDestructive = ThemeToken<Color>("on_destructive")
 val border = ThemeToken<Color>("border")
@@ -210,6 +214,26 @@ val AppTheme = buildPlatformTheme {
         animationSpec = colorAnimationSpec,
         label = "OnSecondaryColor",
     )
+    val animatedControl by animateColorAsState(
+        targetValue = if (useDarkColors) Color(0xFF27272A) else Color(0xFFf4f4f5),
+        animationSpec = colorAnimationSpec,
+        label = "ControlColor",
+    )
+    val animatedOnControl by animateColorAsState(
+        targetValue = if (useDarkColors) Color.White.copy(alpha = 0.64f) else Color.Black.copy(alpha = 0.6f),
+        animationSpec = colorAnimationSpec,
+        label = "OnControlColor",
+    )
+    val animatedSelectedControl by animateColorAsState(
+        targetValue = if (useDarkColors) Color(0xFF3F3F46) else Color.White,
+        animationSpec = colorAnimationSpec,
+        label = "SelectedControlColor",
+    )
+    val animatedOnSelectedControl by animateColorAsState(
+        targetValue = if (useDarkColors) Color(0xFFFAFAFA) else Color(0XFF0C0A09),
+        animationSpec = colorAnimationSpec,
+        label = "OnSelectedControlColor",
+    )
     val animatedBorder by animateColorAsState(
         targetValue = if (useDarkColors) Color.White.copy(alpha = 0.14f) else Color(0xFF1F2328).copy(alpha = 0.15f),
         animationSpec = colorAnimationSpec,
@@ -271,6 +295,10 @@ val AppTheme = buildPlatformTheme {
         onPrimary to animatedOnPrimary,
         secondary to animatedSecondary,
         onSecondary to animatedOnSecondary,
+        control to animatedControl,
+        onControl to animatedOnControl,
+        selectedControl to animatedSelectedControl,
+        onSelectedControl to animatedOnSelectedControl,
         destructive to Color(0xFFDC2626),
         onDestructive to Color.White,
         border to animatedBorder,

@@ -20,16 +20,16 @@ import com.composables.icons.lucide.Lock
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Search
 import com.composables.icons.lucide.X
-import com.composables.ui.ButtonSize
-import com.composables.ui.ButtonStyle
-import com.composables.ui.Icon
-import com.composables.ui.IconButton
-import com.composables.ui.Text
-import com.composables.ui.TextField
-import com.composables.ui.styling.body
-import com.composables.ui.styling.colors
-import com.composables.ui.styling.muted
-import com.composables.ui.styling.textStyles
+import com.composables.ui.components.ButtonSize
+import com.composables.ui.components.ButtonStyle
+import com.composables.ui.components.Icon
+import com.composables.ui.components.IconButton
+import com.composables.ui.components.Text
+import com.composables.ui.components.TextField
+import com.composables.ui.theme.body
+import com.composables.ui.theme.colors
+import com.composables.ui.theme.muted
+import com.composables.ui.theme.textStyles
 import com.composeunstyled.theme.Theme
 
 @Composable

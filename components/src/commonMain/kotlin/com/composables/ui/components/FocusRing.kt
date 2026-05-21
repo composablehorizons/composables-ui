@@ -1,4 +1,4 @@
-package com.composables.ui
+package com.composables.ui.components
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -15,7 +15,7 @@ import com.composeunstyled.collectIsFocusVisibleAsState
 import com.composeunstyled.outline
 
 @Composable
-internal fun Modifier.focusRing(
+fun Modifier.focusRing(
     interactionSource: InteractionSource,
     width: Dp,
     color: Color,

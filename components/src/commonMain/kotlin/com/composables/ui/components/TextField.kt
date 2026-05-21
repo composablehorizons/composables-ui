@@ -1,4 +1,4 @@
-package com.composables.ui
+package com.composables.ui.components
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -40,31 +40,31 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import com.composables.ui.styling.border
-import com.composables.ui.styling.alphas
-import com.composables.ui.styling.colors
-import com.composables.ui.styling.componentSizes
-import com.composables.ui.styling.field
-import com.composables.ui.styling.focusRing
-import com.composables.ui.styling.focusRingOffset
-import com.composables.ui.styling.focusRingWidth
-import com.composables.ui.styling.disabledAlpha
-import com.composables.ui.styling.inputPlaceholder
-import com.composables.ui.styling.onField
-import com.composables.ui.styling.shapes
-import com.composables.ui.styling.textFieldHeight
-import com.composables.ui.styling.textFieldHorizontalPadding
-import com.composables.ui.styling.textFieldInput
-import com.composables.ui.styling.textFieldShape
-import com.composables.ui.styling.textFieldTextSelectionColors
-import com.composables.ui.styling.textSelectionColors
-import com.composables.ui.styling.textStyles
+import com.composables.ui.theme.border
+import com.composables.ui.theme.alphas
+import com.composables.ui.theme.colors
+import com.composables.ui.theme.componentSizes
+import com.composables.ui.theme.field
+import com.composables.ui.theme.focusRing
+import com.composables.ui.theme.focusRingOffset
+import com.composables.ui.theme.focusRingWidth
+import com.composables.ui.theme.disabledAlpha
+import com.composables.ui.theme.inputPlaceholder
+import com.composables.ui.theme.onField
+import com.composables.ui.theme.shapes
+import com.composables.ui.theme.textFieldHeight
+import com.composables.ui.theme.textFieldHorizontalPadding
+import com.composables.ui.theme.textFieldInput
+import com.composables.ui.theme.textFieldShape
+import com.composables.ui.theme.textFieldTextSelectionColors
+import com.composables.ui.theme.textSelectionColors
+import com.composables.ui.theme.textStyles
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.TextInput
 import com.composeunstyled.UnstyledTextField
 import com.composeunstyled.buildModifier
-import com.composeunstyled.focusRing
+import com.composeunstyled.focusRing as unstyledFocusRing
 import com.composeunstyled.theme.Theme
 import com.composeunstyled.TextFieldScope as UnstyledTextFieldScope
 
@@ -129,7 +129,7 @@ fun TextField(
         textColor = contentColor,
         scrollState = scrollState,
         modifier = modifier
-            .focusRing(
+            .unstyledFocusRing(
                 interactionSource = interactionSource,
                 width = Theme[componentSizes][focusRingWidth],
                 color = Theme[colors][focusRing],

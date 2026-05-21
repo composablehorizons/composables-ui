@@ -40,11 +40,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -52,19 +55,18 @@ import androidx.navigation.compose.rememberNavController
 import com.composables.icons.lucide.ArrowLeft
 import com.composables.icons.lucide.ChevronRight
 import com.composables.icons.lucide.Lucide
-import com.composables.icons.lucide.MousePointer
 import com.composables.icons.lucide.Moon
-import com.composables.icons.lucide.Pointer
 import com.composables.icons.lucide.Sun
-import com.composables.ui.AppScaffold
-import com.composables.ui.Button
-import com.composables.ui.ButtonStyle
-import com.composables.ui.Icon
-import com.composables.ui.IconButton
-import com.composables.ui.ScreenScaffold
-import com.composables.ui.Text
-import com.composables.ui.Toolbar
-import com.composables.ui.ToolbarSize
+import com.composables.ui.components.AppScaffold
+import com.composables.ui.components.Button
+import com.composables.ui.components.ButtonStyle
+import com.composables.ui.components.Icon
+import com.composables.ui.components.IconButton
+import com.composables.ui.components.ScreenScaffold
+import com.composables.ui.components.Text
+import com.composables.ui.components.Toolbar
+import com.composables.ui.components.ToolbarSize
+import com.composables.ui.components.focusRing
 import com.composables.ui.demo.examples.AlertDialogExample
 import com.composables.ui.demo.examples.AlertDialogThreeActionsExample
 import com.composables.ui.demo.examples.AlertDialogWithIconExample
@@ -88,27 +90,35 @@ import com.composables.ui.demo.examples.SearchTextFieldExample
 import com.composables.ui.demo.examples.SecondaryButtonExample
 import com.composables.ui.demo.examples.ToolbarWithActionsExample
 import com.composables.ui.demo.examples.TypographyExample
-import com.composables.ui.styling.ColorScheme
-import com.composables.ui.styling.InteractionMode
-import com.composables.ui.styling.LocalColorScheme
-import com.composables.ui.styling.LocalInteractionMode
-import com.composables.ui.styling.AppTheme
-import com.composables.ui.styling.body
-import com.composables.ui.styling.border
-import com.composables.ui.styling.colors
-import com.composables.ui.styling.componentSizes
-import com.composables.ui.styling.focusRing
-import com.composables.ui.styling.focusRingOffset
-import com.composables.ui.styling.focusRingWidth
-import com.composables.ui.styling.muted
-import com.composables.ui.styling.secondary
-import com.composables.ui.styling.textStyles
-import com.composables.ui.styling.background as backgroundColor
+import com.composables.ui.theme.ColorScheme
+import com.composables.ui.theme.InteractionMode
+import com.composables.ui.theme.LocalColorScheme
+import com.composables.ui.theme.LocalInteractionMode
+import com.composables.ui.theme.AppTheme
+import com.composables.ui.theme.body
+import com.composables.ui.theme.border
+import com.composables.ui.theme.control
+import com.composables.ui.theme.colors
+import com.composables.ui.theme.componentSizes
+import com.composables.ui.theme.focusRing
+import com.composables.ui.theme.focusRingOffset
+import com.composables.ui.theme.focusRingWidth
+import com.composables.ui.theme.muted
+import com.composables.ui.theme.onPanel
+import com.composables.ui.theme.onSelectedControl
+import com.composables.ui.theme.panel
+import com.composables.ui.theme.selectedControl
+import com.composables.ui.theme.secondary
+import com.composables.ui.theme.textStyles
+import com.composables.ui.theme.background as backgroundColor
 import com.composeunstyled.DisclosedContent
 import com.composeunstyled.DisclosureButton
-import com.composeunstyled.UnstyledButton
+import com.composeunstyled.ProvideContentColor
+import com.composeunstyled.RadioButton
+import com.composeunstyled.RadioGroupScope
+import com.composeunstyled.UnstyledRadioGroup
 import com.composeunstyled.UnstyledDisclosure
-import com.composeunstyled.focusRing
+import com.composeunstyled.buildModifier
 import com.composeunstyled.theme.Theme
 
 private data class DemoItem(
@@ -179,19 +189,7 @@ private val componentDemoGroups = listOf(
         name = "Button",
         id = "button",
         demos = listOf(
-            DemoItem(
-                "Button (Destructive)",
-                "button-destructive",
-                content = { DestructiveButtonExample() },
-                listName = "Destructive"
-            ),
-            DemoItem("Button (Ghost)", "button-ghost", content = { GhostButtonExample() }, listName = "Ghost"),
-            DemoItem(
-                "Button (Outlined)",
-                "button-outlined",
-                content = { OutlinedButtonExample() },
-                listName = "Outlined"
-            ),
+            DemoItem("Button (Size)", "button-sizes", content = { ButtonSizesExample() }, listName = "Size"),
             DemoItem("Button (Primary)", "button-primary", content = { PrimaryButtonExample() }, listName = "Primary"),
             DemoItem(
                 "Button (Secondary)",
@@ -199,7 +197,19 @@ private val componentDemoGroups = listOf(
                 content = { SecondaryButtonExample() },
                 listName = "Secondary"
             ),
-            DemoItem("Button (Sizes)", "button-sizes", content = { ButtonSizesExample() }, listName = "Sizes"),
+            DemoItem(
+                "Button (Outlined)",
+                "button-outlined",
+                content = { OutlinedButtonExample() },
+                listName = "Outlined"
+            ),
+            DemoItem("Button (Ghost)", "button-ghost", content = { GhostButtonExample() }, listName = "Ghost"),
+            DemoItem(
+                "Button (Destructive)",
+                "button-destructive",
+                content = { DestructiveButtonExample() },
+                listName = "Destructive"
+            ),
         ),
     ),
     DemoGroup(
@@ -459,61 +469,52 @@ private fun DemoRoute(
     colorScheme: ColorScheme,
     onColorSchemeChange: (ColorScheme) -> Unit,
 ) {
-    ScreenScaffold(backgroundColor = Theme[colors][secondary]) {
-        Column(Modifier.fillMaxSize()) {
-            Toolbar(
-                leading = if (showNavigation) {
-                    {
-                        IconButton(
-                            onClick = onBack,
-                            style = ButtonStyle.Ghost,
-                        ) {
-                            Icon(Lucide.ArrowLeft, contentDescription = "Go back")
-                        }
-                        Text(demo.name)
-                    }
-                } else {
-                    null
-                },
-                trailing = {
-                    ColorSchemeAction(
-                        colorScheme = colorScheme,
-                        onColorSchemeChange = onColorSchemeChange,
-                    )
-                    InteractionModeAction(
-                        interactionMode = interactionMode,
-                        onInteractionModeChange = onInteractionModeChange,
-                    )
-                },
-            )
-            CompositionLocalProvider(
-                LocalInteractionMode provides interactionMode,
-                LocalColorScheme provides colorScheme,
-            ) {
-                AppTheme {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
-                            .background(Theme[colors][backgroundColor])
-                            .border(
-                                width = 1.dp,
-                                color = Theme[colors][border],
-                                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-                            )
-                            .padding(demo.previewOptions.padding),
-                        contentAlignment = demo.previewOptions.contentAlignment,
-                    ) {
+    CompositionLocalProvider(
+        LocalInteractionMode provides interactionMode,
+        LocalColorScheme provides colorScheme,
+    ) {
+        AppTheme {
+            ScreenScaffold(backgroundColor = Theme[colors][panel], contentColor = Theme[colors][onPanel]) {
+                Box(Modifier.fillMaxSize()) {
+                    ProvideContentColor(Theme[colors][onPanel]) {
                         Box(
                             modifier = Modifier
-                                .widthIn(max = demo.previewOptions.maxWidth ?: Dp.Infinity)
-                                .fillMaxWidth(),
+                                .fillMaxSize()
+                                .background(Theme[colors][panel])
+                                .padding(demo.previewOptions.padding),
                             contentAlignment = demo.previewOptions.contentAlignment,
                         ) {
-                            demo.content()
+                            Box(
+                                modifier = Modifier
+                                    .widthIn(max = demo.previewOptions.maxWidth ?: Dp.Infinity)
+                                    .fillMaxWidth(),
+                                contentAlignment = demo.previewOptions.contentAlignment,
+                            ) {
+                                demo.content()
+                            }
                         }
                     }
+                    Toolbar(
+                        backgroundColor = Color.Transparent,
+                        leading = if (showNavigation) {
+                            {
+                                DemoTitlePill(
+                                    title = demo.name,
+                                    onBack = onBack,
+                                )
+                            }
+                        } else {
+                            null
+                        },
+                        trailing = {
+                            DemoToolbarActions(
+                                interactionMode = interactionMode,
+                                onInteractionModeChange = onInteractionModeChange,
+                                colorScheme = colorScheme,
+                                onColorSchemeChange = onColorSchemeChange,
+                            )
+                        },
+                    )
                 }
             }
         }
@@ -521,31 +522,75 @@ private fun DemoRoute(
 }
 
 @Composable
+private fun DemoTitlePill(
+    title: String,
+    onBack: () -> Unit,
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        IconButton(
+            onClick = onBack,
+            style = ButtonStyle.Ghost,
+        ) {
+            Icon(Lucide.ArrowLeft, contentDescription = "Go back")
+        }
+        Text(title)
+    }
+}
+
+@Composable
+private fun DemoToolbarActions(
+    interactionMode: InteractionMode,
+    onInteractionModeChange: (InteractionMode) -> Unit,
+    colorScheme: ColorScheme,
+    onColorSchemeChange: (ColorScheme) -> Unit,
+) {
+    InteractionModeAction(
+        interactionMode = interactionMode,
+        onInteractionModeChange = onInteractionModeChange,
+    )
+    ColorSchemeAction(
+        colorScheme = colorScheme,
+        onColorSchemeChange = onColorSchemeChange,
+    )
+}
+
+@Composable
 private fun ColorSchemeAction(
     colorScheme: ColorScheme,
     onColorSchemeChange: (ColorScheme) -> Unit,
 ) {
-    DemoToolbarIconButton(
-        onClick = { onColorSchemeChange(colorScheme.next()) },
+    SegmentedRadioGroup(
+        value = colorScheme,
+        onValueChange = onColorSchemeChange,
+        accessibilityLabel = "Color scheme",
     ) {
-        Icon(
-            imageVector = when (colorScheme) {
-                ColorScheme.Light -> Lucide.Sun
-                else -> Lucide.Moon
-            },
-            modifier = Modifier.size(18.dp),
-            contentDescription = when (colorScheme) {
-                ColorScheme.Light -> "Light color scheme"
-                else -> "Dark color scheme"
-            },
-        )
-    }
-}
-
-private fun ColorScheme.next(): ColorScheme {
-    return when (this) {
-        ColorScheme.Light -> ColorScheme.Dark
-        else -> ColorScheme.Light
+        SegmentedRadioOption(
+            value = ColorScheme.Light,
+            selected = colorScheme == ColorScheme.Light,
+            minWidth = 32.dp,
+        ) { selected ->
+            Icon(
+                imageVector = Lucide.Sun,
+                modifier = Modifier.size(18.dp),
+                tint = segmentedRadioContentColor(selected),
+                contentDescription = "Light color scheme",
+            )
+        }
+        SegmentedRadioOption(
+            value = ColorScheme.Dark,
+            selected = colorScheme == ColorScheme.Dark,
+            minWidth = 32.dp,
+        ) { selected ->
+            Icon(
+                imageVector = Lucide.Moon,
+                modifier = Modifier.size(18.dp),
+                tint = segmentedRadioContentColor(selected),
+                contentDescription = "Dark color scheme",
+            )
+        }
     }
 }
 
@@ -554,46 +599,79 @@ private fun InteractionModeAction(
     interactionMode: InteractionMode,
     onInteractionModeChange: (InteractionMode) -> Unit,
 ) {
-    DemoToolbarIconButton(
-        onClick = {
-            onInteractionModeChange(
-                if (interactionMode == InteractionMode.Touch) {
-                    InteractionMode.Pointer
-                } else {
-                    InteractionMode.Touch
-                },
-            )
-        },
+    SegmentedRadioGroup(
+        value = interactionMode,
+        onValueChange = onInteractionModeChange,
+        accessibilityLabel = "Interaction mode",
     ) {
-        Icon(
-            imageVector = if (interactionMode == InteractionMode.Touch) {
-                Lucide.Pointer
-            } else {
-                Lucide.MousePointer
-            },
-            modifier = Modifier.size(18.dp),
-            contentDescription = if (interactionMode == InteractionMode.Touch) {
-                "Touch preview mode"
-            } else {
-                "Pointer preview mode"
-            },
-        )
+        SegmentedRadioOption(
+            value = InteractionMode.Touch,
+            selected = interactionMode == InteractionMode.Touch,
+            minWidth = 56.dp,
+        ) { selected ->
+            Text(
+                text = "Touch",
+                color = segmentedRadioContentColor(selected),
+                singleLine = true,
+            )
+        }
+        SegmentedRadioOption(
+            value = InteractionMode.Pointer,
+            selected = interactionMode == InteractionMode.Pointer,
+            minWidth = 56.dp,
+        ) { selected ->
+            Text(
+                text = "Mouse",
+                color = segmentedRadioContentColor(selected),
+                singleLine = true,
+            )
+        }
+    }
+}
+@Composable
+private fun <T> SegmentedRadioGroup(
+    value: T,
+    onValueChange: (T) -> Unit,
+    accessibilityLabel: String,
+    content: @Composable RadioGroupScope.() -> Unit,
+) {
+    val shape = RoundedCornerShape(999.dp)
+    val borderColor = Theme[colors][border]
+    UnstyledRadioGroup(
+        value = value,
+        onValueChange = onValueChange,
+        accessibilityLabel = accessibilityLabel,
+        modifier = Modifier
+            .clip(shape)
+            .background(Theme[colors][control], shape)
+            .border(1.dp, borderColor, shape)
+            .padding(4.dp),
+    ) {
+        val radioGroupScope = this
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(2.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            content(radioGroupScope)
+        }
     }
 }
 
 @Composable
-private fun DemoToolbarIconButton(
-    onClick: () -> Unit,
-    content: @Composable () -> Unit,
+private fun <T> RadioGroupScope.SegmentedRadioOption(
+    value: T,
+    selected: Boolean,
+    minWidth: Dp,
+    content: @Composable (selected: Boolean) -> Unit,
 ) {
-    val shape = RoundedCornerShape(8.dp)
+    val shape = RoundedCornerShape(999.dp)
+    val selectedBorderColor = Theme[colors][border]
     val interactionSource = remember { MutableInteractionSource() }
-
-    UnstyledButton(
-        onClick = onClick,
-        contentPadding = PaddingValues(0.dp),
+    RadioButton(
+        value = value,
+        indication = null,
+        interactionSource = interactionSource,
         modifier = Modifier
-            .size(32.dp)
             .focusRing(
                 interactionSource = interactionSource,
                 width = Theme[componentSizes][focusRingWidth],
@@ -602,17 +680,31 @@ private fun DemoToolbarIconButton(
                 offset = Theme[componentSizes][focusRingOffset],
             )
             .clip(shape)
-            .background(Color.White, shape)
-            .border(1.dp, Theme[colors][border], shape),
-        interactionSource = interactionSource,
-        indication = null,
+            .then(buildModifier {
+                if (selected) {
+                    add(Modifier.background(Theme[colors][selectedControl], shape))
+                    add(Modifier.border(1.dp, selectedBorderColor, shape))
+                }
+            }),
     ) {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .height(32.dp)
+                .widthIn(min = minWidth)
+                .padding(horizontal = 10.dp),
             contentAlignment = Alignment.Center,
         ) {
-            content()
+            content(selected)
         }
+    }
+}
+
+@Composable
+private fun segmentedRadioContentColor(selected: Boolean): Color {
+    return if (selected) {
+        Theme[colors][onSelectedControl]
+    } else {
+        Theme[colors][muted]
     }
 }
 

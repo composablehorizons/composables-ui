@@ -10,12 +10,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.composables.ui.Text
-import com.composables.ui.styling.body
-import com.composables.ui.styling.buttonLabel
-import com.composables.ui.styling.header
-import com.composables.ui.styling.textStyles
-import com.composables.ui.styling.title
+import com.composables.ui.components.Text
+import com.composables.ui.theme.body
+import com.composables.ui.theme.buttonLabel
+import com.composables.ui.theme.header
+import com.composables.ui.theme.textStyles
+import com.composables.ui.theme.title
 import com.composeunstyled.theme.Theme
 
 @Composable

@@ -1,4 +1,4 @@
-package com.composables.ui
+package com.composables.ui.components
 
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -26,15 +26,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.unit.dp
-import com.composables.ui.styling.alertDialogShape
-import com.composables.ui.styling.body
-import com.composables.ui.styling.colors
-import com.composables.ui.styling.muted
-import com.composables.ui.styling.onPanel
-import com.composables.ui.styling.panel
-import com.composables.ui.styling.scrim
-import com.composables.ui.styling.shapes
-import com.composables.ui.styling.textStyles
+import com.composables.ui.theme.alertDialogShape
+import com.composables.ui.theme.body
+import com.composables.ui.theme.colors
+import com.composables.ui.theme.muted
+import com.composables.ui.theme.onPanel
+import com.composables.ui.theme.panel
+import com.composables.ui.theme.scrim
+import com.composables.ui.theme.shapes
+import com.composables.ui.theme.textStyles
 import com.composeunstyled.DialogPanel
 import com.composeunstyled.DialogProperties
 import com.composeunstyled.ProvideContentColor
@@ -43,7 +43,7 @@ import com.composeunstyled.Scrim
 import com.composeunstyled.UnstyledDialog
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
-import com.composables.ui.styling.title as titleTextStyle
+import com.composables.ui.theme.title as titleTextStyle
 
 private const val DialogEnterDurationMillis = 400
 private const val DialogExitDurationMillis = 200

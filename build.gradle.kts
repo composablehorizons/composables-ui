@@ -12,17 +12,17 @@ val generatedDemoSources = layout.buildDirectory.dir("generated/docs/demo-source
 val generatedComponentSources = layout.buildDirectory.dir("generated/docs/component-sources")
 
 val docsDemoSources = mapOf(
-    "button-destructive" to "ButtonsExample.kt",
-    "button-ghost" to "ButtonsExample.kt",
-    "button-outlined" to "ButtonsExample.kt",
-    "button-primary" to "ButtonsExample.kt",
-    "button-secondary" to "ButtonsExample.kt",
-    "button-sizes" to "ButtonsExample.kt",
+    "button-sizes" to "ButtonSizesExample.kt",
+    "button-primary" to "PrimaryButtonExample.kt",
+    "button-secondary" to "SecondaryButtonExample.kt",
+    "button-outlined" to "OutlinedButtonExample.kt",
+    "button-ghost" to "GhostButtonExample.kt",
+    "button-destructive" to "DestructiveButtonExample.kt",
 )
 
 val docsComponentSources = mapOf(
-    "Button.kt" to "components/src/commonMain/kotlin/com/composables/ui/Button.kt",
-    "Theme.kt" to "components/src/commonMain/kotlin/com/composables/ui/styling/Theme.kt",
+    "Button.kt" to "components/src/commonMain/kotlin/com/composables/ui/components/Button.kt",
+    "Theme.kt" to "components/src/commonMain/kotlin/com/composables/ui/theme/Theme.kt",
 )
 
 val generateDocsDemoSources by tasks.registering {
@@ -174,6 +174,7 @@ tasks.register<Sync>("bundleDocs") {
                 "$id": {
                   "app": "composables-ui-demos",
                   "source": "demo-sources/$fileName",
+                  "title": "/examples/$fileName",
                   "language": "kotlin"
                 }""".trimIndent()
         }

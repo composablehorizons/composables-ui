@@ -1,4 +1,4 @@
-package com.composables.ui
+package com.composables.ui.components
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -42,22 +42,22 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.composables.ui.styling.border
-import com.composables.ui.styling.componentSizes
-import com.composables.ui.styling.colors
-import com.composables.ui.styling.destructive
-import com.composables.ui.styling.dim
-import com.composables.ui.styling.dropdownMenuItemHeight
-import com.composables.ui.styling.dropdownMenuShadow
-import com.composables.ui.styling.dropdownMenuShape
-import com.composables.ui.styling.indications
-import com.composables.ui.styling.muted
-import com.composables.ui.styling.onPanel
-import com.composables.ui.styling.panel
-import com.composables.ui.styling.secondary
-import com.composables.ui.styling.shapes
-import com.composables.ui.styling.shadows
-import com.composables.ui.styling.textStyles
+import com.composables.ui.theme.border
+import com.composables.ui.theme.componentSizes
+import com.composables.ui.theme.colors
+import com.composables.ui.theme.destructive
+import com.composables.ui.theme.dim
+import com.composables.ui.theme.dropdownMenuItemHeight
+import com.composables.ui.theme.dropdownMenuShadow
+import com.composables.ui.theme.dropdownMenuShape
+import com.composables.ui.theme.indications
+import com.composables.ui.theme.muted
+import com.composables.ui.theme.onPanel
+import com.composables.ui.theme.panel
+import com.composables.ui.theme.secondary
+import com.composables.ui.theme.shapes
+import com.composables.ui.theme.shadows
+import com.composables.ui.theme.textStyles
 import com.composeunstyled.AnchorAlignment
 import com.composeunstyled.AnchorSide
 import com.composeunstyled.DropdownMenuPanelScope
@@ -68,9 +68,9 @@ import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.UnstyledDropdownMenu
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
-import com.composables.ui.styling.body as bodyTextStyle
+import com.composables.ui.theme.body as bodyTextStyle
 import com.composeunstyled.DropdownMenuPanel as UnstyledDropdownMenuPanel
-import com.composables.ui.styling.buttonLabel as buttonLabelTextStyle
+import com.composables.ui.theme.buttonLabel as buttonLabelTextStyle
 
 private const val DropdownMenuEnterDurationMillis = 120
 private const val DropdownMenuExitDurationMillis = 75

@@ -1,4 +1,4 @@
-package com.composables.ui
+package com.composables.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,9 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.composables.ui.styling.textStyles
-import com.composables.ui.styling.header as headerTextStyle
-import com.composables.ui.styling.title as titleTextStyle
+import com.composables.ui.theme.textStyles
+import com.composables.ui.theme.header as headerTextStyle
+import com.composables.ui.theme.title as titleTextStyle
 import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.buildModifier
 import com.composeunstyled.theme.Theme
