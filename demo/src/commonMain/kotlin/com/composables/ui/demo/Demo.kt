@@ -73,6 +73,7 @@ import com.composables.ui.demo.examples.AlertDialogWithIconExample
 import com.composables.ui.demo.examples.BottomSheetActionMenuExample
 import com.composables.ui.demo.examples.BottomSheetConfirmationExample
 import com.composables.ui.demo.examples.BottomSheetFormExample
+import com.composables.ui.demo.examples.ButtonExample
 import com.composables.ui.demo.examples.ButtonSizesExample
 import com.composables.ui.demo.examples.CenteredToolbarExample
 import com.composables.ui.demo.examples.DefaultTextFieldExample
@@ -189,6 +190,7 @@ private val componentDemoGroups = listOf(
         name = "Button",
         id = "button",
         demos = listOf(
+            DemoItem("Button", "button-default", content = { ButtonExample() }, listName = "Default"),
             DemoItem("Button (Size)", "button-sizes", content = { ButtonSizesExample() }, listName = "Size"),
             DemoItem("Button (Primary)", "button-primary", content = { PrimaryButtonExample() }, listName = "Primary"),
             DemoItem(

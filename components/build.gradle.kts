@@ -18,6 +18,10 @@ java {
     }
 }
 
+compose.resources {
+    packageOfResClass = "com.composables.ui.generated.resources"
+}
+
 kotlin {
     jvmToolchain {
         vendor = JvmVendorSpec.JETBRAINS
@@ -73,6 +77,7 @@ kotlin {
             api(compose.foundation)
             implementation(compose.ui)
             implementation(compose.runtime)
+            implementation(compose.components.resources)
         }
     }
 }

@@ -5,7 +5,7 @@ description: Button components for primary actions, secondary actions, outlines,
 
 Use buttons for actions that submit, confirm, cancel, create, delete, or move a user through a workflow.
 
-<UiDemo id="button-primary" />
+<UiDemo id="button-default" />
 
 ## Installation
 

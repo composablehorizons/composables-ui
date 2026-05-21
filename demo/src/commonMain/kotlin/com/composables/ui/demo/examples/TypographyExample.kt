@@ -2,6 +2,7 @@ package com.composables.ui.demo.examples
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,7 +25,7 @@ fun TypographyExample() {
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(24.dp)
+            .padding(PaddingValues(start = 24.dp, top = 88.dp, end = 24.dp, bottom = 24.dp))
             .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {

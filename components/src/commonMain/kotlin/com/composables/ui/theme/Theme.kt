@@ -15,18 +15,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.composeunstyled.platformtheme.buildPlatformTheme
 import com.composeunstyled.platformtheme.platformIndication
 import com.composeunstyled.theme.ThemeProperty
 import com.composeunstyled.theme.ThemeToken
+import com.composeunstyled.theme.buildTheme
 import com.composables.interactioncapabilities.currentInteractionCapabilities
-import com.composeunstyled.platformtheme.text4 as platformText4
-import com.composeunstyled.platformtheme.textStyles as platformTextStyles
+import com.composables.ui.generated.resources.Inter
+import com.composables.ui.generated.resources.Res
+import org.jetbrains.compose.resources.Font
 
 // properties
 val colors = ThemeProperty<Color>("colors")
@@ -161,7 +163,7 @@ fun currentInteractionMode(): InteractionMode {
     }
 }
 
-val AppTheme = buildPlatformTheme {
+val AppTheme = buildTheme {
     val useDarkColors = currentColorScheme() == ColorScheme.Dark
     val textSelectionHandleColor = if (useDarkColors) Color.White else Color(0XFF0C0A09)
     val textSelectionBackgroundColor = textSelectionHandleColor.copy(alpha = 0.24f)
@@ -349,7 +351,12 @@ val AppTheme = buildPlatformTheme {
         disabledAlpha to 0.65f,
     )
 
-    val bodyStyle = properties[platformTextStyles][platformText4]
+    val inter = FontFamily(Font(Res.font.Inter))
+    val bodyStyle = TextStyle(
+        fontFamily = inter,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+    )
     defaultTextStyle = bodyStyle
 
     properties[textStyles] = mapOf(
