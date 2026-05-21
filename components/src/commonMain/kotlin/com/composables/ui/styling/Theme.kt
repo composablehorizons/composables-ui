@@ -241,12 +241,12 @@ val AppTheme = buildPlatformTheme {
         easing = FastOutSlowInEasing,
     )
     val animatedButtonHeight by animateDpAsState(
-        targetValue = if (useTouchSizes) 44.dp else 36.dp,
+        targetValue = if (useTouchSizes) 44.dp else 32.dp,
         animationSpec = sizeAnimationSpec,
         label = "ButtonHeight",
     )
     val animatedIconButtonSize by animateDpAsState(
-        targetValue = if (useTouchSizes) 44.dp else 36.dp,
+        targetValue = if (useTouchSizes) 44.dp else 32.dp,
         animationSpec = sizeAnimationSpec,
         label = "IconButtonSize",
     )
@@ -321,7 +321,7 @@ val AppTheme = buildPlatformTheme {
         disabledAlpha to 0.65f,
     )
 
-    val bodyStyle = properties[platformTextStyles][platformText4].copy(color = animatedOnBackground)
+    val bodyStyle = properties[platformTextStyles][platformText4]
     defaultTextStyle = bodyStyle
 
     properties[textStyles] = mapOf(

@@ -6,14 +6,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -87,8 +85,6 @@ private fun MediumTitleToolbar(
         ) {
             if (leading != null) {
                 leading()
-            } else {
-                Spacer(Modifier.width(12.dp))
             }
             ProvideTextStyle(Theme[textStyles][titleTextStyle]) {
                 title()
@@ -142,7 +138,7 @@ private fun LargeTitleToolbar(
         Row(
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
+                .padding(bottom = 12.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -221,7 +217,7 @@ private fun ToolbarContainer(
             })
             .padding(WindowInsets.statusBars.asPaddingValues())
             .height(height)
-            .padding(horizontal = 4.dp),
+            .padding(horizontal = 12.dp),
         content = content,
     )
 }

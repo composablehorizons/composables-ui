@@ -1,0 +1,9 @@
+sections:
+  - title: Getting Started
+    pages:
+      - title: Components
+        slug: components
+  - title: Components
+    pages:
+      - title: Buttons
+        slug: buttons

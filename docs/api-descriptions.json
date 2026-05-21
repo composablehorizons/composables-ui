@@ -1,0 +1,39 @@
+{
+  "buttons": {
+    "symbols": ["Button", "IconButton", "ButtonStyle", "ButtonSize"],
+    "descriptions": {
+      "Button": "A styled button for text and icon content.",
+      "IconButton": "A square button for icon-only actions.",
+      "ButtonStyle": "Visual style variants for Button and IconButton.",
+      "ButtonSize": "Size variants for Button and IconButton."
+    },
+    "parameters": {
+      "onClick": "Called when the button is activated.",
+      "modifier": "Modifier applied to the button.",
+      "enabled": "Whether the button can be interacted with.",
+      "style": "Visual style used by the button.",
+      "shape": "Shape used for the button container, border, and focus ring.",
+      "buttonSize": "Size used for button height, padding, and icon-only button dimensions.",
+      "contentPadding": "Padding applied around the button content.",
+      "borderWidth": "Width of the button border when the selected style draws one.",
+      "interactionSource": "Interaction source used for focus, press, hover, and indication state.",
+      "content": "Composable content displayed inside the button."
+    },
+    "values": {
+      "ButtonStyle": {
+        "Default": "Uses the default button style.",
+        "Primary": "Use for the primary action on a screen.",
+        "Secondary": "Use for secondary actions.",
+        "Outlined": "Use for lower-emphasis actions with an outline.",
+        "Destructive": "Use for destructive actions.",
+        "Ghost": "Use for low-emphasis actions without a container."
+      },
+      "ButtonSize": {
+        "Small": "Small button size.",
+        "Regular": "Regular button size.",
+        "Large": "Large button size.",
+        "Default": "Alias for Regular."
+      }
+    }
+  }
+}

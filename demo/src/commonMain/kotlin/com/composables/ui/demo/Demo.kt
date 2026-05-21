@@ -48,7 +48,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.composables.icons.lucide.ArrowLeft
 import com.composables.icons.lucide.ChevronRight
@@ -107,6 +106,7 @@ import com.composables.ui.styling.textStyles
 import com.composables.ui.styling.background as backgroundColor
 import com.composeunstyled.DisclosedContent
 import com.composeunstyled.DisclosureButton
+import com.composeunstyled.UnstyledButton
 import com.composeunstyled.UnstyledDisclosure
 import com.composeunstyled.focusRing
 import com.composeunstyled.theme.Theme
@@ -325,13 +325,13 @@ private const val NavigationDimmedAlpha = 0.86f
 private val NavigationTransitionEasing = CubicBezierEasing(0.32f, 0.72f, 0f, 1f)
 
 @Composable
-fun Demo() {
+fun Demo(initialDemoId: String? = null) {
     val navController = rememberNavController()
     val demoListScrollState = rememberScrollState()
     val expandedDemoGroups = remember { mutableStateMapOf<String, Boolean>() }
-    val currentBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = currentBackStackEntry?.destination?.route
-    val currentDemo = demos.firstOrNull { it.id == currentRoute }
+    val initialDemo = demos.firstOrNull { it.id == initialDemoId }
+    val previewSpecificDemo = initialDemo != null
+    val startDestination = initialDemo?.id ?: "home"
     var interactionMode by remember { mutableStateOf(InteractionMode.Touch) }
     var colorScheme by remember { mutableStateOf(ColorScheme.Light) }
 
@@ -339,7 +339,7 @@ fun Demo() {
         AppScaffold {
             NavHost(
                 navController = navController,
-                startDestination = "home",
+                startDestination = startDestination,
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.Black),
@@ -414,6 +414,7 @@ fun Demo() {
                         DemoRoute(
                             demo = demo,
                             onBack = { navController.navigateUp() },
+                            showNavigation = !previewSpecificDemo,
                             interactionMode = interactionMode,
                             onInteractionModeChange = { interactionMode = it },
                             colorScheme = colorScheme,
@@ -452,6 +453,7 @@ private fun DemoList(
 private fun DemoRoute(
     demo: DemoItem,
     onBack: () -> Unit,
+    showNavigation: Boolean,
     interactionMode: InteractionMode,
     onInteractionModeChange: (InteractionMode) -> Unit,
     colorScheme: ColorScheme,
@@ -460,14 +462,18 @@ private fun DemoRoute(
     ScreenScaffold(backgroundColor = Theme[colors][secondary]) {
         Column(Modifier.fillMaxSize()) {
             Toolbar(
-                leading = {
-                    IconButton(
-                        onClick = onBack,
-                        style = ButtonStyle.Ghost,
-                    ) {
-                        Icon(Lucide.ArrowLeft, contentDescription = "Go back")
+                leading = if (showNavigation) {
+                    {
+                        IconButton(
+                            onClick = onBack,
+                            style = ButtonStyle.Ghost,
+                        ) {
+                            Icon(Lucide.ArrowLeft, contentDescription = "Go back")
+                        }
+                        Text(demo.name)
                     }
-                    Text(demo.name)
+                } else {
+                    null
                 },
                 trailing = {
                     ColorSchemeAction(
@@ -519,15 +525,15 @@ private fun ColorSchemeAction(
     colorScheme: ColorScheme,
     onColorSchemeChange: (ColorScheme) -> Unit,
 ) {
-    IconButton(
+    DemoToolbarIconButton(
         onClick = { onColorSchemeChange(colorScheme.next()) },
-        style = ButtonStyle.Secondary,
     ) {
         Icon(
             imageVector = when (colorScheme) {
                 ColorScheme.Light -> Lucide.Sun
                 else -> Lucide.Moon
             },
+            modifier = Modifier.size(18.dp),
             contentDescription = when (colorScheme) {
                 ColorScheme.Light -> "Light color scheme"
                 else -> "Dark color scheme"
@@ -548,7 +554,7 @@ private fun InteractionModeAction(
     interactionMode: InteractionMode,
     onInteractionModeChange: (InteractionMode) -> Unit,
 ) {
-    IconButton(
+    DemoToolbarIconButton(
         onClick = {
             onInteractionModeChange(
                 if (interactionMode == InteractionMode.Touch) {
@@ -558,7 +564,6 @@ private fun InteractionModeAction(
                 },
             )
         },
-        style = ButtonStyle.Secondary,
     ) {
         Icon(
             imageVector = if (interactionMode == InteractionMode.Touch) {
@@ -566,12 +571,48 @@ private fun InteractionModeAction(
             } else {
                 Lucide.MousePointer
             },
+            modifier = Modifier.size(18.dp),
             contentDescription = if (interactionMode == InteractionMode.Touch) {
                 "Touch preview mode"
             } else {
                 "Pointer preview mode"
             },
         )
+    }
+}
+
+@Composable
+private fun DemoToolbarIconButton(
+    onClick: () -> Unit,
+    content: @Composable () -> Unit,
+) {
+    val shape = RoundedCornerShape(8.dp)
+    val interactionSource = remember { MutableInteractionSource() }
+
+    UnstyledButton(
+        onClick = onClick,
+        contentPadding = PaddingValues(0.dp),
+        modifier = Modifier
+            .size(32.dp)
+            .focusRing(
+                interactionSource = interactionSource,
+                width = Theme[componentSizes][focusRingWidth],
+                color = Theme[colors][focusRing],
+                shape = shape,
+                offset = Theme[componentSizes][focusRingOffset],
+            )
+            .clip(shape)
+            .background(Color.White, shape)
+            .border(1.dp, Theme[colors][border], shape),
+        interactionSource = interactionSource,
+        indication = null,
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            content()
+        }
     }
 }
 
