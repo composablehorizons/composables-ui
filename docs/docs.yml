@@ -1,8 +1,8 @@
 sections:
   - title: Getting Started
     pages:
-      - title: Components
-        slug: components
+      - title: Theming
+        slug: theming
   - title: Components
     pages:
       - title: Buttons

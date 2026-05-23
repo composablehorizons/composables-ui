@@ -21,7 +21,6 @@ implementation("com.composables:compose-interaction-capabilities:1.0.0")
 Copy and paste the following sources into your project:
 
 <ComponentSource file="Button.kt" />
-<ComponentSource file="Theme.kt" />
 
 ## Examples
 
