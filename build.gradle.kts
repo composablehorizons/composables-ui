@@ -35,7 +35,6 @@ val docsDemoSources = mapOf(
     "scrollbars-vertical" to "ScrollbarExample.kt",
     "scrollbars-horizontal" to "HorizontalScrollbarExample.kt",
     "slider" to "SliderExample.kt",
-    "stack" to "StackExample.kt",
     "tab-group" to "TabGroupExample.kt",
     "text-field" to "DefaultTextFieldExample.kt",
     "text-field-search" to "SearchTextFieldExample.kt",
