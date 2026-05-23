@@ -153,106 +153,106 @@ internal fun currentInteractionMode(): InteractionMode {
 
 val AppTheme = buildTheme {
     val useDarkColors = currentColorScheme() == ColorScheme.Dark
-    val textSelectionHandleColor = if (useDarkColors) Color.White else Color(0XFF0C0A09)
+    val textSelectionHandleColor = if (useDarkColors) Color.White else Color.Black
     val textSelectionBackgroundColor = textSelectionHandleColor.copy(alpha = 0.24f)
     val colorAnimationSpec = tween<Color>(
         durationMillis = ColorSchemeAnimationDurationMillis,
         easing = FastOutSlowInEasing,
     )
     val animatedBackground by animateColorAsState(
-        targetValue = if (useDarkColors) Color(0xFF09090B) else Color(0xFFFAFAFA),
+        targetValue = if (useDarkColors) Color.Black else Color(0xFFF9F9F9),
         animationSpec = colorAnimationSpec,
         label = "BackgroundColor",
     )
     val animatedOnBackground by animateColorAsState(
-        targetValue = if (useDarkColors) Color(0xFFFAFAFA) else Color(0XFF0C0A09),
+        targetValue = if (useDarkColors) Color.White else Color.Black,
         animationSpec = colorAnimationSpec,
         label = "OnBackgroundColor",
     )
     val animatedPanel by animateColorAsState(
-        targetValue = if (useDarkColors) Color(0xFF18181B) else Color.White,
+        targetValue = if (useDarkColors) Color(0xFF101010) else Color.White,
         animationSpec = colorAnimationSpec,
         label = "PanelColor",
     )
     val animatedOnPanel by animateColorAsState(
-        targetValue = if (useDarkColors) Color(0xFFFAFAFA) else Color.Black,
+        targetValue = if (useDarkColors) Color.White else Color.Black,
         animationSpec = colorAnimationSpec,
         label = "OnPanelColor",
     )
     val animatedMuted by animateColorAsState(
-        targetValue = if (useDarkColors) Color.White.copy(alpha = 0.64f) else Color.Black.copy(alpha = 0.6f),
+        targetValue = if (useDarkColors) Color(0xFFA8A8A8) else Color(0xFF777777),
         animationSpec = colorAnimationSpec,
         label = "MutedColor",
     )
     val animatedPrimary by animateColorAsState(
-        targetValue = if (useDarkColors) Color.White else Color(0XFF0C0A09),
+        targetValue = if (useDarkColors) Color.White else Color.Black,
         animationSpec = colorAnimationSpec,
         label = "PrimaryColor",
     )
     val animatedOnPrimary by animateColorAsState(
-        targetValue = if (useDarkColors) Color(0XFF0C0A09) else Color.White,
+        targetValue = if (useDarkColors) Color.Black else Color.White,
         animationSpec = colorAnimationSpec,
         label = "OnPrimaryColor",
     )
     val animatedSecondary by animateColorAsState(
-        targetValue = if (useDarkColors) Color(0xFF27272A) else Color(0xFFE4E6EB),
+        targetValue = if (useDarkColors) Color(0xFF2F2F2F) else Color(0xFFF1F1F1),
         animationSpec = colorAnimationSpec,
         label = "SecondaryColor",
     )
     val animatedOnSecondary by animateColorAsState(
-        targetValue = if (useDarkColors) Color(0xFFFAFAFA) else Color(0XFF0C0A09),
+        targetValue = if (useDarkColors) Color.White else Color.Black,
         animationSpec = colorAnimationSpec,
         label = "OnSecondaryColor",
     )
     val animatedControl by animateColorAsState(
-        targetValue = if (useDarkColors) Color(0xFF27272A) else Color(0xFFf4f4f5),
+        targetValue = if (useDarkColors) Color(0xFF262626) else Color(0xFFF5F5F5),
         animationSpec = colorAnimationSpec,
         label = "ControlColor",
     )
     val animatedOnControl by animateColorAsState(
-        targetValue = if (useDarkColors) Color.White.copy(alpha = 0.64f) else Color.Black.copy(alpha = 0.6f),
+        targetValue = if (useDarkColors) Color(0xFFA8A8A8) else Color(0xFF777777),
         animationSpec = colorAnimationSpec,
         label = "OnControlColor",
     )
     val animatedSelectedControl by animateColorAsState(
-        targetValue = if (useDarkColors) Color(0xFF3F3F46) else Color.White,
+        targetValue = if (useDarkColors) Color(0xFF3A3A3A) else Color.White,
         animationSpec = colorAnimationSpec,
         label = "SelectedControlColor",
     )
     val animatedOnSelectedControl by animateColorAsState(
-        targetValue = if (useDarkColors) Color(0xFFFAFAFA) else Color(0XFF0C0A09),
+        targetValue = if (useDarkColors) Color.White else Color.Black,
         animationSpec = colorAnimationSpec,
         label = "OnSelectedControlColor",
     )
     val animatedBorder by animateColorAsState(
-        targetValue = if (useDarkColors) Color.White.copy(alpha = 0.14f) else Color(0xFF1F2328).copy(alpha = 0.15f),
+        targetValue = if (useDarkColors) Color(0xFF3A3A3A) else Color(0xFFE0E0E0),
         animationSpec = colorAnimationSpec,
         label = "BorderColor",
     )
     val animatedField by animateColorAsState(
-        targetValue = if (useDarkColors) Color(0xFF18181B) else Color.White,
+        targetValue = if (useDarkColors) Color(0xFF262626) else Color(0xFFF1F1F1),
         animationSpec = colorAnimationSpec,
         label = "FieldColor",
     )
     val animatedOnField by animateColorAsState(
-        targetValue = if (useDarkColors) Color(0xFFFAFAFA) else Color(0XFF0C0A09),
+        targetValue = if (useDarkColors) Color.White else Color.Black,
         animationSpec = colorAnimationSpec,
         label = "OnFieldColor",
     )
     val animatedInputPlaceholder by animateColorAsState(
-        targetValue = if (useDarkColors) Color.White.copy(alpha = 0.48f) else Color.Black.copy(alpha = 0.48f),
+        targetValue = if (useDarkColors) Color(0xFFA8A8A8) else Color(0xFF999999),
         animationSpec = colorAnimationSpec,
         label = "InputPlaceholderColor",
     )
     val animatedFocusRing by animateColorAsState(
-        targetValue = if (useDarkColors) Color(0xFFA1A1AA) else Color(0xFF44403C),
+        targetValue = if (useDarkColors) Color.White.copy(alpha = 0.32f) else Color.Black.copy(alpha = 0.24f),
         animationSpec = colorAnimationSpec,
         label = "FocusRingColor",
     )
     val useTouchSizes = currentInteractionMode() == InteractionMode.Touch
-    val buttonHeightValue = if (useTouchSizes) 44.dp else 32.dp
-    val iconButtonSizeValue = if (useTouchSizes) 44.dp else 32.dp
-    val dropdownMenuItemHeightValue = if (useTouchSizes) 44.dp else 32.dp
+    val buttonHeightValue = if (useTouchSizes) 48.dp else 36.dp
+    val iconButtonSizeValue = if (useTouchSizes) 48.dp else 36.dp
+    val dropdownMenuItemHeightValue = if (useTouchSizes) 48.dp else 36.dp
     val textFieldHeightValue = if (useTouchSizes) 48.dp else 40.dp
 
     properties[colors] = mapOf(
@@ -269,7 +269,7 @@ val AppTheme = buildTheme {
         onControl to animatedOnControl,
         selectedControl to animatedSelectedControl,
         onSelectedControl to animatedOnSelectedControl,
-        destructive to Color(0xFFDC2626),
+        destructive to Color(0xFFFF3040),
         onDestructive to Color.White,
         border to animatedBorder,
         field to animatedField,
@@ -280,7 +280,7 @@ val AppTheme = buildTheme {
         inputDisabled to animatedField,
         textSelectionHandle to textSelectionHandleColor,
         textSelectionBackground to textSelectionBackgroundColor,
-        scrim to Color.Black.copy(alpha = 0.12f),
+        scrim to Color.Black.copy(alpha = if (useDarkColors) 0.48f else 0.38f),
         focusRing to animatedFocusRing,
     )
     properties[textSelectionColors] = mapOf(
@@ -290,11 +290,11 @@ val AppTheme = buildTheme {
         ),
     )
     properties[shapes] = mapOf(
-        buttonShape to if (useTouchSizes) RoundedCornerShape(100) else RoundedCornerShape(6.dp),
+        buttonShape to RoundedCornerShape(100),
         alertDialogShape to RoundedCornerShape(16.dp),
-        bottomSheetShape to RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
-        dropdownMenuShape to RoundedCornerShape(6.dp),
-        textFieldShape to RoundedCornerShape(6.dp),
+        bottomSheetShape to RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        dropdownMenuShape to RoundedCornerShape(16.dp),
+        textFieldShape to RoundedCornerShape(if (useTouchSizes) 16.dp else 12.dp),
     )
     properties[shadows] = mapOf(
         dropdownMenuShadow to Shadow(
@@ -306,13 +306,13 @@ val AppTheme = buildTheme {
     )
     properties[componentSizes] = mapOf(
         buttonHeight to buttonHeightValue,
-        buttonHorizontalPadding to 16.dp,
+        buttonHorizontalPadding to if (useTouchSizes) 20.dp else 16.dp,
         iconButtonSize to iconButtonSizeValue,
         dropdownMenuItemHeight to dropdownMenuItemHeightValue,
         textFieldHeight to textFieldHeightValue,
         textFieldHorizontalPadding to 12.dp,
-        focusRingWidth to 3.dp,
-        focusRingOffset to 0.dp,
+        focusRingWidth to 2.dp,
+        focusRingOffset to 2.dp,
     )
 
     properties[alphas] = mapOf(
@@ -320,14 +320,14 @@ val AppTheme = buildTheme {
     )
 
     val bodyStyle = TextStyle(
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
+        fontSize = if (useTouchSizes) 17.sp else 15.sp,
+        lineHeight = if (useTouchSizes) 24.sp else 20.sp,
         fontWeight = FontWeight.Normal,
     )
     defaultTextStyle = bodyStyle
 
     val brightIndication = rememberRippleIndication(Color.White.copy(alpha = 0.18f))
-    val dimIndication = rememberRippleIndication(Color.Black.copy(alpha = 0.08f))
+    val dimIndication = rememberRippleIndication(Color.Black.copy(alpha = if (useDarkColors) 0.18f else 0.08f))
     defaultIndication = dimIndication
     properties[indications] = mapOf(
         bright to brightIndication,

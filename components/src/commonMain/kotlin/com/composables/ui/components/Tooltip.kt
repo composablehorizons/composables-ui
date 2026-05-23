@@ -29,7 +29,6 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.onPrimary
@@ -232,10 +231,7 @@ private fun TooltipSurface(
     }
 }
 
-private val TooltipTextStyle = TextStyle(
-    fontSize = 16.sp,
-    lineHeight = 24.sp,
-)
+private val TooltipTextStyle = TextStyle()
 
 @Composable
 private fun TooltipArrow(

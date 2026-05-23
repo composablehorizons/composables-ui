@@ -47,11 +47,8 @@ import com.composeunstyled.Scrim
 import com.composeunstyled.Sheet
 import com.composeunstyled.SheetDetent
 import com.composeunstyled.UnstyledModalBottomSheet
-import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 import com.composeunstyled.rememberModalBottomSheetState as rememberUnstyledModalBottomSheetState
-
-private val BottomSheetOutlineColor = Color.Black.copy(alpha = 0.1f)
 
 @Composable
 fun rememberBottomSheetState(
@@ -98,13 +95,12 @@ fun BottomSheet(
                 .padding(top = 16.dp),
             contentAlignment = Alignment.TopCenter,
         ) {
-            Sheet(
-                modifier = modifier
-                    .widthIn(max = 640.dp)
-                    .fillMaxWidth()
-                    .outline(1.dp, BottomSheetOutlineColor, shape)
-                    .clip(shape)
-                    .background(backgroundColor, shape),
+                Sheet(
+                    modifier = modifier
+                        .widthIn(max = 640.dp)
+                        .fillMaxWidth()
+                        .clip(shape)
+                        .background(backgroundColor, shape),
             ) {
                 ProvideContentColor(contentColor) {
                     Box(

@@ -29,12 +29,11 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.composables.ui.theme.alphas
-import com.composables.ui.theme.border
 import com.composables.ui.theme.buttonHeight
 import com.composables.ui.theme.buttonShape
 import com.composables.ui.theme.colors
@@ -56,6 +55,7 @@ import com.composeunstyled.LocalTextStyle
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.UnstyledDisclosure
+import com.composeunstyled.buildModifier
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 
@@ -70,7 +70,7 @@ fun AccordionPanel(
     shape: Shape = Theme[shapes][buttonShape],
     backgroundColor: Color = Theme[colors][secondary],
     contentColor: Color = Theme[colors][onSecondary],
-    borderColor: Color = Theme[colors][border],
+    borderColor: Color = Color.Unspecified,
     contentPadding: PaddingValues = PaddingValues(12.dp),
     content: @Composable () -> Unit,
 ) {
@@ -79,7 +79,11 @@ fun AccordionPanel(
             .fillMaxWidth()
             .clip(shape)
             .background(backgroundColor, shape)
-            .outline(1.dp, borderColor, shape)
+            .then(buildModifier {
+                if (borderColor.isSpecified && borderColor != Color.Transparent) {
+                    add(Modifier.outline(1.dp, borderColor, shape))
+                }
+            })
             .padding(contentPadding),
     ) {
         ProvideContentColor(contentColor) {
@@ -121,7 +125,7 @@ fun DisclosureScope.DisclosureHeading(
     shape: Shape = Theme[shapes][buttonShape],
     backgroundColor: Color = Theme[colors][secondary],
     contentColor: Color = Theme[colors][onSecondary],
-    borderColor: Color = Theme[colors][border],
+    borderColor: Color = Color.Unspecified,
     contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     content: @Composable RowScope.() -> Unit,
@@ -139,8 +143,14 @@ fun DisclosureScope.DisclosureHeading(
                 )
                 .clip(shape)
                 .background(backgroundColor, shape)
-                .outline(1.dp, borderColor, shape)
-                .alpha(if (enabled) 1f else Theme[alphas][disabledAlpha]),
+                .then(buildModifier {
+                    if (borderColor.isSpecified && borderColor != Color.Transparent) {
+                        add(Modifier.outline(1.dp, borderColor, shape))
+                    }
+                    if (!enabled) {
+                        add(Modifier.alpha(Theme[alphas][disabledAlpha]))
+                    }
+                }),
             enabled = enabled,
             contentPadding = PaddingValues(0.dp),
             indication = Theme[indications][dim],
@@ -187,13 +197,8 @@ fun DisclosureScope.DisclosurePanel(
     }
 }
 
-private val DisclosureBodyTextStyle = TextStyle(
-    fontSize = 16.sp,
-    lineHeight = 24.sp,
-)
+private val DisclosureBodyTextStyle = TextStyle()
 
 private val DisclosureButtonTextStyle = TextStyle(
-    fontSize = 16.sp,
-    lineHeight = 24.sp,
-    fontWeight = FontWeight.Medium,
+    fontWeight = FontWeight.SemiBold,
 )

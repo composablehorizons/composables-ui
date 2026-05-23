@@ -23,8 +23,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.composables.ui.theme.alphas
 import com.composables.ui.theme.border
 import com.composables.ui.theme.buttonHeight
@@ -128,13 +128,12 @@ fun <T> TabListScope<T>.Tab(
             Row(
                 modifier = Modifier
                     .heightIn(min = Theme[componentSizes][buttonHeight])
-                    .then(buildModifier {
-                        if (selected) {
-                            add(Modifier.background(Theme[colors][selectedControl], shape))
-                            add(Modifier.border(1.dp, Theme[colors][border], shape))
-                        }
-                        if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha]))
-                    })
+                .then(buildModifier {
+                    if (selected) {
+                        add(Modifier.background(Theme[colors][selectedControl], shape))
+                    }
+                    if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha]))
+                })
                     .padding(horizontal = 12.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
@@ -150,8 +149,7 @@ fun <T> TabListScope<T>.Tab(
 }
 
 private val TabTextStyle = TextStyle(
-    fontSize = 16.sp,
-    lineHeight = 24.sp,
+    fontWeight = FontWeight.SemiBold,
 )
 
 @Composable

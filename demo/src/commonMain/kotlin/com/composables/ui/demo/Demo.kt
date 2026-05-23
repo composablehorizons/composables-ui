@@ -1,14 +1,10 @@
 package com.composables.ui.demo
 
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.core.CubicBezierEasing
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.LocalIndication
@@ -25,7 +21,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -35,22 +30,17 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -62,6 +52,9 @@ import com.composables.icons.lucide.Sun
 import com.composables.ui.components.AppScaffold
 import com.composables.ui.components.Button
 import com.composables.ui.components.ButtonStyle
+import com.composables.ui.components.Disclosure
+import com.composables.ui.components.DisclosureHeading
+import com.composables.ui.components.DisclosurePanel
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
 import com.composables.ui.components.ScreenScaffold
@@ -69,6 +62,7 @@ import com.composables.ui.components.Text
 import com.composables.ui.components.Toolbar
 import com.composables.ui.components.ToolbarSize
 import com.composables.ui.components.focusRing
+import com.composables.ui.components.rememberDisclosureState
 import com.composables.ui.demo.examples.AlertDialogExample
 import com.composables.ui.demo.examples.AlertDialogThreeActionsExample
 import com.composables.ui.demo.examples.AlertDialogWithIconExample
@@ -81,56 +75,50 @@ import com.composables.ui.demo.examples.CenteredToolbarExample
 import com.composables.ui.demo.examples.CheckboxExample
 import com.composables.ui.demo.examples.DefaultTextFieldExample
 import com.composables.ui.demo.examples.DestructiveButtonExample
-import com.composables.ui.demo.examples.DisclosureExample
 import com.composables.ui.demo.examples.DisabledTextFieldExample
+import com.composables.ui.demo.examples.DisclosureExample
 import com.composables.ui.demo.examples.DropdownMenuExample
 import com.composables.ui.demo.examples.DropdownMenuToolbarExample
 import com.composables.ui.demo.examples.GhostButtonExample
 import com.composables.ui.demo.examples.HorizontalScrollbarExample
-import com.composables.ui.demo.examples.ProgressIndicatorExample
-import com.composables.ui.demo.examples.RadioGroupExample
 import com.composables.ui.demo.examples.LargeToolbarExample
 import com.composables.ui.demo.examples.MultilineTextFieldExample
 import com.composables.ui.demo.examples.OutlinedButtonExample
 import com.composables.ui.demo.examples.PrimaryButtonExample
+import com.composables.ui.demo.examples.ProgressIndicatorExample
+import com.composables.ui.demo.examples.RadioGroupExample
 import com.composables.ui.demo.examples.ReadOnlyTextFieldExample
+import com.composables.ui.demo.examples.ScrollbarExample
 import com.composables.ui.demo.examples.SearchTextFieldExample
 import com.composables.ui.demo.examples.SecondaryButtonExample
-import com.composables.ui.demo.examples.ScrollbarExample
 import com.composables.ui.demo.examples.SliderExample
 import com.composables.ui.demo.examples.TabGroupExample
 import com.composables.ui.demo.examples.ToggleSwitchExample
 import com.composables.ui.demo.examples.ToolbarWithActionsExample
 import com.composables.ui.demo.examples.TooltipExample
 import com.composables.ui.demo.examples.TriStateCheckboxExample
+import com.composables.ui.theme.AppTheme
 import com.composables.ui.theme.ColorScheme
 import com.composables.ui.theme.InteractionMode
 import com.composables.ui.theme.LocalColorScheme
 import com.composables.ui.theme.LocalInteractionMode
-import com.composables.ui.theme.AppTheme
 import com.composables.ui.theme.border
-import com.composables.ui.theme.buttonHeight
-import com.composables.ui.theme.control
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.componentSizes
+import com.composables.ui.theme.control
 import com.composables.ui.theme.focusRing
 import com.composables.ui.theme.focusRingOffset
 import com.composables.ui.theme.focusRingWidth
 import com.composables.ui.theme.muted
-import com.composables.ui.theme.onSecondary
 import com.composables.ui.theme.onPanel
 import com.composables.ui.theme.onSelectedControl
 import com.composables.ui.theme.panel
 import com.composables.ui.theme.selectedControl
-import com.composables.ui.theme.secondary
-import com.composeunstyled.DisclosedContent
-import com.composeunstyled.DisclosureButton
 import com.composeunstyled.LocalTextStyle
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.RadioButton
 import com.composeunstyled.RadioGroupScope
 import com.composeunstyled.UnstyledRadioGroup
-import com.composeunstyled.UnstyledDisclosure
 import com.composeunstyled.buildModifier
 import com.composeunstyled.theme.Theme
 
@@ -150,7 +138,7 @@ private data class DemoGroup(
 
 private data class PreviewOptions(
     val contentAlignment: Alignment = Alignment.Center,
-    val padding: PaddingValues = PaddingValues(0.dp),
+    val padding: PaddingValues = PaddingValues(top = 60.dp),
     val maxWidth: Dp? = null,
 )
 
@@ -243,7 +231,14 @@ private val componentDemoGroups = listOf(
         name = "Disclosure",
         id = "disclosure",
         demos = listOf(
-            DemoItem("Disclosure", "disclosure", content = { DisclosureExample() }, listName = "Default"),
+            DemoItem(
+                name = "Disclosure",
+                id = "disclosure",
+                content = { DisclosureExample() }, listName = "Default",
+                previewOptions = PreviewOptions(
+                    contentAlignment = Alignment.TopCenter,
+                )
+            )
         ),
     ),
     DemoGroup(
@@ -433,17 +428,16 @@ private const val NavigationTransitionDurationMillis = 350
 private const val NavigationParallaxDivisor = 5
 private const val NavigationDimmedAlpha = 0.86f
 private val NavigationTransitionEasing = CubicBezierEasing(0.32f, 0.72f, 0f, 1f)
-private val DemoListItemShape = RoundedCornerShape(8.dp)
+private val DemoListItemShape = RoundedCornerShape(12.dp)
 
 @Composable
 fun Demo(initialDemoId: String? = null) {
     val navController = rememberNavController()
     val demoListScrollState = rememberScrollState()
-    val expandedDemoGroups = remember { mutableStateMapOf<String, Boolean>() }
     val initialDemo = demos.firstOrNull { it.id == initialDemoId }
     val previewSpecificDemo = initialDemo != null
     val startDestination = initialDemo?.id ?: "home"
-    var interactionMode by remember { mutableStateOf(InteractionMode.Touch) }
+    var interactionMode by remember { mutableStateOf(InteractionMode.Pointer) }
     var colorScheme by remember { mutableStateOf(ColorScheme.Light) }
 
     CompositionLocalProvider(LocalInteractionMode provides InteractionMode.Pointer) {
@@ -513,7 +507,6 @@ fun Demo(initialDemoId: String? = null) {
                             DemoList(
                                 onSelectDemo = { navController.navigate(it.id) },
                                 scrollState = demoListScrollState,
-                                expandedGroups = expandedDemoGroups,
                                 modifier = Modifier.weight(1f),
                             )
                         }
@@ -542,7 +535,6 @@ fun Demo(initialDemoId: String? = null) {
 private fun DemoList(
     onSelectDemo: (DemoItem) -> Unit,
     scrollState: ScrollState,
-    expandedGroups: MutableMap<String, Boolean>,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier.fillMaxSize(), contentAlignment = Alignment.TopStart) {
@@ -552,7 +544,7 @@ private fun DemoList(
                 .padding(horizontal = 8.dp, vertical = 12.dp)
                 .fillMaxWidth(),
         ) {
-            DemoSection(componentDemoGroups, expandedGroups, onSelectDemo)
+            DemoSection(componentDemoGroups, onSelectDemo)
         }
     }
 }
@@ -726,6 +718,7 @@ private fun InteractionModeAction(
         }
     }
 }
+
 @Composable
 private fun <T> SegmentedRadioGroup(
     value: T,
@@ -763,7 +756,6 @@ private fun <T> RadioGroupScope.SegmentedRadioOption(
     content: @Composable (selected: Boolean) -> Unit,
 ) {
     val shape = RoundedCornerShape(999.dp)
-    val selectedBorderColor = Theme[colors][border]
     val interactionSource = remember { MutableInteractionSource() }
     RadioButton(
         value = value,
@@ -781,7 +773,6 @@ private fun <T> RadioGroupScope.SegmentedRadioOption(
             .then(buildModifier {
                 if (selected) {
                     add(Modifier.background(Theme[colors][selectedControl], shape))
-                    add(Modifier.border(1.dp, selectedBorderColor, shape))
                 }
             }),
     ) {
@@ -809,7 +800,6 @@ private fun segmentedRadioContentColor(selected: Boolean): Color {
 @Composable
 private fun DemoSection(
     groups: List<DemoGroup>,
-    expandedGroups: MutableMap<String, Boolean>,
     onClick: (DemoItem) -> Unit,
 ) {
     groups.forEach { group ->
@@ -828,61 +818,35 @@ private fun DemoSection(
             return@forEach
         }
 
-        val expanded = expandedGroups[group.id] ?: false
-        val interactionSource = remember { MutableInteractionSource() }
-        UnstyledDisclosure(
-            expanded = expanded,
-            onExpandedChange = { expandedGroups[group.id] = it },
+        val state = rememberDisclosureState()
+        Disclosure(
+            state = state,
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Column(Modifier.fillMaxWidth()) {
-                DisclosureButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = Theme[componentSizes][buttonHeight])
-                        .focusRing(
-                            interactionSource = interactionSource,
-                            width = Theme[componentSizes][focusRingWidth],
-                            color = Theme[colors][focusRing],
-                            shape = DemoListItemShape,
-                            offset = Theme[componentSizes][focusRingOffset],
-                        )
-                        .background(Theme[colors][secondary], DemoListItemShape)
-                        .clip(DemoListItemShape),
-                    interactionSource = interactionSource,
-                    indication = LocalIndication.current,
-                    contentAlignment = Alignment.CenterStart,
+            DisclosureHeading(
+                shape = DemoListItemShape,
+                contentPadding = PaddingValues(0.dp),
+            ) {
+                DemoGroupHeader(
+                    name = group.name,
+                    expanded = state.expanded,
+                    showChevron = true,
+                )
+            }
+            DisclosurePanel {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
-                    ProvideContentColor(Theme[colors][onSecondary]) {
-                        DemoGroupHeader(
-                            name = group.name,
-                            expanded = expanded,
-                            showChevron = true,
-                        )
-                    }
-                }
-                DisclosedContent(
-                    enter = expandVertically(
-                        animationSpec = spring(
-                            stiffness = Spring.StiffnessMediumLow,
-                        ),
-                    ),
-                    exit = shrinkVertically(),
-                ) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        group.demos.forEach { demo ->
-                            DemoListButton(
-                                onClick = { onClick(demo) },
-                                modifier = Modifier.fillMaxWidth(),
-                            ) {
-                                Text(
-                                    text = demo.listName,
-                                    style = LocalTextStyle.current.merge(DemoListTextStyle),
-                                    modifier = Modifier.padding(start = DemoListTextStart),
-                                )
-                            }
+                    group.demos.forEach { demo ->
+                        DemoListButton(
+                            onClick = { onClick(demo) },
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Text(
+                                text = demo.listName,
+                                style = LocalTextStyle.current.merge(DemoListTextStyle),
+                                modifier = Modifier.padding(start = DemoListTextStart),
+                            )
                         }
                     }
                 }
@@ -928,10 +892,7 @@ private fun DemoGroupHeader(
 
 private val DemoListHorizontalPadding = 16.dp
 private val DemoListTextStart = DemoListHorizontalPadding
-private val DemoListTextStyle = TextStyle(
-    fontSize = 16.sp,
-    lineHeight = 24.sp,
-)
+private val DemoListTextStyle = TextStyle()
 
 @Composable
 private fun DemoListButton(

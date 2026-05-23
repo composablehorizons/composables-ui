@@ -23,7 +23,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.composables.ui.theme.bright
 import com.composables.ui.theme.border
 import com.composables.ui.theme.buttonHeight
@@ -170,9 +169,7 @@ private fun buttonHorizontalPaddingFor(buttonSize: ButtonSize): Dp = when (butto
 
 private val NoButtonPadding = PaddingValues(0.dp)
 private val ButtonLabelTextStyle = TextStyle(
-    fontSize = 16.sp,
-    lineHeight = 24.sp,
-    fontWeight = FontWeight.Medium,
+    fontWeight = FontWeight.SemiBold,
 )
 
 @Composable

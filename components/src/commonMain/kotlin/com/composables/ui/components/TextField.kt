@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -40,8 +41,6 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.composables.ui.theme.border
 import com.composables.ui.theme.alphas
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.componentSizes
@@ -82,7 +81,7 @@ fun TextField(
     backgroundColor: Color = Theme[colors][field],
     contentColor: Color = Theme[colors][onField],
     placeholderColor: Color = Theme[colors][inputPlaceholder],
-    borderColor: Color = Theme[colors][border],
+    borderColor: Color = Color.Unspecified,
     contentPadding: PaddingValues = PaddingValues(horizontal = Theme[componentSizes][textFieldHorizontalPadding]),
     minHeight: Dp = Theme[componentSizes][textFieldHeight],
     cursorBrush: Brush = SolidColor(contentColor),
@@ -138,8 +137,10 @@ fun TextField(
             )
             .clip(shape)
             .background(backgroundColor, shape)
-            .border(1.dp, borderColor, shape)
             .then(buildModifier {
+                if (borderColor.isSpecified && borderColor != Color.Transparent) {
+                    add(Modifier.border(1.dp, borderColor, shape))
+                }
                 if (!enabled) {
                     add(Modifier.alpha(Theme[alphas][disabledAlpha]))
                 }
@@ -159,10 +160,7 @@ fun TextField(
     }
 }
 
-private val TextFieldInputTextStyle = TextStyle(
-    fontSize = 16.sp,
-    lineHeight = 24.sp,
-)
+private val TextFieldInputTextStyle = TextStyle()
 
 @Composable
 private fun UnstyledTextFieldScope.TextFieldContent(

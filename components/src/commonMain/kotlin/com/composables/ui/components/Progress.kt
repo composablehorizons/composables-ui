@@ -24,7 +24,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.control
 import com.composables.ui.theme.primary

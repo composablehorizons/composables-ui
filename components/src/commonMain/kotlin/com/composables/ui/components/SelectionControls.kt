@@ -34,7 +34,6 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.composables.ui.theme.alphas
 import com.composables.ui.theme.border
 import com.composables.ui.theme.buttonHeight
@@ -48,8 +47,8 @@ import com.composables.ui.theme.focusRingOffset
 import com.composables.ui.theme.focusRingWidth
 import com.composables.ui.theme.indications
 import com.composables.ui.theme.onPanel
-import com.composables.ui.theme.onSelectedControl
-import com.composables.ui.theme.selectedControl
+import com.composables.ui.theme.onPrimary
+import com.composables.ui.theme.primary
 import com.composeunstyled.CheckedIndicator
 import com.composeunstyled.LocalTextStyle
 import com.composeunstyled.ProvideContentColor
@@ -153,8 +152,9 @@ private fun CheckboxBox(
     shape: Shape = RoundedCornerShape(5.dp),
     indication: Indication? = Theme[indications][dim],
 ) {
-    val backgroundColor = if (checked) Theme[colors][selectedControl] else Theme[colors][control]
-    val contentColor = if (checked) Theme[colors][onSelectedControl] else Color.Transparent
+    val backgroundColor = if (checked) Theme[colors][primary] else Theme[colors][control]
+    val contentColor = if (checked) Theme[colors][onPrimary] else Color.Transparent
+    val borderColor = if (checked) Theme[colors][primary] else Theme[colors][border]
     UnstyledCheckbox(
         checked = checked,
         onCheckedChange = onCheckedChange,
@@ -166,7 +166,7 @@ private fun CheckboxBox(
             .focusRing(interactionSource, Theme[componentSizes][focusRingWidth], Theme[colors][focusRing], shape, Theme[componentSizes][focusRingOffset])
             .clip(shape)
             .background(backgroundColor, shape)
-            .border(1.dp, Theme[colors][border], shape)
+            .border(1.dp, borderColor, shape)
             .size(size)
             .then(buildModifier { if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha])) }),
     ) {
@@ -245,7 +245,7 @@ fun <T> RadioGroupScope<T>.Radio(
                     contentAlignment = Alignment.Center,
                 ) {
                     androidx.compose.animation.AnimatedVisibility(selected, enter = fadeIn(), exit = fadeOut()) {
-                        Box(Modifier.size(10.dp).background(Theme[colors][onSelectedControl], CircleShape))
+                        Box(Modifier.size(10.dp).background(Theme[colors][primary], CircleShape))
                     }
                 }
                 if (content != null) {
@@ -269,6 +269,8 @@ fun Switch(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     val trackShape = RoundedCornerShape(999.dp)
+    val trackColor = if (checked) Theme[colors][primary] else Theme[colors][control]
+    val trackBorderColor = if (checked) Theme[colors][primary] else Theme[colors][border]
     UnstyledSwitch(
         checked = checked,
         onCheckedChange = onCheckedChange,
@@ -278,14 +280,14 @@ fun Switch(
         modifier = modifier
             .focusRing(interactionSource, Theme[componentSizes][focusRingWidth], Theme[colors][focusRing], trackShape, Theme[componentSizes][focusRingOffset])
             .clip(trackShape)
-            .background(if (checked) Theme[colors][selectedControl] else Theme[colors][control], trackShape)
-            .border(1.dp, Theme[colors][border], trackShape)
+            .background(trackColor, trackShape)
+            .border(1.dp, trackBorderColor, trackShape)
             .size(width = 44.dp, height = 24.dp)
             .padding(2.dp)
             .then(buildModifier { if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha])) }),
     ) {
         SwitchThumb(animationSpec = androidx.compose.animation.core.spring()) {
-            Box(Modifier.size(20.dp).background(if (checked) Theme[colors][onSelectedControl] else Theme[colors][onPanel], CircleShape))
+            Box(Modifier.size(20.dp).background(if (checked) Theme[colors][onPrimary] else Theme[colors][onPanel], CircleShape))
         }
     }
 }
@@ -314,7 +316,4 @@ fun LabeledSwitch(
     }
 }
 
-private val SelectionControlTextStyle = TextStyle(
-    fontSize = 16.sp,
-    lineHeight = 24.sp,
-)
+private val SelectionControlTextStyle = TextStyle()

@@ -44,7 +44,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.composables.ui.theme.border
 import com.composables.ui.theme.componentSizes
 import com.composables.ui.theme.colors
@@ -176,7 +175,7 @@ fun DropdownMenuScope.DropdownMenuPanel(
                 .outline(1.dp, Theme[colors][border], shape)
                 .clip(shape)
                 .background(backgroundColor, shape)
-                .padding(4.dp),
+                .padding(6.dp),
             enter = enterTransition,
             exit = exitTransition,
         ) {
@@ -262,7 +261,7 @@ fun DropdownMenuPanelContentScope.DropdownMenuItem(
     val focused by interactionSource.collectIsFocusedAsState()
     val pressed by interactionSource.collectIsPressedAsState()
     val active = enabled && (hovered || focused || pressed)
-    val itemShape = RoundedCornerShape(4.dp)
+    val itemShape = RoundedCornerShape(12.dp)
     val contentColor = if (style.destructive) Theme[colors][destructive] else Theme[colors][onPanel]
 
     with(unstyledScope) {
@@ -283,7 +282,7 @@ fun DropdownMenuPanelContentScope.DropdownMenuItem(
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(min = Theme[componentSizes][dropdownMenuItemHeight])
-                        .padding(horizontal = 8.dp, vertical = 6.dp),
+                        .padding(horizontal = 12.dp, vertical = 6.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -330,15 +329,10 @@ fun DropdownMenuPanelContentScope.DropdownMenuLabel(
     }
 }
 
-private val DropdownMenuTextStyle = TextStyle(
-    fontSize = 16.sp,
-    lineHeight = 24.sp,
-)
+private val DropdownMenuTextStyle = TextStyle()
 
 private val DropdownMenuLabelTextStyle = TextStyle(
-    fontSize = 16.sp,
-    lineHeight = 24.sp,
-    fontWeight = FontWeight.Medium,
+    fontWeight = FontWeight.SemiBold,
 )
 
 @Composable

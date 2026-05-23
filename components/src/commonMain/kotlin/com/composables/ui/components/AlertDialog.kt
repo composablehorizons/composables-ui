@@ -43,7 +43,6 @@ import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.Scrim
 import com.composeunstyled.UnstyledDialog
-import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 
 private const val DialogEnterDurationMillis = 400
@@ -53,8 +52,6 @@ private const val DialogExitFadeDurationMillis = 100
 
 private val EmphasizedDecelerateEasing = CubicBezierEasing(0.05f, 0.7f, 0.1f, 1f)
 private val EmphasizedAccelerateEasing = CubicBezierEasing(0.3f, 0f, 0.8f, 0.15f)
-private val DialogOutlineColor = Color.Black.copy(alpha = 0.1f)
-
 @Composable
 fun AlertDialog(
     visible: Boolean,
@@ -106,7 +103,6 @@ fun AlertDialog(
                     .widthIn(min = 280.dp, max = 560.dp)
                     .fillMaxWidth()
                     .heightIn(max = 560.dp)
-                    .outline(1.dp, DialogOutlineColor, shape)
                     .clip(shape)
                     .background(backgroundColor, shape)
                     .padding(24.dp),
@@ -205,7 +201,4 @@ private val AlertDialogTitleTextStyle = TextStyle(
     fontWeight = FontWeight.Medium,
 )
 
-private val AlertDialogBodyTextStyle = TextStyle(
-    fontSize = 16.sp,
-    lineHeight = 24.sp,
-)
+private val AlertDialogBodyTextStyle = TextStyle()
