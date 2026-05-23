@@ -118,6 +118,7 @@ import com.composables.ui.theme.focusRing
 import com.composables.ui.theme.focusRingOffset
 import com.composables.ui.theme.focusRingWidth
 import com.composables.ui.theme.muted
+import com.composables.ui.theme.onSecondary
 import com.composables.ui.theme.onPanel
 import com.composables.ui.theme.onSelectedControl
 import com.composables.ui.theme.panel
@@ -855,16 +856,19 @@ private fun DemoSection(
                             shape = DemoListItemShape,
                             offset = Theme[componentSizes][focusRingOffset],
                         )
+                        .background(Theme[colors][secondary], DemoListItemShape)
                         .clip(DemoListItemShape),
                     interactionSource = interactionSource,
                     indication = LocalIndication.current,
                     contentAlignment = Alignment.CenterStart,
                 ) {
-                    DemoGroupHeader(
-                        name = group.name,
-                        expanded = expanded,
-                        showChevron = true,
-                    )
+                    ProvideContentColor(Theme[colors][onSecondary]) {
+                        DemoGroupHeader(
+                            name = group.name,
+                            expanded = expanded,
+                            showChevron = true,
+                        )
+                    }
                 }
                 DisclosedContent(
                     enter = expandVertically(
@@ -913,7 +917,12 @@ private fun DemoGroupHeader(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        Text(
+            text = name,
+            style = LocalTextStyle.current.merge(DemoListTextStyle),
+        )
         if (showChevron) {
+            Spacer(Modifier.weight(1f))
             Icon(
                 imageVector = Lucide.ChevronRight,
                 contentDescription = null,
@@ -922,18 +931,12 @@ private fun DemoGroupHeader(
                     .rotate(iconRotation),
                 tint = Theme[colors][muted],
             )
-        } else {
-            Spacer(Modifier.size(16.dp))
         }
-        Text(
-            text = name,
-            style = LocalTextStyle.current.merge(DemoListTextStyle),
-        )
     }
 }
 
 private val DemoListHorizontalPadding = 16.dp
-private val DemoListTextStart = DemoListHorizontalPadding + 16.dp + 8.dp
+private val DemoListTextStart = DemoListHorizontalPadding
 private val DemoListTextStyle = TextStyle(
     fontSize = 16.sp,
     lineHeight = 24.sp,
@@ -947,7 +950,7 @@ private fun DemoListButton(
 ) {
     Button(
         onClick = onClick,
-        style = ButtonStyle.Ghost,
+        style = ButtonStyle.Secondary,
         modifier = modifier,
         shape = DemoListItemShape,
         contentPadding = PaddingValues(0.dp),

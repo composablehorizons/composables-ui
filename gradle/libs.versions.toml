@@ -1,9 +1,7 @@
 [versions]
 unstyled = "2.4.0"
-kotlin = "2.3.21"
-kotlinXDate = "0.7.1"
 compose = "1.11.0"
-ktorClient = "3.3.1"
+kotlin = "2.3.21"
 iconsLucide = "1.1.1"
 navigation = "2.9.2"
 agp = "9.2.1"
@@ -11,13 +9,18 @@ android-compile-sdk = "37"
 android-min-sdk = "23"
 activityCompose = "1.13.0"
 interactionCapabilities = "1.0.0"
+rippleIndication = "1.1.0"
 
 [libraries]
 composables-unstyled = { module = "com.composables:composeunstyled", version.ref = "unstyled" }
+composables-unstyled-build-modifier = { module = "com.composables:composeunstyled-build-modifier", version.ref = "unstyled" }
+composables-unstyled-stack = { module = "com.composables:composeunstyled-stack", version.ref = "unstyled" }
 composables-icons-lucide = { module = "com.composables:icons-lucide", version.ref = "iconsLucide" }
 composables-interaction-capabilities = { module = "com.composables:compose-interaction-capabilities", version.ref = "interactionCapabilities" }
-ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorClient" }
-kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinXDate" }
+composables-ripple-indication = { module = "com.composables:ripple-indication", version.ref = "rippleIndication" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose" }
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose" }
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose" }
 androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }

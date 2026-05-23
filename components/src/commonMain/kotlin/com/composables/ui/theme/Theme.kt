@@ -14,20 +14,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.composables.compose.ripple.rememberRippleIndication
+import com.composables.interactioncapabilities.currentInteractionCapabilities
 import com.composeunstyled.theme.ThemeProperty
 import com.composeunstyled.theme.ThemeToken
 import com.composeunstyled.theme.buildTheme
-import com.composables.interactioncapabilities.currentInteractionCapabilities
-import com.composables.ui.generated.resources.Inter
-import com.composables.ui.generated.resources.Res
-import org.jetbrains.compose.resources.Font
 
 // properties
 val colors = ThemeProperty<Color>("colors")
@@ -199,7 +195,7 @@ val AppTheme = buildTheme {
         label = "OnPrimaryColor",
     )
     val animatedSecondary by animateColorAsState(
-        targetValue = if (useDarkColors) Color(0xFF27272A) else Color(0xFFf4f4f5),
+        targetValue = if (useDarkColors) Color(0xFF27272A) else Color(0xFFE4E6EB),
         animationSpec = colorAnimationSpec,
         label = "SecondaryColor",
     )
@@ -323,12 +319,10 @@ val AppTheme = buildTheme {
         disabledAlpha to 0.65f,
     )
 
-    val inter = FontFamily(Font(Res.font.Inter))
     val bodyStyle = TextStyle(
         fontSize = 16.sp,
         lineHeight = 24.sp,
         fontWeight = FontWeight.Normal,
-        fontFamily = inter,
     )
     defaultTextStyle = bodyStyle
 

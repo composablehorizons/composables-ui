@@ -18,10 +18,6 @@ java {
     }
 }
 
-compose.resources {
-    packageOfResClass = "com.composables.ui.generated.resources"
-}
-
 kotlin {
     jvmToolchain {
         vendor = JvmVendorSpec.JETBRAINS
@@ -59,14 +55,13 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(libs.composables.unstyled)
-            implementation("com.composables:composeunstyled-build-modifier:${libs.versions.unstyled.get()}")
-            implementation("com.composables:composeunstyled-stack:${libs.versions.unstyled.get()}")
+            implementation(libs.composables.unstyled.build.modifier)
+            implementation(libs.composables.unstyled.stack)
             implementation(libs.composables.interaction.capabilities)
-            implementation("com.composables:ripple-indication:1.1.0")
-            api("org.jetbrains.compose.foundation:foundation:1.11.0")
-            implementation("org.jetbrains.compose.ui:ui:1.11.0")
-            implementation("org.jetbrains.compose.runtime:runtime:1.11.0")
-            implementation("org.jetbrains.compose.components:components-resources:1.11.0")
+            implementation(libs.composables.ripple.indication)
+            api(libs.compose.foundation)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.runtime)
         }
     }
 }

@@ -54,20 +54,24 @@ import com.composeunstyled.UnstyledButton
 import com.composeunstyled.buildModifier
 import com.composeunstyled.theme.Theme
 
-enum class ButtonStyle {
-    Default,
-    Primary,
-    Secondary,
-    Outlined,
-    Destructive,
-    Ghost,
+@kotlin.jvm.JvmInline
+value class ButtonStyle internal constructor(@Suppress("unused") private val value: Int) {
+    companion object {
+        val Primary = ButtonStyle(0)
+        val Secondary = ButtonStyle(1)
+        val Outlined = ButtonStyle(2)
+        val Destructive = ButtonStyle(3)
+        val Ghost = ButtonStyle(4)
+        val Default = Secondary
+    }
 }
 
-class ButtonSize private constructor() {
+@kotlin.jvm.JvmInline
+value class ButtonSize internal constructor(@Suppress("unused") private val value: Int) {
     companion object {
-        val Small = ButtonSize()
-        val Regular = ButtonSize()
-        val Large = ButtonSize()
+        val Small = ButtonSize(0)
+        val Regular = ButtonSize(1)
+        val Large = ButtonSize(2)
         val Default = Regular
     }
 }
@@ -85,18 +89,16 @@ fun Button(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     content: @Composable RowScope.() -> Unit,
 ) {
-    val styleDefaults = buttonStyleDefaults(style)
-
     ButtonSkeleton(
         onClick = onClick,
         modifier = modifier,
         sizingModifier = Modifier.heightIn(min = buttonHeightFor(buttonSize)),
         enabled = enabled,
-        backgroundColor = styleDefaults.backgroundColor,
-        contentColor = styleDefaults.contentColor,
+        backgroundColor = buttonBackgroundColorFor(style),
+        contentColor = buttonContentColorFor(style),
         shape = shape,
         contentPadding = contentPadding,
-        borderColor = styleDefaults.borderColor,
+        borderColor = buttonBorderColorFor(style),
         borderWidth = borderWidth,
         interactionSource = interactionSource,
         content = {
@@ -124,18 +126,16 @@ fun IconButton(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     content: @Composable () -> Unit,
 ) {
-    val styleDefaults = buttonStyleDefaults(style)
-
     ButtonSkeleton(
         onClick = onClick,
         modifier = modifier,
         sizingModifier = Modifier.size(iconButtonSizeFor(buttonSize)),
         enabled = enabled,
-        backgroundColor = styleDefaults.backgroundColor,
-        contentColor = styleDefaults.contentColor,
+        backgroundColor = buttonBackgroundColorFor(style),
+        contentColor = buttonContentColorFor(style),
         shape = shape,
         contentPadding = NoButtonPadding,
-        borderColor = styleDefaults.borderColor,
+        borderColor = buttonBorderColorFor(style),
         borderWidth = borderWidth,
         interactionSource = interactionSource,
         content = content,
@@ -175,46 +175,32 @@ private val ButtonLabelTextStyle = TextStyle(
     fontWeight = FontWeight.Medium,
 )
 
-private data class ButtonStyleDefaults(
-    val backgroundColor: Color,
-    val contentColor: Color,
-    val borderColor: Color,
-)
+@Composable
+private fun buttonBackgroundColorFor(style: ButtonStyle): Color {
+    return when (style) {
+        ButtonStyle.Primary -> Theme[colors][primary]
+        ButtonStyle.Secondary -> Theme[colors][secondary]
+        ButtonStyle.Outlined -> Color.Transparent
+        ButtonStyle.Destructive -> Theme[colors][destructive]
+        else -> Color.Transparent
+    }
+}
 
 @Composable
-private fun buttonStyleDefaults(style: ButtonStyle): ButtonStyleDefaults {
+private fun buttonContentColorFor(style: ButtonStyle): Color {
     return when (style) {
-        ButtonStyle.Default -> buttonStyleDefaults(ButtonStyle.Secondary)
+        ButtonStyle.Primary -> Theme[colors][onPrimary]
+        ButtonStyle.Secondary -> Theme[colors][onSecondary]
+        ButtonStyle.Destructive -> Theme[colors][onDestructive]
+        else -> Theme[colors][onBackground]
+    }
+}
 
-        ButtonStyle.Primary -> ButtonStyleDefaults(
-            backgroundColor = Theme[colors][primary],
-            contentColor = Theme[colors][onPrimary],
-            borderColor = Color.Unspecified,
-        )
-
-        ButtonStyle.Secondary -> ButtonStyleDefaults(
-            backgroundColor = Theme[colors][secondary],
-            contentColor = Theme[colors][onSecondary],
-            borderColor = Theme[colors][border],
-        )
-
-        ButtonStyle.Outlined -> ButtonStyleDefaults(
-            backgroundColor = Color.Transparent,
-            contentColor = Theme[colors][onBackground],
-            borderColor = Theme[colors][border],
-        )
-
-        ButtonStyle.Destructive -> ButtonStyleDefaults(
-            backgroundColor = Theme[colors][destructive],
-            contentColor = Theme[colors][onDestructive],
-            borderColor = Color.Unspecified,
-        )
-
-        ButtonStyle.Ghost -> ButtonStyleDefaults(
-            backgroundColor = Color.Transparent,
-            contentColor = Theme[colors][onBackground],
-            borderColor = Color.Unspecified,
-        )
+@Composable
+private fun buttonBorderColorFor(style: ButtonStyle): Color {
+    return when (style) {
+        ButtonStyle.Outlined -> Theme[colors][border]
+        else -> Color.Unspecified
     }
 }
 

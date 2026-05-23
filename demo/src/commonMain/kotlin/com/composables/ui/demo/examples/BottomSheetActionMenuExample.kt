@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -51,65 +52,68 @@ fun BottomSheetActionMenuExample() {
             Button(
                 onClick = { sheetState.targetDetent = SheetDetent.Hidden },
                 modifier = Modifier.fillMaxWidth(),
-                style = ButtonStyle.Ghost,
-                contentPadding = PaddingValues(0.dp),
+                style = ButtonStyle.Secondary,
+                contentPadding = PaddingValues(horizontal = 16.dp),
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
+                    Text("Rename")
+                    Spacer(Modifier.weight(1f))
                     Icon(
                         imageVector = Lucide.Pencil,
                         contentDescription = null,
                         modifier = Modifier.size(16.dp),
                     )
-                    Text("Rename")
                 }
             }
             Button(
                 onClick = { sheetState.targetDetent = SheetDetent.Hidden },
                 modifier = Modifier.fillMaxWidth(),
-                style = ButtonStyle.Ghost,
-                contentPadding = PaddingValues(0.dp),
+                style = ButtonStyle.Secondary,
+                contentPadding = PaddingValues(horizontal = 16.dp),
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
+                    Text("Duplicate")
+                    Spacer(Modifier.weight(1f))
                     Icon(
                         imageVector = Lucide.Copy,
                         contentDescription = null,
                         modifier = Modifier.size(16.dp),
                     )
-                    Text("Duplicate")
                 }
             }
             Button(
                 onClick = { sheetState.targetDetent = SheetDetent.Hidden },
                 modifier = Modifier.fillMaxWidth(),
-                style = ButtonStyle.Ghost,
-                contentPadding = PaddingValues(0.dp),
+                style = ButtonStyle.Secondary,
+                contentPadding = PaddingValues(horizontal = 16.dp),
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
+                    Text("Share")
+                    Spacer(Modifier.weight(1f))
                     Icon(
                         imageVector = Lucide.Share,
                         contentDescription = null,
                         modifier = Modifier.size(16.dp),
                     )
-                    Text("Share")
                 }
             }
             Button(
                 onClick = { sheetState.targetDetent = SheetDetent.Hidden },
                 modifier = Modifier.fillMaxWidth(),
-                style = ButtonStyle.Ghost,
-                contentPadding = PaddingValues(0.dp),
+                style = ButtonStyle.Secondary,
+                contentPadding = PaddingValues(horizontal = 16.dp),
             ) {
                 ProvideContentColor(Theme[colors][destructive]) {
                     Row(
@@ -117,12 +121,13 @@ fun BottomSheetActionMenuExample() {
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
+                        Text("Delete")
+                        Spacer(Modifier.weight(1f))
                         Icon(
                             imageVector = Lucide.Trash2,
                             contentDescription = null,
                             modifier = Modifier.size(16.dp),
                         )
-                        Text("Delete")
                     }
                 }
             }
