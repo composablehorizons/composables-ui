@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.navigation.toRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -34,7 +35,7 @@ fun SocialApp() {
         AppScaffold {
             NavHost(
                 navController = navController,
-                startDestination = "home",
+                startDestination = HomeRoute,
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Theme[colors][background]),
@@ -87,20 +88,22 @@ fun SocialApp() {
                     )
                 },
             ) {
-                composable("home") {
+                composable<HomeRoute> {
                     HomePage(
-                        onPostClick = { post -> navController.navigate("post/${post.id}") },
-                        onProfileClick = { profileId -> navController.navigate("profile/$profileId") },
+                        onPostClick = { post -> navController.navigate(PostRoute(post.id)) },
+                        onProfileClick = { profileId -> navController.navigate(ProfileRoute(profileId)) },
                     )
                 }
-                composable("post/{postId}") {
+                composable<PostRoute> {
                     PostDetailPage()
                 }
-                composable("profile/{profileId}") {
+                composable<ProfileRoute> { backStackEntry ->
+                    val route = backStackEntry.toRoute<ProfileRoute>()
                     ProfilePage(
+                        profileId = route.profileId,
                         onBack = { navController.navigateUp() },
                         onProfileClick = {
-                            navController.navigate("profile/john_mobbin") {
+                            navController.navigate(ProfileRoute("john_mobbin")) {
                                 launchSingleTop = true
                             }
                         },

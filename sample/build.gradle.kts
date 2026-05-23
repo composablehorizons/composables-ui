@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose)
     alias(libs.plugins.compose.compiler)
 }
@@ -40,6 +41,7 @@ kotlin {
             implementation(libs.composables.unstyled)
             implementation(libs.composables.unstyled.window.container.size)
             implementation(libs.composables.uri.painter)
+            implementation(libs.kotlinx.serialization.json)
         }
 
         jvmMain.dependencies {
