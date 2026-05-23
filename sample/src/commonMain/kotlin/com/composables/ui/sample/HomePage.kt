@@ -1,5 +1,6 @@
 package com.composables.ui.sample
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -7,6 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -22,6 +24,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,11 +57,14 @@ import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
 import com.composables.ui.components.ScreenScaffold
 import com.composables.ui.components.Text
+import com.composables.ui.sample.components.Avatar
 import com.composables.ui.theme.background
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
+import com.composeunstyled.currentWindowContainerSize
+import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 import com.composables.uripainter.rememberUriPainter
 
@@ -202,72 +208,88 @@ private val timelinePosts = listOf(
 )
 
 private val FeedMaxWidth = 700.dp
+private val WideFeedVerticalInset = 70.dp
 
 @Composable
 internal fun HomePage(
     onPostClick: (SocialPost) -> Unit,
     onProfileClick: (String) -> Unit,
 ) {
-    ScreenScaffold(backgroundColor = Theme[colors][background], contentColor = Theme[colors][onBackground]) {
-        Column(
+    ScreenScaffold {
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Theme[colors][background]),
         ) {
-            HomeToolbar()
             SocialTimeline(
                 modifier = Modifier
-                    .weight(1f)
+                    .fillMaxSize()
                     .fillMaxWidth(),
                 onPostClick = onPostClick,
                 onProfileClick = onProfileClick,
             )
-            SocialBottomBar()
+            SocialBottomBar(
+                onProfileClick = { onProfileClick("john_mobbin") },
+                modifier = Modifier.align(Alignment.BottomCenter),
+            )
         }
     }
 }
 
 @Composable
-private fun HomeToolbar() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(64.dp)
-            .padding(horizontal = 14.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Avatar(
-            url = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=240",
-            size = 36,
-        )
-        Spacer(Modifier.weight(1f))
-    }
-}
-
-@Composable
 private fun SocialTimeline(
-    modifier: Modifier = Modifier,
     onPostClick: (SocialPost) -> Unit,
     onProfileClick: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier) {
-        LazyColumn(
+    val windowSize = currentWindowContainerSize()
+    val showFeedOutline = windowSize.width > FeedMaxWidth
+    val feedShape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)
+    val feedVerticalInset by animateDpAsState(
+        targetValue = if (showFeedOutline) WideFeedVerticalInset else 0.dp,
+        label = "FeedVerticalInset",
+    )
+
+    Box(
+        modifier = modifier.padding(vertical = feedVerticalInset)
+    ) {
+        Box(
             modifier = Modifier
                 .widthIn(max = FeedMaxWidth)
                 .fillMaxWidth()
+                .fillMaxHeight()
+                .then(
+                    if (showFeedOutline) {
+                        Modifier
+                            .outline(
+                                width = 1.dp,
+                                color = Theme[colors][border],
+                                shape = feedShape,
+                                offset = (-1).dp,
+                            )
+                            .clip(feedShape)
+                    } else {
+                        Modifier
+                    }
+                )
                 .align(Alignment.TopCenter),
         ) {
-            itemsIndexed(
-                items = timelinePosts,
-                key = { _, post -> post.id },
-            ) { index, post ->
-                SocialPostRow(
-                    post = post,
-                    onClick = { onPostClick(post) },
-                    onProfileClick = { onProfileClick(post.profileId) },
-                )
-                if (index < timelinePosts.lastIndex) {
-                    HorizontalSeparator()
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(bottom = 96.dp),
+            ) {
+                itemsIndexed(
+                    items = timelinePosts,
+                    key = { _, post -> post.id },
+                ) { index, post ->
+                    SocialPostRow(
+                        post = post,
+                        onClick = { onPostClick(post) },
+                        onProfileClick = { onProfileClick(post.profileId) },
+                    )
+                    if (index < timelinePosts.lastIndex) {
+                        HorizontalSeparator()
+                    }
                 }
             }
         }
@@ -323,7 +345,9 @@ private fun SocialTimelineRail(
         Avatar(
             url = avatarUrl,
             size = 44,
-            modifier = Modifier.clickable(onClick = onProfileClick),
+            modifier = Modifier
+                .clip(CircleShape)
+                .clickable(onClick = onProfileClick),
         )
     }
 }
@@ -333,6 +357,8 @@ private fun PostHeader(
     post: SocialPost,
     onProfileClick: () -> Unit,
 ) {
+    var expanded by remember { mutableStateOf(false) }
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Top,
@@ -340,7 +366,7 @@ private fun PostHeader(
         Text(
             text = post.author,
             modifier = Modifier.clickable(onClick = onProfileClick),
-            style = TextStyle(fontSize = 18.sp, lineHeight = 24.sp, fontWeight = FontWeight.Bold),
+            fontWeight = FontWeight.Medium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
@@ -351,51 +377,44 @@ private fun PostHeader(
             style = TextStyle(fontSize = 18.sp, lineHeight = 24.sp),
         )
         Spacer(Modifier.width(12.dp))
-        PostOverflowMenu()
-    }
-}
-
-@Composable
-private fun PostOverflowMenu() {
-    var expanded by remember { mutableStateOf(false) }
-
-    DropdownMenu(
-        expanded = expanded,
-        onExpandedChange = { expanded = it },
-        alignment = DropdownMenuAlignment.End,
-        panel = {
-            DropdownMenuPanel {
-                DropdownMenuItem(onClick = { expanded = false }) {
-                    Text("Save")
+        DropdownMenu(
+            expanded = expanded,
+            onExpandedChange = { expanded = it },
+            alignment = DropdownMenuAlignment.End,
+            panel = {
+                DropdownMenuPanel {
+                    DropdownMenuItem(onClick = { expanded = false }) {
+                        Text("Save")
+                    }
+                    DropdownMenuItem(onClick = { expanded = false }) {
+                        Text("Copy link")
+                    }
+                    DropdownMenuItem(onClick = { expanded = false }) {
+                        Text("Mute")
+                    }
+                    DropdownMenuItem(onClick = { expanded = false }) {
+                        Text("Not interested")
+                    }
+                    DropdownMenuItem(
+                        onClick = { expanded = false },
+                        style = DropdownMenuItemStyle.Destructive,
+                    ) {
+                        Text("Report")
+                    }
                 }
-                DropdownMenuItem(onClick = { expanded = false }) {
-                    Text("Copy link")
-                }
-                DropdownMenuItem(onClick = { expanded = false }) {
-                    Text("Mute")
-                }
-                DropdownMenuItem(onClick = { expanded = false }) {
-                    Text("Not interested")
-                }
-                DropdownMenuItem(
-                    onClick = { expanded = false },
-                    style = DropdownMenuItemStyle.Destructive,
-                ) {
-                    Text("Report")
-                }
-            }
-        },
-    ) {
-        IconButton(
-            onClick = { expanded = expanded.not() },
-            style = ButtonStyle.Ghost,
+            },
         ) {
-            Icon(
-                imageVector = Lucide.Ellipsis,
-                contentDescription = "Post options",
-                modifier = Modifier.size(22.dp),
-                tint = Theme[colors][onBackground],
-            )
+            IconButton(
+                onClick = { expanded = expanded.not() },
+                style = ButtonStyle.Ghost,
+            ) {
+                Icon(
+                    imageVector = Lucide.Ellipsis,
+                    contentDescription = "Post options",
+                    modifier = Modifier.size(22.dp),
+                    tint = Theme[colors][onBackground],
+                )
+            }
         }
     }
 }

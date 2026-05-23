@@ -97,7 +97,14 @@ fun SocialApp() {
                     PostDetailPage()
                 }
                 composable("profile/{profileId}") {
-                    ProfilePage(onBack = { navController.navigateUp() })
+                    ProfilePage(
+                        onBack = { navController.navigateUp() },
+                        onProfileClick = {
+                            navController.navigate("profile/john_mobbin") {
+                                launchSingleTop = true
+                            }
+                        },
+                    )
                 }
             }
         }

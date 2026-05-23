@@ -82,6 +82,7 @@ fun <T> TabGroupScope<T>.TabList(
     orientation: TabOrientation = TabOrientation.Horizontal,
     shape: Shape = RoundedCornerShape(999.dp),
     backgroundColor: Color = Theme[colors][control],
+    equalTabWidth: Boolean = false,
     content: @Composable TabListScope<T>.() -> Unit,
 ) {
     with(unstyledScope) {
@@ -95,7 +96,14 @@ fun <T> TabGroupScope<T>.TabList(
         ) {
             val scope = TabListScope(this)
             if (orientation == TabOrientation.Horizontal) {
-                Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) { scope.content() }
+                Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                    TabListEqualTabWidthProvider(
+                        equalTabWidth = equalTabWidth,
+                        rowScope = this,
+                    ) {
+                        scope.content()
+                    }
+                }
             } else {
                 Column(verticalArrangement = Arrangement.spacedBy(2.dp)) { scope.content() }
             }
@@ -114,6 +122,12 @@ fun <T> TabListScope<T>.Tab(
     content: @Composable RowScope.(selected: Boolean) -> Unit,
 ) {
     val shape = RoundedCornerShape(999.dp)
+    val rowScope = LocalTabListRowScope.current
+    val itemModifier = if (LocalTabListEqualTabWidth.current && rowScope != null) {
+        with(rowScope) { modifier.weight(1f) }
+    } else {
+        modifier
+    }
     with(unstyledScope) {
         UnstyledTab(
             key = key,
@@ -121,7 +135,7 @@ fun <T> TabListScope<T>.Tab(
             activateOnFocus = activateOnFocus,
             interactionSource = interactionSource,
             indication = indication,
-            modifier = modifier
+            modifier = itemModifier
                 .focusRing(interactionSource, Theme[componentSizes][focusRingWidth], Theme[colors][focusRing], shape, Theme[componentSizes][focusRingOffset])
                 .clip(shape),
         ) {
@@ -145,6 +159,23 @@ fun <T> TabListScope<T>.Tab(
                 }
             }
         }
+    }
+}
+
+private val LocalTabListEqualTabWidth = androidx.compose.runtime.compositionLocalOf { false }
+private val LocalTabListRowScope = androidx.compose.runtime.compositionLocalOf<RowScope?> { null }
+
+@Composable
+private fun TabListEqualTabWidthProvider(
+    equalTabWidth: Boolean,
+    rowScope: RowScope,
+    content: @Composable () -> Unit,
+) {
+    androidx.compose.runtime.CompositionLocalProvider(
+        LocalTabListEqualTabWidth provides equalTabWidth,
+        LocalTabListRowScope provides rowScope,
+    ) {
+        content()
     }
 }
 

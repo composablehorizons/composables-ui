@@ -16,6 +16,7 @@ rippleIndication = "1.1.0"
 composables-unstyled = { module = "com.composables:composeunstyled", version.ref = "unstyled" }
 composables-unstyled-build-modifier = { module = "com.composables:composeunstyled-build-modifier", version.ref = "unstyled" }
 composables-unstyled-stack = { module = "com.composables:composeunstyled-stack", version.ref = "unstyled" }
+composables-unstyled-window-container-size = { module = "com.composables:composeunstyled-window-container-size", version.ref = "unstyled" }
 composables-icons-lucide = { module = "com.composables:icons-lucide", version.ref = "iconsLucide" }
 composables-uri-painter = { module = "com.composables:compose-uri-painter", version.ref = "uriPainter" }
 composables-interaction-capabilities = { module = "com.composables:compose-interaction-capabilities", version.ref = "interactionCapabilities" }

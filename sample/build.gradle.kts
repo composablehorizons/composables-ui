@@ -38,6 +38,7 @@ kotlin {
             implementation(libs.androidx.navigation.compose)
             implementation(libs.composables.icons.lucide)
             implementation(libs.composables.unstyled)
+            implementation(libs.composables.unstyled.window.container.size)
             implementation(libs.composables.uri.painter)
         }
 

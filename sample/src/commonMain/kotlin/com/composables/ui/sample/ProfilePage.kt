@@ -2,7 +2,6 @@ package com.composables.ui.sample
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.composables.icons.lucide.ArrowLeft
 import com.composables.icons.lucide.Bell
 import com.composables.icons.lucide.CircleEllipsis
@@ -52,7 +50,12 @@ import com.composables.ui.components.HorizontalSeparator
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
 import com.composables.ui.components.ScreenScaffold
+import com.composables.ui.components.Tab
+import com.composables.ui.components.TabGroup
+import com.composables.ui.components.TabList
 import com.composables.ui.components.Text
+import com.composables.ui.components.Toolbar
+import com.composables.ui.sample.components.Avatar
 import com.composables.ui.theme.background
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
@@ -99,6 +102,42 @@ private val profilePosts = listOf(
     ),
 )
 
+private val profileReplies = listOf(
+    ProfilePost(
+        id = "reply-greenhouse",
+        age = "2h",
+        body = "This is exactly why small greenhouses are dangerous. One shelf becomes a whole weekend project.",
+        replies = "1",
+        likes = "14",
+    ),
+    ProfilePost(
+        id = "reply-travel",
+        age = "6h",
+        body = "Adding this to the travel list. The light in that courtyard looks unreal.",
+        replies = "3",
+        likes = "22",
+        quoteAuthor = "jane_mobbin",
+        quoteBody = "The botanical garden in Palermo might be my favorite quiet place in the city.",
+        quoteReplies = "19 replies",
+    ),
+    ProfilePost(
+        id = "reply-balcony",
+        age = "1d",
+        body = "A balcony garden counts. The plants do not care about square footage.",
+        replies = "2",
+        likes = "31",
+    ),
+)
+
+@kotlin.jvm.JvmInline
+private value class ProfileFeedTab private constructor(val value: String) {
+    companion object {
+        val Posts = ProfileFeedTab("posts")
+        val Replies = ProfileFeedTab("replies")
+        val all = listOf(Posts, Replies)
+    }
+}
+
 private data class ProfilePost(
     val id: String,
     val age: String,
@@ -111,7 +150,16 @@ private data class ProfilePost(
 )
 
 @Composable
-internal fun ProfilePage(onBack: () -> Unit) {
+internal fun ProfilePage(
+    onBack: () -> Unit,
+    onProfileClick: () -> Unit,
+) {
+    var selectedTab by remember { mutableStateOf(ProfileFeedTab.Posts) }
+    val visiblePosts = when (selectedTab) {
+        ProfileFeedTab.Replies -> profileReplies
+        else -> profilePosts
+    }
+
     ScreenScaffold(backgroundColor = Theme[colors][background], contentColor = Theme[colors][onBackground]) {
         Column(
             modifier = Modifier
@@ -132,52 +180,49 @@ internal fun ProfilePage(onBack: () -> Unit) {
                     item {
                         ProfileToolbar(onBack)
                         ProfileHeader()
-                        ProfileTabs()
+                        ProfileTabs(
+                            selectedTab = selectedTab,
+                            onSelectedTabChange = { selectedTab = it },
+                        )
                     }
                     itemsIndexed(
-                        items = profilePosts,
+                        items = visiblePosts,
                         key = { _, post -> post.id },
                     ) { index, post ->
                         ProfilePostRow(post)
-                        if (index < profilePosts.lastIndex) {
+                        if (index < visiblePosts.lastIndex) {
                             HorizontalSeparator()
                         }
                     }
                 }
             }
-            SocialBottomBar()
+            SocialBottomBar(onProfileClick = onProfileClick)
         }
     }
 }
 
 @Composable
 private fun ProfileToolbar(onBack: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(64.dp)
-            .padding(horizontal = 14.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Row(
-            modifier = Modifier.clickable(onClick = onBack),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            Icon(Lucide.ArrowLeft, contentDescription = "Back", modifier = Modifier.size(28.dp), tint = Theme[colors][onBackground])
-            Text("Back", style = TextStyle(fontSize = 22.sp, lineHeight = 28.sp))
+    Toolbar(
+        backgroundColor = Theme[colors][background],
+        leading = {
+            IconButton(onClick = onBack, style = ButtonStyle.Ghost) {
+                Icon(Lucide.ArrowLeft, contentDescription = "Back", modifier = Modifier.size(28.dp), tint = Theme[colors][onBackground])
+            }
+            Text("Back")
+        },
+        trailing = {
+            IconButton(onClick = {}, style = ButtonStyle.Ghost) {
+                Icon(Lucide.Instagram, contentDescription = "Instagram", modifier = Modifier.size(28.dp), tint = Theme[colors][onBackground])
+            }
+            IconButton(onClick = {}, style = ButtonStyle.Ghost) {
+                Icon(Lucide.Bell, contentDescription = "Notifications", modifier = Modifier.size(28.dp), tint = Theme[colors][onBackground])
+            }
+            IconButton(onClick = {}, style = ButtonStyle.Ghost) {
+                Icon(Lucide.CircleEllipsis, contentDescription = "More", modifier = Modifier.size(28.dp), tint = Theme[colors][onBackground])
+            }
         }
-        Spacer(Modifier.weight(1f))
-        IconButton(onClick = {}, style = ButtonStyle.Ghost) {
-            Icon(Lucide.Instagram, contentDescription = "Instagram", modifier = Modifier.size(28.dp), tint = Theme[colors][onBackground])
-        }
-        IconButton(onClick = {}, style = ButtonStyle.Ghost) {
-            Icon(Lucide.Bell, contentDescription = "Notifications", modifier = Modifier.size(28.dp), tint = Theme[colors][onBackground])
-        }
-        IconButton(onClick = {}, style = ButtonStyle.Ghost) {
-            Icon(Lucide.CircleEllipsis, contentDescription = "More", modifier = Modifier.size(28.dp), tint = Theme[colors][onBackground])
-        }
-    }
+    )
 }
 
 @Composable
@@ -193,16 +238,15 @@ private fun ProfileHeader() {
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                Text("John", style = TextStyle(fontSize = 32.sp, lineHeight = 38.sp, fontWeight = FontWeight.Bold))
+                Text("John", style = TextStyle(fontWeight = FontWeight.Bold))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    Text("john_mobbin", style = TextStyle(fontSize = 20.sp, lineHeight = 26.sp))
+                    Text("john_mobbin")
                     Text(
                         text = "social.app",
                         color = Theme[colors][onField],
-                        style = TextStyle(fontSize = 16.sp, lineHeight = 22.sp),
                         modifier = Modifier
                             .clip(RoundedCornerShape(100))
                             .background(Theme[colors][field])
@@ -214,12 +258,10 @@ private fun ProfileHeader() {
         }
         Text(
             text = "I love to travel, and hope to see more of the world each day",
-            style = TextStyle(fontSize = 22.sp, lineHeight = 32.sp),
         )
         Text(
             text = "1 follower",
             color = Theme[colors][muted],
-            style = TextStyle(fontSize = 20.sp, lineHeight = 26.sp),
         )
         Button(
             onClick = {},
@@ -232,43 +274,39 @@ private fun ProfileHeader() {
 }
 
 @Composable
-private fun ProfileTabs() {
-    Row(
+private fun ProfileTabs(
+    selectedTab: ProfileFeedTab,
+    onSelectedTabChange: (ProfileFeedTab) -> Unit,
+) {
+    TabGroup(
+        selectedTab = selectedTab,
+        onSelectedTabChange = onSelectedTabChange,
+        tabs = ProfileFeedTab.all,
         modifier = Modifier
             .fillMaxWidth()
-            .height(64.dp)
-            .border(width = 1.dp, color = Theme[colors][border]),
-        verticalAlignment = Alignment.Bottom,
+            .padding(12.dp),
     ) {
-        ProfileTab("Posts", selected = true, modifier = Modifier.weight(1f))
-        ProfileTab("Replies", selected = false, modifier = Modifier.weight(1f))
+        TabList(
+            modifier = Modifier.fillMaxWidth(),
+            equalTabWidth = true,
+        ) {
+            ProfileFeedTab.all.forEach { tab ->
+                Tab(key = tab) {
+                    Text(
+                        text = tab.label,
+                        style = TextStyle(fontWeight = FontWeight.Bold),
+                    )
+                }
+            }
+        }
     }
 }
 
-@Composable
-private fun ProfileTab(
-    label: String,
-    selected: Boolean,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Text(
-            text = label,
-            color = if (selected) Theme[colors][onBackground] else Theme[colors][muted],
-            style = TextStyle(fontSize = 20.sp, lineHeight = 28.sp, fontWeight = FontWeight.Bold),
-        )
-        Box(
-            modifier = Modifier
-                .padding(top = 18.dp)
-                .height(2.dp)
-                .fillMaxWidth()
-                .background(if (selected) Theme[colors][onBackground] else Theme[colors][background]),
-        )
+private val ProfileFeedTab.label: String
+    get() = when (this) {
+        ProfileFeedTab.Replies -> "Replies"
+        else -> "Posts"
     }
-}
 
 @Composable
 private fun ProfilePostRow(post: ProfilePost) {
@@ -286,7 +324,6 @@ private fun ProfilePostRow(post: ProfilePost) {
             ProfilePostHeader(post)
             Text(
                 text = post.body,
-                style = TextStyle(fontSize = 19.sp, lineHeight = 27.sp),
                 color = Theme[colors][onBackground],
             )
             if (post.quoteAuthor != null && post.quoteBody != null && post.quoteReplies != null) {
@@ -299,22 +336,53 @@ private fun ProfilePostRow(post: ProfilePost) {
 
 @Composable
 private fun ProfilePostHeader(post: ProfilePost) {
+    var expanded by remember { mutableStateOf(false) }
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Top,
     ) {
         Text(
             text = "john_mobbin",
-            style = TextStyle(fontSize = 18.sp, lineHeight = 24.sp, fontWeight = FontWeight.Bold),
+            style = TextStyle(fontWeight = FontWeight.Bold),
         )
         Spacer(Modifier.weight(1f))
         Text(
             text = post.age,
             color = Theme[colors][muted],
-            style = TextStyle(fontSize = 18.sp, lineHeight = 24.sp),
         )
         Spacer(Modifier.width(12.dp))
-        ProfileOverflowMenu()
+        DropdownMenu(
+            expanded = expanded,
+            onExpandedChange = { expanded = it },
+            alignment = DropdownMenuAlignment.End,
+            panel = {
+                DropdownMenuPanel {
+                    DropdownMenuItem(onClick = { expanded = false }) {
+                        Text("Save")
+                    }
+                    DropdownMenuItem(onClick = { expanded = false }) {
+                        Text("Copy link")
+                    }
+                    DropdownMenuItem(onClick = { expanded = false }) {
+                        Text("Mute")
+                    }
+                    DropdownMenuItem(
+                        onClick = { expanded = false },
+                        style = DropdownMenuItemStyle.Destructive,
+                    ) {
+                        Text("Report")
+                    }
+                }
+            },
+        ) {
+            IconButton(
+                onClick = { expanded = expanded.not() },
+                style = ButtonStyle.Ghost,
+            ) {
+                Icon(Lucide.Ellipsis, contentDescription = "Post options", modifier = Modifier.size(22.dp), tint = Theme[colors][onBackground])
+            }
+        }
     }
 }
 
@@ -337,47 +405,10 @@ private fun QuotedPost(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Avatar(ProfileAvatarUrl, size = 28)
-            Text(author, style = TextStyle(fontSize = 18.sp, lineHeight = 24.sp, fontWeight = FontWeight.Bold))
+            Text(author, style = TextStyle(fontWeight = FontWeight.Bold))
         }
-        Text(body, style = TextStyle(fontSize = 20.sp, lineHeight = 28.sp))
-        Text(replies, color = Theme[colors][muted], style = TextStyle(fontSize = 18.sp, lineHeight = 24.sp))
-    }
-}
-
-@Composable
-private fun ProfileOverflowMenu() {
-    var expanded by remember { mutableStateOf(false) }
-
-    DropdownMenu(
-        expanded = expanded,
-        onExpandedChange = { expanded = it },
-        alignment = DropdownMenuAlignment.End,
-        panel = {
-            DropdownMenuPanel {
-                DropdownMenuItem(onClick = { expanded = false }) {
-                    Text("Save")
-                }
-                DropdownMenuItem(onClick = { expanded = false }) {
-                    Text("Copy link")
-                }
-                DropdownMenuItem(onClick = { expanded = false }) {
-                    Text("Mute")
-                }
-                DropdownMenuItem(
-                    onClick = { expanded = false },
-                    style = DropdownMenuItemStyle.Destructive,
-                ) {
-                    Text("Report")
-                }
-            }
-        },
-    ) {
-        IconButton(
-            onClick = { expanded = expanded.not() },
-            style = ButtonStyle.Ghost,
-        ) {
-            Icon(Lucide.Ellipsis, contentDescription = "Post options", modifier = Modifier.size(22.dp), tint = Theme[colors][onBackground])
-        }
+        Text(body)
+        Text(replies, color = Theme[colors][muted])
     }
 }
 
@@ -414,7 +445,7 @@ private fun ProfileActionButton(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             content(color)
-            Text(count, color = color, style = TextStyle(fontSize = 16.sp))
+            Text(count, color = color)
         }
     }
 }
