@@ -2,12 +2,12 @@ package com.composables.ui.components
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
@@ -15,17 +15,16 @@ import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -45,8 +44,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.composables.ui.theme.border
-import com.composables.ui.theme.componentSizes
 import com.composables.ui.theme.colors
+import com.composables.ui.theme.componentSizes
 import com.composables.ui.theme.destructive
 import com.composables.ui.theme.dim
 import com.composables.ui.theme.dropdownMenuItemHeight
@@ -57,12 +56,11 @@ import com.composables.ui.theme.muted
 import com.composables.ui.theme.onPanel
 import com.composables.ui.theme.panel
 import com.composables.ui.theme.secondary
-import com.composables.ui.theme.shapes
 import com.composables.ui.theme.shadows
+import com.composables.ui.theme.shapes
 import com.composeunstyled.AnchorAlignment
 import com.composeunstyled.AnchorSide
 import com.composeunstyled.DropdownMenuPanelScope
-import com.composeunstyled.DropdownMenuScope as UnstyledDropdownMenuScope
 import com.composeunstyled.LocalTextStyle
 import com.composeunstyled.MenuItem
 import com.composeunstyled.ProvideContentColor
@@ -71,6 +69,7 @@ import com.composeunstyled.UnstyledDropdownMenu
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 import com.composeunstyled.DropdownMenuPanel as UnstyledDropdownMenuPanel
+import com.composeunstyled.DropdownMenuScope as UnstyledDropdownMenuScope
 
 private const val DropdownMenuEnterDurationMillis = 120
 private const val DropdownMenuExitDurationMillis = 75
@@ -182,10 +181,7 @@ fun DropdownMenuScope.DropdownMenuPanel(
             ProvideContentColor(contentColor) {
                 ProvideTextStyle(LocalTextStyle.current.merge(DropdownMenuTextStyle)) {
                     val panelScope = this@UnstyledDropdownMenuPanel
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        content = { DropdownMenuPanelContentScope(panelScope).content() },
-                    )
+                    DropdownMenuPanelContentScope(panelScope).content()
                 }
             }
         }
