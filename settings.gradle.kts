@@ -42,3 +42,4 @@ rootProject.name = "ui"
 
 include(":components")
 include(":demo")
+include(":sample")

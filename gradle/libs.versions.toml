@@ -3,6 +3,7 @@ unstyled = "2.4.0"
 compose = "1.11.0"
 kotlin = "2.3.21"
 iconsLucide = "1.1.1"
+uriPainter = "1.0.4"
 navigation = "2.9.2"
 agp = "9.2.1"
 android-compile-sdk = "37"
@@ -16,6 +17,7 @@ composables-unstyled = { module = "com.composables:composeunstyled", version.ref
 composables-unstyled-build-modifier = { module = "com.composables:composeunstyled-build-modifier", version.ref = "unstyled" }
 composables-unstyled-stack = { module = "com.composables:composeunstyled-stack", version.ref = "unstyled" }
 composables-icons-lucide = { module = "com.composables:icons-lucide", version.ref = "iconsLucide" }
+composables-uri-painter = { module = "com.composables:compose-uri-painter", version.ref = "uriPainter" }
 composables-interaction-capabilities = { module = "com.composables:compose-interaction-capabilities", version.ref = "interactionCapabilities" }
 composables-ripple-indication = { module = "com.composables:ripple-indication", version.ref = "rippleIndication" }
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose" }

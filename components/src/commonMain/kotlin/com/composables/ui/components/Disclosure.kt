@@ -202,5 +202,5 @@ fun DisclosureScope.DisclosurePanel(
 private val DisclosureBodyTextStyle = TextStyle()
 
 private val DisclosureButtonTextStyle = TextStyle(
-    fontWeight = FontWeight.SemiBold,
+    fontWeight = FontWeight.Medium,
 )

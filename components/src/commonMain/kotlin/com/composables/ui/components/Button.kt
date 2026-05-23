@@ -169,7 +169,7 @@ private fun buttonHorizontalPaddingFor(buttonSize: ButtonSize): Dp = when (butto
 
 private val NoButtonPadding = PaddingValues(0.dp)
 private val ButtonLabelTextStyle = TextStyle(
-    fontWeight = FontWeight.SemiBold,
+    fontWeight = FontWeight.Medium,
 )
 
 @Composable

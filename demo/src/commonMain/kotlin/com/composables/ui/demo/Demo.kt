@@ -542,6 +542,7 @@ private fun DemoList(
                 .verticalScroll(scrollState)
                 .padding(horizontal = 8.dp, vertical = 12.dp)
                 .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(DemoListItemSpacing),
         ) {
             DemoSection(componentDemoGroups, onSelectDemo)
         }
@@ -842,6 +843,7 @@ private fun DemoSection(
             DisclosurePanel {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(DemoListItemSpacing),
                 ) {
                     group.demos.forEach { demo ->
                         DemoListButton(
@@ -897,6 +899,7 @@ private fun DemoGroupHeader(
 }
 
 private val DemoListHorizontalPadding = 16.dp
+private val DemoListItemSpacing = 8.dp
 private val DemoListTextStart = DemoListHorizontalPadding
 private val DemoListTextStyle = TextStyle()
 
