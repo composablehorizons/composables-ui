@@ -46,8 +46,6 @@ import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -456,11 +454,9 @@ private fun DemoList(
                 .verticalScroll(scrollState)
                 .padding(horizontal = 8.dp, vertical = 12.dp)
                 .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            DemoSection("Theming", themingDemoGroups, expandedGroups, onSelectDemo)
-            Spacer(Modifier.height(8.dp))
-            DemoSection("Components", componentDemoGroups, expandedGroups, onSelectDemo)
+            DemoSection(themingDemoGroups, expandedGroups, onSelectDemo)
+            DemoSection(componentDemoGroups, expandedGroups, onSelectDemo)
         }
     }
 }
@@ -716,16 +712,10 @@ private fun segmentedRadioContentColor(selected: Boolean): Color {
 
 @Composable
 private fun DemoSection(
-    title: String,
     groups: List<DemoGroup>,
     expandedGroups: MutableMap<String, Boolean>,
     onClick: (DemoItem) -> Unit,
 ) {
-    Text(
-        text = title,
-        modifier = Modifier.padding(horizontal = 16.dp),
-        style = TextStyle(fontWeight = FontWeight.SemiBold),
-    )
     groups.forEach { group ->
         if (group.demos.size == 1) {
             val demo = group.demos.first()
@@ -733,9 +723,10 @@ private fun DemoSection(
                 onClick = { onClick(demo) },
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(
-                    text = group.name,
-                    style = Theme[textStyles][body],
+                DemoGroupHeader(
+                    name = group.name,
+                    expanded = false,
+                    showChevron = false,
                 )
             }
             return@forEach
@@ -768,6 +759,7 @@ private fun DemoSection(
                     DemoGroupHeader(
                         name = group.name,
                         expanded = expanded,
+                        showChevron = true,
                     )
                 }
                 DisclosedContent(
@@ -779,10 +771,7 @@ private fun DemoSection(
                     exit = shrinkVertically(),
                 ) {
                     Column(
-                        modifier = Modifier
-                            .padding(start = 24.dp)
-                            .fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
                         group.demos.forEach { demo ->
                             DemoListButton(
@@ -792,6 +781,7 @@ private fun DemoSection(
                                 Text(
                                     text = demo.listName,
                                     style = Theme[textStyles][body],
+                                    modifier = Modifier.padding(start = DemoListTextStart),
                                 )
                             }
                         }
@@ -806,6 +796,7 @@ private fun DemoSection(
 private fun DemoGroupHeader(
     name: String,
     expanded: Boolean,
+    showChevron: Boolean,
 ) {
     val iconRotation by animateFloatAsState(
         targetValue = if (expanded) 90f else 0f,
@@ -814,24 +805,31 @@ private fun DemoGroupHeader(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(start = DemoListHorizontalPadding, end = DemoListHorizontalPadding),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(
-            imageVector = Lucide.ChevronRight,
-            contentDescription = null,
-            modifier = Modifier
-                .size(16.dp)
-                .rotate(iconRotation),
-            tint = Theme[colors][muted],
-        )
+        if (showChevron) {
+            Icon(
+                imageVector = Lucide.ChevronRight,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(16.dp)
+                    .rotate(iconRotation),
+                tint = Theme[colors][muted],
+            )
+        } else {
+            Spacer(Modifier.size(16.dp))
+        }
         Text(
             text = name,
             style = Theme[textStyles][body],
         )
     }
 }
+
+private val DemoListHorizontalPadding = 16.dp
+private val DemoListTextStart = DemoListHorizontalPadding + 16.dp + 8.dp
 
 @Composable
 private fun DemoListButton(
@@ -844,6 +842,7 @@ private fun DemoListButton(
         style = ButtonStyle.Ghost,
         modifier = modifier,
         shape = DemoListItemShape,
+        contentPadding = PaddingValues(0.dp),
     ) {
         Box(
             modifier = Modifier.fillMaxWidth(),
