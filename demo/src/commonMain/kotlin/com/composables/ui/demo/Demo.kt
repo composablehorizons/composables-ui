@@ -11,6 +11,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,6 +25,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -98,6 +100,7 @@ import com.composables.ui.theme.LocalInteractionMode
 import com.composables.ui.theme.AppTheme
 import com.composables.ui.theme.body
 import com.composables.ui.theme.border
+import com.composables.ui.theme.buttonHeight
 import com.composables.ui.theme.control
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.componentSizes
@@ -335,6 +338,7 @@ private const val NavigationTransitionDurationMillis = 350
 private const val NavigationParallaxDivisor = 5
 private const val NavigationDimmedAlpha = 0.86f
 private val NavigationTransitionEasing = CubicBezierEasing(0.32f, 0.72f, 0f, 1f)
+private val DemoListItemShape = RoundedCornerShape(8.dp)
 
 @Composable
 fun Demo(initialDemoId: String? = null) {
@@ -671,7 +675,7 @@ private fun <T> RadioGroupScope.SegmentedRadioOption(
     val interactionSource = remember { MutableInteractionSource() }
     RadioButton(
         value = value,
-        indication = null,
+        indication = LocalIndication.current,
         interactionSource = interactionSource,
         modifier = Modifier
             .focusRing(
@@ -748,14 +752,17 @@ private fun DemoSection(
                 DisclosureButton(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .heightIn(min = Theme[componentSizes][buttonHeight])
                         .focusRing(
                             interactionSource = interactionSource,
                             width = Theme[componentSizes][focusRingWidth],
                             color = Theme[colors][focusRing],
-                            shape = RoundedCornerShape(8.dp),
+                            shape = DemoListItemShape,
                             offset = Theme[componentSizes][focusRingOffset],
-                        ),
+                        )
+                        .clip(DemoListItemShape),
                     interactionSource = interactionSource,
+                    indication = LocalIndication.current,
                     contentAlignment = Alignment.CenterStart,
                 ) {
                     DemoGroupHeader(
@@ -807,7 +814,7 @@ private fun DemoGroupHeader(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 10.dp),
+            .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -836,7 +843,7 @@ private fun DemoListButton(
         onClick = onClick,
         style = ButtonStyle.Ghost,
         modifier = modifier,
-        shape = RoundedCornerShape(8.dp),
+        shape = DemoListItemShape,
     ) {
         Box(
             modifier = Modifier.fillMaxWidth(),

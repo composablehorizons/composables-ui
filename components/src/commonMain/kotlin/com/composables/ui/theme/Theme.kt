@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.composeunstyled.platformtheme.platformIndication
+import com.composables.compose.ripple.rememberRippleIndication
 import com.composeunstyled.theme.ThemeProperty
 import com.composeunstyled.theme.ThemeToken
 import com.composeunstyled.theme.buildTheme
@@ -352,9 +352,12 @@ val AppTheme = buildTheme {
         textFieldInput to bodyStyle,
     )
 
+    val brightIndication = rememberRippleIndication(Color.White.copy(alpha = 0.18f))
+    val dimIndication = rememberRippleIndication(Color.Black.copy(alpha = 0.08f))
+    defaultIndication = dimIndication
     properties[indications] = mapOf(
-        bright to platformIndication(Color.White.copy(alpha = 0.18f)),
-        dim to platformIndication(Color.Black.copy(alpha = 0.08f)),
+        bright to brightIndication,
+        dim to dimIndication,
     )
 }
 

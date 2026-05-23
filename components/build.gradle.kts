@@ -68,16 +68,15 @@ kotlin {
             implementation(libs.composables.unstyled.icon)
             implementation(libs.composables.unstyled.modal)
             implementation(libs.composables.unstyled.outline)
-            implementation(libs.composables.unstyled.platformtheme)
             implementation(libs.composables.unstyled.separators)
             implementation(libs.composables.unstyled.text.field)
             api(libs.composables.unstyled.theming)
             implementation(libs.composables.interaction.capabilities)
-
-            api(compose.foundation)
-            implementation(compose.ui)
-            implementation(compose.runtime)
-            implementation(compose.components.resources)
+            implementation("com.composables:ripple-indication:1.1.0")
+            api("org.jetbrains.compose.foundation:foundation:1.11.0")
+            implementation("org.jetbrains.compose.ui:ui:1.11.0")
+            implementation("org.jetbrains.compose.runtime:runtime:1.11.0")
+            implementation("org.jetbrains.compose.components:components-resources:1.11.0")
         }
     }
 }
