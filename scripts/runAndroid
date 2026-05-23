@@ -1,0 +1,25 @@
+#!/bin/bash
+set -euo pipefail
+
+PACKAGE_NAME="com.composeunstyled.demo.materialimpl"
+ACTIVITY_NAME=".MaterialDemoActivity"
+
+if ! command -v adb >/dev/null 2>&1; then
+  echo "adb not found. Install Android platform-tools or add adb to PATH."
+  exit 1
+fi
+
+device_id="$(adb devices | awk 'NR>1 && $2=="device" {print $1; exit}')"
+if [ -z "${device_id}" ]; then
+  echo "No connected Android device found."
+  echo "Start an emulator or connect a device, then re-run this script."
+  exit 1
+fi
+
+echo "Installing material demo app on ${device_id}..."
+./gradlew installDebug
+
+echo "Launching material demo app..."
+adb -s "${device_id}" shell am start -n "${PACKAGE_NAME}/${ACTIVITY_NAME}" >/dev/null
+
+echo "Material demo app launched on ${device_id}."

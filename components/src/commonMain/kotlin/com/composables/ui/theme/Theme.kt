@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.composables.compose.ripple.rememberRippleIndication
-import com.composables.interactioncapabilities.currentInteractionCapabilities
 import com.composeunstyled.theme.ThemeProperty
 import com.composeunstyled.theme.ThemeToken
 import com.composeunstyled.theme.buildTheme
@@ -135,21 +134,7 @@ value class InteractionMode internal constructor(@Suppress("unused") private val
     }
 }
 
-val LocalInteractionMode = staticCompositionLocalOf<InteractionMode?> { null }
-
-@Composable
-internal fun currentInteractionMode(): InteractionMode {
-    LocalInteractionMode.current?.let { interactionMode ->
-        return interactionMode
-    }
-
-    val capabilities = currentInteractionCapabilities()
-    return if (capabilities.hasTouch) {
-        InteractionMode.Touch
-    } else {
-        InteractionMode.Pointer
-    }
-}
+val LocalInteractionMode = staticCompositionLocalOf { InteractionMode.Touch }
 
 val AppTheme = buildTheme {
     val useDarkColors = currentColorScheme() == ColorScheme.Dark
@@ -249,7 +234,7 @@ val AppTheme = buildTheme {
         animationSpec = colorAnimationSpec,
         label = "FocusRingColor",
     )
-    val useTouchSizes = currentInteractionMode() == InteractionMode.Touch
+    val useTouchSizes = LocalInteractionMode.current == InteractionMode.Touch
     val buttonHeightValue = if (useTouchSizes) 48.dp else 36.dp
     val iconButtonSizeValue = if (useTouchSizes) 48.dp else 36.dp
     val dropdownMenuItemHeightValue = if (useTouchSizes) 48.dp else 36.dp

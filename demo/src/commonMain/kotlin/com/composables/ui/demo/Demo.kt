@@ -437,94 +437,93 @@ fun Demo(initialDemoId: String? = null) {
     val initialDemo = demos.firstOrNull { it.id == initialDemoId }
     val previewSpecificDemo = initialDemo != null
     val startDestination = initialDemo?.id ?: "home"
-    var interactionMode by remember { mutableStateOf(InteractionMode.Pointer) }
+    val initialInteractionMode = LocalInteractionMode.current
+    var interactionMode by remember { mutableStateOf(initialInteractionMode) }
     var colorScheme by remember { mutableStateOf(ColorScheme.Light) }
 
-    CompositionLocalProvider(LocalInteractionMode provides InteractionMode.Pointer) {
-        AppScaffold {
-            NavHost(
-                navController = navController,
-                startDestination = startDestination,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black),
-                enterTransition = {
-                    slideInHorizontally(
-                        animationSpec = tween(
-                            durationMillis = NavigationTransitionDurationMillis,
-                            easing = NavigationTransitionEasing,
-                        ),
-                        initialOffsetX = { it },
-                    )
-                },
-                exitTransition = {
-                    slideOutHorizontally(
-                        animationSpec = tween(
-                            durationMillis = NavigationTransitionDurationMillis,
-                            easing = NavigationTransitionEasing,
-                        ),
-                        targetOffsetX = { -it / NavigationParallaxDivisor },
-                    ) + fadeOut(
-                        animationSpec = tween(
-                            durationMillis = NavigationTransitionDurationMillis,
-                            easing = NavigationTransitionEasing,
-                        ),
-                        targetAlpha = NavigationDimmedAlpha,
-                    )
-                },
-                popEnterTransition = {
-                    slideInHorizontally(
-                        animationSpec = tween(
-                            durationMillis = NavigationTransitionDurationMillis,
-                            easing = NavigationTransitionEasing,
-                        ),
-                        initialOffsetX = { -it / NavigationParallaxDivisor },
-                    ) + fadeIn(
-                        animationSpec = tween(
-                            durationMillis = NavigationTransitionDurationMillis,
-                            easing = NavigationTransitionEasing,
-                        ),
-                        initialAlpha = NavigationDimmedAlpha,
-                    )
-                },
-                popExitTransition = {
-                    slideOutHorizontally(
-                        animationSpec = tween(
-                            durationMillis = NavigationTransitionDurationMillis,
-                            easing = NavigationTransitionEasing,
-                        ),
-                        targetOffsetX = { it },
-                    )
-                },
-            ) {
-                composable("home") {
-                    ScreenScaffold {
-                        Column(Modifier.fillMaxSize()) {
-                            Toolbar(
-                                title = { Text("Composables UI") },
-                                size = ToolbarSize.Large,
-                            )
-                            DemoList(
-                                onSelectDemo = { navController.navigate(it.id) },
-                                scrollState = demoListScrollState,
-                                modifier = Modifier.weight(1f),
-                            )
-                        }
-                    }
-                }
-
-                demos.forEach { demo ->
-                    composable(demo.id) {
-                        DemoRoute(
-                            demo = demo,
-                            onBack = { navController.navigateUp() },
-                            showNavigation = !previewSpecificDemo,
-                            interactionMode = interactionMode,
-                            onInteractionModeChange = { interactionMode = it },
-                            colorScheme = colorScheme,
-                            onColorSchemeChange = { colorScheme = it },
+    AppScaffold {
+        NavHost(
+            navController = navController,
+            startDestination = startDestination,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black),
+            enterTransition = {
+                slideInHorizontally(
+                    animationSpec = tween(
+                        durationMillis = NavigationTransitionDurationMillis,
+                        easing = NavigationTransitionEasing,
+                    ),
+                    initialOffsetX = { it },
+                )
+            },
+            exitTransition = {
+                slideOutHorizontally(
+                    animationSpec = tween(
+                        durationMillis = NavigationTransitionDurationMillis,
+                        easing = NavigationTransitionEasing,
+                    ),
+                    targetOffsetX = { -it / NavigationParallaxDivisor },
+                ) + fadeOut(
+                    animationSpec = tween(
+                        durationMillis = NavigationTransitionDurationMillis,
+                        easing = NavigationTransitionEasing,
+                    ),
+                    targetAlpha = NavigationDimmedAlpha,
+                )
+            },
+            popEnterTransition = {
+                slideInHorizontally(
+                    animationSpec = tween(
+                        durationMillis = NavigationTransitionDurationMillis,
+                        easing = NavigationTransitionEasing,
+                    ),
+                    initialOffsetX = { -it / NavigationParallaxDivisor },
+                ) + fadeIn(
+                    animationSpec = tween(
+                        durationMillis = NavigationTransitionDurationMillis,
+                        easing = NavigationTransitionEasing,
+                    ),
+                    initialAlpha = NavigationDimmedAlpha,
+                )
+            },
+            popExitTransition = {
+                slideOutHorizontally(
+                    animationSpec = tween(
+                        durationMillis = NavigationTransitionDurationMillis,
+                        easing = NavigationTransitionEasing,
+                    ),
+                    targetOffsetX = { it },
+                )
+            },
+        ) {
+            composable("home") {
+                ScreenScaffold {
+                    Column(Modifier.fillMaxSize()) {
+                        Toolbar(
+                            title = { Text("Composables UI") },
+                            size = ToolbarSize.Large,
+                        )
+                        DemoList(
+                            onSelectDemo = { navController.navigate(it.id) },
+                            scrollState = demoListScrollState,
+                            modifier = Modifier.weight(1f),
                         )
                     }
+                }
+            }
+
+            demos.forEach { demo ->
+                composable(demo.id) {
+                    DemoRoute(
+                        demo = demo,
+                        onBack = { navController.navigateUp() },
+                        showNavigation = !previewSpecificDemo,
+                        interactionMode = interactionMode,
+                        onInteractionModeChange = { interactionMode = it },
+                        colorScheme = colorScheme,
+                        onColorSchemeChange = { colorScheme = it },
+                    )
                 }
             }
         }
@@ -559,28 +558,35 @@ private fun DemoRoute(
     colorScheme: ColorScheme,
     onColorSchemeChange: (ColorScheme) -> Unit,
 ) {
+    val initialInteractionMode = LocalInteractionMode.current
+    val fixedInteractionMode = remember { initialInteractionMode }
+
     CompositionLocalProvider(
-        LocalInteractionMode provides interactionMode,
         LocalColorScheme provides colorScheme,
+        LocalInteractionMode provides fixedInteractionMode
     ) {
         AppTheme {
             ScreenScaffold(backgroundColor = Theme[colors][panel], contentColor = Theme[colors][onPanel]) {
                 Box(Modifier.fillMaxSize()) {
-                    ProvideContentColor(Theme[colors][onPanel]) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(Theme[colors][panel])
-                                .padding(demo.previewOptions.padding),
-                            contentAlignment = demo.previewOptions.contentAlignment,
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .widthIn(max = demo.previewOptions.maxWidth ?: Dp.Infinity)
-                                    .fillMaxWidth(),
-                                contentAlignment = demo.previewOptions.contentAlignment,
-                            ) {
-                                demo.content()
+                    CompositionLocalProvider(LocalInteractionMode provides interactionMode) {
+                        AppTheme {
+                            ProvideContentColor(Theme[colors][onPanel]) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .background(Theme[colors][panel])
+                                        .padding(demo.previewOptions.padding),
+                                    contentAlignment = demo.previewOptions.contentAlignment,
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .widthIn(max = demo.previewOptions.maxWidth ?: Dp.Infinity)
+                                            .fillMaxWidth(),
+                                        contentAlignment = demo.previewOptions.contentAlignment,
+                                    ) {
+                                        demo.content()
+                                    }
+                                }
                             }
                         }
                     }
