@@ -11,13 +11,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.composables.ui.components.AppScaffold
 import com.composables.ui.theme.InteractionMode
 import com.composables.ui.theme.LocalInteractionMode
+import com.composables.ui.theme.background
+import com.composables.ui.theme.colors
+import com.composeunstyled.theme.Theme
 
 private const val NavigationTransitionDurationMillis = 350
 private const val NavigationParallaxDivisor = 5
@@ -35,7 +37,7 @@ fun SocialApp() {
                 startDestination = "home",
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Black),
+                    .background(Theme[colors][background]),
                 enterTransition = {
                     slideInHorizontally(
                         animationSpec = tween(
@@ -86,10 +88,16 @@ fun SocialApp() {
                 },
             ) {
                 composable("home") {
-                    HomePage(onPostClick = { post -> navController.navigate("post/${post.id}") })
+                    HomePage(
+                        onPostClick = { post -> navController.navigate("post/${post.id}") },
+                        onProfileClick = { profileId -> navController.navigate("profile/$profileId") },
+                    )
                 }
                 composable("post/{postId}") {
                     PostDetailPage()
+                }
+                composable("profile/{profileId}") {
+                    ProfilePage(onBack = { navController.navigateUp() })
                 }
             }
         }

@@ -1,9 +1,9 @@
 package com.composables.ui.sample
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,16 +37,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.composables.icons.lucide.Bell
-import com.composables.icons.lucide.CircleUser
 import com.composables.icons.lucide.Ellipsis
 import com.composables.icons.lucide.Heart
-import com.composables.icons.lucide.House
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.MessageCircle
 import com.composables.icons.lucide.Repeat2
-import com.composables.icons.lucide.Search
-import com.composables.icons.lucide.SquarePen
 import com.composables.ui.components.Button
 import com.composables.ui.components.ButtonStyle
 import com.composables.ui.components.DropdownMenu
@@ -55,6 +49,7 @@ import com.composables.ui.components.DropdownMenuAlignment
 import com.composables.ui.components.DropdownMenuItem
 import com.composables.ui.components.DropdownMenuItemStyle
 import com.composables.ui.components.DropdownMenuPanel
+import com.composables.ui.components.HorizontalSeparator
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
 import com.composables.ui.components.ScreenScaffold
@@ -64,11 +59,12 @@ import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
-import com.composables.uripainter.rememberUriPainter
 import com.composeunstyled.theme.Theme
+import com.composables.uripainter.rememberUriPainter
 
 internal data class SocialPost(
     val id: String,
+    val profileId: String,
     val author: String,
     val age: String,
     val body: String,
@@ -81,6 +77,7 @@ internal data class SocialPost(
 private val timelinePosts = listOf(
     SocialPost(
         id = "tea-spillage",
+        profileId = "iwetmyyplants",
         author = "iwetmyyplants",
         age = "7m",
         body = "I'm just going to say what we are all thinking and knowing is about to go downity down:\nThere is about to be some piping hot tea spillage on here daily that people will be posting and we are all going to be sitting back like:",
@@ -91,6 +88,7 @@ private val timelinePosts = listOf(
     ),
     SocialPost(
         id = "rachel",
+        profileId = "ashtonofplants",
         author = "ashtonofplants",
         age = "5m",
         body = "oh my god rachel, thank goodness, you're here",
@@ -100,6 +98,7 @@ private val timelinePosts = listOf(
     ),
     SocialPost(
         id = "plant-chat",
+        profileId = "jungle_dudes",
         author = "jungle_dudes",
         age = "1h",
         body = "Plant parent social app posts are about to turn into group chat energy and I am ready.",
@@ -109,6 +108,7 @@ private val timelinePosts = listOf(
     ),
     SocialPost(
         id = "soil-report",
+        profileId = "rootbound",
         author = "rootbound",
         age = "2h",
         body = "Repotted one monstera and somehow ended up cleaning the entire balcony. This app needs a support group for people who say \"quick plant chore\" and vanish for three hours.",
@@ -118,6 +118,7 @@ private val timelinePosts = listOf(
     ),
     SocialPost(
         id = "sunlight-map",
+        profileId = "window_seat",
         author = "window_seat",
         age = "3h",
         body = "The west window is officially premium real estate. Applications now open. Snake plants need not apply; you know you can survive anywhere.",
@@ -128,6 +129,7 @@ private val timelinePosts = listOf(
     ),
     SocialPost(
         id = "watering-day",
+        profileId = "leafledger",
         author = "leafledger",
         age = "4h",
         body = "Watering day is less of a task and more of a tiny audit where every plant explains what I did wrong last week.",
@@ -137,6 +139,7 @@ private val timelinePosts = listOf(
     ),
     SocialPost(
         id = "cutting-club",
+        profileId = "propagation_station",
         author = "propagation_station",
         age = "5h",
         body = "The pothos cutting has roots. I am now emotionally attached to a glass jar.",
@@ -147,6 +150,7 @@ private val timelinePosts = listOf(
     ),
     SocialPost(
         id = "fern-drama",
+        profileId = "humid_habits",
         author = "humid_habits",
         age = "6h",
         body = "Boston fern update: still dramatic. Mist level increased. Negotiations ongoing.",
@@ -156,6 +160,7 @@ private val timelinePosts = listOf(
     ),
     SocialPost(
         id = "new-shelf",
+        profileId = "shelf_control",
         author = "shelf_control",
         age = "8h",
         body = "Bought a shelf for plants. Plants filled shelf. Need shelf for shelf.",
@@ -165,6 +170,7 @@ private val timelinePosts = listOf(
     ),
     SocialPost(
         id = "morning-check",
+        profileId = "photosynthesquad",
         author = "photosynthesquad",
         age = "10h",
         body = "Morning check-in: everyone alive, one suspicious yellow leaf, and a calathea staring at me like rent is due.",
@@ -174,6 +180,7 @@ private val timelinePosts = listOf(
     ),
     SocialPost(
         id = "ceramic-find",
+        profileId = "potluck",
         author = "potluck",
         age = "12h",
         body = "Found the perfect ceramic pot and now I need a plant worthy of it. This is how they get you.",
@@ -184,6 +191,7 @@ private val timelinePosts = listOf(
     ),
     SocialPost(
         id = "leaf-cleaning",
+        profileId = "dusty_leaves",
         author = "dusty_leaves",
         age = "14h",
         body = "Wiping leaves is basically skincare for plants and I will not be taking questions.",
@@ -196,7 +204,10 @@ private val timelinePosts = listOf(
 private val FeedMaxWidth = 700.dp
 
 @Composable
-internal fun HomePage(onPostClick: (SocialPost) -> Unit) {
+internal fun HomePage(
+    onPostClick: (SocialPost) -> Unit,
+    onProfileClick: (String) -> Unit,
+) {
     ScreenScaffold(backgroundColor = Theme[colors][background], contentColor = Theme[colors][onBackground]) {
         Column(
             modifier = Modifier
@@ -209,6 +220,7 @@ internal fun HomePage(onPostClick: (SocialPost) -> Unit) {
                     .weight(1f)
                     .fillMaxWidth(),
                 onPostClick = onPostClick,
+                onProfileClick = onProfileClick,
             )
             SocialBottomBar()
         }
@@ -236,6 +248,7 @@ private fun HomeToolbar() {
 private fun SocialTimeline(
     modifier: Modifier = Modifier,
     onPostClick: (SocialPost) -> Unit,
+    onProfileClick: (String) -> Unit,
 ) {
     Box(modifier = modifier) {
         LazyColumn(
@@ -251,9 +264,10 @@ private fun SocialTimeline(
                 SocialPostRow(
                     post = post,
                     onClick = { onPostClick(post) },
+                    onProfileClick = { onProfileClick(post.profileId) },
                 )
                 if (index < timelinePosts.lastIndex) {
-                    PostSeparator()
+                    HorizontalSeparator()
                 }
             }
         }
@@ -264,6 +278,7 @@ private fun SocialTimeline(
 private fun SocialPostRow(
     post: SocialPost,
     onClick: () -> Unit,
+    onProfileClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -274,13 +289,14 @@ private fun SocialPostRow(
     ) {
         SocialTimelineRail(
             avatarUrl = post.avatarUrl,
+            onProfileClick = onProfileClick,
             modifier = Modifier.width(44.dp),
         )
         Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            PostHeader(post)
+            PostHeader(post, onProfileClick)
             Text(
                 text = post.body,
                 style = TextStyle(fontSize = 19.sp, lineHeight = 27.sp),
@@ -295,36 +311,35 @@ private fun SocialPostRow(
 }
 
 @Composable
-private fun PostSeparator() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(1.dp)
-            .background(Theme[colors][border]),
-    )
-}
-
-@Composable
 private fun SocialTimelineRail(
     avatarUrl: String,
+    onProfileClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Avatar(avatarUrl, size = 44)
+        Avatar(
+            url = avatarUrl,
+            size = 44,
+            modifier = Modifier.clickable(onClick = onProfileClick),
+        )
     }
 }
 
 @Composable
-private fun PostHeader(post: SocialPost) {
+private fun PostHeader(
+    post: SocialPost,
+    onProfileClick: () -> Unit,
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Top,
     ) {
         Text(
             text = post.author,
+            modifier = Modifier.clickable(onClick = onProfileClick),
             style = TextStyle(fontSize = 18.sp, lineHeight = 24.sp, fontWeight = FontWeight.Bold),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -473,36 +488,4 @@ private fun ActionButton(
     ) {
         content(color)
     }
-}
-
-@Composable
-private fun SocialBottomBar() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp)
-            .border(width = 1.dp, color = Theme[colors][border])
-            .padding(horizontal = 24.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(Lucide.House, contentDescription = "Home", modifier = Modifier.size(32.dp), tint = Theme[colors][onBackground])
-        Icon(Lucide.Search, contentDescription = "Search", modifier = Modifier.size(32.dp), tint = Theme[colors][muted])
-        Icon(Lucide.SquarePen, contentDescription = "Compose", modifier = Modifier.size(32.dp), tint = Theme[colors][muted])
-        Icon(Lucide.Bell, contentDescription = "Notifications", modifier = Modifier.size(32.dp), tint = Theme[colors][muted])
-        Icon(Lucide.CircleUser, contentDescription = "Profile", modifier = Modifier.size(32.dp), tint = Theme[colors][muted])
-    }
-}
-
-@Composable
-private fun Avatar(url: String, size: Int) {
-    Image(
-        painter = rememberUriPainter(url),
-        contentDescription = null,
-        modifier = Modifier
-            .size(size.dp)
-            .clip(CircleShape)
-            .background(Theme[colors][border]),
-        contentScale = ContentScale.Crop,
-    )
 }
