@@ -46,9 +46,7 @@ import com.composables.ui.theme.primary
 
 @Composable
 fun MyComponent() {
-    val primaryColor = Theme[colors][primary]
-    
-    Box(Modifier.background(primaryColor)) {
+    Box(Modifier.background(Theme[colors][primary])) {
         // ...
     }
 }
