@@ -17,7 +17,7 @@ import com.composables.ui.components.ButtonStyle
 import com.composables.ui.components.Text
 
 @Composable
-fun AlertDialogExample() {
+fun AlertDialogThreeActionsExample() {
     var visible by remember { mutableStateOf(false) }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -30,10 +30,10 @@ fun AlertDialogExample() {
         AlertDialog(
             visible = visible,
             onDismissRequest = { visible = false },
-            title = { Text("Enable notifications?", textAlign = TextAlign.Center) },
+            title = { Text("Save changes?", textAlign = TextAlign.Center) },
             text = {
                 Text(
-                    "Notifications help you keep up with important updates from this app.",
+                    "You can save your edits, keep working, or discard the changes.",
                     textAlign = TextAlign.Center,
                 )
             },
@@ -43,7 +43,16 @@ fun AlertDialogExample() {
                     modifier = Modifier.fillMaxWidth(),
                     style = ButtonStyle.Primary,
                 ) {
-                    Text("Allow")
+                    Text("Save")
+                }
+            },
+            neutralButton = {
+                Button(
+                    onClick = { visible = false },
+                    modifier = Modifier.fillMaxWidth(),
+                    style = ButtonStyle.Secondary,
+                ) {
+                    Text("Keep editing")
                 }
             },
             negativeButton = {
@@ -52,7 +61,7 @@ fun AlertDialogExample() {
                     modifier = Modifier.fillMaxWidth(),
                     style = ButtonStyle.Secondary,
                 ) {
-                    Text("Not now")
+                    Text("Discard")
                 }
             },
         )

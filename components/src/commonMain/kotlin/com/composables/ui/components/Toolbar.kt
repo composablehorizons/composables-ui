@@ -16,14 +16,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.composables.ui.theme.textStyles
-import com.composables.ui.theme.header as headerTextStyle
-import com.composables.ui.theme.title as titleTextStyle
+import androidx.compose.ui.unit.sp
+import com.composeunstyled.LocalTextStyle
 import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.buildModifier
-import com.composeunstyled.theme.Theme
 import kotlin.jvm.JvmName
 
 class ToolbarSize private constructor() {
@@ -86,7 +86,7 @@ private fun MediumTitleToolbar(
             if (leading != null) {
                 leading()
             }
-            ProvideTextStyle(Theme[textStyles][titleTextStyle]) {
+            ProvideTextStyle(LocalTextStyle.current.merge(ToolbarTitleTextStyle)) {
                 title()
             }
         }
@@ -142,7 +142,7 @@ private fun LargeTitleToolbar(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            ProvideTextStyle(Theme[textStyles][headerTextStyle]) {
+            ProvideTextStyle(LocalTextStyle.current.merge(ToolbarHeaderTextStyle)) {
                 title()
             }
         }
@@ -168,7 +168,7 @@ fun Toolbar(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                ProvideTextStyle(Theme[textStyles][titleTextStyle]) {
+                ProvideTextStyle(LocalTextStyle.current.merge(ToolbarTitleTextStyle)) {
                     leading()
                 }
             }
@@ -179,7 +179,7 @@ fun Toolbar(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                ProvideTextStyle(Theme[textStyles][titleTextStyle]) {
+                ProvideTextStyle(LocalTextStyle.current.merge(ToolbarTitleTextStyle)) {
                     centered()
                 }
             }
@@ -199,6 +199,18 @@ private fun toolbarHeightFor(size: ToolbarSize): Dp = when (size) {
     ToolbarSize.Large -> 112.dp
     else -> 64.dp
 }
+
+private val ToolbarTitleTextStyle = TextStyle(
+    fontSize = 20.sp,
+    lineHeight = 24.sp,
+    fontWeight = FontWeight.Medium,
+)
+
+private val ToolbarHeaderTextStyle = TextStyle(
+    fontSize = 26.sp,
+    lineHeight = 24.sp,
+    fontWeight = FontWeight.SemiBold,
+)
 
 @Composable
 private fun ToolbarContainer(

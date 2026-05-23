@@ -46,9 +46,11 @@ import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -76,12 +78,17 @@ import com.composables.ui.demo.examples.BottomSheetFormExample
 import com.composables.ui.demo.examples.ButtonExample
 import com.composables.ui.demo.examples.ButtonSizesExample
 import com.composables.ui.demo.examples.CenteredToolbarExample
+import com.composables.ui.demo.examples.CheckboxExample
 import com.composables.ui.demo.examples.DefaultTextFieldExample
 import com.composables.ui.demo.examples.DestructiveButtonExample
+import com.composables.ui.demo.examples.DisclosureExample
 import com.composables.ui.demo.examples.DisabledTextFieldExample
 import com.composables.ui.demo.examples.DropdownMenuExample
 import com.composables.ui.demo.examples.DropdownMenuToolbarExample
 import com.composables.ui.demo.examples.GhostButtonExample
+import com.composables.ui.demo.examples.HorizontalScrollbarExample
+import com.composables.ui.demo.examples.ProgressIndicatorExample
+import com.composables.ui.demo.examples.RadioGroupExample
 import com.composables.ui.demo.examples.LargeToolbarExample
 import com.composables.ui.demo.examples.MultilineTextFieldExample
 import com.composables.ui.demo.examples.OutlinedButtonExample
@@ -89,14 +96,19 @@ import com.composables.ui.demo.examples.PrimaryButtonExample
 import com.composables.ui.demo.examples.ReadOnlyTextFieldExample
 import com.composables.ui.demo.examples.SearchTextFieldExample
 import com.composables.ui.demo.examples.SecondaryButtonExample
+import com.composables.ui.demo.examples.ScrollbarExample
+import com.composables.ui.demo.examples.SliderExample
+import com.composables.ui.demo.examples.StackExample
+import com.composables.ui.demo.examples.TabGroupExample
+import com.composables.ui.demo.examples.ToggleSwitchExample
 import com.composables.ui.demo.examples.ToolbarWithActionsExample
-import com.composables.ui.demo.examples.TypographyExample
+import com.composables.ui.demo.examples.TooltipExample
+import com.composables.ui.demo.examples.TriStateCheckboxExample
 import com.composables.ui.theme.ColorScheme
 import com.composables.ui.theme.InteractionMode
 import com.composables.ui.theme.LocalColorScheme
 import com.composables.ui.theme.LocalInteractionMode
 import com.composables.ui.theme.AppTheme
-import com.composables.ui.theme.body
 import com.composables.ui.theme.border
 import com.composables.ui.theme.buttonHeight
 import com.composables.ui.theme.control
@@ -111,10 +123,10 @@ import com.composables.ui.theme.onSelectedControl
 import com.composables.ui.theme.panel
 import com.composables.ui.theme.selectedControl
 import com.composables.ui.theme.secondary
-import com.composables.ui.theme.textStyles
 import com.composables.ui.theme.background as backgroundColor
 import com.composeunstyled.DisclosedContent
 import com.composeunstyled.DisclosureButton
+import com.composeunstyled.LocalTextStyle
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.RadioButton
 import com.composeunstyled.RadioGroupScope
@@ -216,6 +228,26 @@ private val componentDemoGroups = listOf(
         ),
     ),
     DemoGroup(
+        name = "Checkbox",
+        id = "checkbox",
+        demos = listOf(
+            DemoItem("Checkbox", "checkbox", content = { CheckboxExample() }, listName = "Default"),
+            DemoItem(
+                "Checkbox (Tri-state)",
+                "checkbox-tri-state",
+                content = { TriStateCheckboxExample() },
+                listName = "Tri-state",
+            ),
+        ),
+    ),
+    DemoGroup(
+        name = "Disclosure",
+        id = "disclosure",
+        demos = listOf(
+            DemoItem("Disclosure", "disclosure", content = { DisclosureExample() }, listName = "Default"),
+        ),
+    ),
+    DemoGroup(
         name = "DropdownMenu",
         id = "dropdown-menu",
         demos = listOf(
@@ -231,6 +263,79 @@ private val componentDemoGroups = listOf(
                 "dropdown-menu-toolbar",
                 content = { DropdownMenuToolbarExample() },
                 listName = "Overflow menu",
+                previewOptions = PreviewOptions(maxWidth = 390.dp),
+            ),
+        ),
+    ),
+    DemoGroup(
+        name = "ProgressIndicator",
+        id = "progress-indicator",
+        demos = listOf(
+            DemoItem(
+                "ProgressIndicator",
+                "progress-indicator",
+                content = { ProgressIndicatorExample() },
+                listName = "Default",
+                previewOptions = PreviewOptions(maxWidth = 360.dp),
+            ),
+        ),
+    ),
+    DemoGroup(
+        name = "RadioGroup",
+        id = "radio-group",
+        demos = listOf(
+            DemoItem("RadioGroup", "radio-group", content = { RadioGroupExample() }, listName = "Default"),
+        ),
+    ),
+    DemoGroup(
+        name = "Scrollbars",
+        id = "scrollbars",
+        demos = listOf(
+            DemoItem(
+                "Scrollbars (Vertical)",
+                "scrollbars-vertical",
+                content = { ScrollbarExample() },
+                listName = "Vertical",
+                previewOptions = PreviewOptions(maxWidth = 380.dp),
+            ),
+            DemoItem(
+                "Scrollbars (Horizontal)",
+                "scrollbars-horizontal",
+                content = { HorizontalScrollbarExample() },
+                listName = "Horizontal",
+                previewOptions = PreviewOptions(maxWidth = 380.dp),
+            ),
+        ),
+    ),
+    DemoGroup(
+        name = "Slider",
+        id = "slider",
+        demos = listOf(
+            DemoItem(
+                "Slider",
+                "slider",
+                content = { SliderExample() },
+                listName = "Default",
+                previewOptions = PreviewOptions(maxWidth = 360.dp),
+            ),
+        ),
+    ),
+    DemoGroup(
+        name = "Stack",
+        id = "stack",
+        demos = listOf(
+            DemoItem("Stack", "stack", content = { StackExample() }, listName = "Default"),
+        ),
+    ),
+    DemoGroup(
+        name = "TabGroup",
+        id = "tab-group",
+        demos = listOf(
+            DemoItem(
+                "TabGroup",
+                "tab-group",
+                content = { TabGroupExample() },
+                listName = "Default",
                 previewOptions = PreviewOptions(maxWidth = 390.dp),
             ),
         ),
@@ -277,6 +382,13 @@ private val componentDemoGroups = listOf(
         ),
     ),
     DemoGroup(
+        name = "ToggleSwitch",
+        id = "toggle-switch",
+        demos = listOf(
+            DemoItem("ToggleSwitch", "toggle-switch", content = { ToggleSwitchExample() }, listName = "Default"),
+        ),
+    ),
+    DemoGroup(
         name = "Toolbar",
         id = "toolbar",
         demos = listOf(
@@ -312,25 +424,18 @@ private val componentDemoGroups = listOf(
             ),
         ),
     ),
-)
-
-private val componentDemos = componentDemoGroups.flatMap { it.demos }
-
-private val themingDemos = listOf(
-    DemoItem("Typography", "typography", content = { TypographyExample() }),
-)
-
-private val themingDemoGroups = listOf(
     DemoGroup(
-        name = "Typography",
-        id = "typography",
+        name = "Tooltip",
+        id = "tooltip",
         demos = listOf(
-            DemoItem("Typography", "typography", content = { TypographyExample() }, listName = "Default"),
+            DemoItem("Tooltip", "tooltip", content = { TooltipExample() }, listName = "Default"),
         ),
     ),
 )
 
-private val demos = componentDemos + themingDemos
+private val componentDemos = componentDemoGroups.flatMap { it.demos }
+
+private val demos = componentDemos
 
 private const val NavigationTransitionDurationMillis = 350
 private const val NavigationParallaxDivisor = 5
@@ -455,7 +560,6 @@ private fun DemoList(
                 .padding(horizontal = 8.dp, vertical = 12.dp)
                 .fillMaxWidth(),
         ) {
-            DemoSection(themingDemoGroups, expandedGroups, onSelectDemo)
             DemoSection(componentDemoGroups, expandedGroups, onSelectDemo)
         }
     }
@@ -780,7 +884,7 @@ private fun DemoSection(
                             ) {
                                 Text(
                                     text = demo.listName,
-                                    style = Theme[textStyles][body],
+                                    style = LocalTextStyle.current.merge(DemoListTextStyle),
                                     modifier = Modifier.padding(start = DemoListTextStart),
                                 )
                             }
@@ -823,13 +927,17 @@ private fun DemoGroupHeader(
         }
         Text(
             text = name,
-            style = Theme[textStyles][body],
+            style = LocalTextStyle.current.merge(DemoListTextStyle),
         )
     }
 }
 
 private val DemoListHorizontalPadding = 16.dp
 private val DemoListTextStart = DemoListHorizontalPadding + 16.dp + 8.dp
+private val DemoListTextStyle = TextStyle(
+    fontSize = 16.sp,
+    lineHeight = 24.sp,
+)
 
 @Composable
 private fun DemoListButton(

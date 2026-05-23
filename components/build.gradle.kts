@@ -58,19 +58,9 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.composables.unstyled.button)
-            api(libs.composables.unstyled.modal.bottom.sheet)
-            implementation(libs.composables.unstyled.colored.indication)
-            implementation(libs.composables.unstyled.build.modifier)
-            implementation(libs.composables.unstyled.dialog)
-            implementation(libs.composables.unstyled.dropdown.menu)
-            implementation(libs.composables.unstyled.focus.ring)
-            implementation(libs.composables.unstyled.icon)
-            implementation(libs.composables.unstyled.modal)
-            implementation(libs.composables.unstyled.outline)
-            implementation(libs.composables.unstyled.separators)
-            implementation(libs.composables.unstyled.text.field)
-            api(libs.composables.unstyled.theming)
+            api(libs.composables.unstyled)
+            implementation("com.composables:composeunstyled-build-modifier:${libs.versions.unstyled.get()}")
+            implementation("com.composables:composeunstyled-stack:${libs.versions.unstyled.get()}")
             implementation(libs.composables.interaction.capabilities)
             implementation("com.composables:ripple-indication:1.1.0")
             api("org.jetbrains.compose.foundation:foundation:1.11.0")

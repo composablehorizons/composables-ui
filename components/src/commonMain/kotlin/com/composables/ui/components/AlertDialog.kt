@@ -25,25 +25,26 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.composables.ui.theme.alertDialogShape
-import com.composables.ui.theme.body
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onPanel
 import com.composables.ui.theme.panel
 import com.composables.ui.theme.scrim
 import com.composables.ui.theme.shapes
-import com.composables.ui.theme.textStyles
 import com.composeunstyled.DialogPanel
 import com.composeunstyled.DialogProperties
+import com.composeunstyled.LocalTextStyle
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.Scrim
 import com.composeunstyled.UnstyledDialog
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
-import com.composables.ui.theme.title as titleTextStyle
 
 private const val DialogEnterDurationMillis = 400
 private const val DialogExitDurationMillis = 200
@@ -155,7 +156,7 @@ fun AlertDialog(
                         }
 
                         if (title != null) {
-                            ProvideTextStyle(Theme[textStyles][titleTextStyle]) {
+                            ProvideTextStyle(LocalTextStyle.current.merge(AlertDialogTitleTextStyle)) {
                                 Box(
                                     modifier = Modifier.fillMaxWidth(),
                                     contentAlignment = Alignment.Center,
@@ -173,7 +174,7 @@ fun AlertDialog(
                             contentAlignment = Alignment.Center,
                         ) {
                             ProvideContentColor(supportingTextColor) {
-                                ProvideTextStyle(Theme[textStyles][body]) {
+                                ProvideTextStyle(LocalTextStyle.current.merge(AlertDialogBodyTextStyle)) {
                                     text()
                                 }
                             }
@@ -197,3 +198,14 @@ fun AlertDialog(
         }
     }
 }
+
+private val AlertDialogTitleTextStyle = TextStyle(
+    fontSize = 20.sp,
+    lineHeight = 24.sp,
+    fontWeight = FontWeight.Medium,
+)
+
+private val AlertDialogBodyTextStyle = TextStyle(
+    fontSize = 16.sp,
+    lineHeight = 24.sp,
+)

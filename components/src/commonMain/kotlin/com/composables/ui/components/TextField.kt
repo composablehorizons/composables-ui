@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.composables.ui.theme.border
 import com.composables.ui.theme.alphas
 import com.composables.ui.theme.colors
@@ -54,11 +55,10 @@ import com.composables.ui.theme.onField
 import com.composables.ui.theme.shapes
 import com.composables.ui.theme.textFieldHeight
 import com.composables.ui.theme.textFieldHorizontalPadding
-import com.composables.ui.theme.textFieldInput
 import com.composables.ui.theme.textFieldShape
 import com.composables.ui.theme.textFieldTextSelectionColors
 import com.composables.ui.theme.textSelectionColors
-import com.composables.ui.theme.textStyles
+import com.composeunstyled.LocalTextStyle
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.TextInput
@@ -87,7 +87,7 @@ fun TextField(
     minHeight: Dp = Theme[componentSizes][textFieldHeight],
     cursorBrush: Brush = SolidColor(contentColor),
     selectionColors: TextSelectionColors = Theme[textSelectionColors][textFieldTextSelectionColors],
-    textStyle: TextStyle = Theme[textStyles][textFieldInput],
+    textStyle: TextStyle = LocalTextStyle.current.merge(TextFieldInputTextStyle),
     textAlign: TextAlign = TextAlign.Unspecified,
     lineHeight: TextUnit = TextUnit.Unspecified,
     fontSize: TextUnit = textStyle.fontSize,
@@ -158,6 +158,11 @@ fun TextField(
         )
     }
 }
+
+private val TextFieldInputTextStyle = TextStyle(
+    fontSize = 16.sp,
+    lineHeight = 24.sp,
+)
 
 @Composable
 private fun UnstyledTextFieldScope.TextFieldContent(

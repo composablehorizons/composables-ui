@@ -40,8 +40,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.composables.ui.theme.border
 import com.composables.ui.theme.componentSizes
 import com.composables.ui.theme.colors
@@ -57,20 +60,18 @@ import com.composables.ui.theme.panel
 import com.composables.ui.theme.secondary
 import com.composables.ui.theme.shapes
 import com.composables.ui.theme.shadows
-import com.composables.ui.theme.textStyles
 import com.composeunstyled.AnchorAlignment
 import com.composeunstyled.AnchorSide
 import com.composeunstyled.DropdownMenuPanelScope
 import com.composeunstyled.DropdownMenuScope as UnstyledDropdownMenuScope
+import com.composeunstyled.LocalTextStyle
 import com.composeunstyled.MenuItem
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.UnstyledDropdownMenu
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
-import com.composables.ui.theme.body as bodyTextStyle
 import com.composeunstyled.DropdownMenuPanel as UnstyledDropdownMenuPanel
-import com.composables.ui.theme.buttonLabel as buttonLabelTextStyle
 
 private const val DropdownMenuEnterDurationMillis = 120
 private const val DropdownMenuExitDurationMillis = 75
@@ -180,7 +181,7 @@ fun DropdownMenuScope.DropdownMenuPanel(
             exit = exitTransition,
         ) {
             ProvideContentColor(contentColor) {
-                ProvideTextStyle(Theme[textStyles][bodyTextStyle]) {
+                ProvideTextStyle(LocalTextStyle.current.merge(DropdownMenuTextStyle)) {
                     val panelScope = this@UnstyledDropdownMenuPanel
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -317,7 +318,7 @@ fun DropdownMenuPanelContentScope.DropdownMenuLabel(
     content: @Composable RowScope.() -> Unit,
 ) {
     ProvideContentColor(contentColor) {
-        ProvideTextStyle(Theme[textStyles][buttonLabelTextStyle]) {
+        ProvideTextStyle(LocalTextStyle.current.merge(DropdownMenuLabelTextStyle)) {
             Row(
                 modifier = modifier
                     .fillMaxWidth()
@@ -328,6 +329,17 @@ fun DropdownMenuPanelContentScope.DropdownMenuLabel(
         }
     }
 }
+
+private val DropdownMenuTextStyle = TextStyle(
+    fontSize = 16.sp,
+    lineHeight = 24.sp,
+)
+
+private val DropdownMenuLabelTextStyle = TextStyle(
+    fontSize = 16.sp,
+    lineHeight = 24.sp,
+    fontWeight = FontWeight.Medium,
+)
 
 @Composable
 fun DropdownMenuPanelContentScope.DropdownMenuSeparator(

@@ -19,13 +19,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.composables.ui.theme.bright
 import com.composables.ui.theme.border
 import com.composables.ui.theme.buttonHeight
 import com.composables.ui.theme.buttonHorizontalPadding
-import com.composables.ui.theme.buttonLabel
 import com.composables.ui.theme.buttonShape
 import com.composables.ui.theme.alphas
 import com.composables.ui.theme.componentSizes
@@ -45,7 +47,7 @@ import com.composables.ui.theme.onSecondary
 import com.composables.ui.theme.primary
 import com.composables.ui.theme.secondary
 import com.composables.ui.theme.shapes
-import com.composables.ui.theme.textStyles
+import com.composeunstyled.LocalTextStyle
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.UnstyledButton
@@ -102,7 +104,7 @@ fun Button(
                 horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                ProvideTextStyle(Theme[textStyles][buttonLabel]) {
+                ProvideTextStyle(LocalTextStyle.current.merge(ButtonLabelTextStyle)) {
                     content()
                 }
             }
@@ -167,6 +169,11 @@ private fun buttonHorizontalPaddingFor(buttonSize: ButtonSize): Dp = when (butto
 }
 
 private val NoButtonPadding = PaddingValues(0.dp)
+private val ButtonLabelTextStyle = TextStyle(
+    fontSize = 16.sp,
+    lineHeight = 24.sp,
+    fontWeight = FontWeight.Medium,
+)
 
 private data class ButtonStyleDefaults(
     val backgroundColor: Color,

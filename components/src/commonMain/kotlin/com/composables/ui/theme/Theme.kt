@@ -33,7 +33,6 @@ import org.jetbrains.compose.resources.Font
 val colors = ThemeProperty<Color>("colors")
 val shapes = ThemeProperty<Shape>("shapes")
 val shadows = ThemeProperty<Shadow>("shadows")
-val textStyles = ThemeProperty<TextStyle>("textStyles")
 val indications = ThemeProperty<Indication>("indications")
 val componentSizes = ThemeProperty<Dp>("componentSizes")
 val alphas = ThemeProperty<Float>("alphas")
@@ -78,12 +77,6 @@ val dropdownMenuShape = ThemeToken<Shape>("dropdown_menu_shape")
 val textFieldShape = ThemeToken<Shape>("text_field_shape")
 
 val dropdownMenuShadow = ThemeToken<Shadow>("dropdown_menu_shadow")
-
-val body = ThemeToken<TextStyle>("body")
-val title = ThemeToken<TextStyle>("title")
-val header = ThemeToken<TextStyle>("header")
-val buttonLabel = ThemeToken<TextStyle>("button_label")
-val textFieldInput = ThemeToken<TextStyle>("text_field_input")
 
 val textFieldTextSelectionColors = ThemeToken<TextSelectionColors>("text_field_text_selection_colors")
 
@@ -332,25 +325,12 @@ val AppTheme = buildTheme {
 
     val inter = FontFamily(Font(Res.font.Inter))
     val bodyStyle = TextStyle(
-        fontFamily = inter,
         fontSize = 16.sp,
         lineHeight = 24.sp,
+        fontWeight = FontWeight.Normal,
+        fontFamily = inter,
     )
     defaultTextStyle = bodyStyle
-
-    properties[textStyles] = mapOf(
-        body to bodyStyle,
-        title to bodyStyle.copy(
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Medium,
-        ),
-        header to bodyStyle.copy(
-            fontSize = 26.sp,
-            fontWeight = FontWeight.SemiBold,
-        ),
-        buttonLabel to bodyStyle.copy(fontWeight = FontWeight.Medium),
-        textFieldInput to bodyStyle,
-    )
 
     val brightIndication = rememberRippleIndication(Color.White.copy(alpha = 0.18f))
     val dimIndication = rememberRippleIndication(Color.Black.copy(alpha = 0.08f))

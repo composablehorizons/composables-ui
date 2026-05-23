@@ -20,7 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.composables.ui.theme.bottomSheetShape
 import com.composables.ui.theme.border
 import com.composables.ui.theme.componentSizes
@@ -34,9 +37,8 @@ import com.composables.ui.theme.onPanel
 import com.composables.ui.theme.panel
 import com.composables.ui.theme.scrim
 import com.composables.ui.theme.shapes
-import com.composables.ui.theme.textStyles
-import com.composables.ui.theme.title
 import com.composeunstyled.DragIndication
+import com.composeunstyled.LocalTextStyle
 import com.composeunstyled.ModalBottomSheetState
 import com.composeunstyled.ModalBottomSheetProperties
 import com.composeunstyled.ProvideContentColor
@@ -116,7 +118,7 @@ fun BottomSheet(
                             verticalArrangement = Arrangement.spacedBy(16.dp),
                         ) {
                             if (header != null) {
-                                ProvideTextStyle(Theme[textStyles][title]) {
+                                ProvideTextStyle(LocalTextStyle.current.merge(BottomSheetHeaderTextStyle)) {
                                     Box(
                                         modifier = Modifier.fillMaxWidth(),
                                         contentAlignment = Alignment.Center,
@@ -159,3 +161,9 @@ fun BottomSheet(
         }
     }
 }
+
+private val BottomSheetHeaderTextStyle = TextStyle(
+    fontSize = 20.sp,
+    lineHeight = 24.sp,
+    fontWeight = FontWeight.Medium,
+)

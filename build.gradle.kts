@@ -12,6 +12,12 @@ val generatedDemoSources = layout.buildDirectory.dir("generated/docs/demo-source
 val generatedComponentSources = layout.buildDirectory.dir("generated/docs/component-sources")
 
 val docsDemoSources = mapOf(
+    "alert-dialog" to "AlertDialogExample.kt",
+    "alert-dialog-3-actions" to "AlertDialogThreeActionsExample.kt",
+    "alert-dialog-icon" to "AlertDialogWithIconExample.kt",
+    "bottom-sheet-action-menu" to "BottomSheetActionMenuExample.kt",
+    "bottom-sheet-confirmation" to "BottomSheetConfirmationExample.kt",
+    "bottom-sheet-form" to "BottomSheetFormExample.kt",
     "button-default" to "ButtonExample.kt",
     "button-sizes" to "ButtonSizesExample.kt",
     "button-primary" to "PrimaryButtonExample.kt",
@@ -19,6 +25,28 @@ val docsDemoSources = mapOf(
     "button-outlined" to "OutlinedButtonExample.kt",
     "button-ghost" to "GhostButtonExample.kt",
     "button-destructive" to "DestructiveButtonExample.kt",
+    "checkbox" to "CheckboxExample.kt",
+    "checkbox-tri-state" to "TriStateCheckboxExample.kt",
+    "disclosure" to "DisclosureExample.kt",
+    "dropdown-menu" to "DropdownMenuExample.kt",
+    "dropdown-menu-toolbar" to "DropdownMenuToolbarExample.kt",
+    "progress-indicator" to "ProgressIndicatorExample.kt",
+    "radio-group" to "RadioGroupExample.kt",
+    "scrollbars-vertical" to "ScrollbarExample.kt",
+    "scrollbars-horizontal" to "HorizontalScrollbarExample.kt",
+    "slider" to "SliderExample.kt",
+    "stack" to "StackExample.kt",
+    "tab-group" to "TabGroupExample.kt",
+    "text-field" to "DefaultTextFieldExample.kt",
+    "text-field-search" to "SearchTextFieldExample.kt",
+    "text-field-multiline" to "MultilineTextFieldExample.kt",
+    "text-field-disabled" to "DisabledTextFieldExample.kt",
+    "text-field-read-only" to "ReadOnlyTextFieldExample.kt",
+    "toggle-switch" to "ToggleSwitchExample.kt",
+    "toolbar-actions" to "ToolbarWithActionsExample.kt",
+    "centered-toolbar" to "CenteredToolbarExample.kt",
+    "large-toolbar" to "LargeToolbarExample.kt",
+    "tooltip" to "TooltipExample.kt",
 )
 
 val docsComponentSources = mapOf(
