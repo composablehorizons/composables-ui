@@ -11,19 +11,22 @@ import com.composables.ui.theme.colors
 import com.composables.ui.theme.onBackground
 import com.composeunstyled.FocusVisibilityProvider
 import com.composeunstyled.ProvideContentColor
+import com.composeunstyled.TooltipHost
 import com.composeunstyled.theme.Theme
 
 @Composable
 fun AppScaffold(content: @Composable () -> Unit) {
     AppTheme {
-        FocusVisibilityProvider {
-            ProvideContentColor(Theme[colors][onBackground]) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Theme[colors][background]),
-                ) {
-                    content()
+        TooltipHost {
+            FocusVisibilityProvider {
+                ProvideContentColor(Theme[colors][onBackground]) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Theme[colors][background]),
+                    ) {
+                        content()
+                    }
                 }
             }
         }

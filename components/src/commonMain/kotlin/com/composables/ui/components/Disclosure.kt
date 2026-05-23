@@ -114,7 +114,9 @@ fun Disclosure(
         onExpandedChange = { state.expanded = it },
         modifier = modifier,
     ) {
-        DisclosureScope(this).content()
+        Column(modifier = Modifier.fillMaxWidth()) {
+            DisclosureScope(this@UnstyledDisclosure).content()
+        }
     }
 }
 
