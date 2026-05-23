@@ -98,7 +98,6 @@ import com.composables.ui.demo.examples.SearchTextFieldExample
 import com.composables.ui.demo.examples.SecondaryButtonExample
 import com.composables.ui.demo.examples.ScrollbarExample
 import com.composables.ui.demo.examples.SliderExample
-import com.composables.ui.demo.examples.StackExample
 import com.composables.ui.demo.examples.TabGroupExample
 import com.composables.ui.demo.examples.ToggleSwitchExample
 import com.composables.ui.demo.examples.ToolbarWithActionsExample
@@ -124,7 +123,6 @@ import com.composables.ui.theme.onSelectedControl
 import com.composables.ui.theme.panel
 import com.composables.ui.theme.selectedControl
 import com.composables.ui.theme.secondary
-import com.composables.ui.theme.background as backgroundColor
 import com.composeunstyled.DisclosedContent
 import com.composeunstyled.DisclosureButton
 import com.composeunstyled.LocalTextStyle
@@ -319,13 +317,6 @@ private val componentDemoGroups = listOf(
                 listName = "Default",
                 previewOptions = PreviewOptions(maxWidth = 360.dp),
             ),
-        ),
-    ),
-    DemoGroup(
-        name = "Stack",
-        id = "stack",
-        demos = listOf(
-            DemoItem("Stack", "stack", content = { StackExample() }, listName = "Default"),
         ),
     ),
     DemoGroup(
