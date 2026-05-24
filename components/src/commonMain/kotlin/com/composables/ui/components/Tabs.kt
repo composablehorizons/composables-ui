@@ -96,7 +96,14 @@ fun <T> TabGroupScope<T>.TabList(
         ) {
             val scope = TabListScope(this)
             if (orientation == TabOrientation.Horizontal) {
-                Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                Row(
+                    modifier = Modifier.then(buildModifier {
+                        if (equalTabWidth) {
+                            add(Modifier.fillMaxWidth())
+                        }
+                    }),
+                    horizontalArrangement = Arrangement.spacedBy(2.dp),
+                ) {
                     TabListEqualTabWidthProvider(
                         equalTabWidth = equalTabWidth,
                         rowScope = this,
@@ -123,7 +130,8 @@ fun <T> TabListScope<T>.Tab(
 ) {
     val shape = RoundedCornerShape(999.dp)
     val rowScope = LocalTabListRowScope.current
-    val itemModifier = if (LocalTabListEqualTabWidth.current && rowScope != null) {
+    val fillsTabWidth = LocalTabListEqualTabWidth.current && rowScope != null
+    val itemModifier = if (fillsTabWidth) {
         with(rowScope) { modifier.weight(1f) }
     } else {
         modifier
@@ -142,12 +150,15 @@ fun <T> TabListScope<T>.Tab(
             Row(
                 modifier = Modifier
                     .heightIn(min = Theme[componentSizes][buttonHeight])
-                .then(buildModifier {
-                    if (selected) {
-                        add(Modifier.background(Theme[colors][selectedControl], shape))
-                    }
-                    if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha]))
-                })
+                    .then(buildModifier {
+                        if (fillsTabWidth) {
+                            add(Modifier.fillMaxWidth())
+                        }
+                        if (selected) {
+                            add(Modifier.background(Theme[colors][selectedControl], shape))
+                        }
+                        if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha]))
+                    })
                     .padding(horizontal = 12.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,

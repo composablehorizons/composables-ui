@@ -1,10 +1,12 @@
 package com.composables.ui.sample
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -63,9 +65,12 @@ import com.composables.ui.theme.field
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
 import com.composables.ui.theme.onField
+import com.composeunstyled.currentWindowContainerSize
+import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 
 private val ProfileMaxWidth = 700.dp
+private val WideProfileVerticalInset = 70.dp
 
 private val fakeProfiles = listOf(
     Profile(
@@ -254,8 +259,16 @@ internal fun ProfilePage(
         ProfileFeedTab.Replies -> profile.replies
         else -> profile.posts
     }
+    val windowSize = currentWindowContainerSize()
+    val hasMeasuredWindowWidth = windowSize.width > 0.dp
+    val showProfileOutline = !hasMeasuredWindowWidth || windowSize.width > ProfileMaxWidth
+    val profileShape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)
+    val profileVerticalInset by animateDpAsState(
+        targetValue = if (showProfileOutline) WideProfileVerticalInset else 0.dp,
+        label = "ProfileVerticalInset",
+    )
 
-    ScreenScaffold(backgroundColor = Theme[colors][background], contentColor = Theme[colors][onBackground]) {
+    ScreenScaffold {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -266,30 +279,52 @@ internal fun ProfilePage(
                     .weight(1f)
                     .fillMaxWidth(),
             ) {
-                LazyColumn(
+                Column(
                     modifier = Modifier
                         .widthIn(max = ProfileMaxWidth)
                         .fillMaxWidth()
+                        .fillMaxHeight()
                         .align(Alignment.TopCenter),
                 ) {
-                    item {
-                        ProfileToolbar(onBack)
-                        ProfileHeader(profile)
-                        ProfileTabs(
-                            selectedTab = selectedTab,
-                            onSelectedTabChange = { selectedTab = it },
-                        )
-                    }
-                    itemsIndexed(
-                        items = visiblePosts,
-                        key = { _, post -> post.id },
-                    ) { index, post ->
-                        ProfilePostRow(
-                            profile = profile,
-                            post = post,
-                        )
-                        if (index < visiblePosts.lastIndex) {
-                            HorizontalSeparator()
+                    ProfileToolbar(onBack)
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(bottom = profileVerticalInset)
+                            .then(
+                                if (showProfileOutline) {
+                                    Modifier
+                                        .outline(
+                                            width = 1.dp,
+                                            color = Theme[colors][border],
+                                            shape = profileShape,
+                                            offset = (-1).dp,
+                                        )
+                                        .clip(profileShape)
+                                } else {
+                                    Modifier
+                                }
+                            ),
+                    ) {
+                        item {
+                            ProfileHeader(profile)
+                            ProfileTabs(
+                                selectedTab = selectedTab,
+                                onSelectedTabChange = { selectedTab = it },
+                            )
+                        }
+                        itemsIndexed(
+                            items = visiblePosts,
+                            key = { _, post -> post.id },
+                        ) { index, post ->
+                            ProfilePostRow(
+                                profile = profile,
+                                post = post,
+                            )
+                            if (index < visiblePosts.lastIndex) {
+                                HorizontalSeparator()
+                            }
                         }
                     }
                 }

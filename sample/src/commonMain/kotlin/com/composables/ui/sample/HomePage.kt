@@ -243,7 +243,8 @@ private fun SocialTimeline(
     modifier: Modifier = Modifier,
 ) {
     val windowSize = currentWindowContainerSize()
-    val showFeedOutline = windowSize.width > FeedMaxWidth
+    val hasMeasuredWindowWidth = windowSize.width > 0.dp
+    val showFeedOutline = !hasMeasuredWindowWidth || windowSize.width > FeedMaxWidth
     val feedShape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)
     val feedVerticalInset by animateDpAsState(
         targetValue = if (showFeedOutline) WideFeedVerticalInset else 0.dp,
