@@ -106,10 +106,13 @@ fun ProfileScreen(
     )
 
     ScreenScaffold {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = profileVerticalInset),
+        ) {
             Box(
                 modifier = Modifier
-                    .weight(1f)
                     .fillMaxWidth(),
             ) {
                 Column(
@@ -124,7 +127,6 @@ fun ProfileScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
-                            .padding(bottom = profileVerticalInset)
                             .then(
                                 if (showProfileOutline) {
                                     Modifier
@@ -163,7 +165,6 @@ fun ProfileScreen(
                     }
                 }
             }
-            SocialBottomBar(onProfileClick = onProfileClick)
         }
     }
 }

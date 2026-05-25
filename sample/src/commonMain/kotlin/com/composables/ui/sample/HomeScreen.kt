@@ -72,19 +72,13 @@ fun HomeScreen(
     onProfileClick: (String) -> Unit,
 ) {
     ScreenScaffold {
-        Box(Modifier.fillMaxSize()) {
-            SocialFeed(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .fillMaxWidth(),
-                onPostClick = onPostClick,
-                onProfileClick = onProfileClick,
-            )
-            SocialBottomBar(
-                onProfileClick = { onProfileClick("john_mobbin") },
-                modifier = Modifier.align(Alignment.BottomCenter),
-            )
-        }
+        SocialFeed(
+            modifier = Modifier
+                .fillMaxSize()
+                .fillMaxWidth(),
+            onPostClick = onPostClick,
+            onProfileClick = onProfileClick,
+        )
     }
 }
 
