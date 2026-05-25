@@ -3,29 +3,23 @@ package com.composables.ui.sample
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,7 +31,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,6 +40,7 @@ import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.MessageCircle
 import com.composables.icons.lucide.Repeat2
 import com.composables.ui.components.Button
+import com.composables.ui.components.ButtonSize
 import com.composables.ui.components.ButtonStyle
 import com.composables.ui.components.DropdownMenu
 import com.composables.ui.components.DropdownMenuAlignment
@@ -59,19 +53,13 @@ import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
 import com.composables.ui.components.ScreenScaffold
 import com.composables.ui.components.Text
-import com.composables.ui.components.focusRing
-import com.composables.ui.sample.components.Avatar
+import com.composables.ui.sample.components.AvatarButton
+import com.composables.ui.sample.components.FeedPost
 import com.composables.ui.theme.background
 import com.composables.ui.theme.border
-import com.composables.ui.theme.componentSizes
 import com.composables.ui.theme.colors
-import com.composables.ui.theme.focusRing
-import com.composables.ui.theme.focusRingOffset
-import com.composables.ui.theme.focusRingWidth
-import com.composables.ui.theme.largeShape
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
-import com.composables.ui.theme.shapes
 import com.composeunstyled.currentWidthBreakpoint
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
@@ -311,133 +299,88 @@ private fun SocialPostRow(
     onClick: () -> Unit,
     onProfileClick: () -> Unit,
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val shape = Theme[shapes][largeShape]
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .focusRing(
-                interactionSource = interactionSource,
-                width = Theme[componentSizes][focusRingWidth],
-                color = Theme[colors][focusRing],
-                shape = shape,
-                offset = Theme[componentSizes][focusRingOffset],
+    FeedPost(
+        onClick = onClick,
+        avatar = {
+            AvatarButton(
+                url = post.avatarUrl,
+                onClick = onProfileClick,
             )
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = onClick,
+        },
+        authorName = {
+            Button(onClick = onProfileClick, style = ButtonStyle.Link) {
+                Text(
+                    text = post.author,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+        },
+        timestamp = {
+            Text(
+                text = post.age,
+                color = Theme[colors][muted],
+                style = TextStyle(fontSize = 18.sp, lineHeight = 24.sp),
             )
-            .padding(horizontal = 14.dp, vertical = 10.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        SocialTimelineRail(
-            avatarUrl = post.avatarUrl,
-            onProfileClick = onProfileClick,
-            modifier = Modifier.width(44.dp),
-        )
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            PostHeader(post, onProfileClick)
+        },
+        overflow = { PostOverflowMenu() },
+        body = {
             Text(
                 text = post.body,
                 style = TextStyle(fontSize = 19.sp, lineHeight = 27.sp),
                 color = Theme[colors][onBackground],
             )
-            if (post.imageUrl != null) {
-                PostImage(post.imageUrl)
-            }
-            PostActions(post)
-        }
-    }
-}
-
-@Composable
-private fun SocialTimelineRail(
-    avatarUrl: String,
-    onProfileClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier.fillMaxHeight(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        },
+        media = post.imageUrl?.let { imageUrl ->
+            { PostImage(imageUrl) }
+        },
     ) {
-        Avatar(
-            url = avatarUrl,
-            size = 44,
-            modifier = Modifier
-                .clip(CircleShape)
-                .clickable(onClick = onProfileClick),
-        )
+        PostActions(post)
     }
 }
 
 @Composable
-private fun PostHeader(
-    post: SocialPost,
-    onProfileClick: () -> Unit,
-) {
+private fun PostOverflowMenu() {
     var expanded by remember { mutableStateOf(false) }
 
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.Top,
-    ) {
-        Text(
-            text = post.author,
-            modifier = Modifier.clickable(onClick = onProfileClick),
-            fontWeight = FontWeight.Medium,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-        Spacer(Modifier.weight(1f))
-        Text(
-            text = post.age,
-            color = Theme[colors][muted],
-            style = TextStyle(fontSize = 18.sp, lineHeight = 24.sp),
-        )
-        Spacer(Modifier.width(12.dp))
-        DropdownMenu(
-            expanded = expanded,
-            onExpandedChange = { expanded = it },
-            alignment = DropdownMenuAlignment.End,
-            panel = {
-                DropdownMenuPanel {
-                    DropdownMenuItem(onClick = { expanded = false }) {
-                        Text("Save")
-                    }
-                    DropdownMenuItem(onClick = { expanded = false }) {
-                        Text("Copy link")
-                    }
-                    DropdownMenuItem(onClick = { expanded = false }) {
-                        Text("Mute")
-                    }
-                    DropdownMenuItem(onClick = { expanded = false }) {
-                        Text("Not interested")
-                    }
-                    DropdownMenuItem(
-                        onClick = { expanded = false },
-                        style = DropdownMenuItemStyle.Destructive,
-                    ) {
-                        Text("Report")
-                    }
+    DropdownMenu(
+        expanded = expanded,
+        onExpandedChange = { expanded = it },
+        alignment = DropdownMenuAlignment.End,
+        panel = {
+            DropdownMenuPanel {
+                DropdownMenuItem(onClick = { expanded = false }) {
+                    Text("Save")
                 }
-            },
-        ) {
-            IconButton(
-                onClick = { expanded = expanded.not() },
-                style = ButtonStyle.Ghost,
-            ) {
-                Icon(
-                    imageVector = Lucide.Ellipsis,
-                    contentDescription = "Post options",
-                    modifier = Modifier.size(22.dp),
-                    tint = Theme[colors][onBackground],
-                )
+                DropdownMenuItem(onClick = { expanded = false }) {
+                    Text("Copy link")
+                }
+                DropdownMenuItem(onClick = { expanded = false }) {
+                    Text("Mute")
+                }
+                DropdownMenuItem(onClick = { expanded = false }) {
+                    Text("Not interested")
+                }
+                DropdownMenuItem(
+                    onClick = { expanded = false },
+                    style = DropdownMenuItemStyle.Destructive,
+                ) {
+                    Text("Report")
+                }
             }
+        },
+    ) {
+        IconButton(
+            onClick = { expanded = expanded.not() },
+            style = ButtonStyle.Ghost,
+            buttonSize = ButtonSize.Small,
+        ) {
+            Icon(
+                imageVector = Lucide.Ellipsis,
+                contentDescription = "Post options",
+                modifier = Modifier.size(22.dp),
+                tint = Theme[colors][onBackground],
+            )
         }
     }
 }
@@ -460,36 +403,30 @@ private fun PostImage(url: String) {
 private fun PostActions(post: SocialPost) {
     val actionColor = Theme[colors][muted]
 
-    Row(
-        modifier = Modifier.offset(x = (-20).dp),
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        CountedActionButton(
-            count = post.likes,
-            color = actionColor,
-            onClick = {},
-        ) { color ->
-            Icon(Lucide.Heart, contentDescription = "Like", modifier = Modifier.size(25.dp), tint = color)
-        }
-        CountedActionButton(
-            count = post.replies,
-            color = actionColor,
-            onClick = {},
-        ) { color ->
-            Icon(
-                Lucide.MessageCircle,
-                contentDescription = "Reply",
-                modifier = Modifier.size(25.dp),
-                tint = color,
-            )
-        }
-        ActionButton(
-            color = actionColor,
-            onClick = {},
-        ) { color ->
-            Icon(Lucide.Repeat2, contentDescription = "Repost", modifier = Modifier.size(25.dp), tint = color)
-        }
+    CountedActionButton(
+        count = post.likes,
+        color = actionColor,
+        onClick = {},
+    ) { color ->
+        Icon(Lucide.Heart, contentDescription = "Like", modifier = Modifier.size(25.dp), tint = color)
+    }
+    CountedActionButton(
+        count = post.replies,
+        color = actionColor,
+        onClick = {},
+    ) { color ->
+        Icon(
+            Lucide.MessageCircle,
+            contentDescription = "Reply",
+            modifier = Modifier.size(25.dp),
+            tint = color,
+        )
+    }
+    ActionButton(
+        color = actionColor,
+        onClick = {},
+    ) { color ->
+        Icon(Lucide.Repeat2, contentDescription = "Repost", modifier = Modifier.size(25.dp), tint = color)
     }
 }
 

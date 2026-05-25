@@ -102,6 +102,7 @@ fun SocialApp() {
                     ProfilePage(
                         profileId = route.profileId,
                         onBack = { navController.navigateUp() },
+                        onPostClick = { postId -> navController.navigate(PostRoute(postId)) },
                         onProfileClick = {
                             navController.navigate(ProfileRoute("john_mobbin")) {
                                 launchSingleTop = true

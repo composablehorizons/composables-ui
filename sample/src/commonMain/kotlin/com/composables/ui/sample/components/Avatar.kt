@@ -9,6 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import com.composables.ui.components.ButtonSize
+import com.composables.ui.components.ButtonStyle
+import com.composables.ui.components.IconButton
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.uripainter.rememberUriPainter
@@ -29,4 +32,25 @@ internal fun Avatar(
             .background(Theme[colors][border]),
         contentScale = ContentScale.Crop,
     )
+}
+
+@Composable
+internal fun AvatarButton(
+    url: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = modifier,
+        style = ButtonStyle.Ghost,
+        shape = CircleShape,
+        buttonSize = ButtonSize.Small,
+    ) {
+        Avatar(
+            url = url,
+            size = 44,
+            modifier = Modifier.clip(CircleShape),
+        )
+    }
 }

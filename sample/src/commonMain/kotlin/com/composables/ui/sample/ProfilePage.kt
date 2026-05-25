@@ -6,16 +6,13 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -42,6 +39,7 @@ import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.MessageCircle
 import com.composables.icons.lucide.Repeat2
 import com.composables.ui.components.Button
+import com.composables.ui.components.ButtonSize
 import com.composables.ui.components.ButtonStyle
 import com.composables.ui.components.DropdownMenu
 import com.composables.ui.components.DropdownMenuAlignment
@@ -59,6 +57,8 @@ import com.composables.ui.components.TabList
 import com.composables.ui.components.Text
 import com.composables.ui.components.Toolbar
 import com.composables.ui.sample.components.Avatar
+import com.composables.ui.sample.components.AvatarButton
+import com.composables.ui.sample.components.FeedPost
 import com.composables.ui.theme.background
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
@@ -151,13 +151,31 @@ private val fakeProfiles = listOf(
         followerCount = "18.4k followers",
         avatarUrl = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=240",
         posts = listOf(
-            ProfilePost("rachel-tea", "7m", "There is about to be some piping hot tea spillage in the plant group chat.", "2", "4"),
+            ProfilePost(
+                "rachel-tea",
+                "7m",
+                "There is about to be some piping hot tea spillage in the plant group chat.",
+                "2",
+                "4"
+            ),
             ProfilePost("rachel-fern", "1h", "My fern has entered its dramatic era again.", "6", "33"),
-            ProfilePost("rachel-cuttings", "5h", "Cuttings update: everyone has roots except the one I cared about most.", "8", "91"),
+            ProfilePost(
+                "rachel-cuttings",
+                "5h",
+                "Cuttings update: everyone has roots except the one I cared about most.",
+                "8",
+                "91"
+            ),
         ),
         replies = listOf(
             ProfilePost("rachel-reply-pot", "2h", "That pot is doing a lot of emotional support work.", "1", "12"),
-            ProfilePost("rachel-reply-light", "6h", "Move it three inches left and pretend that was always the plan.", "3", "26"),
+            ProfilePost(
+                "rachel-reply-light",
+                "6h",
+                "Move it three inches left and pretend that was always the plan.",
+                "3",
+                "26"
+            ),
         ),
     ),
     Profile(
@@ -174,7 +192,13 @@ private val fakeProfiles = listOf(
             ProfilePost("ashton-moss", "9h", "Moss poles are furniture now and I will not hear otherwise.", "5", "48"),
         ),
         replies = listOf(
-            ProfilePost("ashton-reply-water", "1h", "I use reminders and still manage to freestyle the watering schedule.", "4", "19"),
+            ProfilePost(
+                "ashton-reply-water",
+                "1h",
+                "I use reminders and still manage to freestyle the watering schedule.",
+                "4",
+                "19"
+            ),
             ProfilePost("ashton-reply-window", "7h", "North window plants deserve more respect.", "2", "14"),
         ),
     ),
@@ -187,9 +211,27 @@ private val fakeProfiles = listOf(
         followerCount = "9,812 followers",
         avatarUrl = "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=240",
         posts = listOf(
-            ProfilePost("jungle-chat", "1h", "Plant parent social app posts are about to turn into group chat energy and I am ready.", "7", "56"),
-            ProfilePost("jungle-humidifier", "4h", "Bought a humidifier and accidentally created a microclimate.", "11", "84"),
-            ProfilePost("jungle-trail", "1d", "Weekend plan: nursery, coffee, pretend we have self-control.", "6", "63"),
+            ProfilePost(
+                "jungle-chat",
+                "1h",
+                "Plant parent social app posts are about to turn into group chat energy and I am ready.",
+                "7",
+                "56"
+            ),
+            ProfilePost(
+                "jungle-humidifier",
+                "4h",
+                "Bought a humidifier and accidentally created a microclimate.",
+                "11",
+                "84"
+            ),
+            ProfilePost(
+                "jungle-trail",
+                "1d",
+                "Weekend plan: nursery, coffee, pretend we have self-control.",
+                "6",
+                "63"
+            ),
         ),
         replies = listOf(
             ProfilePost("jungle-reply-shelf", "3h", "Second shelf is not optional. It is infrastructure.", "2", "31"),
@@ -205,7 +247,13 @@ private val fakeProfiles = listOf(
         followerCount = "2,341 followers",
         avatarUrl = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=240",
         posts = listOf(
-            ProfilePost("rootbound-balcony", "2h", "Repotted one monstera and somehow ended up cleaning the entire balcony.", "9", "83"),
+            ProfilePost(
+                "rootbound-balcony",
+                "2h",
+                "Repotted one monstera and somehow ended up cleaning the entire balcony.",
+                "9",
+                "83"
+            ),
             ProfilePost("rootbound-mix", "5h", "Today’s soil mix: bark, perlite, compost, confidence.", "4", "36"),
             ProfilePost("rootbound-roots", "1d", "Healthy roots are the plant version of good gossip.", "7", "58"),
         ),
@@ -252,6 +300,7 @@ private data class ProfilePost(
 internal fun ProfilePage(
     profileId: String,
     onBack: () -> Unit,
+    onPostClick: (String) -> Unit,
     onProfileClick: () -> Unit,
 ) {
     val profile = fakeProfiles.firstOrNull { it.id == profileId } ?: fakeProfiles.first()
@@ -269,11 +318,7 @@ internal fun ProfilePage(
     )
 
     ScreenScaffold {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Theme[colors][background]),
-        ) {
+        Column(modifier = Modifier.fillMaxSize()) {
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -321,6 +366,7 @@ internal fun ProfilePage(
                             ProfilePostRow(
                                 profile = profile,
                                 post = post,
+                                onClick = { onPostClick(post.id) },
                             )
                             if (index < visiblePosts.lastIndex) {
                                 HorizontalSeparator()
@@ -340,19 +386,39 @@ private fun ProfileToolbar(onBack: () -> Unit) {
         backgroundColor = Theme[colors][background],
         leading = {
             IconButton(onClick = onBack, style = ButtonStyle.Ghost) {
-                Icon(Lucide.ArrowLeft, contentDescription = "Back", modifier = Modifier.size(28.dp), tint = Theme[colors][onBackground])
+                Icon(
+                    Lucide.ArrowLeft,
+                    contentDescription = "Back",
+                    modifier = Modifier.size(28.dp),
+                    tint = Theme[colors][onBackground]
+                )
             }
             Text("Back")
         },
         trailing = {
             IconButton(onClick = {}, style = ButtonStyle.Ghost) {
-                Icon(Lucide.Instagram, contentDescription = "Instagram", modifier = Modifier.size(28.dp), tint = Theme[colors][onBackground])
+                Icon(
+                    Lucide.Instagram,
+                    contentDescription = "Instagram",
+                    modifier = Modifier.size(28.dp),
+                    tint = Theme[colors][onBackground]
+                )
             }
             IconButton(onClick = {}, style = ButtonStyle.Ghost) {
-                Icon(Lucide.Bell, contentDescription = "Notifications", modifier = Modifier.size(28.dp), tint = Theme[colors][onBackground])
+                Icon(
+                    Lucide.Bell,
+                    contentDescription = "Notifications",
+                    modifier = Modifier.size(28.dp),
+                    tint = Theme[colors][onBackground]
+                )
             }
             IconButton(onClick = {}, style = ButtonStyle.Ghost) {
-                Icon(Lucide.CircleEllipsis, contentDescription = "More", modifier = Modifier.size(28.dp), tint = Theme[colors][onBackground])
+                Icon(
+                    Lucide.CircleEllipsis,
+                    contentDescription = "More",
+                    modifier = Modifier.size(28.dp),
+                    tint = Theme[colors][onBackground]
+                )
             }
         }
     )
@@ -445,24 +511,37 @@ private val ProfileFeedTab.label: String
 private fun ProfilePostRow(
     profile: Profile,
     post: ProfilePost,
+    onClick: () -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 14.dp, vertical = 14.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        Avatar(profile.avatarUrl, size = 44)
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            ProfilePostHeader(profile = profile, post = post)
+    FeedPost(
+        onClick = onClick,
+        avatar = {
+            AvatarButton(
+                url = profile.avatarUrl,
+                onClick = onClick,
+            )
+        },
+        authorName = {
+            Text(
+                text = profile.handle,
+                style = TextStyle(fontWeight = FontWeight.Bold),
+            )
+        },
+        timestamp = {
+            Text(
+                text = post.age,
+                color = Theme[colors][muted],
+            )
+        },
+        overflow = { ProfilePostOverflowMenu() },
+        body = {
             Text(
                 text = post.body,
                 color = Theme[colors][onBackground],
             )
-            if (post.quoteAuthor != null && post.quoteBody != null && post.quoteReplies != null) {
+        },
+        media = if (post.quoteAuthor != null && post.quoteBody != null && post.quoteReplies != null) {
+            {
                 QuotedPost(
                     avatarUrl = profile.avatarUrl,
                     author = post.quoteAuthor,
@@ -470,62 +549,53 @@ private fun ProfilePostRow(
                     replies = post.quoteReplies,
                 )
             }
-            ProfilePostActions(post)
-        }
+        } else {
+            null
+        },
+    ) {
+        ProfilePostActions(post)
     }
 }
 
 @Composable
-private fun ProfilePostHeader(
-    profile: Profile,
-    post: ProfilePost,
-) {
+private fun ProfilePostOverflowMenu() {
     var expanded by remember { mutableStateOf(false) }
 
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.Top,
-    ) {
-        Text(
-            text = profile.handle,
-            style = TextStyle(fontWeight = FontWeight.Bold),
-        )
-        Spacer(Modifier.weight(1f))
-        Text(
-            text = post.age,
-            color = Theme[colors][muted],
-        )
-        Spacer(Modifier.width(12.dp))
-        DropdownMenu(
-            expanded = expanded,
-            onExpandedChange = { expanded = it },
-            alignment = DropdownMenuAlignment.End,
-            panel = {
-                DropdownMenuPanel {
-                    DropdownMenuItem(onClick = { expanded = false }) {
-                        Text("Save")
-                    }
-                    DropdownMenuItem(onClick = { expanded = false }) {
-                        Text("Copy link")
-                    }
-                    DropdownMenuItem(onClick = { expanded = false }) {
-                        Text("Mute")
-                    }
-                    DropdownMenuItem(
-                        onClick = { expanded = false },
-                        style = DropdownMenuItemStyle.Destructive,
-                    ) {
-                        Text("Report")
-                    }
+    DropdownMenu(
+        expanded = expanded,
+        onExpandedChange = { expanded = it },
+        alignment = DropdownMenuAlignment.End,
+        panel = {
+            DropdownMenuPanel {
+                DropdownMenuItem(onClick = { expanded = false }) {
+                    Text("Save")
                 }
-            },
-        ) {
-            IconButton(
-                onClick = { expanded = expanded.not() },
-                style = ButtonStyle.Ghost,
-            ) {
-                Icon(Lucide.Ellipsis, contentDescription = "Post options", modifier = Modifier.size(22.dp), tint = Theme[colors][onBackground])
+                DropdownMenuItem(onClick = { expanded = false }) {
+                    Text("Copy link")
+                }
+                DropdownMenuItem(onClick = { expanded = false }) {
+                    Text("Mute")
+                }
+                DropdownMenuItem(
+                    onClick = { expanded = false },
+                    style = DropdownMenuItemStyle.Destructive,
+                ) {
+                    Text("Report")
+                }
             }
+        },
+    ) {
+        IconButton(
+            onClick = { expanded = expanded.not() },
+            style = ButtonStyle.Ghost,
+            buttonSize = ButtonSize.Small,
+        ) {
+            Icon(
+                Lucide.Ellipsis,
+                contentDescription = "Post options",
+                modifier = Modifier.size(22.dp),
+                tint = Theme[colors][onBackground],
+            )
         }
     }
 }
@@ -561,20 +631,14 @@ private fun QuotedPost(
 private fun ProfilePostActions(post: ProfilePost) {
     val actionColor = Theme[colors][muted]
 
-    Row(
-        modifier = Modifier.offset(x = (-20).dp),
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        ProfileActionButton(count = post.likes, color = actionColor) { color ->
-            Icon(Lucide.Heart, contentDescription = "Like", modifier = Modifier.size(25.dp), tint = color)
-        }
-        ProfileActionButton(count = post.replies, color = actionColor) { color ->
-            Icon(Lucide.MessageCircle, contentDescription = "Reply", modifier = Modifier.size(25.dp), tint = color)
-        }
-        Button(onClick = {}, style = ButtonStyle.Ghost) {
-            Icon(Lucide.Repeat2, contentDescription = "Repost", modifier = Modifier.size(25.dp), tint = actionColor)
-        }
+    ProfileActionButton(count = post.likes, color = actionColor) { color ->
+        Icon(Lucide.Heart, contentDescription = "Like", modifier = Modifier.size(25.dp), tint = color)
+    }
+    ProfileActionButton(count = post.replies, color = actionColor) { color ->
+        Icon(Lucide.MessageCircle, contentDescription = "Reply", modifier = Modifier.size(25.dp), tint = color)
+    }
+    Button(onClick = {}, style = ButtonStyle.Ghost) {
+        Icon(Lucide.Repeat2, contentDescription = "Repost", modifier = Modifier.size(25.dp), tint = actionColor)
     }
 }
 
