@@ -5,6 +5,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -300,7 +301,7 @@ private fun Color.isBright(): Boolean = luminance() > 0.5f
 @Composable
 private fun Modifier.bouncyPress(
     enabled: Boolean,
-    interactionSource: MutableInteractionSource,
+    interactionSource: InteractionSource,
 ): Modifier {
     if (!enabled) {
         return this
