@@ -58,6 +58,9 @@ import com.composables.ui.components.Toolbar
 import com.composables.ui.sample.components.Avatar
 import com.composables.ui.sample.components.AvatarButton
 import com.composables.ui.sample.components.FeedPost
+import com.composables.ui.sample.data.SocialProfile
+import com.composables.ui.sample.data.ProfilePost
+import com.composables.ui.sample.data.profiles
 import com.composables.ui.theme.background
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
@@ -72,209 +75,6 @@ import com.composeunstyled.theme.Theme
 private val ProfileMaxWidth = 700.dp
 private val WideProfileVerticalInset = 70.dp
 
-private val fakeProfiles = listOf(
-    Profile(
-        id = "john_mobbin",
-        name = "John",
-        handle = "john_mobbin",
-        badge = "social.app",
-        bio = "I love to travel, and hope to see more of the world each day",
-        followerCount = "1 follower",
-        avatarUrl = "https://images.unsplash.com/photo-1520412099551-62b6bafeb5bb?q=80&w=240",
-        posts = listOf(
-            ProfilePost(
-                id = "botany-follow",
-                age = "4h",
-                body = "Here's a post you should follow if you love botany @jane_mobbin",
-                replies = "2",
-                likes = "11",
-            ),
-            ProfilePost(
-                id = "morocco-dream",
-                age = "4h",
-                body = "Always a dream to see the Medina in Morocco!",
-                quoteAuthor = "earthpix",
-                quoteBody = "What is one place you're absolutely traveling to by next year?",
-                quoteReplies = "237 replies",
-                replies = "9",
-                likes = "42",
-            ),
-            ProfilePost(
-                id = "plant-light",
-                age = "7h",
-                body = "Soft morning light makes every plant look like it has a personal photographer.",
-                replies = "4",
-                likes = "28",
-            ),
-            ProfilePost(
-                id = "tiny-garden",
-                age = "1d",
-                body = "Tiny balconies count as gardens if you care enough.",
-                replies = "5",
-                likes = "51",
-            ),
-        ),
-        replies = listOf(
-            ProfilePost(
-                id = "reply-greenhouse",
-                age = "2h",
-                body = "This is exactly why small greenhouses are dangerous. One shelf becomes a whole weekend project.",
-                replies = "1",
-                likes = "14",
-            ),
-            ProfilePost(
-                id = "reply-travel",
-                age = "6h",
-                body = "Adding this to the travel list. The light in that courtyard looks unreal.",
-                replies = "3",
-                likes = "22",
-                quoteAuthor = "jane_mobbin",
-                quoteBody = "The botanical garden in Palermo might be my favorite quiet place in the city.",
-                quoteReplies = "19 replies",
-            ),
-            ProfilePost(
-                id = "reply-balcony",
-                age = "1d",
-                body = "A balcony garden counts. The plants do not care about square footage.",
-                replies = "2",
-                likes = "31",
-            ),
-        ),
-    ),
-    Profile(
-        id = "iwetmyyplants",
-        name = "Rachel",
-        handle = "iwetmyyplants",
-        badge = "plant log",
-        bio = "Overwatering emotions, underwatering actual plants.",
-        followerCount = "18.4k followers",
-        avatarUrl = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=240",
-        posts = listOf(
-            ProfilePost(
-                "rachel-tea",
-                "7m",
-                "There is about to be some piping hot tea spillage in the plant group chat.",
-                "2",
-                "4"
-            ),
-            ProfilePost("rachel-fern", "1h", "My fern has entered its dramatic era again.", "6", "33"),
-            ProfilePost(
-                "rachel-cuttings",
-                "5h",
-                "Cuttings update: everyone has roots except the one I cared about most.",
-                "8",
-                "91"
-            ),
-        ),
-        replies = listOf(
-            ProfilePost("rachel-reply-pot", "2h", "That pot is doing a lot of emotional support work.", "1", "12"),
-            ProfilePost(
-                "rachel-reply-light",
-                "6h",
-                "Move it three inches left and pretend that was always the plan.",
-                "3",
-                "26"
-            ),
-        ),
-    ),
-    Profile(
-        id = "ashtonofplants",
-        name = "Ashton",
-        handle = "ashtonofplants",
-        badge = "social.app",
-        bio = "Plants, coffee, and saying I only need one more shelf.",
-        followerCount = "4,208 followers",
-        avatarUrl = "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=240",
-        posts = listOf(
-            ProfilePost("ashton-rachel", "5m", "oh my god rachel, thank goodness, you're here", "1", "18"),
-            ProfilePost("ashton-shelf", "3h", "The new shelf is full. I have learned nothing.", "9", "77"),
-            ProfilePost("ashton-moss", "9h", "Moss poles are furniture now and I will not hear otherwise.", "5", "48"),
-        ),
-        replies = listOf(
-            ProfilePost(
-                "ashton-reply-water",
-                "1h",
-                "I use reminders and still manage to freestyle the watering schedule.",
-                "4",
-                "19"
-            ),
-            ProfilePost("ashton-reply-window", "7h", "North window plants deserve more respect.", "2", "14"),
-        ),
-    ),
-    Profile(
-        id = "jungle_dudes",
-        name = "Jungle Dudes",
-        handle = "jungle_dudes",
-        badge = "duo",
-        bio = "Two friends slowly turning an apartment into a conservatory.",
-        followerCount = "9,812 followers",
-        avatarUrl = "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=240",
-        posts = listOf(
-            ProfilePost(
-                "jungle-chat",
-                "1h",
-                "Plant parent social app posts are about to turn into group chat energy and I am ready.",
-                "7",
-                "56"
-            ),
-            ProfilePost(
-                "jungle-humidifier",
-                "4h",
-                "Bought a humidifier and accidentally created a microclimate.",
-                "11",
-                "84"
-            ),
-            ProfilePost(
-                "jungle-trail",
-                "1d",
-                "Weekend plan: nursery, coffee, pretend we have self-control.",
-                "6",
-                "63"
-            ),
-        ),
-        replies = listOf(
-            ProfilePost("jungle-reply-shelf", "3h", "Second shelf is not optional. It is infrastructure.", "2", "31"),
-            ProfilePost("jungle-reply-soil", "8h", "Chunky soil mix changed everything.", "1", "17"),
-        ),
-    ),
-    Profile(
-        id = "rootbound",
-        name = "Maya",
-        handle = "rootbound",
-        badge = "repotting",
-        bio = "I repot for fun and then complain about the mess.",
-        followerCount = "2,341 followers",
-        avatarUrl = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=240",
-        posts = listOf(
-            ProfilePost(
-                "rootbound-balcony",
-                "2h",
-                "Repotted one monstera and somehow ended up cleaning the entire balcony.",
-                "9",
-                "83"
-            ),
-            ProfilePost("rootbound-mix", "5h", "Today’s soil mix: bark, perlite, compost, confidence.", "4", "36"),
-            ProfilePost("rootbound-roots", "1d", "Healthy roots are the plant version of good gossip.", "7", "58"),
-        ),
-        replies = listOf(
-            ProfilePost("rootbound-reply-fern", "4h", "Ferns do not negotiate. They issue demands.", "5", "44"),
-            ProfilePost("rootbound-reply-pot", "11h", "Drainage holes are not a suggestion.", "2", "29"),
-        ),
-    ),
-)
-
-private data class Profile(
-    val id: String,
-    val name: String,
-    val handle: String,
-    val badge: String,
-    val bio: String,
-    val followerCount: String,
-    val avatarUrl: String,
-    val posts: List<ProfilePost>,
-    val replies: List<ProfilePost>,
-)
-
 @kotlin.jvm.JvmInline
 private value class ProfileFeedTab private constructor(val value: String) {
     companion object {
@@ -284,17 +84,6 @@ private value class ProfileFeedTab private constructor(val value: String) {
     }
 }
 
-private data class ProfilePost(
-    val id: String,
-    val age: String,
-    val body: String,
-    val replies: String,
-    val likes: String,
-    val quoteAuthor: String? = null,
-    val quoteBody: String? = null,
-    val quoteReplies: String? = null,
-)
-
 @Composable
 fun ProfilePage(
     profileId: String,
@@ -302,7 +91,7 @@ fun ProfilePage(
     onPostClick: (String) -> Unit,
     onProfileClick: () -> Unit,
 ) {
-    val profile = fakeProfiles.firstOrNull { it.id == profileId } ?: fakeProfiles.first()
+    val profile = profiles.firstOrNull { it.id == profileId } ?: profiles.first()
     var selectedTab by remember { mutableStateOf(ProfileFeedTab.Posts) }
     val visiblePosts = when (selectedTab) {
         ProfileFeedTab.Replies -> profile.replies
@@ -424,7 +213,7 @@ private fun ProfileToolbar(onBack: () -> Unit) {
 }
 
 @Composable
-private fun ProfileHeader(profile: Profile) {
+private fun ProfileHeader(profile: SocialProfile) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -508,7 +297,7 @@ private val ProfileFeedTab.label: String
 
 @Composable
 private fun ProfilePostRow(
-    profile: Profile,
+    profile: SocialProfile,
     post: ProfilePost,
     onClick: () -> Unit,
 ) {

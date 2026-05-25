@@ -52,6 +52,8 @@ import com.composables.ui.components.ScreenScaffold
 import com.composables.ui.components.Text
 import com.composables.ui.sample.components.AvatarButton
 import com.composables.ui.sample.components.FeedPost
+import com.composables.ui.sample.data.SocialPost
+import com.composables.ui.sample.data.feedPosts
 import com.composables.ui.theme.background
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
@@ -61,145 +63,6 @@ import com.composables.uripainter.rememberUriPainter
 import com.composeunstyled.currentWidthBreakpoint
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
-
-data class SocialPost(
-    val id: String,
-    val profileId: String,
-    val author: String,
-    val age: String,
-    val body: String,
-    val replies: String,
-    val likes: String,
-    val avatarUrl: String,
-    val imageUrl: String? = null,
-)
-
-private val timelinePosts = listOf(
-    SocialPost(
-        id = "tea-spillage",
-        profileId = "iwetmyyplants",
-        author = "iwetmyyplants",
-        age = "7m",
-        body = "I'm just going to say what we are all thinking and knowing is about to go downity down:\nThere is about to be some piping hot tea spillage on here daily that people will be posting and we are all going to be sitting back like:",
-        replies = "2",
-        likes = "4",
-        avatarUrl = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=240",
-        imageUrl = "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1200",
-    ),
-    SocialPost(
-        id = "rachel",
-        profileId = "ashtonofplants",
-        author = "ashtonofplants",
-        age = "5m",
-        body = "oh my god rachel, thank goodness, you're here",
-        replies = "1",
-        likes = "18",
-        avatarUrl = "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=240",
-    ),
-    SocialPost(
-        id = "plant-chat",
-        profileId = "jungle_dudes",
-        author = "jungle_dudes",
-        age = "1h",
-        body = "Plant parent social app posts are about to turn into group chat energy and I am ready.",
-        replies = "7",
-        likes = "56",
-        avatarUrl = "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=240",
-    ),
-    SocialPost(
-        id = "soil-report",
-        profileId = "rootbound",
-        author = "rootbound",
-        age = "2h",
-        body = "Repotted one monstera and somehow ended up cleaning the entire balcony. This app needs a support group for people who say \"quick plant chore\" and vanish for three hours.",
-        replies = "9",
-        likes = "83",
-        avatarUrl = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=240",
-    ),
-    SocialPost(
-        id = "sunlight-map",
-        profileId = "window_seat",
-        author = "window_seat",
-        age = "3h",
-        body = "The west window is officially premium real estate. Applications now open. Snake plants need not apply; you know you can survive anywhere.",
-        replies = "4",
-        likes = "41",
-        avatarUrl = "https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=240",
-        imageUrl = "https://images.unsplash.com/photo-1495908333425-29a1e0918c5f?q=80&w=1200",
-    ),
-    SocialPost(
-        id = "watering-day",
-        profileId = "leafledger",
-        author = "leafledger",
-        age = "4h",
-        body = "Watering day is less of a task and more of a tiny audit where every plant explains what I did wrong last week.",
-        replies = "12",
-        likes = "104",
-        avatarUrl = "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=240",
-    ),
-    SocialPost(
-        id = "cutting-club",
-        profileId = "propagation_station",
-        author = "propagation_station",
-        age = "5h",
-        body = "The pothos cutting has roots. I am now emotionally attached to a glass jar.",
-        replies = "6",
-        likes = "67",
-        avatarUrl = "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=240",
-        imageUrl = "https://images.unsplash.com/photo-1463936575829-25148e1db1b8?q=80&w=1200",
-    ),
-    SocialPost(
-        id = "fern-drama",
-        profileId = "humid_habits",
-        author = "humid_habits",
-        age = "6h",
-        body = "Boston fern update: still dramatic. Mist level increased. Negotiations ongoing.",
-        replies = "3",
-        likes = "29",
-        avatarUrl = "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?q=80&w=240",
-    ),
-    SocialPost(
-        id = "new-shelf",
-        profileId = "shelf_control",
-        author = "shelf_control",
-        age = "8h",
-        body = "Bought a shelf for plants. Plants filled shelf. Need shelf for shelf.",
-        replies = "15",
-        likes = "138",
-        avatarUrl = "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=240",
-    ),
-    SocialPost(
-        id = "morning-check",
-        profileId = "photosynthesquad",
-        author = "photosynthesquad",
-        age = "10h",
-        body = "Morning check-in: everyone alive, one suspicious yellow leaf, and a calathea staring at me like rent is due.",
-        replies = "8",
-        likes = "92",
-        avatarUrl = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=240",
-    ),
-    SocialPost(
-        id = "ceramic-find",
-        profileId = "potluck",
-        author = "potluck",
-        age = "12h",
-        body = "Found the perfect ceramic pot and now I need a plant worthy of it. This is how they get you.",
-        replies = "2",
-        likes = "37",
-        avatarUrl = "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=240",
-        imageUrl = "https://images.unsplash.com/photo-1485955900006-10f4d324d411?q=80&w=1200",
-    ),
-    SocialPost(
-        id = "leaf-cleaning",
-        profileId = "dusty_leaves",
-        author = "dusty_leaves",
-        age = "14h",
-        body = "Wiping leaves is basically skincare for plants and I will not be taking questions.",
-        replies = "11",
-        likes = "76",
-        avatarUrl = "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=240",
-    ),
-)
 
 private val FeedMaxWidth = 700.dp
 private val WideFeedVerticalInset = 70.dp
@@ -273,7 +136,7 @@ private fun SocialTimeline(
                 contentPadding = PaddingValues(bottom = 96.dp),
             ) {
                 itemsIndexed(
-                    items = timelinePosts,
+                    items = feedPosts,
                     key = { _, post -> post.id },
                 ) { index, post ->
                     SocialPostRow(
@@ -281,7 +144,7 @@ private fun SocialTimeline(
                         onClick = { onPostClick(post) },
                         onProfileClick = { onProfileClick(post.profileId) },
                     )
-                    if (index < timelinePosts.lastIndex) {
+                    if (index < feedPosts.lastIndex) {
                         HorizontalSeparator()
                     }
                 }
@@ -314,11 +177,7 @@ private fun SocialPostRow(
             }
         },
         timestamp = {
-            Text(
-                text = post.age,
-                color = Theme[colors][muted],
-                style = TextStyle(fontSize = 18.sp, lineHeight = 24.sp),
-            )
+            Text(post.age)
         },
         overflow = { PostOverflowMenu() },
         body = {
