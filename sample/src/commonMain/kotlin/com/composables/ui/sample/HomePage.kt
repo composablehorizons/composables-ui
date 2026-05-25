@@ -52,6 +52,7 @@ import com.composables.ui.components.DropdownMenuAlignment
 import com.composables.ui.components.DropdownMenuItem
 import com.composables.ui.components.DropdownMenuItemStyle
 import com.composables.ui.components.DropdownMenuPanel
+import com.composables.ui.components.ExpandedWidthBreakpoint
 import com.composables.ui.components.HorizontalSeparator
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
@@ -63,7 +64,7 @@ import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
-import com.composeunstyled.currentWindowContainerSize
+import com.composeunstyled.currentWidthBreakpoint
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 import com.composables.uripainter.rememberUriPainter
@@ -242,9 +243,8 @@ private fun SocialTimeline(
     onProfileClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val windowSize = currentWindowContainerSize()
-    val hasMeasuredWindowWidth = windowSize.width > 0.dp
-    val showFeedOutline = !hasMeasuredWindowWidth || windowSize.width > FeedMaxWidth
+    val widthBreakpoint = currentWidthBreakpoint()
+    val showFeedOutline = widthBreakpoint isAtLeast ExpandedWidthBreakpoint
     val feedShape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)
     val feedVerticalInset by animateDpAsState(
         targetValue = if (showFeedOutline) WideFeedVerticalInset else 0.dp,

@@ -10,6 +10,7 @@ import com.composables.ui.theme.background
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.onBackground
 import com.composeunstyled.FocusVisibilityProvider
+import com.composeunstyled.ProvideBreakpoints
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.TooltipHost
 import com.composeunstyled.theme.Theme
@@ -17,15 +18,20 @@ import com.composeunstyled.theme.Theme
 @Composable
 fun AppScaffold(content: @Composable () -> Unit) {
     AppTheme {
-        TooltipHost {
-            FocusVisibilityProvider {
-                ProvideContentColor(Theme[colors][onBackground]) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Theme[colors][background]),
-                    ) {
-                        content()
+        ProvideBreakpoints(
+            widthBreakpoints = WidthBreakpoints,
+            heightBreakpoints = HeightBreakpoints,
+        ) {
+            TooltipHost {
+                FocusVisibilityProvider {
+                    ProvideContentColor(Theme[colors][onBackground]) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Theme[colors][background]),
+                        ) {
+                            content()
+                        }
                     }
                 }
             }

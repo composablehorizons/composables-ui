@@ -48,6 +48,7 @@ import com.composables.ui.components.DropdownMenuAlignment
 import com.composables.ui.components.DropdownMenuItem
 import com.composables.ui.components.DropdownMenuItemStyle
 import com.composables.ui.components.DropdownMenuPanel
+import com.composables.ui.components.ExpandedWidthBreakpoint
 import com.composables.ui.components.HorizontalSeparator
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
@@ -65,7 +66,7 @@ import com.composables.ui.theme.field
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
 import com.composables.ui.theme.onField
-import com.composeunstyled.currentWindowContainerSize
+import com.composeunstyled.currentWidthBreakpoint
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 
@@ -259,9 +260,8 @@ internal fun ProfilePage(
         ProfileFeedTab.Replies -> profile.replies
         else -> profile.posts
     }
-    val windowSize = currentWindowContainerSize()
-    val hasMeasuredWindowWidth = windowSize.width > 0.dp
-    val showProfileOutline = !hasMeasuredWindowWidth || windowSize.width > ProfileMaxWidth
+    val widthBreakpoint = currentWidthBreakpoint()
+    val showProfileOutline = widthBreakpoint isAtLeast ExpandedWidthBreakpoint
     val profileShape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)
     val profileVerticalInset by animateDpAsState(
         targetValue = if (showProfileOutline) WideProfileVerticalInset else 0.dp,
