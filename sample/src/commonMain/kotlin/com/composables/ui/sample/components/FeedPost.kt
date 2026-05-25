@@ -85,7 +85,10 @@ fun FeedPost(
                         }
                     }
                 }
-                Box(Modifier.size(20.dp)) {
+                Box(
+                    modifier = Modifier.size(FeedPostHeaderControlSize),
+                    contentAlignment = Alignment.Center,
+                ) {
                     overflow()
                 }
             }
@@ -101,3 +104,5 @@ fun FeedPost(
         }
     }
 }
+
+private val FeedPostHeaderControlSize = 20.dp

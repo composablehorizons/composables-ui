@@ -62,7 +62,7 @@ import com.composeunstyled.currentWidthBreakpoint
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 
-internal data class SocialPost(
+data class SocialPost(
     val id: String,
     val profileId: String,
     val author: String,
@@ -205,7 +205,7 @@ private val FeedMaxWidth = 700.dp
 private val WideFeedVerticalInset = 70.dp
 
 @Composable
-internal fun HomePage(
+fun HomePage(
     onPostClick: (SocialPost) -> Unit,
     onProfileClick: (String) -> Unit,
 ) {

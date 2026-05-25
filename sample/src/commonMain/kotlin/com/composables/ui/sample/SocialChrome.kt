@@ -29,7 +29,7 @@ import com.composables.ui.theme.onBackground
 import com.composeunstyled.theme.Theme
 
 @Composable
-internal fun SocialBottomBar(
+fun SocialBottomBar(
     onProfileClick: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {

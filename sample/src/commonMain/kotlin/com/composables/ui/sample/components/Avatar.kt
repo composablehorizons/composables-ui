@@ -18,7 +18,7 @@ import com.composables.uripainter.rememberUriPainter
 import com.composeunstyled.theme.Theme
 
 @Composable
-internal fun Avatar(
+fun Avatar(
     url: String,
     size: Int,
     modifier: Modifier = Modifier,
@@ -35,7 +35,7 @@ internal fun Avatar(
 }
 
 @Composable
-internal fun AvatarButton(
+fun AvatarButton(
     url: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,

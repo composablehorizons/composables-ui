@@ -296,7 +296,7 @@ private data class ProfilePost(
 )
 
 @Composable
-internal fun ProfilePage(
+fun ProfilePage(
     profileId: String,
     onBack: () -> Unit,
     onPostClick: (String) -> Unit,
