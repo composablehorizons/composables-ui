@@ -66,7 +66,7 @@ fun FeedPost(
         Box(Modifier.size(44.dp)) {
             avatar()
         }
-        Column(Modifier.weight(1f)) {
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -87,16 +87,14 @@ fun FeedPost(
                     overflow()
                 }
             }
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                body()
-                media?.invoke()
-                Row(
-                    modifier = Modifier.offset(x = (-20).dp),
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    actions()
-                }
+            body()
+            media?.invoke()
+            Row(
+                modifier = Modifier.offset(x = (-20).dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                actions()
             }
         }
     }
