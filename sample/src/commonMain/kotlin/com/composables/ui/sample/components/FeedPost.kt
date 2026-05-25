@@ -67,7 +67,10 @@ fun FeedPost(
             avatar()
         }
         Column(Modifier.weight(1f)) {
-            Row(Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Row(
                     modifier = Modifier.weight(1f),
                     verticalAlignment = Alignment.CenterVertically,
@@ -80,9 +83,7 @@ fun FeedPost(
                         }
                     }
                 }
-                Box(
-                    modifier = Modifier.offset(x = 10.dp, y = (-10).dp),
-                ) {
+                Box(Modifier.size(20.dp)) {
                     overflow()
                 }
             }

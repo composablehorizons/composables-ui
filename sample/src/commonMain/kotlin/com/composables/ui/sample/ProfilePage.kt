@@ -585,6 +585,7 @@ private fun ProfilePostOverflowMenu() {
             onClick = { expanded = expanded.not() },
             style = ButtonStyle.Ghost,
             buttonSize = ButtonSize.Small,
+            indication = null,
         ) {
             Icon(
                 Lucide.Ellipsis,

@@ -371,11 +371,11 @@ private fun PostOverflowMenu() {
             onClick = { expanded = expanded.not() },
             style = ButtonStyle.Ghost,
             buttonSize = ButtonSize.Small,
+            indication = null,
         ) {
             Icon(
                 imageVector = Lucide.Ellipsis,
                 contentDescription = "Post options",
-                modifier = Modifier.size(22.dp),
                 tint = Theme[colors][onBackground],
             )
         }

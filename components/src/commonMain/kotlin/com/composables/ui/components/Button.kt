@@ -3,6 +3,7 @@ package com.composables.ui.components
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.Indication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.InteractionSource
@@ -97,22 +98,25 @@ fun Button(
     contentPadding: PaddingValues = buttonPaddingFor(buttonSize, style),
     borderWidth: Dp = 1.dp,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    indication: Indication? = buttonIndicationFor(style, buttonBackgroundColorFor(style)),
     content: @Composable RowScope.() -> Unit,
 ) {
     val hovered by interactionSource.collectIsHoveredAsState()
+    val backgroundColor = buttonBackgroundColorFor(style)
 
     BaseButton(
         onClick = onClick,
         modifier = modifier.size(buttonSize, style),
         enabled = enabled,
         style = style,
-        backgroundColor = buttonBackgroundColorFor(style),
+        backgroundColor = backgroundColor,
         contentColor = buttonContentColorFor(style),
         shape = shape,
         contentPadding = contentPadding,
         borderColor = buttonBorderColorFor(style),
         borderWidth = borderWidth,
         interactionSource = interactionSource,
+        indication = indication,
         content = {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
@@ -136,20 +140,24 @@ fun IconButton(
     buttonSize: ButtonSize = ButtonSize.Default,
     borderWidth: Dp = 1.dp,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    indication: Indication? = buttonIndicationFor(style, buttonBackgroundColorFor(style)),
     content: @Composable () -> Unit,
 ) {
+    val backgroundColor = buttonBackgroundColorFor(style)
+
     BaseButton(
         onClick = onClick,
         modifier = modifier.size(iconButtonSizeFor(buttonSize)),
         enabled = enabled,
         style = style,
-        backgroundColor = buttonBackgroundColorFor(style),
+        backgroundColor = backgroundColor,
         contentColor = buttonContentColorFor(style),
         shape = shape,
         contentPadding = NoButtonPadding,
         borderColor = buttonBorderColorFor(style),
         borderWidth = borderWidth,
         interactionSource = interactionSource,
+        indication = indication,
         content = content,
     )
 }
@@ -249,10 +257,9 @@ private fun BaseButton(
     borderColor: Color,
     borderWidth: Dp,
     interactionSource: MutableInteractionSource,
+    indication: Indication?,
     content: @Composable () -> Unit,
 ) {
-    val indication = buttonIndicationFor(style, backgroundColor)
-
     UnstyledButton(
         onClick = onClick,
         enabled = enabled,
