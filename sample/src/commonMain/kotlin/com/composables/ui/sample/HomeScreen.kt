@@ -54,7 +54,6 @@ import com.composables.ui.sample.components.AvatarButton
 import com.composables.ui.sample.components.FeedPost
 import com.composables.ui.sample.data.SocialPost
 import com.composables.ui.sample.data.feedPosts
-import com.composables.ui.theme.background
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.muted
@@ -73,12 +72,8 @@ fun HomeScreen(
     onProfileClick: (String) -> Unit,
 ) {
     ScreenScaffold {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Theme[colors][background]),
-        ) {
-            SocialTimeline(
+        Box(Modifier.fillMaxSize()) {
+            SocialFeed(
                 modifier = Modifier
                     .fillMaxSize()
                     .fillMaxWidth(),
@@ -94,7 +89,7 @@ fun HomeScreen(
 }
 
 @Composable
-private fun SocialTimeline(
+private fun SocialFeed(
     onPostClick: (SocialPost) -> Unit,
     onProfileClick: (String) -> Unit,
     modifier: Modifier = Modifier,
