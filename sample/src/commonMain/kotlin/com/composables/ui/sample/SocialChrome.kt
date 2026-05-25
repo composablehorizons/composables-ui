@@ -16,11 +16,12 @@ import com.composables.ui.components.NavigationBarItem
 
 @Composable
 fun SocialBottomBar(
+    onHomeClick: () -> Unit = {},
     onProfileClick: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     NavigationBar(modifier) {
-        NavigationBarItem(selected = true, onClick = {}) {
+        NavigationBarItem(selected = true, onClick = onHomeClick) {
             Icon(Lucide.House, contentDescription = "Home", modifier = Modifier.size(32.dp))
         }
         NavigationBarItem(selected = false, onClick = {}) {

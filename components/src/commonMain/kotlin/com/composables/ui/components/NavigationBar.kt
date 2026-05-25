@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.composables.ui.theme.background
 import com.composables.ui.theme.border
@@ -29,6 +30,7 @@ fun NavigationBar(
         modifier = modifier
             .fillMaxWidth()
             .height(80.dp)
+            .pointerInput(Unit) {}
             .border(width = 1.dp, color = Theme[colors][border])
             .background(Theme[colors][background])
             .padding(horizontal = 24.dp),

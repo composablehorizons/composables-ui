@@ -1,5 +1,7 @@
 package com.composables.ui.sample
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -17,7 +19,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -27,7 +32,6 @@ import com.composables.ui.components.AppScaffold
 import com.composables.ui.components.ExpandedWidthBreakpoint
 import com.composables.ui.theme.InteractionMode
 import com.composables.ui.theme.LocalInteractionMode
-import com.composables.ui.theme.background
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composeunstyled.currentWidthBreakpoint
@@ -68,7 +72,8 @@ fun SocialApp() {
                         modifier = Modifier.fillMaxSize(),
                     )
                     SocialBottomBar(
-                        onProfileClick = { navController.navigateToProfile("john_mobbin") },
+                        onHomeClick = { navController.navigateToHomeTab() },
+                        onProfileClick = { navController.navigateToProfileTab() },
                         modifier = Modifier.align(Alignment.BottomCenter),
                     )
                 }
@@ -82,82 +87,142 @@ private fun SocialNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
-    NavHost(
-        navController = navController,
-        startDestination = HomeRoute,
-        modifier = modifier.background(Theme[colors][background]),
-        enterTransition = {
-            slideInHorizontally(
-                animationSpec = tween(
-                    durationMillis = NavigationTransitionDurationMillis,
-                    easing = NavigationTransitionEasing,
-                ),
-                initialOffsetX = { it },
-            )
-        },
-        exitTransition = {
-            slideOutHorizontally(
-                animationSpec = tween(
-                    durationMillis = NavigationTransitionDurationMillis,
-                    easing = NavigationTransitionEasing,
-                ),
-                targetOffsetX = { -it / NavigationParallaxDivisor },
-            ) + fadeOut(
-                animationSpec = tween(
-                    durationMillis = NavigationTransitionDurationMillis,
-                    easing = NavigationTransitionEasing,
-                ),
-                targetAlpha = NavigationDimmedAlpha,
-            )
-        },
-        popEnterTransition = {
-            slideInHorizontally(
-                animationSpec = tween(
-                    durationMillis = NavigationTransitionDurationMillis,
-                    easing = NavigationTransitionEasing,
-                ),
-                initialOffsetX = { -it / NavigationParallaxDivisor },
-            ) + fadeIn(
-                animationSpec = tween(
-                    durationMillis = NavigationTransitionDurationMillis,
-                    easing = NavigationTransitionEasing,
-                ),
-                initialAlpha = NavigationDimmedAlpha,
-            )
-        },
-        popExitTransition = {
-            slideOutHorizontally(
-                animationSpec = tween(
-                    durationMillis = NavigationTransitionDurationMillis,
-                    easing = NavigationTransitionEasing,
-                ),
-                targetOffsetX = { it },
-            )
-        },
-    ) {
-        composable<HomeRoute> {
-            HomeScreen(
-                onPostClick = { post -> navController.navigate(PostRoute(post.id)) },
-                onProfileClick = { profileId -> navController.navigate(ProfileRoute(profileId)) },
-            )
-        }
-        composable<PostRoute> {
-            PostDetailScreen()
-        }
-        composable<ProfileRoute> { backStackEntry ->
-            val route = backStackEntry.toRoute<ProfileRoute>()
-            ProfileScreen(
-                profileId = route.profileId,
-                onBack = { navController.navigateUp() },
-                onPostClick = { postId -> navController.navigate(PostRoute(postId)) },
-                onProfileClick = { navController.navigateToProfile("john_mobbin") },
-            )
+    Box(modifier = modifier.background(Color.Black)) {
+        NavHost(
+            navController = navController,
+            startDestination = HomeRoute,
+            modifier = Modifier.fillMaxSize(),
+            enterTransition = {
+                if (targetState.destination.isTabDestination()) {
+                    EnterTransition.None
+                } else {
+                    slideInHorizontally(
+                        animationSpec = tween(
+                            durationMillis = NavigationTransitionDurationMillis,
+                            easing = NavigationTransitionEasing,
+                        ),
+                        initialOffsetX = { it },
+                    )
+                }
+            },
+            exitTransition = {
+                if (targetState.destination.isTabDestination()) {
+                    ExitTransition.None
+                } else {
+                    slideOutHorizontally(
+                        animationSpec = tween(
+                            durationMillis = NavigationTransitionDurationMillis,
+                            easing = NavigationTransitionEasing,
+                        ),
+                        targetOffsetX = { -it / NavigationParallaxDivisor },
+                    ) + fadeOut(
+                        animationSpec = tween(
+                            durationMillis = NavigationTransitionDurationMillis,
+                            easing = NavigationTransitionEasing,
+                        ),
+                        targetAlpha = NavigationDimmedAlpha,
+                    )
+                }
+            },
+            popEnterTransition = {
+                if (targetState.destination.isTabDestination()) {
+                    EnterTransition.None
+                } else {
+                    slideInHorizontally(
+                        animationSpec = tween(
+                            durationMillis = NavigationTransitionDurationMillis,
+                            easing = NavigationTransitionEasing,
+                        ),
+                        initialOffsetX = { -it / NavigationParallaxDivisor },
+                    ) + fadeIn(
+                        animationSpec = tween(
+                            durationMillis = NavigationTransitionDurationMillis,
+                            easing = NavigationTransitionEasing,
+                        ),
+                        initialAlpha = NavigationDimmedAlpha,
+                    )
+                }
+            },
+            popExitTransition = {
+                if (targetState.destination.isTabDestination()) {
+                    ExitTransition.None
+                } else {
+                    slideOutHorizontally(
+                        animationSpec = tween(
+                            durationMillis = NavigationTransitionDurationMillis,
+                            easing = NavigationTransitionEasing,
+                        ),
+                        targetOffsetX = { it },
+                    )
+                }
+            },
+        ) {
+            composable<HomeRoute> {
+                HomeScreen(
+                    onPostClick = { post -> navController.navigate(PostRoute(post.id)) },
+                    onProfileClick = { profileId -> navController.navigate(ProfileRoute(profileId)) },
+                )
+            }
+            composable<HomeTabRoute>(
+                enterTransition = { EnterTransition.None },
+                exitTransition = { ExitTransition.None },
+                popEnterTransition = { EnterTransition.None },
+                popExitTransition = { ExitTransition.None },
+            ) {
+                HomeScreen(
+                    onPostClick = { post -> navController.navigate(PostRoute(post.id)) },
+                    onProfileClick = { profileId -> navController.navigate(ProfileRoute(profileId)) },
+                )
+            }
+            composable<PostRoute> {
+                PostDetailScreen()
+            }
+            composable<ProfileRoute> { backStackEntry ->
+                val route = backStackEntry.toRoute<ProfileRoute>()
+                ProfileScreen(
+                    profileId = route.profileId,
+                    onBack = { navController.navigateUp() },
+                    onPostClick = { postId -> navController.navigate(PostRoute(postId)) },
+                    onProfileClick = { navController.navigateToProfile("john_mobbin") },
+                )
+            }
+            composable<ProfileTabRoute>(
+                enterTransition = { EnterTransition.None },
+                exitTransition = { ExitTransition.None },
+                popEnterTransition = { EnterTransition.None },
+                popExitTransition = { ExitTransition.None },
+            ) {
+                ProfileScreen(
+                    profileId = "john_mobbin",
+                    onBack = null,
+                    onPostClick = { postId -> navController.navigate(PostRoute(postId)) },
+                    onProfileClick = { navController.navigateToProfile("john_mobbin") },
+                )
+            }
         }
     }
 }
 
+private fun NavDestination.isTabDestination(): Boolean {
+    return hasRoute<HomeTabRoute>() || hasRoute<ProfileTabRoute>()
+}
+
 private fun NavHostController.navigateToProfile(profileId: String) {
     navigate(ProfileRoute(profileId)) {
+        launchSingleTop = true
+    }
+}
+
+private fun NavHostController.navigateToHomeTab() {
+    navigate(HomeTabRoute) {
+        popUpTo(HomeRoute)
+        launchSingleTop = true
+    }
+}
+
+private fun NavHostController.navigateToProfileTab() {
+    navigate(ProfileTabRoute) {
+        popUpTo(HomeRoute)
         launchSingleTop = true
     }
 }

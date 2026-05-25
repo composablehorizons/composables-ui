@@ -87,7 +87,7 @@ private value class ProfileFeedTab private constructor(val value: String) {
 @Composable
 fun ProfileScreen(
     profileId: String,
-    onBack: () -> Unit,
+    onBack: (() -> Unit)?,
     onPostClick: (String) -> Unit,
     onProfileClick: () -> Unit,
 ) {
@@ -170,19 +170,21 @@ fun ProfileScreen(
 }
 
 @Composable
-private fun ProfileToolbar(onBack: () -> Unit) {
+private fun ProfileToolbar(onBack: (() -> Unit)?) {
     Toolbar(
         backgroundColor = Theme[colors][background],
-        leading = {
-            IconButton(onClick = onBack, style = ButtonStyle.Ghost) {
-                Icon(
-                    Lucide.ArrowLeft,
-                    contentDescription = "Back",
-                    modifier = Modifier.size(28.dp),
-                    tint = Theme[colors][onBackground]
-                )
+        leading = onBack?.let { onBackClick ->
+            {
+                IconButton(onClick = onBackClick, style = ButtonStyle.Ghost) {
+                    Icon(
+                        Lucide.ArrowLeft,
+                        contentDescription = "Back",
+                        modifier = Modifier.size(28.dp),
+                        tint = Theme[colors][onBackground]
+                    )
+                }
+                Text("Back")
             }
-            Text("Back")
         },
         trailing = {
             IconButton(onClick = {}, style = ButtonStyle.Ghost) {
