@@ -65,6 +65,9 @@ val textSelectionBackground = ThemeToken<Color>("text_selection_background")
 val scrim = ThemeToken<Color>("scrim")
 val focusRing = ThemeToken<Color>("focus_ring")
 
+val smallShape = ThemeToken<Shape>("small_shape")
+val mediumShape = ThemeToken<Shape>("medium_shape")
+val largeShape = ThemeToken<Shape>("large_shape")
 val buttonShape = ThemeToken<Shape>("button_shape")
 val alertDialogShape = ThemeToken<Shape>("alert_dialog_shape")
 val bottomSheetShape = ThemeToken<Shape>("bottom_sheet_shape")
@@ -275,6 +278,9 @@ val AppTheme = buildTheme {
         ),
     )
     properties[shapes] = mapOf(
+        smallShape to RoundedCornerShape(6.dp),
+        mediumShape to RoundedCornerShape(12.dp),
+        largeShape to RoundedCornerShape(16.dp),
         buttonShape to RoundedCornerShape(100),
         alertDialogShape to RoundedCornerShape(16.dp),
         bottomSheetShape to RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),

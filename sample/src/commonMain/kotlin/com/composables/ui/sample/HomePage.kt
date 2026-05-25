@@ -4,6 +4,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -58,12 +59,19 @@ import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
 import com.composables.ui.components.ScreenScaffold
 import com.composables.ui.components.Text
+import com.composables.ui.components.focusRing
 import com.composables.ui.sample.components.Avatar
 import com.composables.ui.theme.background
 import com.composables.ui.theme.border
+import com.composables.ui.theme.componentSizes
 import com.composables.ui.theme.colors
+import com.composables.ui.theme.focusRing
+import com.composables.ui.theme.focusRingOffset
+import com.composables.ui.theme.focusRingWidth
+import com.composables.ui.theme.largeShape
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
+import com.composables.ui.theme.shapes
 import com.composeunstyled.currentWidthBreakpoint
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
@@ -303,10 +311,24 @@ private fun SocialPostRow(
     onClick: () -> Unit,
     onProfileClick: () -> Unit,
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val shape = Theme[shapes][largeShape]
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .focusRing(
+                interactionSource = interactionSource,
+                width = Theme[componentSizes][focusRingWidth],
+                color = Theme[colors][focusRing],
+                shape = shape,
+                offset = Theme[componentSizes][focusRingOffset],
+            )
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick,
+            )
             .padding(horizontal = 14.dp, vertical = 10.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
