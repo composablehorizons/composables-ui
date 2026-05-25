@@ -61,10 +61,7 @@ internal fun FeedPost(
         Box(Modifier.size(44.dp)) {
             avatar()
         }
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
+        Column(Modifier.weight(1f)) {
             Row(Modifier.fillMaxWidth()) {
                 Row(
                     modifier = Modifier.weight(1f),
@@ -75,8 +72,7 @@ internal fun FeedPost(
                     timestamp()
                 }
                 Box(
-                    modifier = Modifier.offset(x = 10.dp, y = -10.dp),
-                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.offset(x = 10.dp, y = (-10).dp),
                 ) {
                     overflow()
                 }

@@ -272,11 +272,13 @@ private fun ButtonSkeleton(
                 offset = Theme[componentSizes][focusRingOffset],
             )
             .bouncyPress(enabled = enabled && style != ButtonStyle.Link, interactionSource = interactionSource)
-            .clip(shape)
-            .background(backgroundColor, shape)
             .then(buildModifier {
-                if (borderColor.isSpecified && borderColor != Color.Transparent && borderWidth > Dp.Hairline) {
-                    add(Modifier.border(borderWidth, borderColor, shape))
+                if (style != ButtonStyle.Link) {
+                    add(Modifier.clip(shape))
+                    add(Modifier.background(backgroundColor, shape))
+                    if (borderColor.isSpecified && borderColor != Color.Transparent && borderWidth > Dp.Hairline) {
+                        add(Modifier.border(borderWidth, borderColor, shape))
+                    }
                 }
                 if (!enabled) {
                     add(Modifier.alpha(Theme[alphas][disabledAlpha]))
