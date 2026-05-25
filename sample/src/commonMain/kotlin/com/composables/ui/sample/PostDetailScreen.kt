@@ -11,7 +11,7 @@ import com.composables.ui.theme.onBackground
 import com.composeunstyled.theme.Theme
 
 @Composable
-fun PostDetailPage() {
+fun PostDetailScreen() {
     ScreenScaffold(backgroundColor = Theme[colors][background], contentColor = Theme[colors][onBackground]) {
         Box(Modifier.fillMaxSize())
     }

@@ -85,7 +85,7 @@ private value class ProfileFeedTab private constructor(val value: String) {
 }
 
 @Composable
-fun ProfilePage(
+fun ProfileScreen(
     profileId: String,
     onBack: () -> Unit,
     onPostClick: (String) -> Unit,

@@ -89,17 +89,17 @@ fun SocialApp() {
                 },
             ) {
                 composable<HomeRoute> {
-                    HomePage(
+                    HomeScreen(
                         onPostClick = { post -> navController.navigate(PostRoute(post.id)) },
                         onProfileClick = { profileId -> navController.navigate(ProfileRoute(profileId)) },
                     )
                 }
                 composable<PostRoute> {
-                    PostDetailPage()
+                    PostDetailScreen()
                 }
                 composable<ProfileRoute> { backStackEntry ->
                     val route = backStackEntry.toRoute<ProfileRoute>()
-                    ProfilePage(
+                    ProfileScreen(
                         profileId = route.profileId,
                         onBack = { navController.navigateUp() },
                         onPostClick = { postId -> navController.navigate(PostRoute(postId)) },

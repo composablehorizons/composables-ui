@@ -68,7 +68,7 @@ private val FeedMaxWidth = 700.dp
 private val WideFeedVerticalInset = 70.dp
 
 @Composable
-fun HomePage(
+fun HomeScreen(
     onPostClick: (SocialPost) -> Unit,
     onProfileClick: (String) -> Unit,
 ) {
