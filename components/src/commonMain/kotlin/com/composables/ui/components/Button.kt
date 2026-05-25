@@ -100,10 +100,9 @@ fun Button(
 ) {
     val hovered by interactionSource.collectIsHoveredAsState()
 
-    ButtonSkeleton(
+    BaseButton(
         onClick = onClick,
-        modifier = modifier,
-        sizingModifier = buttonSizingModifierFor(buttonSize, style),
+        modifier = modifier.then(buttonSizingModifierFor(buttonSize, style)),
         enabled = enabled,
         style = style,
         backgroundColor = buttonBackgroundColorFor(style),
@@ -138,10 +137,9 @@ fun IconButton(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     content: @Composable () -> Unit,
 ) {
-    ButtonSkeleton(
+    BaseButton(
         onClick = onClick,
-        modifier = modifier,
-        sizingModifier = Modifier.size(iconButtonSizeFor(buttonSize)),
+        modifier = modifier.size(iconButtonSizeFor(buttonSize)),
         enabled = enabled,
         style = style,
         backgroundColor = buttonBackgroundColorFor(style),
@@ -241,10 +239,9 @@ private fun buttonBorderColorFor(style: ButtonStyle): Color {
 }
 
 @Composable
-private fun ButtonSkeleton(
+private fun BaseButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    sizingModifier: Modifier,
     enabled: Boolean = true,
     style: ButtonStyle,
     backgroundColor: Color,
@@ -263,7 +260,6 @@ private fun ButtonSkeleton(
         enabled = enabled,
         contentPadding = contentPadding,
         modifier = modifier
-            .then(sizingModifier)
             .focusRing(
                 interactionSource = interactionSource,
                 width = Theme[componentSizes][focusRingWidth],

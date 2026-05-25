@@ -31,7 +31,7 @@ import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.theme.Theme
 
 @Composable
-internal fun FeedPost(
+fun FeedPost(
     onClick: () -> Unit,
     avatar: @Composable () -> Unit,
     authorName: @Composable () -> Unit,
