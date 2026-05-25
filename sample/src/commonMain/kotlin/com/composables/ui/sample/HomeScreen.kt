@@ -97,7 +97,7 @@ private fun SocialFeed(
     )
 
     Box(
-        modifier = modifier.padding(vertical = feedVerticalInset)
+        modifier = modifier.padding(top = feedVerticalInset)
     ) {
         Box(
             modifier = Modifier
