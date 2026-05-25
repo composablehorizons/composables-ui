@@ -49,6 +49,7 @@ fun SocialApp() {
                 Row(
                     modifier = Modifier.fillMaxSize(),
                 ) {
+                    // placeholder for sidebar
                     Box(
                         modifier = Modifier
                             .fillMaxHeight()
