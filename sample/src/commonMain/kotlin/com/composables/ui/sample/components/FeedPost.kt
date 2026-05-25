@@ -76,7 +76,9 @@ fun FeedPost(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    authorName()
+                    Box(Modifier.weight(1f, fill = false)) {
+                        authorName()
+                    }
                     ProvideTextStyle(LocalTextStyle.current.merge(fontWeight = FontWeight.Thin)) {
                         ProvideContentColor(Theme[colors][muted]) {
                             timestamp()
