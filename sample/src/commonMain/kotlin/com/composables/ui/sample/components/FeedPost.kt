@@ -77,14 +77,16 @@ internal fun FeedPost(
                     overflow()
                 }
             }
-            body()
-            media?.invoke()
-            Row(
-                modifier = Modifier.offset(x = (-20).dp),
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                actions()
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                body()
+                media?.invoke()
+                Row(
+                    modifier = Modifier.offset(x = (-20).dp),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    actions()
+                }
             }
         }
     }
