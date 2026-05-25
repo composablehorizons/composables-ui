@@ -102,7 +102,7 @@ fun Button(
 
     BaseButton(
         onClick = onClick,
-        modifier = modifier.then(buttonSizingModifierFor(buttonSize, style)),
+        modifier = modifier.size(buttonSize, style),
         enabled = enabled,
         style = style,
         backgroundColor = buttonBackgroundColorFor(style),
@@ -154,9 +154,6 @@ fun IconButton(
 }
 
 @Composable
-internal fun buttonPaddingFor(buttonSize: ButtonSize): PaddingValues = buttonPaddingFor(buttonSize, ButtonStyle.Default)
-
-@Composable
 private fun buttonPaddingFor(buttonSize: ButtonSize, style: ButtonStyle): PaddingValues {
     if (style == ButtonStyle.Link) {
         return NoButtonPadding
@@ -171,8 +168,8 @@ private fun buttonShapeFor(style: ButtonStyle): Shape {
 }
 
 @Composable
-private fun buttonSizingModifierFor(buttonSize: ButtonSize, style: ButtonStyle): Modifier {
-    return if (style == ButtonStyle.Link) Modifier else Modifier.heightIn(min = buttonHeightFor(buttonSize))
+private fun Modifier.size(buttonSize: ButtonSize, style: ButtonStyle): Modifier {
+    return if (style == ButtonStyle.Link) this else heightIn(min = buttonHeightFor(buttonSize))
 }
 
 @Composable
