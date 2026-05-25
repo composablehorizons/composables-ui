@@ -46,9 +46,7 @@ fun SocialApp() {
         AppScaffold {
             val widthBreakpoint = currentWidthBreakpoint()
             if (widthBreakpoint isAtLeast ExpandedWidthBreakpoint) {
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                ) {
+                Row(modifier = Modifier.fillMaxSize()) {
                     // placeholder for sidebar
                     Box(
                         modifier = Modifier
