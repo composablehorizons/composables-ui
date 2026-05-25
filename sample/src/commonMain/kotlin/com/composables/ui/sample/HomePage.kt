@@ -139,59 +139,47 @@ private fun SocialTimeline(
                     items = feedPosts,
                     key = { _, post -> post.id },
                 ) { index, post ->
-                    SocialPostRow(
-                        post = post,
+                    val onProfileClick1 = { onProfileClick(post.profileId) }
+                    FeedPost(
                         onClick = { onPostClick(post) },
-                        onProfileClick = { onProfileClick(post.profileId) },
-                    )
+                        avatar = {
+                            AvatarButton(
+                                url = post.avatarUrl,
+                                onClick = onProfileClick1,
+                            )
+                        },
+                        authorName = {
+                            Button(onClick = onProfileClick1, style = ButtonStyle.Link) {
+                                Text(
+                                    text = post.author,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                )
+                            }
+                        },
+                        timestamp = {
+                            Text(post.age)
+                        },
+                        overflow = { PostOverflowMenu() },
+                        body = {
+                            Text(
+                                text = post.body,
+                                style = TextStyle(fontSize = 19.sp, lineHeight = 27.sp),
+                                color = Theme[colors][onBackground],
+                            )
+                        },
+                        media = post.imageUrl?.let<kotlin.String, @androidx.compose.runtime.Composable (() -> kotlin.Unit)?> { imageUrl ->
+                            { PostImage(imageUrl) }
+                        },
+                    ) {
+                        PostActions(post = post)
+                    }
                     if (index < feedPosts.lastIndex) {
                         HorizontalSeparator()
                     }
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun SocialPostRow(
-    post: SocialPost,
-    onClick: () -> Unit,
-    onProfileClick: () -> Unit,
-) {
-    FeedPost(
-        onClick = onClick,
-        avatar = {
-            AvatarButton(
-                url = post.avatarUrl,
-                onClick = onProfileClick,
-            )
-        },
-        authorName = {
-            Button(onClick = onProfileClick, style = ButtonStyle.Link) {
-                Text(
-                    text = post.author,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
-        },
-        timestamp = {
-            Text(post.age)
-        },
-        overflow = { PostOverflowMenu() },
-        body = {
-            Text(
-                text = post.body,
-                style = TextStyle(fontSize = 19.sp, lineHeight = 27.sp),
-                color = Theme[colors][onBackground],
-            )
-        },
-        media = post.imageUrl?.let { imageUrl ->
-            { PostImage(imageUrl) }
-        },
-    ) {
-        PostActions(post)
     }
 }
 
