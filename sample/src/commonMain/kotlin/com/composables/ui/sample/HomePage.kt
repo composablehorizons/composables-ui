@@ -1,19 +1,16 @@
 package com.composables.ui.sample
 
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -60,10 +57,10 @@ import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
+import com.composables.uripainter.rememberUriPainter
 import com.composeunstyled.currentWidthBreakpoint
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
-import com.composables.uripainter.rememberUriPainter
 
 internal data class SocialPost(
     val id: String,
@@ -349,20 +346,20 @@ private fun PostOverflowMenu() {
         alignment = DropdownMenuAlignment.End,
         panel = {
             DropdownMenuPanel {
-                DropdownMenuItem(onClick = { expanded = false }) {
+                DropdownMenuItem(onClick = { }) {
                     Text("Save")
                 }
-                DropdownMenuItem(onClick = { expanded = false }) {
+                DropdownMenuItem(onClick = { }) {
                     Text("Copy link")
                 }
-                DropdownMenuItem(onClick = { expanded = false }) {
+                DropdownMenuItem(onClick = { }) {
                     Text("Mute")
                 }
-                DropdownMenuItem(onClick = { expanded = false }) {
+                DropdownMenuItem(onClick = { }) {
                     Text("Not interested")
                 }
                 DropdownMenuItem(
-                    onClick = { expanded = false },
+                    onClick = { },
                     style = DropdownMenuItemStyle.Destructive,
                 ) {
                     Text("Report")
