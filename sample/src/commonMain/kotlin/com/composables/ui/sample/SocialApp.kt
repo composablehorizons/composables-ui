@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,8 +29,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.composables.ui.components.AppScaffold
 import com.composables.ui.components.ExpandedWidthBreakpoint
-import com.composables.ui.theme.InteractionMode
-import com.composables.ui.theme.LocalInteractionMode
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composeunstyled.currentWidthBreakpoint
@@ -46,37 +43,35 @@ private val NavigationTransitionEasing = CubicBezierEasing(0.32f, 0.72f, 0f, 1f)
 fun SocialApp() {
     val navController = rememberNavController()
 
-    CompositionLocalProvider(LocalInteractionMode provides InteractionMode.Touch) {
-        AppScaffold {
-            val widthBreakpoint = currentWidthBreakpoint()
-            if (widthBreakpoint isAtLeast ExpandedWidthBreakpoint) {
-                Row(modifier = Modifier.fillMaxSize()) {
-                    // placeholder for sidebar
-                    Box(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .width(300.dp)
-                            .border(width = 1.dp, color = Theme[colors][border]),
-                    )
-                    SocialNavHost(
-                        navController = navController,
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight(),
-                    )
-                }
-            } else {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    SocialNavHost(
-                        navController = navController,
-                        modifier = Modifier.fillMaxSize(),
-                    )
-                    SocialBottomBar(
-                        onHomeClick = { navController.navigateToHomeTab() },
-                        onProfileClick = { navController.navigateToProfileTab() },
-                        modifier = Modifier.align(Alignment.BottomCenter),
-                    )
-                }
+    AppScaffold {
+        val widthBreakpoint = currentWidthBreakpoint()
+        if (widthBreakpoint isAtLeast ExpandedWidthBreakpoint) {
+            Row(modifier = Modifier.fillMaxSize()) {
+                // placeholder for sidebar
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(300.dp)
+                        .border(width = 1.dp, color = Theme[colors][border]),
+                )
+                SocialNavHost(
+                    navController = navController,
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                )
+            }
+        } else {
+            Box(modifier = Modifier.fillMaxSize()) {
+                SocialNavHost(
+                    navController = navController,
+                    modifier = Modifier.fillMaxSize(),
+                )
+                SocialBottomBar(
+                    onHomeClick = { navController.navigateToHomeTab() },
+                    onProfileClick = { navController.navigateToProfileTab() },
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                )
             }
         }
     }

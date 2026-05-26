@@ -28,8 +28,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -41,6 +43,8 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.platform.WindowInfo
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.composables.ui.theme.border
@@ -73,6 +77,8 @@ import com.composeunstyled.DropdownMenuScope as UnstyledDropdownMenuScope
 
 private const val DropdownMenuEnterDurationMillis = 120
 private const val DropdownMenuExitDurationMillis = 75
+
+val LocalDropdownMenuWindowInfo = staticCompositionLocalOf<WindowInfo?> { null }
 
 class DropdownMenuScope internal constructor(
     internal val unstyledScope: UnstyledDropdownMenuScope,
@@ -126,23 +132,34 @@ fun DropdownMenu(
     panel: @Composable DropdownMenuScope.() -> Unit,
     anchor: @Composable () -> Unit,
 ) {
-    UnstyledDropdownMenu(
-        expanded = expanded,
-        onExpandedChange = onExpandedChange,
-        modifier = modifier,
-        side = side.anchorSide,
-        alignment = alignment.anchorAlignment,
-        sideOffset = sideOffset,
-        alignmentOffset = alignmentOffset,
-        panel = {
-            DropdownMenuScope(
-                unstyledScope = this,
-                side = side,
-                alignment = alignment,
-            ).panel()
-        },
-        anchor = anchor,
-    )
+    val dropdownMenuWindowInfo = LocalDropdownMenuWindowInfo.current
+    val dropdownMenuContent = @Composable {
+        UnstyledDropdownMenu(
+            expanded = expanded,
+            onExpandedChange = onExpandedChange,
+            modifier = modifier,
+            side = side.anchorSide,
+            alignment = alignment.anchorAlignment,
+            sideOffset = sideOffset,
+            alignmentOffset = alignmentOffset,
+            panel = {
+                DropdownMenuScope(
+                    unstyledScope = this,
+                    side = side,
+                    alignment = alignment,
+                ).panel()
+            },
+            anchor = anchor,
+        )
+    }
+
+    if (dropdownMenuWindowInfo == null) {
+        dropdownMenuContent()
+    } else {
+        CompositionLocalProvider(LocalWindowInfo provides dropdownMenuWindowInfo) {
+            dropdownMenuContent()
+        }
+    }
 }
 
 @Composable
