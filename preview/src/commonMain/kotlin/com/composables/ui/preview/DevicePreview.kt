@@ -24,6 +24,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.mutableStateOf
@@ -33,7 +34,6 @@ import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
@@ -604,6 +604,12 @@ private fun DevicePreviewStage(
     var rotationFrame by remember(device.id) {
         mutableStateOf(DeviceRotationFrame(orientation = orientation, rotationZ = 0f))
     }
+    var previousRenderedDeviceId by remember { mutableStateOf(device.id) }
+    val deviceChanged = previousRenderedDeviceId != device.id
+
+    SideEffect {
+        previousRenderedDeviceId = device.id
+    }
 
     LaunchedEffect(device.id, device.canRotate, orientation) {
         suspend fun animateFrameRotationTo(
@@ -707,6 +713,51 @@ private fun DevicePreviewStage(
                 animationSpec = DevicePreviewZoomAnimationSpec,
                 label = "DevicePreviewZoom",
             )
+            val animatedWidth by animateDpAsState(
+                targetValue = targetWidth,
+                animationSpec = if (rotationFrame.rotating || (!deviceChanged && !framedDevice)) {
+                    DevicePreviewSizeSnapSpec
+                } else {
+                    DevicePreviewAnimationSpec
+                },
+                label = "DevicePreviewFrameWidth",
+            )
+            val animatedHeight by animateDpAsState(
+                targetValue = targetHeight,
+                animationSpec = if (rotationFrame.rotating || (!deviceChanged && !framedDevice)) {
+                    DevicePreviewSizeSnapSpec
+                } else {
+                    DevicePreviewAnimationSpec
+                },
+                label = "DevicePreviewFrameHeight",
+            )
+            val previewWidth = if (rotationFrame.rotating) targetWidth else animatedWidth
+            val previewHeight = if (rotationFrame.rotating) targetHeight else animatedHeight
+            val animatedStagePadding by animateDpAsState(
+                targetValue = if (framedDevice) DevicePreviewFramedPadding else 0.dp,
+                animationSpec = DevicePreviewAnimationSpec,
+                label = "DevicePreviewStagePadding",
+            )
+            val animatedFramePadding by animateDpAsState(
+                targetValue = if (framedDevice) DeviceFramePadding else 0.dp,
+                animationSpec = DevicePreviewAnimationSpec,
+                label = "DevicePreviewFramePadding",
+            )
+            val animatedFrameCornerRadius by animateDpAsState(
+                targetValue = if (framedDevice) DeviceFrameCornerRadius else 0.dp,
+                animationSpec = DevicePreviewAnimationSpec,
+                label = "DevicePreviewFrameCornerRadius",
+            )
+            val animatedContentCornerRadius by animateDpAsState(
+                targetValue = if (framedDevice) DeviceContentCornerRadius else 0.dp,
+                animationSpec = DevicePreviewAnimationSpec,
+                label = "DevicePreviewContentCornerRadius",
+            )
+            val animatedFrameBorderWidth by animateDpAsState(
+                targetValue = if (framedDevice) 1.dp else 0.dp,
+                animationSpec = DevicePreviewAnimationSpec,
+                label = "DevicePreviewFrameBorderWidth",
+            )
 
             Box(
                 modifier = Modifier
@@ -715,60 +766,33 @@ private fun DevicePreviewStage(
                     .verticalScroll(verticalScrollState),
                 contentAlignment = Alignment.Center,
             ) {
-                if (framedDevice) {
-                    val animatedWidth by animateDpAsState(
-                        targetValue = targetWidth,
-                        animationSpec = if (rotationFrame.rotating) {
-                            DevicePreviewSizeSnapSpec
-                        } else {
-                            DevicePreviewAnimationSpec
-                        },
-                        label = "DevicePreviewFrameWidth",
-                    )
-                    val animatedHeight by animateDpAsState(
-                        targetValue = targetHeight,
-                        animationSpec = if (rotationFrame.rotating) {
-                            DevicePreviewSizeSnapSpec
-                        } else {
-                            DevicePreviewAnimationSpec
-                        },
-                        label = "DevicePreviewFrameHeight",
-                    )
-                    val frameWidth = if (rotationFrame.rotating) targetWidth else animatedWidth
-                    val frameHeight = if (rotationFrame.rotating) targetHeight else animatedHeight
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(DevicePreviewFramedPadding),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        ZoomedPreview(
-                            width = frameWidth + DeviceFramePadding * 2,
-                            height = frameHeight + DeviceFramePadding * 2,
-                            zoom = animatedZoom,
-                        ) {
-                            DevicePreviewFrame(
-                                width = frameWidth,
-                                height = frameHeight,
-                                interactionMode = InteractionMode.Touch,
-                                layoutDirection = layoutDirection,
-                                contentAlpha = contentAlpha,
-                                modifier = Modifier.graphicsLayer {
-                                    rotationZ = rotationFrame.rotationZ
-                                },
-                                content = content,
-                            )
-                        }
-                    }
-                } else {
-                    BrowserZoomedPreview(
-                        width = containerWidth,
-                        height = containerHeight,
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(animatedStagePadding),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    ZoomedPreview(
+                        width = previewWidth + animatedFramePadding * 2,
+                        height = previewHeight + animatedFramePadding * 2,
                         zoom = animatedZoom,
-                        interactionMode = InteractionMode.Pointer,
-                        layoutDirection = layoutDirection,
-                        content = content,
-                    )
+                    ) {
+                        DevicePreviewFrame(
+                            width = previewWidth,
+                            height = previewHeight,
+                            interactionMode = if (framedDevice) InteractionMode.Touch else InteractionMode.Pointer,
+                            layoutDirection = layoutDirection,
+                            contentAlpha = contentAlpha,
+                            framePadding = animatedFramePadding,
+                            frameCornerRadius = animatedFrameCornerRadius,
+                            contentCornerRadius = animatedContentCornerRadius,
+                            borderWidth = animatedFrameBorderWidth,
+                            modifier = Modifier.graphicsLayer {
+                                rotationZ = rotationFrame.rotationZ
+                            },
+                            content = content,
+                        )
+                    }
                 }
             }
 
@@ -787,45 +811,6 @@ private fun DevicePreviewStage(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(PreviewControlsPadding),
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun BrowserZoomedPreview(
-    width: Dp,
-    height: Dp,
-    zoom: Float,
-    interactionMode: InteractionMode,
-    layoutDirection: LayoutDirection,
-    content: @Composable () -> Unit,
-) {
-    val layoutWidth = width * (1f / zoom)
-    val layoutHeight = height * (1f / zoom)
-
-    Box(
-        modifier = Modifier
-            .requiredSize(width, height)
-            .clipToBounds()
-            .background(PreviewContentBackground),
-        contentAlignment = Alignment.Center,
-    ) {
-        Box(
-            modifier = Modifier
-                .requiredSize(layoutWidth, layoutHeight)
-                .graphicsLayer {
-                    scaleX = zoom
-                    scaleY = zoom
-                    transformOrigin = TransformOrigin.Center
-                },
-        ) {
-            ProvidePreviewWindowInfo(width = layoutWidth, height = layoutHeight) {
-                ProvidePreviewCompositionLocals(
-                    interactionMode = interactionMode,
-                    layoutDirection = layoutDirection,
-                    content = content,
                 )
             }
         }
@@ -865,20 +850,27 @@ private fun DevicePreviewFrame(
     interactionMode: InteractionMode,
     layoutDirection: LayoutDirection,
     contentAlpha: Float,
+    framePadding: Dp,
+    frameCornerRadius: Dp,
+    contentCornerRadius: Dp,
+    borderWidth: Dp,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
+    val frameShape = RoundedCornerShape(frameCornerRadius)
+    val contentShape = RoundedCornerShape(contentCornerRadius)
+
     Box(
         modifier = modifier
-            .background(DeviceBezel, RoundedCornerShape(40.dp))
-            .border(width = 1.dp, color = FrameBorder, shape = RoundedCornerShape(40.dp))
-            .padding(DeviceFramePadding),
+            .background(DeviceBezel, frameShape)
+            .border(width = borderWidth, color = FrameBorder, shape = frameShape)
+            .padding(framePadding),
         contentAlignment = Alignment.Center,
     ) {
         Box(
             modifier = Modifier
                 .requiredSize(width, height)
-                .clip(RoundedCornerShape(28.dp))
+                .clip(contentShape)
                 .background(PreviewContentBackground)
                 .graphicsLayer {
                     alpha = contentAlpha
@@ -1016,6 +1008,8 @@ private val DevicePreviewFramedPadding = 24.dp
 private val PreviewControlsPadding = 16.dp
 private val PreviewControlsFocusPadding = 4.dp
 private val DeviceFramePadding = 10.dp
+private val DeviceFrameCornerRadius = 40.dp
+private val DeviceContentCornerRadius = 28.dp
 private const val DeviceRotationDegrees = 90f
 private const val DeviceRotationSwapProgress = 0.5f
 private const val DeviceRotationSwapDegrees = 45f

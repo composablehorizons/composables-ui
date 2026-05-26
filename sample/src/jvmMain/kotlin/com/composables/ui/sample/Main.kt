@@ -59,15 +59,16 @@ fun main() = application {
     ) {
         val density = LocalDensity.current
         val minimumWidth = with(density) { 340.dp.roundToPx() }
+        val minimumHeight = with(density) { 220.dp.roundToPx() }
 
-        DisposableEffect(window, minimumWidth) {
+        DisposableEffect(window, minimumWidth, minimumHeight) {
             val previousMinimumSize = window.minimumSize
             val rootPane = window.rootPane
             val previousFullWindowContent = rootPane.getClientProperty(FullWindowContentProperty)
             val previousTransparentTitleBar = rootPane.getClientProperty(TransparentTitleBarProperty)
             val previousWindowTitleVisible = rootPane.getClientProperty(WindowTitleVisibleProperty)
 
-            window.minimumSize = Dimension(minimumWidth, previousMinimumSize.height)
+            window.minimumSize = Dimension(minimumWidth, minimumHeight)
             rootPane.putClientProperty(FullWindowContentProperty, true)
             rootPane.putClientProperty(TransparentTitleBarProperty, true)
             rootPane.putClientProperty(WindowTitleVisibleProperty, false)
