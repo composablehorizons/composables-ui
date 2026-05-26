@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
@@ -63,7 +64,8 @@ import com.composables.icons.lucide.ChevronDown
 import com.composables.icons.lucide.Minus
 import com.composables.icons.lucide.Monitor
 import com.composables.icons.lucide.Plus
-import com.composables.icons.lucide.RotateCw
+import com.composables.icons.lucide.RotateCcwSquare
+import com.composables.icons.lucide.RotateCwSquare
 import com.composables.icons.lucide.Smartphone
 import com.composables.icons.lucide.Tablet
 import com.composables.ui.components.Button
@@ -78,6 +80,7 @@ import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
 import com.composables.ui.components.LocalDropdownMenuWindowInfo
 import com.composables.ui.components.Text
+import com.composables.ui.components.VerticalSeparator
 import com.composables.ui.theme.AppTheme
 import com.composables.ui.theme.InteractionMode
 import com.composables.ui.theme.LocalInteractionMode
@@ -305,41 +308,75 @@ private fun DevicePreviewControls(
             .clip(controlsShape)
             .background(backgroundColor, controlsShape)
             .border(width = 1.dp, color = borderColor, shape = controlsShape)
-            .padding(PreviewControlsPadding),
+            .padding(PreviewToolbarPanelPadding),
     ) {
         ProvideContentColor(contentColor) {
             Row(
                 modifier = Modifier
                     .horizontalScroll(controlsScrollState)
-                    .padding(PreviewControlsFocusPadding),
+                    .padding(PreviewToolbarContentPadding),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                LayoutDirectionButton(
-                    layoutDirection = layoutDirection,
-                    onClick = { onLayoutDirectionChange(layoutDirection.oppositePreviewLayoutDirection()) },
+                DeviceControlsGroup(
+                    devices = devices,
+                    selectedDevice = selectedDevice,
+                    orientation = orientation,
+                    onDeviceSelected = onDeviceSelected,
                 )
+                VerticalSeparator(modifier = Modifier.height(24.dp))
                 ZoomControls(
                     zoom = zoom,
                     zoomLevels = zoomLevels,
                     onZoomChange = onZoomChange,
                 )
-                OrientationButton(
+                VerticalSeparator(modifier = Modifier.height(24.dp))
+                PreviewOptionsGroup(
                     orientation = orientation,
+                    layoutDirection = layoutDirection,
                     enabled = selectedDevice.canRotate,
-                    onClick = { onOrientationChange(orientation.rotated()) },
+                    onLayoutDirectionChange = onLayoutDirectionChange,
+                    onOrientationChange = onOrientationChange,
                 )
-                devices.forEach { device ->
-                    DevicePreviewButton(
-                        device = device,
-                        orientation = orientation,
-                        selected = device.id == selectedDevice.id,
-                        onClick = { onDeviceSelected(device) },
-                    )
-                }
             }
         }
     }
+}
+
+@Composable
+private fun DeviceControlsGroup(
+    devices: List<DevicePreviewDevice>,
+    selectedDevice: DevicePreviewDevice,
+    orientation: DevicePreviewOrientation,
+    onDeviceSelected: (DevicePreviewDevice) -> Unit,
+) {
+    devices.forEach { device ->
+        DevicePreviewButton(
+            device = device,
+            orientation = orientation,
+            selected = device.id == selectedDevice.id,
+            onClick = { onDeviceSelected(device) },
+        )
+    }
+}
+
+@Composable
+private fun PreviewOptionsGroup(
+    orientation: DevicePreviewOrientation,
+    layoutDirection: LayoutDirection,
+    enabled: Boolean,
+    onLayoutDirectionChange: (LayoutDirection) -> Unit,
+    onOrientationChange: (DevicePreviewOrientation) -> Unit,
+) {
+    LayoutDirectionButton(
+        layoutDirection = layoutDirection,
+        onClick = { onLayoutDirectionChange(layoutDirection.oppositePreviewLayoutDirection()) },
+    )
+    OrientationButton(
+        orientation = orientation,
+        enabled = enabled,
+        onClick = { onOrientationChange(orientation.rotated()) },
+    )
 }
 
 @Composable
@@ -374,7 +411,7 @@ private fun OrientationButton(
         buttonSize = ButtonSize.Regular,
     ) {
         Icon(
-            imageVector = Lucide.RotateCw,
+            imageVector = iconForRotation(orientation),
             contentDescription = if (orientation == DevicePreviewOrientation.Portrait) {
                 "Switch to landscape"
             } else {
@@ -530,6 +567,14 @@ private fun iconFor(device: DevicePreviewDevice): ImageVector {
         DevicePreviewDevices.Mobile.id -> Lucide.Smartphone
         DevicePreviewDevices.Tablet.id -> Lucide.Tablet
         else -> Lucide.Monitor
+    }
+}
+
+private fun iconForRotation(orientation: DevicePreviewOrientation): ImageVector {
+    return if (orientation == DevicePreviewOrientation.Portrait) {
+        Lucide.RotateCwSquare
+    } else {
+        Lucide.RotateCcwSquare
     }
 }
 
@@ -779,24 +824,35 @@ private fun DevicePreviewStage(
                         .padding(animatedStagePadding),
                     contentAlignment = Alignment.Center,
                 ) {
-                    ZoomedPreview(
-                        width = previewWidth + animatedFramePadding * 2,
-                        height = previewHeight + animatedFramePadding * 2,
-                        zoom = animatedZoom,
-                    ) {
-                        DevicePreviewFrame(
+                    if (framedDevice) {
+                        ZoomedPreview(
+                            width = previewWidth + animatedFramePadding * 2,
+                            height = previewHeight + animatedFramePadding * 2,
+                            zoom = animatedZoom,
+                        ) {
+                            DevicePreviewFrame(
+                                width = previewWidth,
+                                height = previewHeight,
+                                interactionMode = InteractionMode.Touch,
+                                layoutDirection = layoutDirection,
+                                contentAlpha = contentAlpha,
+                                framePadding = animatedFramePadding,
+                                frameCornerRadius = animatedFrameCornerRadius,
+                                contentCornerRadius = animatedContentCornerRadius,
+                                borderWidth = animatedFrameBorderWidth,
+                                modifier = Modifier.graphicsLayer {
+                                    rotationZ = rotationFrame.rotationZ
+                                },
+                                content = content,
+                            )
+                        }
+                    } else {
+                        DesktopZoomedPreview(
                             width = previewWidth,
                             height = previewHeight,
-                            interactionMode = if (framedDevice) InteractionMode.Touch else InteractionMode.Pointer,
+                            zoom = animatedZoom,
                             layoutDirection = layoutDirection,
-                            contentAlpha = contentAlpha,
-                            framePadding = animatedFramePadding,
                             frameCornerRadius = animatedFrameCornerRadius,
-                            contentCornerRadius = animatedContentCornerRadius,
-                            borderWidth = animatedFrameBorderWidth,
-                            modifier = Modifier.graphicsLayer {
-                                rotationZ = rotationFrame.rotationZ
-                            },
                             content = content,
                         )
                     }
@@ -818,10 +874,50 @@ private fun DevicePreviewStage(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(
-                            start = PreviewControlsPadding,
-                            end = PreviewControlsPadding,
-                            bottom = PreviewControlsBottomMargin,
+                            start = PreviewToolbarHorizontalMargin,
+                            end = PreviewToolbarHorizontalMargin,
+                            bottom = PreviewToolbarBottomMargin,
                         ),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun DesktopZoomedPreview(
+    width: Dp,
+    height: Dp,
+    zoom: Float,
+    layoutDirection: LayoutDirection,
+    frameCornerRadius: Dp,
+    content: @Composable () -> Unit,
+) {
+    val layoutWidth = width * (1f / zoom)
+    val layoutHeight = height * (1f / zoom)
+    val shape = RoundedCornerShape(frameCornerRadius)
+
+    Box(
+        modifier = Modifier
+            .requiredSize(width, height)
+            .clip(shape)
+            .background(PreviewContentBackground),
+        contentAlignment = Alignment.Center,
+    ) {
+        Box(
+            modifier = Modifier
+                .requiredSize(layoutWidth, layoutHeight)
+                .graphicsLayer {
+                    scaleX = zoom
+                    scaleY = zoom
+                    transformOrigin = TransformOrigin.Center
+                },
+        ) {
+            ProvidePreviewWindowInfo(width = layoutWidth, height = layoutHeight) {
+                ProvidePreviewCompositionLocals(
+                    interactionMode = InteractionMode.Pointer,
+                    layoutDirection = layoutDirection,
+                    content = content,
                 )
             }
         }
@@ -1016,9 +1112,10 @@ private val DevicePreviewZoomAnimationSpec = spring<Float>(
 )
 private val DeviceRotationContentFadeSpec = tween<Float>(durationMillis = 120)
 private val DevicePreviewFramedPadding = 24.dp
-private val PreviewControlsPadding = 4.dp
-private val PreviewControlsFocusPadding = PreviewControlsPadding
-private val PreviewControlsBottomMargin = 12.dp
+private val PreviewToolbarPanelPadding = 4.dp
+private val PreviewToolbarContentPadding = PreviewToolbarPanelPadding
+private val PreviewToolbarHorizontalMargin = PreviewToolbarPanelPadding
+private val PreviewToolbarBottomMargin = 12.dp
 private val DeviceFramePadding = 10.dp
 private val DeviceFrameCornerRadius = 40.dp
 private val DeviceContentCornerRadius = 28.dp
