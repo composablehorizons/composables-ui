@@ -34,6 +34,7 @@ import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
@@ -74,6 +75,7 @@ import com.composables.ui.components.DropdownMenuItem
 import com.composables.ui.components.DropdownMenuPanel
 import com.composables.ui.components.DropdownMenuSide
 import com.composables.ui.components.Icon
+import com.composables.ui.components.IconButton
 import com.composables.ui.components.LocalDropdownMenuWindowInfo
 import com.composables.ui.components.Text
 import com.composables.ui.theme.AppTheme
@@ -81,9 +83,12 @@ import com.composables.ui.theme.InteractionMode
 import com.composables.ui.theme.LocalInteractionMode
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
+import com.composables.ui.theme.dropdownMenuShadow
+import com.composables.ui.theme.mediumShape
 import com.composables.ui.theme.onPanel
 import com.composables.ui.theme.panel
 import com.composables.ui.theme.shapes
+import com.composables.ui.theme.shadows
 import com.composables.ui.theme.smallShape
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.theme.Theme
@@ -287,18 +292,20 @@ private fun DevicePreviewControls(
     onZoomChange: (DevicePreviewZoom) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val controlsShape = Theme[shapes][smallShape]
+    val controlsShape = Theme[shapes][mediumShape]
     val controlsScrollState = rememberScrollState()
     val backgroundColor = Theme[colors][panel]
     val contentColor = Theme[colors][onPanel]
     val borderColor = Theme[colors][border]
+    val controlsShadow = Theme[shadows][dropdownMenuShadow]
 
     Box(
         modifier = modifier
+            .dropShadow(controlsShape, controlsShadow)
             .clip(controlsShape)
             .background(backgroundColor, controlsShape)
             .border(width = 1.dp, color = borderColor, shape = controlsShape)
-            .padding(8.dp),
+            .padding(PreviewControlsPadding),
     ) {
         ProvideContentColor(contentColor) {
             Row(
@@ -340,15 +347,15 @@ private fun LayoutDirectionButton(
     layoutDirection: LayoutDirection,
     onClick: () -> Unit,
 ) {
-    Button(
+    IconButton(
         onClick = onClick,
         style = ButtonStyle.Ghost,
-        buttonSize = ButtonSize.Small,
+        buttonSize = ButtonSize.Regular,
     ) {
         Text(
             text = if (layoutDirection == LayoutDirection.Ltr) "LTR" else "RTL",
             fontSize = 11.sp,
-            fontWeight = FontWeight.Light,
+            fontWeight = FontWeight.Normal,
             singleLine = true,
         )
     }
@@ -360,11 +367,11 @@ private fun OrientationButton(
     enabled: Boolean,
     onClick: () -> Unit,
 ) {
-    Button(
+    IconButton(
         onClick = onClick,
         enabled = enabled,
         style = ButtonStyle.Ghost,
-        buttonSize = ButtonSize.Small,
+        buttonSize = ButtonSize.Regular,
     ) {
         Icon(
             imageVector = Lucide.RotateCw,
@@ -388,11 +395,11 @@ private fun ZoomControls(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Button(
+        IconButton(
             onClick = { onZoomChange(zoom.zoomedOut(zoomLevels)) },
             enabled = zoom.scale > zoomLevels.minOf { it.scale },
             style = ButtonStyle.Ghost,
-            buttonSize = ButtonSize.Small,
+            buttonSize = ButtonSize.Regular,
         ) {
             Icon(
                 imageVector = Lucide.Minus,
@@ -405,11 +412,11 @@ private fun ZoomControls(
             zoomLevels = zoomLevels,
             onZoomChange = onZoomChange,
         )
-        Button(
+        IconButton(
             onClick = { onZoomChange(zoom.zoomedIn(zoomLevels)) },
             enabled = zoom.scale < zoomLevels.maxOf { it.scale },
             style = ButtonStyle.Ghost,
-            buttonSize = ButtonSize.Small,
+            buttonSize = ButtonSize.Regular,
         ) {
             Icon(
                 imageVector = Lucide.Plus,
@@ -460,7 +467,7 @@ private fun ZoomMenu(
             Button(
                 onClick = { expanded = !expanded },
                 style = ButtonStyle.Ghost,
-                buttonSize = ButtonSize.Small,
+                buttonSize = ButtonSize.Regular,
                 modifier = Modifier.width(92.dp),
             ) {
                 Text(zoom.label, singleLine = true)
@@ -498,10 +505,10 @@ private fun DevicePreviewButton(
         }
     }
 
-    Button(
+    IconButton(
         onClick = onClick,
         style = if (selected) ButtonStyle.Primary else ButtonStyle.Ghost,
-        buttonSize = ButtonSize.Small,
+        buttonSize = ButtonSize.Regular,
     ) {
         Icon(
             imageVector = iconFor(device),
@@ -810,7 +817,11 @@ private fun DevicePreviewStage(
                     onZoomChange = onZoomChange,
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
-                        .padding(PreviewControlsPadding),
+                        .padding(
+                            start = PreviewControlsPadding,
+                            end = PreviewControlsPadding,
+                            bottom = PreviewControlsBottomMargin,
+                        ),
                 )
             }
         }
@@ -1005,8 +1016,9 @@ private val DevicePreviewZoomAnimationSpec = spring<Float>(
 )
 private val DeviceRotationContentFadeSpec = tween<Float>(durationMillis = 120)
 private val DevicePreviewFramedPadding = 24.dp
-private val PreviewControlsPadding = 16.dp
-private val PreviewControlsFocusPadding = 4.dp
+private val PreviewControlsPadding = 4.dp
+private val PreviewControlsFocusPadding = PreviewControlsPadding
+private val PreviewControlsBottomMargin = 12.dp
 private val DeviceFramePadding = 10.dp
 private val DeviceFrameCornerRadius = 40.dp
 private val DeviceContentCornerRadius = 28.dp
