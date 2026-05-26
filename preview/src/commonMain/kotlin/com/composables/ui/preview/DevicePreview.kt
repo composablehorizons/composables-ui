@@ -13,13 +13,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -29,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -52,13 +49,14 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.platform.WindowInfo
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.composables.icons.lucide.Lucide
-import com.composables.icons.lucide.ArrowLeftRight
 import com.composables.icons.lucide.Check
 import com.composables.icons.lucide.ChevronDown
 import com.composables.icons.lucide.Minus
@@ -81,8 +79,13 @@ import com.composables.ui.components.Text
 import com.composables.ui.theme.AppTheme
 import com.composables.ui.theme.InteractionMode
 import com.composables.ui.theme.LocalInteractionMode
+import com.composables.ui.theme.border
+import com.composables.ui.theme.colors
+import com.composables.ui.theme.onPanel
+import com.composables.ui.theme.panel
 import com.composables.ui.theme.shapes
 import com.composables.ui.theme.smallShape
+import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.theme.Theme
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -202,9 +205,7 @@ fun DevicePreviewHost(
     selectedZoom: DevicePreviewZoom? = null,
     onZoomSelected: (DevicePreviewZoom) -> Unit = {},
     zoomLevels: List<DevicePreviewZoom> = DevicePreviewZoomLevels.Default,
-    appBarDragArea: @Composable (modifier: Modifier, content: @Composable () -> Unit) -> Unit = { modifier, content ->
-        Box(modifier = modifier) { content() }
-    },
+    showControls: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     require(devices.isNotEmpty()) { "DevicePreviewHost requires at least one device." }
@@ -239,11 +240,14 @@ fun DevicePreviewHost(
         internalZoom = zoom
         onZoomSelected(zoom)
     }
+    val previewContent = remember {
+        movableContentOf(content)
+    }
 
     AppTheme {
         val windowShape = Theme[shapes][smallShape]
 
-        Column(
+        Box(
             modifier = modifier
                 .fillMaxSize()
                 .clip(windowShape)
@@ -256,22 +260,21 @@ fun DevicePreviewHost(
                 layoutDirection = currentLayoutDirection,
                 zoom = currentZoom,
                 zoomLevels = zoomLevels,
+                showControls = showControls,
                 onDeviceSelected = selectDevice,
                 onOrientationChange = selectOrientation,
                 onLayoutDirectionChange = selectLayoutDirection,
                 onZoomChange = selectZoom,
-                appBarDragArea = appBarDragArea,
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
-                content = content,
+                    .fillMaxSize(),
+                content = previewContent,
             )
         }
     }
 }
 
 @Composable
-private fun DevicePreviewChrome(
+private fun DevicePreviewControls(
     devices: List<DevicePreviewDevice>,
     selectedDevice: DevicePreviewDevice,
     orientation: DevicePreviewOrientation,
@@ -282,26 +285,26 @@ private fun DevicePreviewChrome(
     onOrientationChange: (DevicePreviewOrientation) -> Unit,
     onLayoutDirectionChange: (LayoutDirection) -> Unit,
     onZoomChange: (DevicePreviewZoom) -> Unit,
-    appBarDragArea: @Composable (modifier: Modifier, content: @Composable () -> Unit) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val controlsShape = Theme[shapes][smallShape]
+    val controlsScrollState = rememberScrollState()
+    val backgroundColor = Theme[colors][panel]
+    val contentColor = Theme[colors][onPanel]
+    val borderColor = Theme[colors][border]
+
     Box(
         modifier = modifier
-            .requiredHeight(64.dp)
-            .background(ToolbarBackground)
-            .border(width = 1.dp, color = ToolbarBorder)
-            .padding(horizontal = 16.dp),
+            .clip(controlsShape)
+            .background(backgroundColor, controlsShape)
+            .border(width = 1.dp, color = borderColor, shape = controlsShape)
+            .padding(8.dp),
     ) {
-        Row(
-            modifier = Modifier.matchParentSize(),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            appBarDragArea(
-                Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
-            ) {}
+        ProvideContentColor(contentColor) {
             Row(
+                modifier = Modifier
+                    .horizontalScroll(controlsScrollState)
+                    .padding(PreviewControlsFocusPadding),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -314,15 +317,15 @@ private fun DevicePreviewChrome(
                     zoomLevels = zoomLevels,
                     onZoomChange = onZoomChange,
                 )
-                if (selectedDevice.canRotate) {
-                    OrientationButton(
-                        orientation = orientation,
-                        onClick = { onOrientationChange(orientation.rotated()) },
-                    )
-                }
+                OrientationButton(
+                    orientation = orientation,
+                    enabled = selectedDevice.canRotate,
+                    onClick = { onOrientationChange(orientation.rotated()) },
+                )
                 devices.forEach { device ->
                     DevicePreviewButton(
                         device = device,
+                        orientation = orientation,
                         selected = device.id == selectedDevice.id,
                         onClick = { onDeviceSelected(device) },
                     )
@@ -339,17 +342,14 @@ private fun LayoutDirectionButton(
 ) {
     Button(
         onClick = onClick,
-        style = ButtonStyle.Secondary,
+        style = ButtonStyle.Ghost,
         buttonSize = ButtonSize.Small,
     ) {
-        Icon(
-            imageVector = Lucide.ArrowLeftRight,
-            contentDescription = if (layoutDirection == LayoutDirection.Ltr) {
-                "Switch to RTL"
-            } else {
-                "Switch to LTR"
-            },
-            modifier = Modifier.size(18.dp),
+        Text(
+            text = if (layoutDirection == LayoutDirection.Ltr) "LTR" else "RTL",
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Light,
+            singleLine = true,
         )
     }
 }
@@ -357,11 +357,13 @@ private fun LayoutDirectionButton(
 @Composable
 private fun OrientationButton(
     orientation: DevicePreviewOrientation,
+    enabled: Boolean,
     onClick: () -> Unit,
 ) {
     Button(
         onClick = onClick,
-        style = ButtonStyle.Secondary,
+        enabled = enabled,
+        style = ButtonStyle.Ghost,
         buttonSize = ButtonSize.Small,
     ) {
         Icon(
@@ -389,7 +391,7 @@ private fun ZoomControls(
         Button(
             onClick = { onZoomChange(zoom.zoomedOut(zoomLevels)) },
             enabled = zoom.scale > zoomLevels.minOf { it.scale },
-            style = ButtonStyle.Secondary,
+            style = ButtonStyle.Ghost,
             buttonSize = ButtonSize.Small,
         ) {
             Icon(
@@ -406,7 +408,7 @@ private fun ZoomControls(
         Button(
             onClick = { onZoomChange(zoom.zoomedIn(zoomLevels)) },
             enabled = zoom.scale < zoomLevels.maxOf { it.scale },
-            style = ButtonStyle.Secondary,
+            style = ButtonStyle.Ghost,
             buttonSize = ButtonSize.Small,
         ) {
             Icon(
@@ -457,7 +459,7 @@ private fun ZoomMenu(
         anchor = {
             Button(
                 onClick = { expanded = !expanded },
-                style = ButtonStyle.Secondary,
+                style = ButtonStyle.Ghost,
                 buttonSize = ButtonSize.Small,
                 modifier = Modifier.width(92.dp),
             ) {
@@ -475,21 +477,46 @@ private fun ZoomMenu(
 @Composable
 private fun DevicePreviewButton(
     device: DevicePreviewDevice,
+    orientation: DevicePreviewOrientation,
     selected: Boolean,
     onClick: () -> Unit,
 ) {
+    val targetIconRotation = if (device.hasOrientationIcon && orientation == DevicePreviewOrientation.Landscape) {
+        DeviceRotationDegrees
+    } else {
+        0f
+    }
+    var iconRotation by remember(device.hasOrientationIcon) { mutableStateOf(targetIconRotation) }
+
+    LaunchedEffect(targetIconRotation) {
+        animateDeviceRotationTo(
+            startRotation = iconRotation,
+            targetRotation = targetIconRotation,
+            easing = ::easeOutBack,
+        ) { rotation, _ ->
+            iconRotation = rotation
+        }
+    }
+
     Button(
         onClick = onClick,
-        style = if (selected) ButtonStyle.Primary else ButtonStyle.Secondary,
+        style = if (selected) ButtonStyle.Primary else ButtonStyle.Ghost,
         buttonSize = ButtonSize.Small,
     ) {
         Icon(
             imageVector = iconFor(device),
             contentDescription = device.label,
-            modifier = Modifier.size(18.dp),
+            modifier = Modifier
+                .size(18.dp)
+                .graphicsLayer {
+                    rotationZ = iconRotation
+                },
         )
     }
 }
+
+private val DevicePreviewDevice.hasOrientationIcon: Boolean
+    get() = id == DevicePreviewDevices.Mobile.id || id == DevicePreviewDevices.Tablet.id
 
 private fun iconFor(device: DevicePreviewDevice): ImageVector {
     return when (device.id) {
@@ -536,7 +563,7 @@ fun isDevicePreviewRotationShortcut(event: KeyEvent): Boolean {
 fun isDevicePreviewLayoutDirectionShortcut(event: KeyEvent): Boolean {
     return event.type == KeyEventType.KeyDown &&
         event.isMetaPressed &&
-        event.key.keyCode == BackQuoteKeyCode
+        event.key == Key.Grave
 }
 
 fun devicePreviewZoomForShortcut(
@@ -564,11 +591,11 @@ private fun DevicePreviewStage(
     layoutDirection: LayoutDirection,
     zoom: DevicePreviewZoom,
     zoomLevels: List<DevicePreviewZoom>,
+    showControls: Boolean,
     onDeviceSelected: (DevicePreviewDevice) -> Unit,
     onOrientationChange: (DevicePreviewOrientation) -> Unit,
     onLayoutDirectionChange: (LayoutDirection) -> Unit,
     onZoomChange: (DevicePreviewZoom) -> Unit,
-    appBarDragArea: @Composable (modifier: Modifier, content: @Composable () -> Unit) -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
@@ -584,27 +611,10 @@ private fun DevicePreviewStage(
             renderedOrientation: DevicePreviewOrientation,
         ) {
             val startRotation = rotationFrame.rotationZ
-            val distance = abs(targetRotation - startRotation)
-            if (distance == 0f) {
-                rotationFrame = DeviceRotationFrame(
-                    orientation = renderedOrientation,
-                    rotationZ = targetRotation,
-                    rotating = targetRotation != 0f,
-                )
-                return
-            }
-
-            val durationNanos = (
-                DeviceRotationDuration.inWholeNanoseconds.toFloat() *
-                    (distance / DeviceRotationDegrees)
-            ).roundToLong()
-            val startTime = withFrameNanos { it }
-            var finished = false
-            while (!finished) {
-                val frameTime = withFrameNanos { it }
-                val progress = ((frameTime - startTime).toFloat() / durationNanos.toFloat()).coerceIn(0f, 1f)
-                val rotation = startRotation + (targetRotation - startRotation) * easeOutCubic(progress)
-                finished = progress == 1f
+            animateDeviceRotationTo(
+                startRotation = startRotation,
+                targetRotation = targetRotation,
+            ) { rotation, finished ->
                 rotationFrame = DeviceRotationFrame(
                     orientation = renderedOrientation,
                     rotationZ = rotation,
@@ -664,25 +674,13 @@ private fun DevicePreviewStage(
         animateOrientationChangeTo(targetOrientation = orientation)
     }
 
-    Column(modifier = modifier) {
-        DevicePreviewChrome(
-            devices = devices,
-            selectedDevice = device,
-            orientation = orientation,
-            layoutDirection = layoutDirection,
-            zoom = zoom,
-            zoomLevels = zoomLevels,
-            onDeviceSelected = onDeviceSelected,
-            onOrientationChange = onOrientationChange,
-            onLayoutDirectionChange = onLayoutDirectionChange,
-            onZoomChange = onZoomChange,
-            appBarDragArea = appBarDragArea,
-            modifier = Modifier.fillMaxWidth(),
-        )
-        BoxWithConstraints(
+    BoxWithConstraints(modifier = modifier) {
+        val containerWidth = maxWidth
+        val containerHeight = maxHeight
+
+        Box(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
+                .fillMaxSize(),
         ) {
             val framedDevice = device.canRotate
             val contentAlpha by animateFloatAsState(
@@ -698,19 +696,17 @@ private fun DevicePreviewStage(
                 device.height
             } else {
                 device.width
-            } ?: maxWidth
+            } ?: containerWidth
             val targetHeight = if (framedDevice && rotationFrame.orientation == DevicePreviewOrientation.Landscape) {
                 device.width
             } else {
                 device.height
-            } ?: maxHeight
+            } ?: containerHeight
             val animatedZoom by animateFloatAsState(
                 targetValue = zoom.scale,
                 animationSpec = DevicePreviewZoomAnimationSpec,
                 label = "DevicePreviewZoom",
             )
-            val containerWidth = maxWidth
-            val containerHeight = maxHeight
 
             Box(
                 modifier = Modifier
@@ -774,6 +770,24 @@ private fun DevicePreviewStage(
                         content = content,
                     )
                 }
+            }
+
+            if (showControls) {
+                DevicePreviewControls(
+                    devices = devices,
+                    selectedDevice = device,
+                    orientation = orientation,
+                    layoutDirection = layoutDirection,
+                    zoom = zoom,
+                    zoomLevels = zoomLevels,
+                    onDeviceSelected = onDeviceSelected,
+                    onOrientationChange = onOrientationChange,
+                    onLayoutDirectionChange = onLayoutDirectionChange,
+                    onZoomChange = onZoomChange,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(PreviewControlsPadding),
+                )
             }
         }
     }
@@ -941,6 +955,33 @@ private data class DeviceRotationFrame(
     val rotating: Boolean = false,
 )
 
+private suspend fun animateDeviceRotationTo(
+    startRotation: Float,
+    targetRotation: Float,
+    easing: (Float) -> Float = ::easeOutCubic,
+    onFrame: (rotation: Float, finished: Boolean) -> Unit,
+) {
+    val distance = abs(targetRotation - startRotation)
+    if (distance == 0f) {
+        onFrame(targetRotation, true)
+        return
+    }
+
+    val durationNanos = (
+        DeviceRotationDuration.inWholeNanoseconds.toFloat() *
+            (distance / DeviceRotationDegrees)
+    ).roundToLong()
+    val startTime = withFrameNanos { it }
+    var finished = false
+    while (!finished) {
+        val frameTime = withFrameNanos { it }
+        val progress = ((frameTime - startTime).toFloat() / durationNanos.toFloat()).coerceIn(0f, 1f)
+        val rotation = startRotation + (targetRotation - startRotation) * easing(progress)
+        finished = progress == 1f
+        onFrame(rotation, finished)
+    }
+}
+
 private fun easeInCubic(progress: Float): Float {
     return progress * progress * progress
 }
@@ -959,8 +1000,6 @@ private fun easeOutBack(progress: Float): Float {
 
 private val PreviewBackground = Color(0xFF151515)
 private val PreviewContentBackground = Color(0xFFFAFAFA)
-private val ToolbarBackground = Color(0xFF202020)
-private val ToolbarBorder = Color(0xFF303030)
 private val DeviceBezel = Color(0xFF070707)
 private val FrameBorder = Color(0xFF4A4A4A)
 private val DevicePreviewAnimationSpec = spring<Dp>(
@@ -974,11 +1013,12 @@ private val DevicePreviewZoomAnimationSpec = spring<Float>(
 )
 private val DeviceRotationContentFadeSpec = tween<Float>(durationMillis = 120)
 private val DevicePreviewFramedPadding = 24.dp
+private val PreviewControlsPadding = 16.dp
+private val PreviewControlsFocusPadding = 4.dp
 private val DeviceFramePadding = 10.dp
 private const val DeviceRotationDegrees = 90f
 private const val DeviceRotationSwapProgress = 0.5f
 private const val DeviceRotationSwapDegrees = 45f
 private const val DeviceRotationOvershoot = 1.1f
 private val DeviceRotationDuration = 360.milliseconds
-private const val BackQuoteKeyCode = 192L
 private const val PlusKeyCode = 521L

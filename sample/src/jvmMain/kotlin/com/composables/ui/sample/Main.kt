@@ -1,6 +1,5 @@
 package com.composables.ui.sample
 
-import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -91,9 +90,6 @@ fun main() = application {
             onLayoutDirectionSelected = { selectedLayoutDirection = it },
             selectedZoom = selectedZoom,
             onZoomSelected = { selectedZoom = it },
-            appBarDragArea = { modifier, content ->
-                WindowDraggableArea(modifier = modifier, content = content)
-            },
         ) {
             SocialApp()
         }
