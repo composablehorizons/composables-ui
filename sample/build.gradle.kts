@@ -44,6 +44,7 @@ kotlin {
         }
 
         jvmMain.dependencies {
+            implementation(project(":preview"))
             implementation(compose.desktop.currentOs) {
                 exclude("org.jetbrains.compose.material")
                 exclude("org.jetbrains.compose.material3")

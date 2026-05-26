@@ -42,4 +42,5 @@ rootProject.name = "ui"
 
 include(":components")
 include(":demo")
+include(":preview")
 include(":sample")

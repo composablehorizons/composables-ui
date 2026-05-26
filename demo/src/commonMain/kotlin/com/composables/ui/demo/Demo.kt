@@ -106,6 +106,7 @@ import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.componentSizes
 import com.composables.ui.theme.control
+import com.composables.ui.theme.currentInteractionMode
 import com.composables.ui.theme.focusRing
 import com.composables.ui.theme.focusRingOffset
 import com.composables.ui.theme.focusRingWidth
@@ -437,7 +438,7 @@ fun Demo(initialDemoId: String? = null) {
     val initialDemo = demos.firstOrNull { it.id == initialDemoId }
     val previewSpecificDemo = initialDemo != null
     val startDestination = initialDemo?.id ?: "home"
-    val initialInteractionMode = LocalInteractionMode.current
+    val initialInteractionMode = currentInteractionMode()
     var interactionMode by remember { mutableStateOf(initialInteractionMode) }
     var colorScheme by remember { mutableStateOf(ColorScheme.Light) }
 
@@ -559,7 +560,7 @@ private fun DemoRoute(
     colorScheme: ColorScheme,
     onColorSchemeChange: (ColorScheme) -> Unit,
 ) {
-    val initialInteractionMode = LocalInteractionMode.current
+    val initialInteractionMode = currentInteractionMode()
     val fixedInteractionMode = remember { initialInteractionMode }
 
     CompositionLocalProvider(
