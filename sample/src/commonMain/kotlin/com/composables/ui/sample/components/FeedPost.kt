@@ -40,7 +40,6 @@ fun FeedPost(
     actions: @Composable () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val shape = Theme[shapes][largeShape]
 
     Row(
         modifier = modifier
@@ -49,7 +48,6 @@ fun FeedPost(
                 interactionSource = interactionSource,
                 width = Theme[componentSizes][focusRingWidth],
                 color = Theme[colors][focusRing],
-                shape = shape,
                 offset = Theme[componentSizes][focusRingOffset],
             )
             .clickable(

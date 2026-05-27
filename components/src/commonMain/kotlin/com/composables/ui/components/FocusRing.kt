@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -19,7 +20,7 @@ fun Modifier.focusRing(
     interactionSource: InteractionSource,
     width: Dp,
     color: Color,
-    shape: Shape,
+    shape: Shape = RectangleShape,
     offset: Dp,
 ): Modifier {
     val showFocusRing by interactionSource.collectIsFocusVisibleAsState()
