@@ -51,7 +51,8 @@ import com.composables.ui.components.IconButton
 import com.composables.ui.components.Text
 import com.composables.ui.sample.components.AvatarButton
 import com.composables.ui.sample.components.FeedPost
-import com.composables.ui.sample.components.PostMediaItem
+import com.composables.ui.sample.components.LandscapeMediaItem
+import com.composables.ui.sample.components.PortraitMediaItem
 import com.composables.ui.sample.data.SocialPost
 import com.composables.ui.sample.data.feedPosts
 import com.composables.ui.sample.data.profiles
@@ -115,7 +116,7 @@ private fun SocialFeed(
         }
         Box(
             modifier = Modifier
-                .widthIn(max = if(widthBreakpoint isAtLeast Medium) FeedMaxWidth else Dp.Unspecified)
+                .widthIn(max = if (widthBreakpoint isAtLeast Medium) FeedMaxWidth else Dp.Unspecified)
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .padding(top = feedVerticalInset)
@@ -182,7 +183,11 @@ private fun SocialFeed(
                             if (post.media.isNotEmpty()) {
                                 {
                                     post.media.forEach { item ->
-                                        PostMediaItem(item)
+                                        if (post.portraitMedia) {
+                                            PortraitMediaItem(item.url)
+                                        } else {
+                                            LandscapeMediaItem(item.url)
+                                        }
                                     }
                                 }
                             } else null

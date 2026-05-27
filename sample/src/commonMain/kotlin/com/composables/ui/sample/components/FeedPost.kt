@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -25,7 +24,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.composables.ui.components.focusRing
-import com.composables.ui.sample.data.PostMedia
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.componentSizes
@@ -110,7 +108,6 @@ fun FeedPost(
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .height(280.dp)
                     .horizontalScroll(rememberScrollState())
                     .padding(start = 80.dp, end = 24.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -135,17 +132,30 @@ fun FeedPost(
 private val FeedPostHeaderControlSize = 20.dp
 
 @Composable
-fun PostMediaItem(media: PostMedia) {
-    val shape = Theme[shapes][mediumShape]
-
+fun PortraitMediaItem(url: String) {
     Image(
-        painter = rememberUriPainter(media.url),
+        painter = rememberUriPainter(url),
         contentDescription = null,
         modifier = Modifier
-            .height(if (media.isPortrait) 220.dp else 250.dp)
-            .clip(shape)
-            .background(Theme[colors][border], shape)
-            .border(1.dp, Theme[colors][border], shape),
+            .height(250.dp)
+            .clip(Theme[shapes][mediumShape])
+            .background(Theme[colors][border], Theme[shapes][mediumShape])
+            .border(1.dp, Theme[colors][border], Theme[shapes][mediumShape]),
+        contentScale = ContentScale.Crop,
+    )
+}
+
+@Composable
+fun LandscapeMediaItem(url: String) {
+
+    Image(
+        painter = rememberUriPainter(url),
+        contentDescription = null,
+        modifier = Modifier
+            .height(250.dp)
+            .clip(Theme[shapes][mediumShape])
+            .background(Theme[colors][border], Theme[shapes][mediumShape])
+            .border(1.dp, Theme[colors][border], Theme[shapes][mediumShape]),
         contentScale = ContentScale.Crop,
     )
 }
