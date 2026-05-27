@@ -31,15 +31,15 @@ import com.composables.icons.lucide.Plus
 import com.composables.icons.lucide.Search
 import com.composables.icons.lucide.User
 import com.composables.ui.components.Icon
-import com.composables.ui.theme.AppScaffold
-import com.composables.ui.theme.Large
-import com.composables.ui.theme.Medium
 import com.composables.ui.components.NavigationBar
 import com.composables.ui.components.NavigationBarItem
 import com.composables.ui.components.Sidebar
 import com.composables.ui.components.SidebarItem
 import com.composables.ui.components.SidebarMode
 import com.composables.ui.components.Text
+import com.composables.ui.theme.AppScaffold
+import com.composables.ui.theme.Large
+import com.composables.ui.theme.Medium
 import com.composeunstyled.currentWidthBreakpoint
 
 private const val NavigationTransitionDurationMillis = 350

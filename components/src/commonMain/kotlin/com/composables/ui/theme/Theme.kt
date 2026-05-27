@@ -416,21 +416,3 @@ fun AppScaffold(content: @Composable () -> Unit) {
         }
     }
 }
-
-@Composable
-fun ScreenScaffold(
-    modifier: Modifier = Modifier,
-    backgroundColor: Color = Theme[colors][background],
-    contentColor: Color = Theme[colors][onBackground],
-    content: @Composable () -> Unit,
-) {
-    ProvideContentColor(contentColor) {
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-                .background(backgroundColor),
-        ) {
-            content()
-        }
-    }
-}
