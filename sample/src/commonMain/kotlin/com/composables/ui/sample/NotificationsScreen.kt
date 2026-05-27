@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import com.composables.ui.theme.ScreenScaffold
 import com.composables.ui.components.Text
 
 @Composable

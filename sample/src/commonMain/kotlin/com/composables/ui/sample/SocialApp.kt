@@ -240,6 +240,7 @@ private fun SocialNavHost(
                 HomeScreen(
                     onPostClick = { post -> navController.navigate(PostRoute(post.id)) },
                     onProfileClick = { profileId -> navController.navigate(ProfileRoute(profileId)) },
+                    onNewPostClick = { navController.navigateToComposeTab() },
                 )
             }
             composable<HomeTabRoute>(
@@ -251,6 +252,7 @@ private fun SocialNavHost(
                 HomeScreen(
                     onPostClick = { post -> navController.navigate(PostRoute(post.id)) },
                     onProfileClick = { profileId -> navController.navigate(ProfileRoute(profileId)) },
+                    onNewPostClick = { navController.navigateToComposeTab() },
                 )
             }
             composable<PostRoute> { backStackEntry ->

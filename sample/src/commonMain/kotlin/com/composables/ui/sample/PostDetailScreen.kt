@@ -1,5 +1,6 @@
 package com.composables.ui.sample
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,12 +19,11 @@ import com.composables.icons.lucide.Lucide
 import com.composables.ui.components.ButtonStyle
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
-import com.composables.ui.theme.ScreenScaffold
 import com.composables.ui.components.Text
 import com.composables.ui.components.Toolbar
-import com.composables.ui.theme.background
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.onBackground
+import com.composables.ui.theme.panel
 import com.composeunstyled.theme.Theme
 
 private val PostDetailMaxWidth = 700.dp
@@ -39,10 +39,11 @@ fun PostDetailScreen(
                 modifier = Modifier
                     .widthIn(max = PostDetailMaxWidth)
                     .fillMaxWidth()
+                    .background(Theme[colors][panel])
                     .align(Alignment.TopCenter),
             ) {
                 Toolbar(
-                    backgroundColor = Theme[colors][background],
+                    backgroundColor = Theme[colors][panel],
                     leading = {
                         IconButton(onClick = onBack, style = ButtonStyle.Ghost) {
                             Icon(

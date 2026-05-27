@@ -47,7 +47,6 @@ import com.composables.ui.theme.Expanded
 import com.composables.ui.components.HorizontalSeparator
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
-import com.composables.ui.theme.ScreenScaffold
 import com.composables.ui.components.Tab
 import com.composables.ui.components.TabGroup
 import com.composables.ui.components.TabList
@@ -66,6 +65,7 @@ import com.composables.ui.theme.field
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
 import com.composables.ui.theme.onField
+import com.composables.ui.theme.panel
 import com.composeunstyled.currentWidthBreakpoint
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
@@ -121,6 +121,7 @@ fun ProfileScreen(
                             .then(
                                 if (showProfileOutline) {
                                     Modifier
+                                        .background(Theme[colors][panel], profileShape)
                                         .outline(
                                             width = 1.dp,
                                             color = Theme[colors][border],
@@ -129,7 +130,7 @@ fun ProfileScreen(
                                         )
                                         .clip(profileShape)
                                 } else {
-                                    Modifier
+                                    Modifier.background(Theme[colors][panel])
                                 }
                             ),
                     ) {
@@ -163,7 +164,7 @@ fun ProfileScreen(
 @Composable
 private fun ProfileToolbar(onBack: (() -> Unit)?) {
     Toolbar(
-        backgroundColor = Theme[colors][background],
+        backgroundColor = Theme[colors][panel],
         leading = onBack?.let { onBackClick ->
             {
                 IconButton(onClick = onBackClick, style = ButtonStyle.Ghost) {

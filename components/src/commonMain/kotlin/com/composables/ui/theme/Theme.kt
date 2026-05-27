@@ -179,7 +179,7 @@ val AppTheme = buildTheme {
         easing = FastOutSlowInEasing,
     )
     val animatedBackground by animateColorAsState(
-        targetValue = if (useDarkColors) Color.Black else Color.White,
+        targetValue = if (useDarkColors) Color.Black else Color(0xFFF4F4F4),
         animationSpec = colorAnimationSpec,
         label = "BackgroundColor",
     )

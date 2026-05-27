@@ -3,6 +3,8 @@ package com.composables.ui.sample
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -27,8 +29,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import com.composables.icons.lucide.Ellipsis
 import com.composables.icons.lucide.Heart
 import com.composables.icons.lucide.Lucide
@@ -46,16 +51,17 @@ import com.composables.ui.components.HorizontalSeparator
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
 import com.composables.ui.theme.Medium
-import com.composables.ui.theme.ScreenScaffold
 import com.composables.ui.components.Text
 import com.composables.ui.sample.components.AvatarButton
 import com.composables.ui.sample.components.FeedPost
 import com.composables.ui.sample.data.SocialPost
 import com.composables.ui.sample.data.feedPosts
+import com.composables.ui.sample.data.profiles
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
+import com.composables.ui.theme.panel
 import com.composables.uripainter.rememberUriPainter
 import com.composeunstyled.currentWidthBreakpoint
 import com.composeunstyled.outline
@@ -63,11 +69,13 @@ import com.composeunstyled.theme.Theme
 
 private val FeedMaxWidth = 700.dp
 private val WideFeedVerticalInset = 70.dp
+private const val LoggedInProfileId = "john_mobbin"
 
 @Composable
 fun HomeScreen(
     onPostClick: (SocialPost) -> Unit,
     onProfileClick: (String) -> Unit,
+    onNewPostClick: () -> Unit,
 ) {
     ScreenScaffold {
         SocialFeed(
@@ -76,6 +84,7 @@ fun HomeScreen(
                 .fillMaxWidth(),
             onPostClick = onPostClick,
             onProfileClick = onProfileClick,
+            onNewPostClick = onNewPostClick,
         )
     }
 }
@@ -84,27 +93,38 @@ fun HomeScreen(
 private fun SocialFeed(
     onPostClick: (SocialPost) -> Unit,
     onProfileClick: (String) -> Unit,
+    onNewPostClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val widthBreakpoint = currentWidthBreakpoint()
-    val showFeedOutline = widthBreakpoint isAtLeast Medium
     val feedShape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)
     val feedVerticalInset by animateDpAsState(
-        targetValue = if (showFeedOutline) WideFeedVerticalInset else 0.dp,
+        targetValue = if (widthBreakpoint isAtLeast Medium) WideFeedVerticalInset else 0.dp,
         label = "FeedVerticalInset",
     )
 
-    Box(
-        modifier = modifier.padding(top = feedVerticalInset)
-    ) {
+    Box(modifier = modifier) {
+        if (widthBreakpoint isAtLeast Medium) {
+            Text(
+                text = "My Feed",
+                modifier = Modifier
+                    .then(Modifier.widthIn(max = FeedMaxWidth))
+                    .fillMaxWidth()
+                    .align(Alignment.TopCenter)
+                    .padding(horizontal = 24.dp, vertical = 22.dp),
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
         Box(
             modifier = Modifier
-                .then(if (showFeedOutline) Modifier.widthIn(max = FeedMaxWidth) else Modifier)
+                .then(if (widthBreakpoint isAtLeast Medium) Modifier.widthIn(max = FeedMaxWidth) else Modifier)
                 .fillMaxWidth()
                 .fillMaxHeight()
+                .padding(top = feedVerticalInset)
                 .then(
-                    if (showFeedOutline) {
+                    if (widthBreakpoint isAtLeast Medium) {
                         Modifier
+                            .background(Theme[colors][panel], feedShape)
                             .outline(
                                 width = 1.dp,
                                 color = Theme[colors][border],
@@ -113,7 +133,7 @@ private fun SocialFeed(
                             )
                             .clip(feedShape)
                     } else {
-                        Modifier
+                        Modifier.background(Theme[colors][panel])
                     }
                 )
                 .align(Alignment.TopCenter),
@@ -122,6 +142,13 @@ private fun SocialFeed(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(bottom = 96.dp),
             ) {
+                item(key = "composer") {
+                    FeedComposer(
+                        onProfileClick = { onProfileClick(LoggedInProfileId) },
+                        onNewPostClick = onNewPostClick,
+                    )
+                    HorizontalSeparator()
+                }
                 itemsIndexed(
                     items = feedPosts,
                     key = { _, post -> post.id },
@@ -165,6 +192,47 @@ private fun SocialFeed(
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun FeedComposer(
+    onProfileClick: () -> Unit,
+    onNewPostClick: () -> Unit,
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val loggedInProfile = profiles.first { it.id == LoggedInProfileId }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(24.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        AvatarButton(
+            url = loggedInProfile.avatarUrl,
+            onClick = onProfileClick,
+        )
+        Text(
+            text = "What's up?",
+            modifier = Modifier
+                .weight(1f)
+                .pointerHoverIcon(PointerIcon.Text)
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    onClick = onNewPostClick,
+                ),
+            color = Theme[colors][muted],
+        )
+        Button(
+            onClick = onNewPostClick,
+            style = ButtonStyle.Outlined,
+            shape = RoundedCornerShape(12.dp),
+        ) {
+            Text("Post")
         }
     }
 }
