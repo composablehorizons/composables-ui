@@ -34,7 +34,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.composables.ui.theme.alphas
-import com.composables.ui.theme.buttonHeight
 import com.composables.ui.theme.buttonShape
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.componentSizes
@@ -164,7 +163,7 @@ fun DisclosureScope.DisclosureHeading(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .heightIn(min = Theme[componentSizes][buttonHeight])
+                            .heightIn(min = defaultControlHeight())
                             .padding(contentPadding),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically,

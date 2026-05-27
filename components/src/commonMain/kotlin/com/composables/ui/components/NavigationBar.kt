@@ -3,6 +3,7 @@ package com.composables.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,12 +14,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import com.composables.ui.theme.background
-import com.composables.ui.theme.border
+import com.composables.ui.theme.buttonShape
 import com.composables.ui.theme.colors
-import com.composables.ui.theme.muted
-import com.composables.ui.theme.onBackground
+import com.composables.ui.theme.navigationBar
+import com.composables.ui.theme.navigationBarBorder
+import com.composables.ui.theme.onNavigationBar
+import com.composables.ui.theme.onSelectedNavigationBarItem
+import com.composables.ui.theme.selectedNavigationBarItem
+import com.composables.ui.theme.shapes
 import com.composeunstyled.ProvideContentColor
+import com.composeunstyled.buildModifier
 import com.composeunstyled.theme.Theme
 
 @Composable
@@ -29,33 +34,50 @@ fun NavigationBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(80.dp)
+            .height(NavigationBarHeight)
             .pointerInput(Unit) {}
-            .border(width = 1.dp, color = Theme[colors][border])
-            .background(Theme[colors][background])
+            .border(width = 1.dp, color = Theme[colors][navigationBarBorder])
+            .background(Theme[colors][navigationBar])
             .padding(horizontal = 24.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.spacedBy(NavigationBarItemSpacing),
         verticalAlignment = Alignment.CenterVertically,
         content = content,
     )
 }
 
 @Composable
-fun NavigationBarItem(
+fun RowScope.NavigationBarItem(
     selected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     icon: @Composable () -> Unit,
 ) {
-    IconButton(
-        onClick = onClick,
-        modifier = modifier,
-        enabled = enabled,
-        style = ButtonStyle.Ghost,
+    val shape = Theme[shapes][buttonShape]
+
+    Box(
+        modifier = modifier
+            .weight(1f)
+            .height(NavigationBarHeight),
+        contentAlignment = Alignment.Center,
     ) {
-        ProvideContentColor(if (selected) Theme[colors][onBackground] else Theme[colors][muted]) {
-            icon()
+        IconButton(
+            onClick = onClick,
+            modifier = Modifier.then(buildModifier {
+                if (selected) {
+                    add(Modifier.background(Theme[colors][selectedNavigationBarItem], shape))
+                }
+            }),
+            enabled = enabled,
+            style = ButtonStyle.Ghost,
+            shape = shape,
+        ) {
+            ProvideContentColor(if (selected) Theme[colors][onSelectedNavigationBarItem] else Theme[colors][onNavigationBar]) {
+                icon()
+            }
         }
     }
 }
+
+private val NavigationBarHeight = 64.dp
+private val NavigationBarItemSpacing = 0.dp

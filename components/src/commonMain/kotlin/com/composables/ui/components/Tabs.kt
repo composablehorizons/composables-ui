@@ -27,7 +27,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.composables.ui.theme.alphas
 import com.composables.ui.theme.border
-import com.composables.ui.theme.buttonHeight
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.componentSizes
 import com.composables.ui.theme.control
@@ -149,7 +148,7 @@ fun <T> TabListScope<T>.Tab(
         ) {
             Row(
                 modifier = Modifier
-                    .heightIn(min = Theme[componentSizes][buttonHeight])
+                    .heightIn(min = defaultControlHeight())
                     .then(buildModifier {
                         if (fillsTabWidth) {
                             add(Modifier.fillMaxWidth())

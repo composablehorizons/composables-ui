@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.composables.ui.components.focusRing
 import com.composables.ui.theme.colors
@@ -25,9 +24,7 @@ import com.composables.ui.theme.focusRingWidth
 import com.composables.ui.theme.largeShape
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.shapes
-import com.composeunstyled.LocalTextStyle
 import com.composeunstyled.ProvideContentColor
-import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.theme.Theme
 
 @Composable
@@ -79,10 +76,8 @@ fun FeedPost(
                     Box(Modifier.weight(1f, fill = false)) {
                         authorName()
                     }
-                    ProvideTextStyle(LocalTextStyle.current.merge(fontWeight = FontWeight.Thin)) {
-                        ProvideContentColor(Theme[colors][muted]) {
-                            timestamp()
-                        }
+                    ProvideContentColor(Theme[colors][muted]) {
+                        timestamp()
                     }
                 }
                 Box(

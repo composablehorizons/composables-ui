@@ -36,8 +36,6 @@ import androidx.compose.ui.unit.dp
 import com.composables.ui.theme.alphas
 import com.composables.ui.theme.bright
 import com.composables.ui.theme.border
-import com.composables.ui.theme.buttonHeight
-import com.composables.ui.theme.buttonHorizontalPadding
 import com.composables.ui.theme.buttonShape
 import com.composables.ui.theme.componentSizes
 import com.composables.ui.theme.colors
@@ -47,7 +45,6 @@ import com.composables.ui.theme.dim
 import com.composables.ui.theme.focusRing
 import com.composables.ui.theme.focusRingOffset
 import com.composables.ui.theme.focusRingWidth
-import com.composables.ui.theme.iconButtonSize
 import com.composables.ui.theme.indications
 import com.composables.ui.theme.onBackground
 import com.composables.ui.theme.onDestructive
@@ -183,23 +180,23 @@ private fun Modifier.size(buttonSize: ButtonSize, style: ButtonStyle): Modifier 
 
 @Composable
 private fun buttonHeightFor(buttonSize: ButtonSize): Dp = when (buttonSize) {
-    ButtonSize.Small -> Theme[componentSizes][buttonHeight] - 4.dp
-    ButtonSize.Large -> Theme[componentSizes][buttonHeight] + 4.dp
-    else -> Theme[componentSizes][buttonHeight]
+    ButtonSize.Small -> defaultControlHeight() - 4.dp
+    ButtonSize.Large -> defaultControlHeight() + 4.dp
+    else -> defaultControlHeight()
 }
 
 @Composable
 private fun iconButtonSizeFor(buttonSize: ButtonSize): Dp = when (buttonSize) {
-    ButtonSize.Small -> Theme[componentSizes][iconButtonSize] - 4.dp
-    ButtonSize.Large -> Theme[componentSizes][iconButtonSize] + 4.dp
-    else -> Theme[componentSizes][iconButtonSize]
+    ButtonSize.Small -> defaultIconButtonSize() - 4.dp
+    ButtonSize.Large -> defaultIconButtonSize() + 4.dp
+    else -> defaultIconButtonSize()
 }
 
 @Composable
 private fun buttonHorizontalPaddingFor(buttonSize: ButtonSize): Dp = when (buttonSize) {
-    ButtonSize.Small -> Theme[componentSizes][buttonHorizontalPadding] - 4.dp
-    ButtonSize.Large -> Theme[componentSizes][buttonHorizontalPadding] + 4.dp
-    else -> Theme[componentSizes][buttonHorizontalPadding]
+    ButtonSize.Small -> defaultButtonHorizontalPadding() - 4.dp
+    ButtonSize.Large -> defaultButtonHorizontalPadding() + 4.dp
+    else -> defaultButtonHorizontalPadding()
 }
 
 private val NoButtonPadding = PaddingValues(0.dp)

@@ -52,6 +52,17 @@ val control = ThemeToken<Color>("control")
 val onControl = ThemeToken<Color>("on_control")
 val selectedControl = ThemeToken<Color>("selected_control")
 val onSelectedControl = ThemeToken<Color>("on_selected_control")
+val sidebar = ThemeToken<Color>("sidebar")
+val onSidebar = ThemeToken<Color>("on_sidebar")
+val sidebarMuted = ThemeToken<Color>("sidebar_muted")
+val selectedSidebarItem = ThemeToken<Color>("selected_sidebar_item")
+val onSelectedSidebarItem = ThemeToken<Color>("on_selected_sidebar_item")
+val sidebarBorder = ThemeToken<Color>("sidebar_border")
+val navigationBar = ThemeToken<Color>("navigation_bar")
+val onNavigationBar = ThemeToken<Color>("on_navigation_bar")
+val selectedNavigationBarItem = ThemeToken<Color>("selected_navigation_bar_item")
+val onSelectedNavigationBarItem = ThemeToken<Color>("on_selected_navigation_bar_item")
+val navigationBarBorder = ThemeToken<Color>("navigation_bar_border")
 val destructive = ThemeToken<Color>("destructive")
 val onDestructive = ThemeToken<Color>("on_destructive")
 val border = ThemeToken<Color>("border")
@@ -79,9 +90,6 @@ val dropdownMenuShadow = ThemeToken<Shadow>("dropdown_menu_shadow")
 
 val textFieldTextSelectionColors = ThemeToken<TextSelectionColors>("text_field_text_selection_colors")
 
-val buttonHeight = ThemeToken<Dp>("button_height")
-val buttonHorizontalPadding = ThemeToken<Dp>("button_horizontal_padding")
-val iconButtonSize = ThemeToken<Dp>("icon_button_size")
 val dropdownMenuItemHeight = ThemeToken<Dp>("dropdown_menu_item_height")
 val textFieldHeight = ThemeToken<Dp>("text_field_height")
 val textFieldHorizontalPadding = ThemeToken<Dp>("text_field_horizontal_padding")
@@ -161,7 +169,7 @@ val AppTheme = buildTheme {
         easing = FastOutSlowInEasing,
     )
     val animatedBackground by animateColorAsState(
-        targetValue = if (useDarkColors) Color.Black else Color(0xFFF9F9F9),
+        targetValue = if (useDarkColors) Color.Black else Color.White,
         animationSpec = colorAnimationSpec,
         label = "BackgroundColor",
     )
@@ -230,6 +238,26 @@ val AppTheme = buildTheme {
         animationSpec = colorAnimationSpec,
         label = "BorderColor",
     )
+    val animatedSidebar by animateColorAsState(
+        targetValue = if (useDarkColors) Color(0xFF121212) else Color(0xFFF7F7F7),
+        animationSpec = colorAnimationSpec,
+        label = "SidebarColor",
+    )
+    val animatedSelectedSidebarItem by animateColorAsState(
+        targetValue = if (useDarkColors) Color(0xFF262626) else Color(0xFFECECEC),
+        animationSpec = colorAnimationSpec,
+        label = "SelectedSidebarItemColor",
+    )
+    val animatedNavigationBar by animateColorAsState(
+        targetValue = if (useDarkColors) Color.Black else Color.White,
+        animationSpec = colorAnimationSpec,
+        label = "NavigationBarColor",
+    )
+    val animatedSelectedNavigationBarItem by animateColorAsState(
+        targetValue = if (useDarkColors) Color(0xFF262626) else Color(0xFFECECEC),
+        animationSpec = colorAnimationSpec,
+        label = "SelectedNavigationBarItemColor",
+    )
     val animatedField by animateColorAsState(
         targetValue = if (useDarkColors) Color(0xFF262626) else Color(0xFFF1F1F1),
         animationSpec = colorAnimationSpec,
@@ -251,8 +279,6 @@ val AppTheme = buildTheme {
         label = "FocusRingColor",
     )
     val useTouchSizes = currentInteractionMode() == InteractionMode.Touch
-    val buttonHeightValue = if (useTouchSizes) 48.dp else 36.dp
-    val iconButtonSizeValue = if (useTouchSizes) 48.dp else 36.dp
     val dropdownMenuItemHeightValue = if (useTouchSizes) 48.dp else 36.dp
     val textFieldHeightValue = if (useTouchSizes) 48.dp else 40.dp
 
@@ -270,6 +296,17 @@ val AppTheme = buildTheme {
         onControl to animatedOnControl,
         selectedControl to animatedSelectedControl,
         onSelectedControl to animatedOnSelectedControl,
+        sidebar to animatedSidebar,
+        onSidebar to animatedOnBackground,
+        sidebarMuted to animatedMuted,
+        selectedSidebarItem to animatedSelectedSidebarItem,
+        onSelectedSidebarItem to animatedOnSelectedControl,
+        sidebarBorder to animatedBorder,
+        navigationBar to animatedNavigationBar,
+        onNavigationBar to animatedOnBackground,
+        selectedNavigationBarItem to animatedSelectedNavigationBarItem,
+        onSelectedNavigationBarItem to animatedOnSelectedControl,
+        navigationBarBorder to animatedBorder,
         destructive to Color(0xFFFF3040),
         onDestructive to Color.White,
         border to animatedBorder,
@@ -294,7 +331,7 @@ val AppTheme = buildTheme {
         smallShape to RoundedCornerShape(6.dp),
         mediumShape to RoundedCornerShape(12.dp),
         largeShape to RoundedCornerShape(16.dp),
-        buttonShape to RoundedCornerShape(100),
+        buttonShape to RoundedCornerShape(if (useTouchSizes) 100.dp else 10.dp),
         alertDialogShape to RoundedCornerShape(16.dp),
         bottomSheetShape to RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         dropdownMenuShape to RoundedCornerShape(16.dp),
@@ -309,9 +346,6 @@ val AppTheme = buildTheme {
         ),
     )
     properties[componentSizes] = mapOf(
-        buttonHeight to buttonHeightValue,
-        buttonHorizontalPadding to if (useTouchSizes) 20.dp else 16.dp,
-        iconButtonSize to iconButtonSizeValue,
         dropdownMenuItemHeight to dropdownMenuItemHeightValue,
         textFieldHeight to textFieldHeightValue,
         textFieldHorizontalPadding to 12.dp,

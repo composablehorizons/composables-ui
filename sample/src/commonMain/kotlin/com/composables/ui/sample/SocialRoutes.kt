@@ -9,6 +9,15 @@ data object HomeRoute
 data object HomeTabRoute
 
 @Serializable
+data object SearchTabRoute
+
+@Serializable
+data object ComposeTabRoute
+
+@Serializable
+data object NotificationsTabRoute
+
+@Serializable
 data class PostRoute(val postId: String)
 
 @Serializable

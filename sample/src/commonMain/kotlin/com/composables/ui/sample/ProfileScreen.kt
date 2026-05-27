@@ -1,6 +1,5 @@
 package com.composables.ui.sample
 
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.ArrowLeft
@@ -73,7 +71,6 @@ import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 
 private val ProfileMaxWidth = 700.dp
-private val WideProfileVerticalInset = 70.dp
 
 @kotlin.jvm.JvmInline
 private value class ProfileFeedTab private constructor(val value: String) {
@@ -100,16 +97,10 @@ fun ProfileScreen(
     val widthBreakpoint = currentWidthBreakpoint()
     val showProfileOutline = widthBreakpoint isAtLeast ExpandedWidthBreakpoint
     val profileShape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)
-    val profileVerticalInset by animateDpAsState(
-        targetValue = if (showProfileOutline) WideProfileVerticalInset else 0.dp,
-        label = "ProfileVerticalInset",
-    )
 
     ScreenScaffold {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = profileVerticalInset),
+            modifier = Modifier.fillMaxSize(),
         ) {
             Box(
                 modifier = Modifier
@@ -228,7 +219,7 @@ private fun ProfileHeader(profile: SocialProfile) {
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                Text(profile.name, style = TextStyle(fontWeight = FontWeight.Bold))
+                Text(profile.name, fontWeight = FontWeight.Bold)
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -284,7 +275,7 @@ private fun ProfileTabs(
                 Tab(key = tab) {
                     Text(
                         text = tab.label,
-                        style = TextStyle(fontWeight = FontWeight.Bold),
+                        fontWeight = FontWeight.Bold,
                     )
                 }
             }
@@ -315,7 +306,7 @@ private fun ProfilePostRow(
         authorName = {
             Text(
                 text = profile.handle,
-                style = TextStyle(fontWeight = FontWeight.Bold),
+                fontWeight = FontWeight.Bold,
             )
         },
         timestamp = {
@@ -409,7 +400,7 @@ private fun QuotedPost(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Avatar(avatarUrl, size = 28)
-            Text(author, style = TextStyle(fontWeight = FontWeight.Bold))
+            Text(author, fontWeight = FontWeight.Bold)
         }
         Text(body)
         Text(replies, color = Theme[colors][muted])

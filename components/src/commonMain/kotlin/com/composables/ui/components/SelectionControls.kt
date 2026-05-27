@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.composables.ui.theme.alphas
 import com.composables.ui.theme.border
-import com.composables.ui.theme.buttonHeight
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.componentSizes
 import com.composables.ui.theme.control
@@ -302,7 +301,7 @@ fun LabeledSwitch(
     content: @Composable RowScope.() -> Unit,
 ) {
     Row(
-        modifier = modifier.heightIn(min = Theme[componentSizes][buttonHeight]),
+        modifier = modifier.heightIn(min = defaultControlHeight()),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

@@ -27,10 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.composables.icons.lucide.Ellipsis
 import com.composables.icons.lucide.Heart
 import com.composables.icons.lucide.Lucide
@@ -153,7 +151,6 @@ private fun SocialFeed(
                         body = {
                             Text(
                                 text = post.body,
-                                style = TextStyle(fontSize = 19.sp, lineHeight = 27.sp),
                                 color = Theme[colors][onBackground],
                             )
                         },
@@ -282,7 +279,6 @@ private fun CountedActionButton(
             Text(
                 text = count,
                 color = color,
-                style = TextStyle(fontSize = 16.sp),
             )
         }
     }
