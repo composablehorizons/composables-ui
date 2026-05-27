@@ -62,7 +62,6 @@ val navigationBar = ThemeToken<Color>("navigation_bar")
 val onNavigationBar = ThemeToken<Color>("on_navigation_bar")
 val selectedNavigationBarItem = ThemeToken<Color>("selected_navigation_bar_item")
 val onSelectedNavigationBarItem = ThemeToken<Color>("on_selected_navigation_bar_item")
-val navigationBarBorder = ThemeToken<Color>("navigation_bar_border")
 val destructive = ThemeToken<Color>("destructive")
 val onDestructive = ThemeToken<Color>("on_destructive")
 val border = ThemeToken<Color>("border")
@@ -306,7 +305,6 @@ val AppTheme = buildTheme {
         onNavigationBar to animatedOnBackground,
         selectedNavigationBarItem to animatedSelectedNavigationBarItem,
         onSelectedNavigationBarItem to animatedOnSelectedControl,
-        navigationBarBorder to animatedBorder,
         destructive to Color(0xFFFF3040),
         onDestructive to Color.White,
         border to animatedBorder,

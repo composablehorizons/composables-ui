@@ -1,11 +1,12 @@
 package com.composables.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -18,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import com.composables.ui.theme.buttonShape
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.navigationBar
-import com.composables.ui.theme.navigationBarBorder
 import com.composables.ui.theme.onNavigationBar
 import com.composables.ui.theme.onSelectedNavigationBarItem
 import com.composables.ui.theme.selectedNavigationBarItem
@@ -32,23 +32,28 @@ fun NavigationBar(
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
 ) {
-    Row(
-        modifier = modifier
+    Column(
+        modifier
             .fillMaxWidth()
-            .height(NavigationBarHeight)
             .pointerInput(Unit) {}
-            .border(width = 1.dp, color = Theme[colors][navigationBarBorder])
             .background(Theme[colors][navigationBar])
-            .padding(horizontal = 24.dp)
-            .navigationBarsPadding(),
-        horizontalArrangement = Arrangement.spacedBy(NavigationBarItemSpacing),
-        verticalAlignment = Alignment.CenterVertically,
-        content = content,
-    )
+    ) {
+        HorizontalSeparator()
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(NavigationBarHeight)
+                .padding(horizontal = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(NavigationBarItemSpacing),
+            verticalAlignment = Alignment.CenterVertically,
+            content = content,
+        )
+        Spacer(Modifier.navigationBarsPadding())
+    }
 }
 
 @Composable
-fun NavigationBarItem(
+fun RowScope.NavigationBarItem(
     selected: Boolean,
     onClick: () -> Unit,
     icon: @Composable () -> Unit,
@@ -59,16 +64,17 @@ fun NavigationBarItem(
 
     Box(
         modifier = modifier
+            .weight(1f)
             .height(NavigationBarHeight),
         contentAlignment = Alignment.Center,
     ) {
         IconButton(
             onClick = onClick,
-            modifier = Modifier.then(buildModifier {
+            modifier = buildModifier {
                 if (selected) {
                     add(Modifier.background(Theme[colors][selectedNavigationBarItem], shape))
                 }
-            }),
+            },
             enabled = enabled,
             style = ButtonStyle.Ghost,
             shape = shape,
