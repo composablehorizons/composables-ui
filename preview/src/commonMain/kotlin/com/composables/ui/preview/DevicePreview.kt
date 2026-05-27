@@ -180,8 +180,8 @@ object DevicePreviewDevices {
     val Mobile = DevicePreviewDevice(
         id = "mobile",
         label = "Mobile",
-        width = 340.dp,
-        height = 720.dp,
+        width = 390.dp,
+        height = 844.dp,
     )
 
     val Tablet = DevicePreviewDevice(
