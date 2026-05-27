@@ -237,7 +237,7 @@ private fun FeedComposer(
         )
         Button(
             onClick = onNewPostClick,
-            style = ButtonStyle.Outlined,
+            style = ButtonStyle.Primary
         ) {
             Text("Post")
         }
