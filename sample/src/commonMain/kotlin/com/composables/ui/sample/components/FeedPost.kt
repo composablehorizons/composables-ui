@@ -1,5 +1,8 @@
 package com.composables.ui.sample.components
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -7,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -17,14 +21,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.composables.ui.components.focusRing
+import com.composables.ui.sample.data.PostMedia
+import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.componentSizes
 import com.composables.ui.theme.focusRing
 import com.composables.ui.theme.focusRingOffset
 import com.composables.ui.theme.focusRingWidth
+import com.composables.ui.theme.mediumShape
 import com.composables.ui.theme.muted
+import com.composables.ui.theme.shapes
+import com.composables.uripainter.rememberUriPainter
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.theme.Theme
 
@@ -99,7 +110,7 @@ fun FeedPost(
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .height(240.dp)
+                    .height(280.dp)
                     .horizontalScroll(rememberScrollState())
                     .padding(start = 80.dp, end = 24.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -122,3 +133,19 @@ fun FeedPost(
 }
 
 private val FeedPostHeaderControlSize = 20.dp
+
+@Composable
+fun PostMediaItem(media: PostMedia) {
+    val shape = Theme[shapes][mediumShape]
+
+    Image(
+        painter = rememberUriPainter(media.url),
+        contentDescription = null,
+        modifier = Modifier
+            .height(if (media.isPortrait) 220.dp else 250.dp)
+            .clip(shape)
+            .background(Theme[colors][border], shape)
+            .border(1.dp, Theme[colors][border], shape),
+        contentScale = ContentScale.Crop,
+    )
+}

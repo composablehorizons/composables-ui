@@ -1,17 +1,13 @@
 package com.composables.ui.sample
 
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.FlexBasis.Companion.Dp
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,11 +28,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.Dp.Companion
 import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.Ellipsis
 import com.composables.icons.lucide.Heart
@@ -57,7 +51,7 @@ import com.composables.ui.components.IconButton
 import com.composables.ui.components.Text
 import com.composables.ui.sample.components.AvatarButton
 import com.composables.ui.sample.components.FeedPost
-import com.composables.ui.sample.data.PostMedia
+import com.composables.ui.sample.components.PostMediaItem
 import com.composables.ui.sample.data.SocialPost
 import com.composables.ui.sample.data.feedPosts
 import com.composables.ui.sample.data.profiles
@@ -67,7 +61,6 @@ import com.composables.ui.theme.colors
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
 import com.composables.ui.theme.panel
-import com.composables.uripainter.rememberUriPainter
 import com.composeunstyled.currentWidthBreakpoint
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
@@ -291,23 +284,6 @@ private fun PostOverflowMenu() {
             )
         }
     }
-}
-
-@Composable
-private fun PostMediaItem(media: PostMedia) {
-    val shape = RoundedCornerShape(10.dp)
-
-    Image(
-        painter = rememberUriPainter(media.url),
-        contentDescription = null,
-        modifier = Modifier
-            .fillMaxHeight()
-            .aspectRatio(if (media.isPortrait) 9f / 16f else 16f / 9f)
-            .clip(shape)
-            .background(Theme[colors][border], shape)
-            .border(1.dp, Theme[colors][border], shape),
-        contentScale = ContentScale.Crop,
-    )
 }
 
 @Composable
