@@ -9,7 +9,12 @@ data class SocialPost(
     val replies: String,
     val likes: String,
     val avatarUrl: String,
-    val imageUrl: String? = null,
+    val media: List<PostMedia> = emptyList(),
+)
+
+data class PostMedia(
+    val url: String,
+    val isPortrait: Boolean,
 )
 
 data class SocialProfile(
@@ -46,7 +51,20 @@ val feedPosts = listOf(
         replies = "2",
         likes = "4",
         avatarUrl = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=240",
-        imageUrl = "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1200",
+        media = listOf(
+            PostMedia(
+                url = "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1200",
+                isPortrait = true,
+            ),
+            PostMedia(
+                url = "https://images.unsplash.com/photo-1495908333425-29a1e0918c5f?q=80&w=1200",
+                isPortrait = false,
+            ),
+            PostMedia(
+                url = "https://images.unsplash.com/photo-1463936575829-25148e1db1b8?q=80&w=1200",
+                isPortrait = false,
+            ),
+        ),
     ),
     SocialPost(
         id = "rachel",
@@ -87,7 +105,16 @@ val feedPosts = listOf(
         replies = "4",
         likes = "41",
         avatarUrl = "https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=240",
-        imageUrl = "https://images.unsplash.com/photo-1495908333425-29a1e0918c5f?q=80&w=1200",
+        media = listOf(
+            PostMedia(
+                url = "https://images.unsplash.com/photo-1495908333425-29a1e0918c5f?q=80&w=1200",
+                isPortrait = false,
+            ),
+            PostMedia(
+                url = "https://images.unsplash.com/photo-1520412099551-62b6bafeb5bb?q=80&w=1200",
+                isPortrait = true,
+            ),
+        ),
     ),
     SocialPost(
         id = "watering-day",
@@ -108,7 +135,20 @@ val feedPosts = listOf(
         replies = "6",
         likes = "67",
         avatarUrl = "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=240",
-        imageUrl = "https://images.unsplash.com/photo-1463936575829-25148e1db1b8?q=80&w=1200",
+        media = listOf(
+            PostMedia(
+                url = "https://images.unsplash.com/photo-1463936575829-25148e1db1b8?q=80&w=1200",
+                isPortrait = false,
+            ),
+            PostMedia(
+                url = "https://images.unsplash.com/photo-1485955900006-10f4d324d411?q=80&w=1200",
+                isPortrait = true,
+            ),
+            PostMedia(
+                url = "https://images.unsplash.com/photo-1495908333425-29a1e0918c5f?q=80&w=1200",
+                isPortrait = false,
+            ),
+        ),
     ),
     SocialPost(
         id = "fern-drama",
@@ -149,7 +189,16 @@ val feedPosts = listOf(
         replies = "2",
         likes = "37",
         avatarUrl = "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=240",
-        imageUrl = "https://images.unsplash.com/photo-1485955900006-10f4d324d411?q=80&w=1200",
+        media = listOf(
+            PostMedia(
+                url = "https://images.unsplash.com/photo-1485955900006-10f4d324d411?q=80&w=1200",
+                isPortrait = true,
+            ),
+            PostMedia(
+                url = "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1200",
+                isPortrait = true,
+            ),
+        ),
     ),
     SocialPost(
         id = "leaf-cleaning",

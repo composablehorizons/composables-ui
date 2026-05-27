@@ -3,10 +3,12 @@ package com.composables.ui.sample
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.FlexBasis.Companion.Dp
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -28,12 +30,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.Dp.Companion
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.input.pointer.PointerIcon
-import androidx.compose.ui.input.pointer.pointerHoverIcon
 import com.composables.icons.lucide.Ellipsis
 import com.composables.icons.lucide.Heart
 import com.composables.icons.lucide.Lucide
@@ -50,13 +54,14 @@ import com.composables.ui.components.DropdownMenuPanel
 import com.composables.ui.components.HorizontalSeparator
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
-import com.composables.ui.theme.Medium
 import com.composables.ui.components.Text
 import com.composables.ui.sample.components.AvatarButton
 import com.composables.ui.sample.components.FeedPost
+import com.composables.ui.sample.data.PostMedia
 import com.composables.ui.sample.data.SocialPost
 import com.composables.ui.sample.data.feedPosts
 import com.composables.ui.sample.data.profiles
+import com.composables.ui.theme.Medium
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.muted
@@ -117,7 +122,7 @@ private fun SocialFeed(
         }
         Box(
             modifier = Modifier
-                .then(if (widthBreakpoint isAtLeast Medium) Modifier.widthIn(max = FeedMaxWidth) else Modifier)
+                .widthIn(max = if(widthBreakpoint isAtLeast Medium) FeedMaxWidth else Dp.Unspecified)
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .padding(top = feedVerticalInset)
@@ -181,8 +186,14 @@ private fun SocialFeed(
                                 color = Theme[colors][onBackground],
                             )
                         },
-                        media = post.imageUrl?.let<kotlin.String, @androidx.compose.runtime.Composable (() -> kotlin.Unit)?> { imageUrl ->
-                            { PostImage(imageUrl) }
+                        media = run {
+                            if (post.media.isNotEmpty()) {
+                                {
+                                    post.media.forEach { item ->
+                                        PostMediaItem(item)
+                                    }
+                                }
+                            } else null
                         },
                     ) {
                         PostActions(post = post)
@@ -284,15 +295,18 @@ private fun PostOverflowMenu() {
 }
 
 @Composable
-private fun PostImage(url: String) {
+private fun PostMediaItem(media: PostMedia) {
+    val shape = RoundedCornerShape(10.dp)
+
     Image(
-        painter = rememberUriPainter(url),
+        painter = rememberUriPainter(media.url),
         contentDescription = null,
         modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(1.35f)
-            .clip(RoundedCornerShape(10.dp))
-            .background(Theme[colors][border]),
+            .fillMaxHeight()
+            .aspectRatio(if (media.isPortrait) 9f / 16f else 16f / 9f)
+            .clip(shape)
+            .background(Theme[colors][border], shape)
+            .border(1.dp, Theme[colors][border], shape),
         contentScale = ContentScale.Crop,
     )
 }
