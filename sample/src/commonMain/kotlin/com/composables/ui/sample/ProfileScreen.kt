@@ -43,11 +43,11 @@ import com.composables.ui.components.DropdownMenuAlignment
 import com.composables.ui.components.DropdownMenuItem
 import com.composables.ui.components.DropdownMenuItemStyle
 import com.composables.ui.components.DropdownMenuPanel
-import com.composables.ui.components.Expanded
+import com.composables.ui.theme.Expanded
 import com.composables.ui.components.HorizontalSeparator
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
-import com.composables.ui.components.ScreenScaffold
+import com.composables.ui.theme.ScreenScaffold
 import com.composables.ui.components.Tab
 import com.composables.ui.components.TabGroup
 import com.composables.ui.components.TabList

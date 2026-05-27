@@ -30,11 +30,10 @@ import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Plus
 import com.composables.icons.lucide.Search
 import com.composables.icons.lucide.User
-import com.composables.ui.components.AppScaffold
-import com.composables.ui.components.Expanded
 import com.composables.ui.components.Icon
-import com.composables.ui.components.Large
-import com.composables.ui.components.Medium
+import com.composables.ui.theme.AppScaffold
+import com.composables.ui.theme.Large
+import com.composables.ui.theme.Medium
 import com.composables.ui.components.NavigationBar
 import com.composables.ui.components.NavigationBarItem
 import com.composables.ui.components.Sidebar

@@ -18,7 +18,7 @@ import com.composables.icons.lucide.Lucide
 import com.composables.ui.components.ButtonStyle
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
-import com.composables.ui.components.ScreenScaffold
+import com.composables.ui.theme.ScreenScaffold
 import com.composables.ui.components.Text
 import com.composables.ui.components.Toolbar
 import com.composables.ui.theme.background

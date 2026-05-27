@@ -45,8 +45,8 @@ import com.composables.ui.components.DropdownMenuPanel
 import com.composables.ui.components.HorizontalSeparator
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
-import com.composables.ui.components.Medium
-import com.composables.ui.components.ScreenScaffold
+import com.composables.ui.theme.Medium
+import com.composables.ui.theme.ScreenScaffold
 import com.composables.ui.components.Text
 import com.composables.ui.sample.components.AvatarButton
 import com.composables.ui.sample.components.FeedPost
