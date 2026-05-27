@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -137,7 +136,7 @@ fun PortraitMediaItem(url: String) {
         painter = rememberUriPainter(url),
         contentDescription = null,
         modifier = Modifier
-            .height(250.dp)
+            .size(220.dp, 280.dp)
             .clip(Theme[shapes][mediumShape])
             .background(Theme[colors][border], Theme[shapes][mediumShape])
             .border(1.dp, Theme[colors][border], Theme[shapes][mediumShape]),
@@ -152,7 +151,7 @@ fun LandscapeMediaItem(url: String) {
         painter = rememberUriPainter(url),
         contentDescription = null,
         modifier = Modifier
-            .height(250.dp)
+            .size(250.dp, 180.dp)
             .clip(Theme[shapes][mediumShape])
             .background(Theme[colors][border], Theme[shapes][mediumShape])
             .border(1.dp, Theme[colors][border], Theme[shapes][mediumShape]),
