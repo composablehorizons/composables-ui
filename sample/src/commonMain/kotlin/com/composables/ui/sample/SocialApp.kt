@@ -31,9 +31,9 @@ import com.composables.icons.lucide.Plus
 import com.composables.icons.lucide.Search
 import com.composables.icons.lucide.User
 import com.composables.ui.components.AppScaffold
-import com.composables.ui.components.ExpandedWidthBreakpoint
+import com.composables.ui.components.Expanded
 import com.composables.ui.components.Icon
-import com.composables.ui.components.LargeWidthBreakpoint
+import com.composables.ui.components.Large
 import com.composables.ui.components.NavigationBar
 import com.composables.ui.components.NavigationBarItem
 import com.composables.ui.components.Sidebar
@@ -65,7 +65,7 @@ fun SocialApp() {
     AppScaffold {
         val widthBreakpoint = currentWidthBreakpoint()
 
-        if (widthBreakpoint isAtLeast ExpandedWidthBreakpoint) {
+        if (widthBreakpoint isAtLeast Expanded) {
             Box(modifier = Modifier.fillMaxSize()) {
                 SocialNavHost(
                     navController = navController,
@@ -74,7 +74,7 @@ fun SocialApp() {
                 )
                 Sidebar(
                     modifier = Modifier.align(Alignment.CenterStart),
-                    mode = if (widthBreakpoint isAtLeast LargeWidthBreakpoint) SidebarMode.Expanded else SidebarMode.Compact,
+                    mode = if (widthBreakpoint isAtLeast Large) SidebarMode.Expanded else SidebarMode.Compact,
                     content = {
                         SidebarItem(
                             selected = homeSelected,

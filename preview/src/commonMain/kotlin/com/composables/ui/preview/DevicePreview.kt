@@ -187,8 +187,8 @@ object DevicePreviewDevices {
     val Tablet = DevicePreviewDevice(
         id = "tablet",
         label = "Tablet",
-        width = 768.dp,
-        height = 1024.dp,
+        width = 800.dp,
+        height = 1280.dp,
     )
 
     val Desktop = DevicePreviewDevice(
