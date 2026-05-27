@@ -169,8 +169,13 @@ private fun SocialNavHost(
                     onProfileClick = { profileId -> navController.navigate(ProfileRoute(profileId)) },
                 )
             }
-            composable<PostRoute> {
-                PostDetailScreen()
+            composable<PostRoute> { backStackEntry ->
+                val route = backStackEntry.toRoute<PostRoute>()
+                PostDetailScreen(
+                    postId = route.postId,
+                    onBack = { navController.navigateUp() },
+                    onProfileClick = { profileId -> navController.navigate(ProfileRoute(profileId)) },
+                )
             }
             composable<ProfileRoute> { backStackEntry ->
                 val route = backStackEntry.toRoute<ProfileRoute>()
