@@ -42,7 +42,7 @@ import com.composables.ui.components.DropdownMenuAlignment
 import com.composables.ui.components.DropdownMenuItem
 import com.composables.ui.components.DropdownMenuItemStyle
 import com.composables.ui.components.DropdownMenuPanel
-import com.composables.ui.components.ExpandedWidth
+import com.composables.ui.components.Expanded
 import com.composables.ui.components.HorizontalSeparator
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
@@ -87,7 +87,7 @@ private fun SocialFeed(
     modifier: Modifier = Modifier,
 ) {
     val widthBreakpoint = currentWidthBreakpoint()
-    val showFeedOutline = widthBreakpoint isAtLeast ExpandedWidth
+    val showFeedOutline = widthBreakpoint isAtLeast Expanded
     val feedShape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)
     val feedVerticalInset by animateDpAsState(
         targetValue = if (showFeedOutline) WideFeedVerticalInset else 0.dp,

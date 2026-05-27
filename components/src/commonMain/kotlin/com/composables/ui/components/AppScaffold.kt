@@ -18,16 +18,16 @@ import com.composeunstyled.ScreenBreakpoints
 import com.composeunstyled.TooltipHost
 import com.composeunstyled.theme.Theme
 
-val MediumWidth = Breakpoint("medium")
-val ExpandedWidth = Breakpoint("expanded")
-val LargeWidth = Breakpoint("large")
-val ExtraLargeWidth = Breakpoint("extraLarge")
+val Medium = Breakpoint("medium")
+val Expanded = Breakpoint("expanded")
+val Large = Breakpoint("large")
+val ExtraLarge = Breakpoint("extraLarge")
 
 val WidthBreakpoints = ScreenBreakpoints {
-    MediumWidth at 600.dp
-    ExpandedWidth at 840.dp
-    LargeWidth at 1200.dp
-    ExtraLargeWidth at 1600.dp
+    Medium at 600.dp
+    Expanded at 840.dp
+    Large at 1200.dp
+    ExtraLarge at 1600.dp
 }
 
 @Composable

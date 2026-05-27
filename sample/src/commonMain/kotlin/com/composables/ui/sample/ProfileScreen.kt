@@ -43,7 +43,7 @@ import com.composables.ui.components.DropdownMenuAlignment
 import com.composables.ui.components.DropdownMenuItem
 import com.composables.ui.components.DropdownMenuItemStyle
 import com.composables.ui.components.DropdownMenuPanel
-import com.composables.ui.components.ExpandedWidth
+import com.composables.ui.components.Expanded
 import com.composables.ui.components.HorizontalSeparator
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
@@ -95,7 +95,7 @@ fun ProfileScreen(
         else -> profile.posts
     }
     val widthBreakpoint = currentWidthBreakpoint()
-    val showProfileOutline = widthBreakpoint isAtLeast ExpandedWidth
+    val showProfileOutline = widthBreakpoint isAtLeast Expanded
     val profileShape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)
 
     ScreenScaffold {
