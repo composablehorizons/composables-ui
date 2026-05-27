@@ -18,10 +18,7 @@ import com.composeunstyled.theme.Theme
 @Composable
 fun AppScaffold(content: @Composable () -> Unit) {
     AppTheme {
-        ProvideBreakpoints(
-            widthBreakpoints = WidthBreakpoints,
-            heightBreakpoints = HeightBreakpoints,
-        ) {
+        ProvideBreakpoints(widthBreakpoints = WidthBreakpoints) {
             TooltipHost {
                 FocusVisibilityProvider {
                     ProvideContentColor(Theme[colors][onBackground]) {

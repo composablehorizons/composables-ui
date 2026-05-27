@@ -15,11 +15,3 @@ val WidthBreakpoints = ScreenBreakpoints {
     LargeWidthBreakpoint at 1200.dp
     ExtraLargeWidthBreakpoint at 1600.dp
 }
-
-val MediumHeightBreakpoint = Breakpoint("medium")
-val ExpandedHeightBreakpoint = Breakpoint("expanded")
-
-val HeightBreakpoints = ScreenBreakpoints {
-    MediumHeightBreakpoint at 480.dp
-    ExpandedHeightBreakpoint at 900.dp
-}

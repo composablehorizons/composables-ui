@@ -10,7 +10,7 @@ agp = "9.2.1"
 android-compile-sdk = "37"
 android-min-sdk = "23"
 activityCompose = "1.13.0"
-interactionCapabilities = "1.0.0"
+interactionCapabilities = "1.1.0"
 rippleIndication = "1.1.0"
 
 [libraries]

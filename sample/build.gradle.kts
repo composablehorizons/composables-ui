@@ -1,10 +1,12 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.android.application)
 }
 
 java {
@@ -32,6 +34,12 @@ kotlin {
         binaries.executable()
     }
 
+    androidTarget {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_17
+        }
+    }
+
     sourceSets {
         commonMain.dependencies {
             implementation(project(":components"))
@@ -50,6 +58,23 @@ kotlin {
                 exclude("org.jetbrains.compose.material3")
             }
         }
+
+        androidMain.dependencies {
+            implementation(libs.androidx.activity.compose)
+        }
+    }
+}
+
+android {
+    namespace = "com.composables.ui.sample"
+    compileSdk = libs.versions.android.compile.sdk.get().toInt()
+
+    defaultConfig {
+        applicationId = "com.composables.ui.sample"
+        minSdk = libs.versions.android.min.sdk.get().toInt()
+        targetSdk = libs.versions.android.compile.sdk.get().toInt()
+        versionCode = 1
+        versionName = "1.0.0"
     }
 }
 

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,7 +39,8 @@ fun NavigationBar(
             .pointerInput(Unit) {}
             .border(width = 1.dp, color = Theme[colors][navigationBarBorder])
             .background(Theme[colors][navigationBar])
-            .padding(horizontal = 24.dp),
+            .padding(horizontal = 24.dp)
+            .navigationBarsPadding(),
         horizontalArrangement = Arrangement.spacedBy(NavigationBarItemSpacing),
         verticalAlignment = Alignment.CenterVertically,
         content = content,
@@ -46,18 +48,17 @@ fun NavigationBar(
 }
 
 @Composable
-fun RowScope.NavigationBarItem(
+fun NavigationBarItem(
     selected: Boolean,
     onClick: () -> Unit,
+    icon: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    icon: @Composable () -> Unit,
 ) {
     val shape = Theme[shapes][buttonShape]
 
     Box(
         modifier = modifier
-            .weight(1f)
             .height(NavigationBarHeight),
         contentAlignment = Alignment.Center,
     ) {
