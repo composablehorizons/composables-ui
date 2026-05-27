@@ -112,7 +112,7 @@ fun FeedPost(
             modifier = Modifier
                 .padding(horizontal = 24.dp)
                 .padding(start = 56.dp)
-                .offset(x = (-18).dp),
+                .offset(x = (-16).dp),
             horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
