@@ -99,7 +99,7 @@ private fun SocialFeed(
     ) {
         Box(
             modifier = Modifier
-                .widthIn(max = FeedMaxWidth)
+                .then(if (showFeedOutline) Modifier.widthIn(max = FeedMaxWidth) else Modifier)
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .then(

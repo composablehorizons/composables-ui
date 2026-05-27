@@ -27,7 +27,7 @@ import com.composables.ui.theme.shapes
 import com.composeunstyled.theme.Theme
 
 @Composable
-fun NavigationSidebar(
+fun Sidebar(
     modifier: Modifier = Modifier,
     width: Dp = 230.dp,
     header: @Composable ColumnScope.() -> Unit = {},
@@ -55,7 +55,7 @@ fun NavigationSidebar(
 }
 
 @Composable
-fun NavigationSidebarItem(
+fun SidebarItem(
     selected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,

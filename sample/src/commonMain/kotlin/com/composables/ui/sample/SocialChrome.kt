@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,8 +21,8 @@ import com.composables.icons.lucide.User
 import com.composables.ui.components.Icon
 import com.composables.ui.components.NavigationBar
 import com.composables.ui.components.NavigationBarItem
-import com.composables.ui.components.NavigationSidebar
-import com.composables.ui.components.NavigationSidebarItem
+import com.composables.ui.components.Sidebar
+import com.composables.ui.components.SidebarItem
 import com.composables.ui.components.Text
 import com.composables.ui.sample.components.Avatar
 import com.composables.ui.sample.data.profiles
@@ -81,7 +80,7 @@ fun SocialSidebar(
 ) {
     val profile = profiles.first()
 
-    NavigationSidebar(
+    Sidebar(
         modifier = modifier,
         header = {
             Text(
@@ -149,7 +148,7 @@ private fun ColumnScope.SocialSidebarItem(
     label: String,
     onClick: () -> Unit,
 ) {
-    NavigationSidebarItem(
+    SidebarItem(
         selected = selected,
         onClick = onClick,
         icon = icon,
