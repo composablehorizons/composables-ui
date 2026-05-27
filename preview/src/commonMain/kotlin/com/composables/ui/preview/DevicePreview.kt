@@ -9,7 +9,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -22,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -58,9 +58,9 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Check
 import com.composables.icons.lucide.ChevronDown
+import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Minus
 import com.composables.icons.lucide.Monitor
 import com.composables.icons.lucide.Plus
@@ -90,8 +90,8 @@ import com.composables.ui.theme.dropdownMenuShadow
 import com.composables.ui.theme.mediumShape
 import com.composables.ui.theme.onPanel
 import com.composables.ui.theme.panel
-import com.composables.ui.theme.shapes
 import com.composables.ui.theme.shadows
+import com.composables.ui.theme.shapes
 import com.composables.ui.theme.smallShape
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.theme.Theme
@@ -180,8 +180,8 @@ object DevicePreviewDevices {
     val Mobile = DevicePreviewDevice(
         id = "mobile",
         label = "Mobile",
-        width = 390.dp,
-        height = 844.dp,
+        width = 411.dp,
+        height = 731.dp
     )
 
     val Tablet = DevicePreviewDevice(
@@ -614,8 +614,8 @@ fun isDevicePreviewRotationShortcut(event: KeyEvent): Boolean {
 
 fun isDevicePreviewLayoutDirectionShortcut(event: KeyEvent): Boolean {
     return event.type == KeyEventType.KeyDown &&
-        event.isMetaPressed &&
-        event.key == Key.Grave
+            event.isMetaPressed &&
+            event.key == Key.Grave
 }
 
 fun devicePreviewZoomForShortcut(
@@ -690,9 +690,9 @@ private fun DevicePreviewStage(
             while (!finished) {
                 val frameTime = withFrameNanos { it }
                 val progress = (
-                    (frameTime - startTime).toFloat() /
-                        DeviceRotationDuration.inWholeNanoseconds.toFloat()
-                ).coerceIn(0f, 1f)
+                        (frameTime - startTime).toFloat() /
+                                DeviceRotationDuration.inWholeNanoseconds.toFloat()
+                        ).coerceIn(0f, 1f)
 
                 finished = progress == 1f
                 rotationFrame = if (progress < DeviceRotationSwapProgress) {
@@ -1067,9 +1067,9 @@ private suspend fun animateDeviceRotationTo(
     }
 
     val durationNanos = (
-        DeviceRotationDuration.inWholeNanoseconds.toFloat() *
-            (distance / DeviceRotationDegrees)
-    ).roundToLong()
+            DeviceRotationDuration.inWholeNanoseconds.toFloat() *
+                    (distance / DeviceRotationDegrees)
+            ).roundToLong()
     val startTime = withFrameNanos { it }
     var finished = false
     while (!finished) {
@@ -1093,8 +1093,8 @@ private fun easeOutCubic(progress: Float): Float {
 private fun easeOutBack(progress: Float): Float {
     val shiftedProgress = progress - 1f
     return 1f +
-        (DeviceRotationOvershoot + 1f) * shiftedProgress * shiftedProgress * shiftedProgress +
-        DeviceRotationOvershoot * shiftedProgress * shiftedProgress
+            (DeviceRotationOvershoot + 1f) * shiftedProgress * shiftedProgress * shiftedProgress +
+            DeviceRotationOvershoot * shiftedProgress * shiftedProgress
 }
 
 private val PreviewBackground = Color(0xFF151515)
