@@ -134,7 +134,6 @@ private fun SocialFeed(
                                 width = 1.dp,
                                 color = Theme[colors][border],
                                 shape = feedShape,
-                                offset = (-1).dp,
                             )
                             .clip(feedShape)
                     } else {
