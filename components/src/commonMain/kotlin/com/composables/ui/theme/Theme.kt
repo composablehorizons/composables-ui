@@ -1,15 +1,19 @@
 package com.composables.ui.theme
 
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Indication
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.shadow.Shadow
@@ -22,23 +26,15 @@ import androidx.compose.ui.unit.sp
 import com.composables.compose.ripple.rememberRippleIndication
 import com.composables.interactioncapabilities.currentInteractionCapabilities
 import com.composeunstyled.Breakpoint
+import com.composeunstyled.FocusVisibilityProvider
+import com.composeunstyled.ProvideBreakpoints
+import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.ScreenBreakpoints
+import com.composeunstyled.TooltipHost
+import com.composeunstyled.theme.Theme
 import com.composeunstyled.theme.ThemeProperty
 import com.composeunstyled.theme.ThemeToken
 import com.composeunstyled.theme.buildTheme
-
-val MediumWidthBreakpoint = Breakpoint("medium")
-val ExpandedWidthBreakpoint = Breakpoint("expanded")
-val LargeWidthBreakpoint = Breakpoint("large")
-val ExtraLargeWidthBreakpoint = Breakpoint("extraLarge")
-
-val WidthBreakpoints = ScreenBreakpoints {
-    MediumWidthBreakpoint at 600.dp
-    ExpandedWidthBreakpoint at 840.dp
-    LargeWidthBreakpoint at 1200.dp
-    ExtraLargeWidthBreakpoint at 1600.dp
-}
-
 
 // properties
 val colors = ThemeProperty<Color>("colors")
@@ -387,3 +383,54 @@ val AppTheme = buildTheme {
 }
 
 private const val ColorSchemeAnimationDurationMillis = 180
+
+val Medium = Breakpoint("medium")
+val Expanded = Breakpoint("expanded")
+val Large = Breakpoint("large")
+val ExtraLarge = Breakpoint("extraLarge")
+
+val WidthBreakpoints = ScreenBreakpoints {
+    Medium at 600.dp
+    Expanded at 840.dp
+    Large at 1200.dp
+    ExtraLarge at 1600.dp
+}
+
+@Composable
+fun AppScaffold(content: @Composable () -> Unit) {
+    AppTheme {
+        ProvideBreakpoints(widthBreakpoints = WidthBreakpoints) {
+            TooltipHost {
+                FocusVisibilityProvider {
+                    ProvideContentColor(Theme[colors][onBackground]) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Theme[colors][background]),
+                        ) {
+                            content()
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ScreenScaffold(
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = Theme[colors][background],
+    contentColor: Color = Theme[colors][onBackground],
+    content: @Composable () -> Unit,
+) {
+    ProvideContentColor(contentColor) {
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(backgroundColor),
+        ) {
+            content()
+        }
+    }
+}
