@@ -24,8 +24,22 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.composables.icons.lucide.Bell
+import com.composables.icons.lucide.House
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Plus
+import com.composables.icons.lucide.Search
+import com.composables.icons.lucide.User
 import com.composables.ui.components.AppScaffold
 import com.composables.ui.components.ExpandedWidthBreakpoint
+import com.composables.ui.components.Icon
+import com.composables.ui.components.LargeWidthBreakpoint
+import com.composables.ui.components.NavigationBar
+import com.composables.ui.components.NavigationBarItem
+import com.composables.ui.components.Sidebar
+import com.composables.ui.components.SidebarItem
+import com.composables.ui.components.SidebarMode
+import com.composables.ui.components.Text
 import com.composeunstyled.currentWidthBreakpoint
 
 private const val NavigationTransitionDurationMillis = 350
@@ -39,35 +53,75 @@ fun SocialApp() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val homeSelected = currentDestination == null ||
-        currentDestination.hasRoute<HomeRoute>() ||
-        currentDestination.hasRoute<HomeTabRoute>() ||
-        currentDestination.hasRoute<PostRoute>()
+            currentDestination.hasRoute<HomeRoute>() ||
+            currentDestination.hasRoute<HomeTabRoute>() ||
+            currentDestination.hasRoute<PostRoute>()
     val searchSelected = currentDestination?.hasRoute<SearchTabRoute>() == true
     val composeSelected = currentDestination?.hasRoute<ComposeTabRoute>() == true
     val notificationsSelected = currentDestination?.hasRoute<NotificationsTabRoute>() == true
     val profileSelected = currentDestination?.hasRoute<ProfileRoute>() == true ||
-        currentDestination?.hasRoute<ProfileTabRoute>() == true
+            currentDestination?.hasRoute<ProfileTabRoute>() == true
 
     AppScaffold {
         val widthBreakpoint = currentWidthBreakpoint()
+        val sidebarMode = if (widthBreakpoint isAtLeast LargeWidthBreakpoint) {
+            SidebarMode.Expanded
+        } else {
+            SidebarMode.Compact
+        }
+
         if (widthBreakpoint isAtLeast ExpandedWidthBreakpoint) {
             Box(modifier = Modifier.fillMaxSize()) {
                 SocialNavHost(
                     navController = navController,
                     modifier = Modifier.fillMaxSize(),
+                    animateStackTransitions = false,
                 )
-                SocialSidebar(
-                    homeSelected = homeSelected,
-                    searchSelected = searchSelected,
-                    composeSelected = composeSelected,
-                    notificationsSelected = notificationsSelected,
-                    profileSelected = profileSelected,
-                    onHomeClick = { navController.navigateToHomeTab() },
-                    onSearchClick = { navController.navigateToSearchTab() },
-                    onComposeClick = { navController.navigateToComposeTab() },
-                    onNotificationsClick = { navController.navigateToNotificationsTab() },
-                    onProfileClick = { navController.navigateToProfileTab() },
+                Sidebar(
                     modifier = Modifier.align(Alignment.CenterStart),
+                    mode = sidebarMode,
+                    content = {
+                        SidebarItem(
+                            selected = homeSelected,
+                            icon = { Icon(Lucide.House) },
+                            onClick = { navController.navigateToHomeTab() },
+                            text = {
+                                Text(text = "Home", singleLine = true)
+                            },
+                        )
+                        SidebarItem(
+                            selected = searchSelected,
+                            icon = { Icon(Lucide.Search) },
+                            onClick = { navController.navigateToSearchTab() },
+                            text = {
+                                Text(text = "Search", singleLine = true)
+                            },
+                        )
+                        SidebarItem(
+                            selected = composeSelected,
+                            icon = { Icon(Lucide.Plus) },
+                            onClick = { navController.navigateToComposeTab() },
+                            text = {
+                                Text(text = "New post", singleLine = true)
+                            },
+                        )
+                        SidebarItem(
+                            selected = notificationsSelected,
+                            icon = { Icon(Lucide.Bell) },
+                            onClick = { navController.navigateToNotificationsTab() },
+                            text = {
+                                Text(text = "Activity", singleLine = true)
+                            },
+                        )
+                        SidebarItem(
+                            selected = profileSelected,
+                            icon = { Icon(Lucide.User) },
+                            onClick = { navController.navigateToProfileTab() },
+                            text = {
+                                Text(text = "Profile", singleLine = true)
+                            },
+                        )
+                    },
                 )
             }
         } else {
@@ -75,20 +129,35 @@ fun SocialApp() {
                 SocialNavHost(
                     navController = navController,
                     modifier = Modifier.fillMaxSize(),
+                    animateStackTransitions = true,
                 )
-                SocialBottomBar(
-                    homeSelected = homeSelected,
-                    searchSelected = searchSelected,
-                    composeSelected = composeSelected,
-                    notificationsSelected = notificationsSelected,
-                    profileSelected = profileSelected,
-                    onHomeClick = { navController.navigateToHomeTab() },
-                    onSearchClick = { navController.navigateToSearchTab() },
-                    onComposeClick = { navController.navigateToComposeTab() },
-                    onNotificationsClick = { navController.navigateToNotificationsTab() },
-                    onProfileClick = { navController.navigateToProfileTab() },
-                    modifier = Modifier.align(Alignment.BottomCenter),
-                )
+                NavigationBar(modifier = Modifier.align(Alignment.BottomCenter)) {
+                    NavigationBarItem(
+                        selected = homeSelected,
+                        onClick = { navController.navigateToHomeTab() }) {
+                        Icon(Lucide.House, contentDescription = "Home")
+                    }
+                    NavigationBarItem(
+                        selected = searchSelected,
+                        onClick = { navController.navigateToSearchTab() }) {
+                        Icon(Lucide.Search, contentDescription = "Search")
+                    }
+                    NavigationBarItem(
+                        selected = composeSelected,
+                        onClick = { navController.navigateToComposeTab() }) {
+                        Icon(Lucide.Plus, contentDescription = "New post")
+                    }
+                    NavigationBarItem(
+                        selected = notificationsSelected,
+                        onClick = { navController.navigateToNotificationsTab() }) {
+                        Icon(Lucide.Bell, contentDescription = "Activity")
+                    }
+                    NavigationBarItem(
+                        selected = profileSelected,
+                        onClick = { navController.navigateToProfileTab() }) {
+                        Icon(Lucide.User, contentDescription = "Profile")
+                    }
+                }
             }
         }
     }
@@ -98,6 +167,7 @@ fun SocialApp() {
 private fun SocialNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
+    animateStackTransitions: Boolean,
 ) {
     Box(modifier = modifier.background(Color.Black)) {
         NavHost(
@@ -105,7 +175,7 @@ private fun SocialNavHost(
             startDestination = HomeRoute,
             modifier = Modifier.fillMaxSize(),
             enterTransition = {
-                if (targetState.destination.isTabDestination()) {
+                if (targetState.destination.isTabDestination() || !animateStackTransitions) {
                     EnterTransition.None
                 } else {
                     slideInHorizontally(
@@ -118,7 +188,7 @@ private fun SocialNavHost(
                 }
             },
             exitTransition = {
-                if (targetState.destination.isTabDestination()) {
+                if (targetState.destination.isTabDestination() || !animateStackTransitions) {
                     ExitTransition.None
                 } else {
                     slideOutHorizontally(
@@ -137,7 +207,7 @@ private fun SocialNavHost(
                 }
             },
             popEnterTransition = {
-                if (targetState.destination.isTabDestination()) {
+                if (targetState.destination.isTabDestination() || !animateStackTransitions) {
                     EnterTransition.None
                 } else {
                     slideInHorizontally(
@@ -156,7 +226,7 @@ private fun SocialNavHost(
                 }
             },
             popExitTransition = {
-                if (targetState.destination.isTabDestination()) {
+                if (targetState.destination.isTabDestination() || !animateStackTransitions) {
                     ExitTransition.None
                 } else {
                     slideOutHorizontally(
@@ -186,8 +256,12 @@ private fun SocialNavHost(
                     onProfileClick = { profileId -> navController.navigate(ProfileRoute(profileId)) },
                 )
             }
-            composable<PostRoute> {
-                PostDetailScreen()
+            composable<PostRoute> { backStackEntry ->
+                val route = backStackEntry.toRoute<PostRoute>()
+                PostDetailScreen(
+                    postId = route.postId,
+                    onBack = { navController.navigateUp() },
+                )
             }
             composable<SearchTabRoute>(
                 enterTransition = { EnterTransition.None },
@@ -241,10 +315,10 @@ private fun SocialNavHost(
 
 private fun NavDestination.isTabDestination(): Boolean {
     return hasRoute<HomeTabRoute>() ||
-        hasRoute<SearchTabRoute>() ||
-        hasRoute<ComposeTabRoute>() ||
-        hasRoute<NotificationsTabRoute>() ||
-        hasRoute<ProfileTabRoute>()
+            hasRoute<SearchTabRoute>() ||
+            hasRoute<ComposeTabRoute>() ||
+            hasRoute<NotificationsTabRoute>() ||
+            hasRoute<ProfileTabRoute>()
 }
 
 private fun NavHostController.navigateToProfile(profileId: String) {
