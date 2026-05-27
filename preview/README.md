@@ -28,8 +28,10 @@ var selectedDevice by remember { mutableStateOf(DevicePreviewDevices.Desktop) }
 var selectedOrientation by remember { mutableStateOf(DevicePreviewOrientation.Portrait) }
 var selectedLayoutDirection by remember { mutableStateOf(LayoutDirection.Ltr) }
 var selectedZoom by remember { mutableStateOf(DevicePreviewZoom.Default) }
+val screenshotState = rememberDevicePreviewScreenshotState()
 
 DevicePreviewHost(
+    screenshotState = screenshotState,
     selectedDevice = selectedDevice,
     onDeviceSelected = { selectedDevice = it },
     selectedOrientation = selectedOrientation,
@@ -73,5 +75,6 @@ The module includes helpers for wiring common shortcuts from your window `onKeyE
 - `Cmd+-`, `Cmd++`, `Cmd+0`: zoom out, zoom in, reset zoom
 - `Cmd+R`: rotate the selected device when rotation is available
 - `Cmd+backtick`: toggle LTR and RTL
+- `Cmd+P`: copy a screenshot of the selected preview frame to the clipboard
 
-Use `deviceForPreviewShortcut`, `devicePreviewZoomForShortcut`, `isDevicePreviewRotationShortcut`, and `isDevicePreviewLayoutDirectionShortcut` if you want the sample app to support those shortcuts.
+Use `deviceForPreviewShortcut`, `devicePreviewZoomForShortcut`, `isDevicePreviewRotationShortcut`, `isDevicePreviewLayoutDirectionShortcut`, and `isDevicePreviewScreenshotShortcut` if you want the sample app to support those shortcuts.

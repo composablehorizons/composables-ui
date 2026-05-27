@@ -20,7 +20,9 @@ import com.composables.ui.preview.deviceForPreviewShortcut
 import com.composables.ui.preview.devicePreviewZoomForShortcut
 import com.composables.ui.preview.isDevicePreviewLayoutDirectionShortcut
 import com.composables.ui.preview.isDevicePreviewRotationShortcut
+import com.composables.ui.preview.isDevicePreviewScreenshotShortcut
 import com.composables.ui.preview.oppositePreviewLayoutDirection
+import com.composables.ui.preview.rememberDevicePreviewScreenshotState
 import com.composables.ui.preview.rotated
 import java.awt.Dimension
 
@@ -30,6 +32,7 @@ fun main() = application {
     var selectedOrientation by remember { mutableStateOf(DevicePreviewOrientation.Portrait) }
     var selectedLayoutDirection by remember { mutableStateOf(LayoutDirection.Ltr) }
     var selectedZoom by remember { mutableStateOf(DevicePreviewZoom.Default) }
+    val screenshotState = rememberDevicePreviewScreenshotState()
 
     Window(
         onCloseRequest = ::exitApplication,
@@ -45,6 +48,9 @@ fun main() = application {
                 true
             } else if (isDevicePreviewLayoutDirectionShortcut(event)) {
                 selectedLayoutDirection = selectedLayoutDirection.oppositePreviewLayoutDirection()
+                true
+            } else if (isDevicePreviewScreenshotShortcut(event)) {
+                screenshotState.requestScreenshot()
                 true
             } else {
                 val shortcutZoom = devicePreviewZoomForShortcut(event, selectedZoom)
@@ -83,6 +89,7 @@ fun main() = application {
 
         DevicePreviewHost(
             initialDevice = DevicePreviewDevices.Desktop,
+            screenshotState = screenshotState,
             selectedDevice = selectedDevice,
             onDeviceSelected = { selectedDevice = it },
             selectedOrientation = selectedOrientation,
