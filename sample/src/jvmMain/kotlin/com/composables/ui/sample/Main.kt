@@ -58,7 +58,7 @@ fun main() = application {
         },
     ) {
         val density = LocalDensity.current
-        val minimumWidth = with(density) { 340.dp.roundToPx() }
+        val minimumWidth = with(density) { 220.dp.roundToPx() }
         val minimumHeight = with(density) { 220.dp.roundToPx() }
 
         DisposableEffect(window, minimumWidth, minimumHeight) {
