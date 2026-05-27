@@ -238,7 +238,6 @@ private fun FeedComposer(
         Button(
             onClick = onNewPostClick,
             style = ButtonStyle.Outlined,
-            shape = RoundedCornerShape(12.dp),
         ) {
             Text("Post")
         }
