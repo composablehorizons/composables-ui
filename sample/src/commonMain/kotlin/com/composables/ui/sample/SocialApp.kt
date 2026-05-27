@@ -38,6 +38,7 @@ import com.composables.ui.components.SidebarItem
 import com.composables.ui.components.SidebarMode
 import com.composables.ui.components.Text
 import com.composables.ui.theme.AppScaffold
+import com.composables.ui.theme.Expanded
 import com.composables.ui.theme.Large
 import com.composables.ui.theme.Medium
 import com.composeunstyled.currentWidthBreakpoint

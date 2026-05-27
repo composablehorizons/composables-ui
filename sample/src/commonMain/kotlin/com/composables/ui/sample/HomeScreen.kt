@@ -102,7 +102,7 @@ private fun SocialFeed(
         label = "FeedVerticalInset",
     )
 
-    Box(modifier = modifier) {
+    Box(modifier = modifier.padding(horizontal = if(widthBreakpoint isAtLeast Medium) 80.dp else 0.dp)) {
         if (widthBreakpoint isAtLeast Medium) {
             Text(
                 text = "My Feed",
