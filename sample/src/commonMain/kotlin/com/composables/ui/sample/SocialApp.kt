@@ -68,7 +68,6 @@ data class PostDetailsRoute(val postId: String)
 @Serializable
 data class ProfileRoute(val profileId: String)
 
-@OptIn(ExperimentalFoundationStyleApi::class)
 @Composable
 fun SocialApp() {
     val navController = rememberNavController()
