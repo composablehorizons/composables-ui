@@ -88,7 +88,7 @@ fun SocialApp() {
     val profileSelected = currentDestination?.hasRoute<ProfileRoute>() == true
 
     AppScaffold {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(Modifier.fillMaxSize()) {
             val widthBreakpoint = currentWidthBreakpoint()
 
             Column(
