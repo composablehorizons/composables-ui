@@ -28,11 +28,15 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.composables.icons.lucide.Bell
+import com.composables.icons.lucide.Ellipsis
 import com.composables.icons.lucide.House
 import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Menu
 import com.composables.icons.lucide.Plus
 import com.composables.icons.lucide.Search
 import com.composables.icons.lucide.User
+import com.composables.ui.components.DropdownMenuAlignment
+import com.composables.ui.components.DropdownMenuSide
 import com.composables.ui.components.ButtonSize
 import com.composables.ui.components.ButtonStyle
 import com.composables.ui.components.Icon
@@ -44,6 +48,7 @@ import com.composables.ui.components.SidebarItem
 import com.composables.ui.components.SidebarMode
 import com.composables.ui.components.Text
 import com.composables.ui.components.Toolbar
+import com.composables.ui.sample.components.AccountMenuDropdown
 import com.composables.ui.sample.data.authenticatedUser
 import com.composables.ui.theme.AppScaffold
 import com.composables.ui.theme.ColorScheme
@@ -159,6 +164,21 @@ fun SocialApp() {
                 Sidebar(
                     modifier = Modifier.align(Alignment.CenterStart),
                     mode = if (widthBreakpoint isAtLeast Large) SidebarMode.Expanded else SidebarMode.Compact,
+                    footer = {
+                        AccountMenuDropdown(
+                            colorScheme = colorScheme,
+                            onColorSchemeChange = { colorScheme = it },
+                            side = DropdownMenuSide.End,
+                            alignment = DropdownMenuAlignment.End,
+                        ) { openMenu ->
+                            SidebarItem(
+                                selected = false,
+                                icon = { Icon(Lucide.Menu) },
+                                onClick = openMenu,
+                                text = { Text(text = "More", singleLine = true) },
+                            )
+                        }
+                    },
                     content = {
                         SidebarItem(
                             selected = homeSelected,
