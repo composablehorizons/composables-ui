@@ -81,7 +81,6 @@ private value class ProfileFeedTab private constructor(val value: String) {
 @Composable
 fun Profile(
     profileId: String,
-    onBack: (() -> Unit)?,
     onPostClick: (String) -> Unit,
     onProfileClick: () -> Unit,
 ) {
@@ -91,9 +90,6 @@ fun Profile(
         ProfileFeedTab.Replies -> profile.replies
         else -> profile.posts
     }
-    val widthBreakpoint = currentWidthBreakpoint()
-    val showProfileOutline = widthBreakpoint isAtLeast Medium
-    val profileShape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -108,28 +104,11 @@ fun Profile(
                     .fillMaxHeight()
                     .align(Alignment.TopCenter),
             ) {
-                if (!showProfileOutline) {
-                    ProfileToolbar(onBack)
-                }
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
-                        .then(
-                            if (showProfileOutline) {
-                                Modifier
-                                    .background(Theme[colors][panel], profileShape)
-                                    .outline(
-                                        width = 1.dp,
-                                        color = Theme[colors][border],
-                                        shape = profileShape,
-                                        offset = (-1).dp,
-                                    )
-                                    .clip(profileShape)
-                            } else {
-                                Modifier.background(Theme[colors][panel])
-                            }
-                        ),
+                        .background(Theme[colors][panel]),
                 ) {
                     item {
                         ProfileHeader(profile)
@@ -155,51 +134,6 @@ fun Profile(
             }
         }
     }
-}
-
-@Composable
-private fun ProfileToolbar(onBack: (() -> Unit)?) {
-    Toolbar(
-        leading = onBack?.let { onBackClick ->
-            {
-                IconButton(onClick = onBackClick, style = ButtonStyle.Ghost) {
-                    Icon(
-                        Lucide.ArrowLeft,
-                        contentDescription = "Back",
-                        modifier = Modifier.size(28.dp),
-                        tint = Theme[colors][onBackground]
-                    )
-                }
-                Text("Back")
-            }
-        },
-        trailing = {
-            IconButton(onClick = {}, style = ButtonStyle.Ghost) {
-                Icon(
-                    Lucide.Instagram,
-                    contentDescription = "Instagram",
-                    modifier = Modifier.size(28.dp),
-                    tint = Theme[colors][onBackground]
-                )
-            }
-            IconButton(onClick = {}, style = ButtonStyle.Ghost) {
-                Icon(
-                    Lucide.Bell,
-                    contentDescription = "Notifications",
-                    modifier = Modifier.size(28.dp),
-                    tint = Theme[colors][onBackground]
-                )
-            }
-            IconButton(onClick = {}, style = ButtonStyle.Ghost) {
-                Icon(
-                    Lucide.CircleEllipsis,
-                    contentDescription = "More",
-                    modifier = Modifier.size(28.dp),
-                    tint = Theme[colors][onBackground]
-                )
-            }
-        }
-    )
 }
 
 @Composable

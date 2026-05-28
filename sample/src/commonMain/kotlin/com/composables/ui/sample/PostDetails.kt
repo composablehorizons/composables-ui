@@ -30,7 +30,6 @@ import com.composeunstyled.theme.Theme
 @Composable
 fun PostDetails(
     postId: String,
-    onBack: () -> Unit,
 ) {
     Box(Modifier.fillMaxSize()) {
         Column(
@@ -39,20 +38,6 @@ fun PostDetails(
                 .background(Theme[colors][panel])
                 .align(Alignment.TopCenter),
         ) {
-            Toolbar(
-                backgroundColor = Theme[colors][panel],
-                leading = {
-                    IconButton(onClick = onBack, style = ButtonStyle.Ghost) {
-                        Icon(
-                            Lucide.ArrowLeft,
-                            contentDescription = "Back",
-                            modifier = Modifier.size(28.dp),
-                            tint = Theme[colors][onBackground],
-                        )
-                    }
-                    Text("Post")
-                },
-            )
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

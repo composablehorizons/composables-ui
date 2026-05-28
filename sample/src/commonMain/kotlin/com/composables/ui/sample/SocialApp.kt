@@ -100,12 +100,13 @@ fun SocialApp() {
                 if (widthBreakpoint isAtLeast Medium) {
                     Toolbar(
                         leading = {
-                            // can go back
-                            IconButton(
-                                onClick = { /* TODO */ },
-                                style = ButtonStyle.Ghost,
-                            ) {
-                                Icon(Lucide.ArrowLeft, contentDescription = "Go back")
+                            if (navController.previousBackStackEntry != null) {
+                                IconButton(
+                                    onClick = { /* TODO */ },
+                                    style = ButtonStyle.Ghost,
+                                ) {
+                                    Icon(Lucide.ArrowLeft, contentDescription = "Go back")
+                                }
                             }
 
                             when {
@@ -305,7 +306,6 @@ private fun TabHost(
             val route = backStackEntry.toRoute<PostDetailsRoute>()
             PostDetails(
                 postId = route.postId,
-                onBack = { navController.navigateUp() },
             )
         }
         composable<SearchRoute> {
@@ -321,7 +321,6 @@ private fun TabHost(
             val route = backStackEntry.toRoute<ProfileRoute>()
             Profile(
                 profileId = route.profileId,
-                onBack = { navController.navigateUp() },
                 onPostClick = { postId -> navController.navigate(PostDetailsRoute(postId)) },
                 onProfileClick = { navController.navigateToProfile(authenticatedUser.id) },
             )
