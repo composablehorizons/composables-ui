@@ -425,3 +425,5 @@ val profiles = listOf(
         ),
     ),
 )
+
+val authenticatedUser = profiles.first()

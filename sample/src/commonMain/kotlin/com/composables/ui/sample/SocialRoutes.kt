@@ -3,25 +3,20 @@ package com.composables.ui.sample
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object HomeRoute
+data object SocialFeedRoute
 
 @Serializable
-data object HomeTabRoute
+data object SearchRoute
 
 @Serializable
-data object SearchTabRoute
+data object NewPostRoute
 
 @Serializable
-data object ComposeTabRoute
+data object ActivityRoute
 
 @Serializable
-data object NotificationsTabRoute
-
-@Serializable
-data class PostRoute(val postId: String)
+data class PostDetailsRoute(val postId: String)
 
 @Serializable
 data class ProfileRoute(val profileId: String)
 
-@Serializable
-data object ProfileTabRoute
