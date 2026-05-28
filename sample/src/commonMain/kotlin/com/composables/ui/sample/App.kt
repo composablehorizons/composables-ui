@@ -94,9 +94,10 @@ fun SocialApp() {
 
             Column(
                 Modifier
-                    .fillMaxSize()
+                    .align(Alignment.TopCenter)
                     .padding(horizontal = if (widthBreakpoint isAtLeast Medium) 80.dp else 0.dp)
-                    .widthIn(max = 700.dp)
+                    .widthIn(max = if (widthBreakpoint isAtLeast Medium) 700.dp else 0.dp)
+                    .fillMaxSize(),
             ) {
                 if (widthBreakpoint isAtLeast Medium) {
                     Toolbar(
@@ -133,7 +134,8 @@ fun SocialApp() {
                 }
                 TabHost(
                     navController = navController,
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize(),
                 )
             }
 
