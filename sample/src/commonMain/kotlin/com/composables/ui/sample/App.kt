@@ -131,7 +131,11 @@ fun SocialApp() {
 
                     }
                 )
-                Box(Modifier.background(Color.Black)) {
+                Box(
+                    // we want the exiting screen to look dimmed. to achieve this effect,
+                    // we set a black background, while fading the page itself during the transition
+                    Modifier.background(Color.Black)
+                ) {
                     TabHost(
                         navController = navController,
                         modifier = Modifier
