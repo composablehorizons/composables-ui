@@ -35,23 +35,16 @@ fun PostDetails(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Theme[colors][panel])
-                .align(Alignment.TopCenter),
+                .padding(24.dp),
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(24.dp),
-            ) {
-                Text(
-                    text = "Post details",
-                    style = TextStyle(fontWeight = FontWeight.Bold),
-                )
-                Text(
-                    text = "Post id: $postId",
-                    color = Theme[colors][onBackground],
-                )
-            }
+            Text(
+                text = "Post details",
+                style = TextStyle(fontWeight = FontWeight.Bold),
+            )
+            Text(
+                text = "Post id: $postId",
+                color = Theme[colors][onBackground],
+            )
         }
     }
 }

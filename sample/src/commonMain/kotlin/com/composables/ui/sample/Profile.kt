@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,12 +25,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.composables.icons.lucide.ArrowLeft
-import com.composables.icons.lucide.Bell
-import com.composables.icons.lucide.CircleEllipsis
 import com.composables.icons.lucide.Ellipsis
 import com.composables.icons.lucide.Heart
-import com.composables.icons.lucide.Instagram
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.MessageCircle
 import com.composables.icons.lucide.Repeat2
@@ -50,14 +45,12 @@ import com.composables.ui.components.Tab
 import com.composables.ui.components.TabGroup
 import com.composables.ui.components.TabList
 import com.composables.ui.components.Text
-import com.composables.ui.components.Toolbar
 import com.composables.ui.sample.components.Avatar
 import com.composables.ui.sample.components.AvatarButton
 import com.composables.ui.sample.components.FeedPost
-import com.composables.ui.sample.data.SocialProfile
 import com.composables.ui.sample.data.ProfilePost
+import com.composables.ui.sample.data.SocialProfile
 import com.composables.ui.sample.data.profiles
-import com.composables.ui.theme.Medium
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.field
@@ -65,8 +58,6 @@ import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
 import com.composables.ui.theme.onField
 import com.composables.ui.theme.panel
-import com.composeunstyled.currentWidthBreakpoint
-import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 
 @kotlin.jvm.JvmInline

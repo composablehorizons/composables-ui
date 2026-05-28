@@ -1,21 +1,16 @@
 package com.composables.ui.sample
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,12 +18,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.Ellipsis
 import com.composables.icons.lucide.Heart
@@ -55,14 +48,9 @@ import com.composables.ui.sample.data.SocialPost
 import com.composables.ui.sample.data.authenticatedUser
 import com.composables.ui.sample.data.feedPosts
 import com.composables.ui.sample.data.profiles
-import com.composables.ui.theme.Medium
-import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
-import com.composables.ui.theme.panel
-import com.composeunstyled.currentWidthBreakpoint
-import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 
 @Composable
@@ -72,92 +60,67 @@ fun SocialFeed(
     onNewPostClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val widthBreakpoint = currentWidthBreakpoint()
-    val feedShape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)
-    Box(modifier = modifier) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .then(
-                    if (widthBreakpoint isAtLeast Medium) {
-                        Modifier
-                            .background(Theme[colors][panel], feedShape)
-                            .outline(
-                                width = 1.dp,
-                                color = Theme[colors][border],
-                                shape = feedShape,
-                            )
-                            .clip(feedShape)
-                    } else {
-                        Modifier.background(Theme[colors][panel])
-                    }
-                )
-                .align(Alignment.TopCenter),
-        ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(bottom = 96.dp),
-            ) {
-                item(key = "composer") {
-                    FeedComposer(
-                        onProfileClick = { onProfileClick(authenticatedUser.id) },
-                        onNewPostClick = onNewPostClick,
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(bottom = 96.dp),
+    ) {
+        item(key = "composer") {
+            FeedComposer(
+                onProfileClick = { onProfileClick(authenticatedUser.id) },
+                onNewPostClick = onNewPostClick,
+            )
+            HorizontalSeparator()
+        }
+        itemsIndexed(
+            items = feedPosts,
+            key = { _, post -> post.id },
+        ) { index, post ->
+            val onProfileClick1 = { onProfileClick(post.profileId) }
+            FeedPost(
+                onClick = { onPostClick(post) },
+                avatar = {
+                    AvatarButton(
+                        url = post.avatarUrl,
+                        onClick = onProfileClick1,
                     )
-                    HorizontalSeparator()
-                }
-                itemsIndexed(
-                    items = feedPosts,
-                    key = { _, post -> post.id },
-                ) { index, post ->
-                    val onProfileClick1 = { onProfileClick(post.profileId) }
-                    FeedPost(
-                        onClick = { onPostClick(post) },
-                        avatar = {
-                            AvatarButton(
-                                url = post.avatarUrl,
-                                onClick = onProfileClick1,
-                            )
-                        },
-                        authorName = {
-                            Button(onClick = onProfileClick1, style = ButtonStyle.Link) {
-                                Text(
-                                    text = post.author,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                )
-                            }
-                        },
-                        timestamp = {
-                            Text(post.age)
-                        },
-                        overflow = { PostOverflowMenu() },
-                        body = {
-                            Text(
-                                text = post.body,
-                                color = Theme[colors][onBackground],
-                            )
-                        },
-                        media = run {
-                            if (post.media.isNotEmpty()) {
-                                {
-                                    post.media.forEach { item ->
-                                        if (post.portraitMedia) {
-                                            PortraitMediaItem(item.url)
-                                        } else {
-                                            LandscapeMediaItem(item.url)
-                                        }
-                                    }
+                },
+                authorName = {
+                    Button(onClick = onProfileClick1, style = ButtonStyle.Link) {
+                        Text(
+                            text = post.author,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                },
+                timestamp = {
+                    Text(post.age)
+                },
+                overflow = { PostOverflowMenu() },
+                body = {
+                    Text(
+                        text = post.body,
+                        color = Theme[colors][onBackground],
+                    )
+                },
+                media = run {
+                    if (post.media.isNotEmpty()) {
+                        {
+                            post.media.forEach { item ->
+                                if (post.portraitMedia) {
+                                    PortraitMediaItem(item.url)
+                                } else {
+                                    LandscapeMediaItem(item.url)
                                 }
-                            } else null
-                        },
-                    ) {
-                        PostActions(post = post)
-                    }
-                    if (index < feedPosts.lastIndex) {
-                        HorizontalSeparator()
-                    }
-                }
+                            }
+                        }
+                    } else null
+                },
+            ) {
+                PostActions(post = post)
+            }
+            if (index < feedPosts.lastIndex) {
+                HorizontalSeparator()
             }
         }
     }
