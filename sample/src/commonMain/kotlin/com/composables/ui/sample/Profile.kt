@@ -106,10 +106,28 @@ fun Profile(
                     ) {
                         item {
                             ProfileHeader(profile)
-                            ProfileTabs(
+                            TabGroup(
                                 selectedTab = selectedTab,
-                                onSelectedTabChange = { selectedTab = it },
-                            )
+                                onSelectedTabChange = { it: ProfileFeedTab -> selectedTab = it },
+                                tabs = ProfileFeedTab.all,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(12.dp),
+                            ) {
+                                this.TabList(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    equalTabWidth = true,
+                                ) {
+                                    ProfileFeedTab.all.forEach { tab ->
+                                        this.Tab(key = tab) {
+                                            Text(
+                                                text = tab.label,
+                                                fontWeight = FontWeight.Bold,
+                                            )
+                                        }
+                                    }
+                                }
+                            }
                         }
                         itemsIndexed(
                             items = visiblePosts,
@@ -175,35 +193,6 @@ private fun ProfileHeader(profile: SocialProfile) {
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text("Follow")
-        }
-    }
-}
-
-@Composable
-private fun ProfileTabs(
-    selectedTab: ProfileFeedTab,
-    onSelectedTabChange: (ProfileFeedTab) -> Unit,
-) {
-    TabGroup(
-        selectedTab = selectedTab,
-        onSelectedTabChange = onSelectedTabChange,
-        tabs = ProfileFeedTab.all,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(12.dp),
-    ) {
-        TabList(
-            modifier = Modifier.fillMaxWidth(),
-            equalTabWidth = true,
-        ) {
-            ProfileFeedTab.all.forEach { tab ->
-                Tab(key = tab) {
-                    Text(
-                        text = tab.label,
-                        fontWeight = FontWeight.Bold,
-                    )
-                }
-            }
         }
     }
 }
