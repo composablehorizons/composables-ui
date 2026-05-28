@@ -7,10 +7,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.composables.ui.components.Text
+import com.composables.ui.components.Toolbar
 
 @Composable
 fun NotificationsScreen() {
-    ScreenScaffold {
+    ScreenScaffold(
+        toolbar = {
+            Toolbar(
+                title = {
+                    Text("Activity")
+                },
+            )
+        },
+    ) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center,

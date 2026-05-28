@@ -40,6 +40,7 @@ import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
 import com.composables.ui.components.Text
 import com.composables.ui.components.TextField
+import com.composables.ui.components.Toolbar
 import com.composables.ui.sample.components.Avatar
 import com.composables.ui.theme.Medium
 import com.composables.ui.theme.border
@@ -52,12 +53,23 @@ import com.composeunstyled.currentWidthBreakpoint
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 
-private val SearchPanelMaxWidth = 640.dp
-private val WideSearchVerticalInset = 48.dp
+private val WideSearchVerticalInset = 70.dp
 
 @Composable
 fun SearchScreen() {
-    ScreenScaffold {
+    val widthBreakpoint = currentWidthBreakpoint()
+
+    ScreenScaffold(
+        toolbar = if (widthBreakpoint isAtLeast Medium) {
+            {
+                Toolbar(
+                    title = {
+                        Text("Search")
+                    },
+                )
+            }
+        } else null,
+    ) {
         SearchContent(
             modifier = Modifier
                 .fillMaxSize()
@@ -83,7 +95,7 @@ private fun SearchContent(
     ) {
         Column(
             modifier = Modifier
-                .then(if (showPanelOutline) Modifier.widthIn(max = SearchPanelMaxWidth) else Modifier)
+                .then(if (showPanelOutline) Modifier.widthIn(max = ScreenContentMaxWidth) else Modifier)
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .then(
@@ -103,7 +115,9 @@ private fun SearchContent(
                 )
                 .align(Alignment.TopCenter),
         ) {
-            SearchHeader()
+            if (!showPanelOutline) {
+                SearchHeader()
+            }
             SearchResults()
         }
     }

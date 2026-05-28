@@ -43,7 +43,6 @@ import com.composables.ui.components.DropdownMenuAlignment
 import com.composables.ui.components.DropdownMenuItem
 import com.composables.ui.components.DropdownMenuItemStyle
 import com.composables.ui.components.DropdownMenuPanel
-import com.composables.ui.theme.Expanded
 import com.composables.ui.components.HorizontalSeparator
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
@@ -58,7 +57,7 @@ import com.composables.ui.sample.components.FeedPost
 import com.composables.ui.sample.data.SocialProfile
 import com.composables.ui.sample.data.ProfilePost
 import com.composables.ui.sample.data.profiles
-import com.composables.ui.theme.background
+import com.composables.ui.theme.Medium
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.field
@@ -70,7 +69,7 @@ import com.composeunstyled.currentWidthBreakpoint
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 
-private val ProfileMaxWidth = 700.dp
+private val WideProfileVerticalInset = 70.dp
 
 @kotlin.jvm.JvmInline
 private value class ProfileFeedTab private constructor(val value: String) {
@@ -95,10 +94,14 @@ fun ProfileScreen(
         else -> profile.posts
     }
     val widthBreakpoint = currentWidthBreakpoint()
-    val showProfileOutline = widthBreakpoint isAtLeast Expanded
+    val showProfileOutline = widthBreakpoint isAtLeast Medium
     val profileShape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)
 
-    ScreenScaffold {
+    ScreenScaffold(
+        toolbar = {
+            ProfileToolbar(onBack)
+        },
+    ) {
         Box(
             modifier = Modifier.fillMaxSize(),
         ) {
@@ -108,12 +111,15 @@ fun ProfileScreen(
             ) {
                 Column(
                     modifier = Modifier
-                        .then(if (showProfileOutline) Modifier.widthIn(max = ProfileMaxWidth) else Modifier)
+                        .then(if (showProfileOutline) Modifier.widthIn(max = ScreenContentMaxWidth) else Modifier)
                         .fillMaxWidth()
                         .fillMaxHeight()
+                        .then(if (showProfileOutline) Modifier.padding(top = WideProfileVerticalInset) else Modifier)
                         .align(Alignment.TopCenter),
                 ) {
-                    ProfileToolbar(onBack)
+                    if (!showProfileOutline) {
+                        ProfileToolbar(onBack)
+                    }
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -164,7 +170,6 @@ fun ProfileScreen(
 @Composable
 private fun ProfileToolbar(onBack: (() -> Unit)?) {
     Toolbar(
-        backgroundColor = Theme[colors][panel],
         leading = onBack?.let { onBackClick ->
             {
                 IconButton(onClick = onBackClick, style = ButtonStyle.Ghost) {

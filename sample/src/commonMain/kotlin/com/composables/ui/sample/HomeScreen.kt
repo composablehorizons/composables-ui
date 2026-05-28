@@ -28,7 +28,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -49,6 +48,7 @@ import com.composables.ui.components.HorizontalSeparator
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
 import com.composables.ui.components.Text
+import com.composables.ui.components.Toolbar
 import com.composables.ui.sample.components.AvatarButton
 import com.composables.ui.sample.components.FeedPost
 import com.composables.ui.sample.components.LandscapeMediaItem
@@ -66,7 +66,6 @@ import com.composeunstyled.currentWidthBreakpoint
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 
-private val FeedMaxWidth = 700.dp
 private val WideFeedVerticalInset = 70.dp
 private const val LoggedInProfileId = "john_mobbin"
 
@@ -76,7 +75,16 @@ fun HomeScreen(
     onProfileClick: (String) -> Unit,
     onNewPostClick: () -> Unit,
 ) {
-    ScreenScaffold {
+    val widthBreakpoint = currentWidthBreakpoint()
+    val toolbar = (@Composable {
+        Toolbar(
+            title = {
+                Text("My Feed")
+            },
+        )
+    }).takeIf { widthBreakpoint isAtLeast Medium }
+
+    ScreenScaffold(toolbar = toolbar) {
         SocialFeed(
             modifier = Modifier
                 .fillMaxSize()
@@ -102,21 +110,10 @@ private fun SocialFeed(
         label = "FeedVerticalInset",
     )
 
-    Box(modifier = modifier.padding(horizontal = if(widthBreakpoint isAtLeast Medium) 80.dp else 0.dp)) {
-        if (widthBreakpoint isAtLeast Medium) {
-            Text(
-                text = "My Feed",
-                modifier = Modifier
-                    .then(Modifier.widthIn(max = FeedMaxWidth))
-                    .fillMaxWidth()
-                    .align(Alignment.TopCenter)
-                    .padding(horizontal = 24.dp, vertical = 22.dp),
-                fontWeight = FontWeight.SemiBold,
-            )
-        }
+    Box(modifier = modifier.padding(horizontal = if (widthBreakpoint isAtLeast Medium) 80.dp else 0.dp)) {
         Box(
             modifier = Modifier
-                .widthIn(max = if (widthBreakpoint isAtLeast Medium) FeedMaxWidth else Dp.Unspecified)
+                .widthIn(max = if (widthBreakpoint isAtLeast Medium) ScreenContentMaxWidth else Dp.Unspecified)
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .padding(top = feedVerticalInset)
