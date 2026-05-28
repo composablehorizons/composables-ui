@@ -65,10 +65,8 @@ import com.composables.ui.theme.Large
 import com.composables.ui.theme.Medium
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
-import com.composables.ui.theme.largeShape
 import com.composables.ui.theme.onPanel
 import com.composables.ui.theme.panel
-import com.composables.ui.theme.shapes
 import com.composeunstyled.LocalContentColor
 import com.composeunstyled.buildModifier
 import com.composeunstyled.currentWidthBreakpoint
@@ -82,7 +80,7 @@ private const val NavigationDimmedAlpha = 0.86f
 private val NavigationTransitionEasing = CubicBezierEasing(0.32f, 0.72f, 0f, 1f)
 
 @Serializable
-data object SocialFeedRoute
+data object HomeRoute
 
 @Serializable
 data object SearchRoute
@@ -106,7 +104,7 @@ fun SocialApp() {
     val currentDestination = navBackStackEntry?.destination
 
     val homeSelected = currentDestination == null ||
-            currentDestination.hasRoute<SocialFeedRoute>() ||
+            currentDestination.hasRoute<HomeRoute>() ||
             currentDestination.hasRoute<PostDetailsRoute>()
     val searchSelected = currentDestination?.hasRoute<SearchRoute>() == true
     val composeSelected = currentDestination?.hasRoute<NewPostRoute>() == true
@@ -214,6 +212,13 @@ fun SocialApp() {
                 }
             }
 
+            fun onTabSelected(route: Any) {
+                navController.navigate(route) {
+                    popUpTo(route)
+                    launchSingleTop = true
+                }
+            }
+
             if (widthBreakpoint isAtLeast Medium) {
                 Sidebar(
                     modifier = Modifier.align(Alignment.CenterStart),
@@ -222,7 +227,7 @@ fun SocialApp() {
                         SidebarItem(
                             selected = homeSelected,
                             icon = { Icon(Lucide.House) },
-                            onClick = { navController.navigateToHomeTab() },
+                            onClick = { onTabSelected(HomeRoute) },
                             text = {
                                 Text(text = "Home", singleLine = true)
                             },
@@ -230,7 +235,7 @@ fun SocialApp() {
                         SidebarItem(
                             selected = searchSelected,
                             icon = { Icon(Lucide.Search) },
-                            onClick = { navController.navigateToSearchTab() },
+                            onClick = { onTabSelected(SearchRoute) },
                             text = {
                                 Text(text = "Search", singleLine = true)
                             },
@@ -238,26 +243,20 @@ fun SocialApp() {
                         SidebarItem(
                             selected = composeSelected,
                             icon = { Icon(Lucide.Plus) },
-                            onClick = { navController.navigateToComposeTab() },
-                            text = {
-                                Text(text = "New post", singleLine = true)
-                            },
+                            onClick = { onTabSelected(NewPostRoute) },
+                            text = { Text(text = "New post", singleLine = true) },
                         )
                         SidebarItem(
                             selected = activitySelected,
                             icon = { Icon(Lucide.Bell) },
-                            onClick = { navController.navigateToNotificationsTab() },
-                            text = {
-                                Text(text = "Activity", singleLine = true)
-                            },
+                            onClick = { onTabSelected(ActivityRoute) },
+                            text = { Text(text = "Activity", singleLine = true) },
                         )
                         SidebarItem(
                             selected = profileSelected,
                             icon = { Icon(Lucide.User) },
-                            onClick = { navController.navigateToProfile(authenticatedUser.id) },
-                            text = {
-                                Text(text = "Profile", singleLine = true)
-                            },
+                            onClick = { onTabSelected(ProfileRoute(authenticatedUser.id)) },
+                            text = { Text(text = "Profile", singleLine = true) },
                         )
                     },
                 )
@@ -266,24 +265,24 @@ fun SocialApp() {
                     NavigationBarItem(
                         modifier = Modifier.weight(1f),
                         selected = homeSelected,
-                        onClick = { navController.navigateToHomeTab() },
+                        onClick = { onTabSelected(HomeRoute) },
                         icon = { Icon(Lucide.House, contentDescription = "Home") }
                     )
                     NavigationBarItem(
                         modifier = Modifier.weight(1f),
                         selected = searchSelected,
-                        onClick = { navController.navigateToSearchTab() },
+                        onClick = { onTabSelected(SearchRoute) },
                         icon = { Icon(Lucide.Search, contentDescription = "Search") })
                     NavigationBarItem(
                         modifier = Modifier.weight(1f),
                         selected = composeSelected,
-                        onClick = { navController.navigateToComposeTab() },
+                        onClick = { onTabSelected(NewPostRoute) },
                         icon = { Icon(Lucide.Plus, contentDescription = "New post") }
                     )
                     NavigationBarItem(
                         modifier = Modifier.weight(1f),
                         selected = activitySelected,
-                        onClick = { navController.navigateToNotificationsTab() },
+                        onClick = { onTabSelected(ActivityRoute) },
                         icon = { Icon(Lucide.Bell, contentDescription = "Activity") })
                     NavigationBarItem(
                         modifier = Modifier.weight(1f),
@@ -306,7 +305,7 @@ private fun TabHost(
 
     NavHost(
         navController = navController,
-        startDestination = SocialFeedRoute,
+        startDestination = HomeRoute,
         modifier = modifier,
         enterTransition = {
             if (targetState.destination.isTabDestination() || !animateTransition) {
@@ -373,7 +372,7 @@ private fun TabHost(
             }
         },
     ) {
-        composable<SocialFeedRoute> {
+        composable<HomeRoute> {
             SocialFeed(
                 onPostClick = { post -> navController.navigate(PostDetailsRoute(post.id)) },
                 onProfileClick = { profileId -> navController.navigate(ProfileRoute(profileId)) },
@@ -418,30 +417,9 @@ private fun NavHostController.navigateToProfile(profileId: String) {
     }
 }
 
-private fun NavHostController.navigateToSearchTab() {
-    navigate(SearchRoute) {
-        popUpTo(SocialFeedRoute)
-        launchSingleTop = true
-    }
-}
-
 private fun NavHostController.navigateToComposeTab() {
     navigate(NewPostRoute) {
-        popUpTo(SocialFeedRoute)
-        launchSingleTop = true
-    }
-}
-
-private fun NavHostController.navigateToNotificationsTab() {
-    navigate(ActivityRoute) {
-        popUpTo(SocialFeedRoute)
-        launchSingleTop = true
-    }
-}
-
-private fun NavHostController.navigateToHomeTab() {
-    navigate(SocialFeedRoute) {
-        popUpTo(SocialFeedRoute)
+        popUpTo(HomeRoute)
         launchSingleTop = true
     }
 }
