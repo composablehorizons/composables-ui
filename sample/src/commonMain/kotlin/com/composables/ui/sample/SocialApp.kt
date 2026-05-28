@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
@@ -78,7 +79,7 @@ fun SocialApp() {
                     navController = navController,
                     modifier = Modifier
                         .align(Alignment.TopCenter)
-                        .widthIn(max = ScreenContentMaxWidth)
+                        .widthIn(max = 700.dp)
                         .fillMaxWidth(),
                     animate = (widthBreakpoint isAtLeast Medium).not(),
                 )

@@ -104,7 +104,6 @@ fun Profile(
         ) {
             Column(
                 modifier = Modifier
-                    .then(if (showProfileOutline) Modifier.widthIn(max = ScreenContentMaxWidth) else Modifier)
                     .fillMaxWidth()
                     .fillMaxHeight()
                     .align(Alignment.TopCenter),

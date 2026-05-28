@@ -62,7 +62,6 @@ fun Search(
     Box(modifier = modifier) {
         Column(
             modifier = Modifier
-                .then(if (showPanelOutline) Modifier.widthIn(max = ScreenContentMaxWidth) else Modifier)
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .then(

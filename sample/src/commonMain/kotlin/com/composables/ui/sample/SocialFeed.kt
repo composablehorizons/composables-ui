@@ -78,7 +78,6 @@ fun SocialFeed(
     Box(modifier = modifier.padding(horizontal = if (widthBreakpoint isAtLeast Medium) 80.dp else 0.dp)) {
         Box(
             modifier = Modifier
-                .widthIn(max = if (widthBreakpoint isAtLeast Medium) ScreenContentMaxWidth else Dp.Unspecified)
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .then(
