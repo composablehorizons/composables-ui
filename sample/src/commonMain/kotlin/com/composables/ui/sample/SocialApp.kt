@@ -40,7 +40,6 @@ import com.composables.ui.components.SidebarItem
 import com.composables.ui.components.SidebarMode
 import com.composables.ui.components.Text
 import com.composables.ui.sample.data.authenticatedUser
-import com.composables.ui.sample.data.profiles
 import com.composables.ui.theme.AppScaffold
 import com.composables.ui.theme.Large
 import com.composables.ui.theme.Medium
@@ -72,7 +71,6 @@ data class PostDetailsRoute(val postId: String)
 
 @Serializable
 data class ProfileRoute(val profileId: String)
-
 
 @Composable
 fun SocialApp() {
