@@ -90,102 +90,96 @@ fun SocialApp() {
     val profileSelected = currentDestination?.hasRoute<ProfileRoute>() == true
 
     AppScaffold {
-        val widthBreakpoint = currentWidthBreakpoint()
+        Box(modifier = Modifier.fillMaxSize()) {
+            val widthBreakpoint = currentWidthBreakpoint()
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Theme[colors][background]),
-            content = {
-                TabHost(
-                    navController = navController,
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(horizontal = if (widthBreakpoint isAtLeast Medium) 80.dp else 0.dp)
-                        .widthIn(max = 700.dp)
-                        .fillMaxWidth(),
-                )
+            TabHost(
+                navController = navController,
+                modifier = Modifier
+                    .padding(horizontal = if (widthBreakpoint isAtLeast Medium) 80.dp else 0.dp)
+                    .widthIn(max = 700.dp)
+                    .fillMaxSize(),
+            )
 
-                if (widthBreakpoint isAtLeast Medium) {
-                    Sidebar(
-                        modifier = Modifier.align(Alignment.CenterStart),
-                        mode = if (widthBreakpoint isAtLeast Large) SidebarMode.Expanded else SidebarMode.Compact,
-                        content = {
-                            SidebarItem(
-                                selected = homeSelected,
-                                icon = { Icon(Lucide.House) },
-                                onClick = { navController.navigateToHomeTab() },
-                                text = {
-                                    Text(text = "Home", singleLine = true)
-                                },
-                            )
-                            SidebarItem(
-                                selected = searchSelected,
-                                icon = { Icon(Lucide.Search) },
-                                onClick = { navController.navigateToSearchTab() },
-                                text = {
-                                    Text(text = "Search", singleLine = true)
-                                },
-                            )
-                            SidebarItem(
-                                selected = composeSelected,
-                                icon = { Icon(Lucide.Plus) },
-                                onClick = { navController.navigateToComposeTab() },
-                                text = {
-                                    Text(text = "New post", singleLine = true)
-                                },
-                            )
-                            SidebarItem(
-                                selected = notificationsSelected,
-                                icon = { Icon(Lucide.Bell) },
-                                onClick = { navController.navigateToNotificationsTab() },
-                                text = {
-                                    Text(text = "Activity", singleLine = true)
-                                },
-                            )
-                            SidebarItem(
-                                selected = profileSelected,
-                                icon = { Icon(Lucide.User) },
-                                onClick = { navController.navigateToProfile(authenticatedUser.id) },
-                                text = {
-                                    Text(text = "Profile", singleLine = true)
-                                },
-                            )
-                        },
-                    )
-                } else {
-                    NavigationBar(modifier = Modifier.align(Alignment.BottomCenter)) {
-                        NavigationBarItem(
-                            modifier = Modifier.weight(1f),
+            if (widthBreakpoint isAtLeast Medium) {
+                Sidebar(
+                    modifier = Modifier.align(Alignment.CenterStart),
+                    mode = if (widthBreakpoint isAtLeast Large) SidebarMode.Expanded else SidebarMode.Compact,
+                    content = {
+                        SidebarItem(
                             selected = homeSelected,
+                            icon = { Icon(Lucide.House) },
                             onClick = { navController.navigateToHomeTab() },
-                            icon = { Icon(Lucide.House, contentDescription = "Home") }
+                            text = {
+                                Text(text = "Home", singleLine = true)
+                            },
                         )
-                        NavigationBarItem(
-                            modifier = Modifier.weight(1f),
+                        SidebarItem(
                             selected = searchSelected,
+                            icon = { Icon(Lucide.Search) },
                             onClick = { navController.navigateToSearchTab() },
-                            icon = { Icon(Lucide.Search, contentDescription = "Search") })
-                        NavigationBarItem(
-                            modifier = Modifier.weight(1f),
-                            selected = composeSelected,
-                            onClick = { navController.navigateToComposeTab() },
-                            icon = { Icon(Lucide.Plus, contentDescription = "New post") }
+                            text = {
+                                Text(text = "Search", singleLine = true)
+                            },
                         )
-                        NavigationBarItem(
-                            modifier = Modifier.weight(1f),
+                        SidebarItem(
+                            selected = composeSelected,
+                            icon = { Icon(Lucide.Plus) },
+                            onClick = { navController.navigateToComposeTab() },
+                            text = {
+                                Text(text = "New post", singleLine = true)
+                            },
+                        )
+                        SidebarItem(
                             selected = notificationsSelected,
+                            icon = { Icon(Lucide.Bell) },
                             onClick = { navController.navigateToNotificationsTab() },
-                            icon = { Icon(Lucide.Bell, contentDescription = "Activity") })
-                        NavigationBarItem(
-                            modifier = Modifier.weight(1f),
+                            text = {
+                                Text(text = "Activity", singleLine = true)
+                            },
+                        )
+                        SidebarItem(
                             selected = profileSelected,
+                            icon = { Icon(Lucide.User) },
                             onClick = { navController.navigateToProfile(authenticatedUser.id) },
-                            icon = { Icon(Lucide.User, contentDescription = "Profile") })
-                    }
+                            text = {
+                                Text(text = "Profile", singleLine = true)
+                            },
+                        )
+                    },
+                )
+            } else {
+                NavigationBar(modifier = Modifier.align(Alignment.BottomCenter)) {
+                    NavigationBarItem(
+                        modifier = Modifier.weight(1f),
+                        selected = homeSelected,
+                        onClick = { navController.navigateToHomeTab() },
+                        icon = { Icon(Lucide.House, contentDescription = "Home") }
+                    )
+                    NavigationBarItem(
+                        modifier = Modifier.weight(1f),
+                        selected = searchSelected,
+                        onClick = { navController.navigateToSearchTab() },
+                        icon = { Icon(Lucide.Search, contentDescription = "Search") })
+                    NavigationBarItem(
+                        modifier = Modifier.weight(1f),
+                        selected = composeSelected,
+                        onClick = { navController.navigateToComposeTab() },
+                        icon = { Icon(Lucide.Plus, contentDescription = "New post") }
+                    )
+                    NavigationBarItem(
+                        modifier = Modifier.weight(1f),
+                        selected = notificationsSelected,
+                        onClick = { navController.navigateToNotificationsTab() },
+                        icon = { Icon(Lucide.Bell, contentDescription = "Activity") })
+                    NavigationBarItem(
+                        modifier = Modifier.weight(1f),
+                        selected = profileSelected,
+                        onClick = { navController.navigateToProfile(authenticatedUser.id) },
+                        icon = { Icon(Lucide.User, contentDescription = "Profile") })
                 }
-            },
-        )
+            }
+        }
     }
 }
 
