@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
@@ -397,18 +398,23 @@ val WidthBreakpoints = ScreenBreakpoints {
 }
 
 @Composable
-fun AppScaffold(content: @Composable () -> Unit) {
-    AppTheme {
-        ProvideBreakpoints(widthBreakpoints = WidthBreakpoints) {
-            TooltipHost {
-                FocusVisibilityProvider {
-                    ProvideContentColor(Theme[colors][onBackground]) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(Theme[colors][background]),
-                        ) {
-                            content()
+fun AppScaffold(
+    colorScheme: ColorScheme = ColorScheme.System,
+    content: @Composable () -> Unit,
+) {
+    CompositionLocalProvider(LocalColorScheme provides colorScheme) {
+        AppTheme {
+            ProvideBreakpoints(widthBreakpoints = WidthBreakpoints) {
+                TooltipHost {
+                    FocusVisibilityProvider {
+                        ProvideContentColor(Theme[colors][onBackground]) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(Theme[colors][background]),
+                            ) {
+                                content()
+                            }
                         }
                     }
                 }

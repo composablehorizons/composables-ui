@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +46,7 @@ import com.composables.ui.components.Text
 import com.composables.ui.components.Toolbar
 import com.composables.ui.sample.data.authenticatedUser
 import com.composables.ui.theme.AppScaffold
+import com.composables.ui.theme.ColorScheme
 import com.composables.ui.theme.Large
 import com.composables.ui.theme.Medium
 import com.composables.ui.theme.border
@@ -74,6 +78,7 @@ data class ProfileRoute(val profileId: String)
 @Composable
 fun SocialApp() {
     val navController = rememberNavController()
+    var colorScheme by remember { mutableStateOf(ColorScheme.System) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
@@ -85,7 +90,7 @@ fun SocialApp() {
     val activitySelected = currentDestination?.hasRoute<ActivityRoute>() == true
     val profileSelected = currentDestination?.hasRoute<ProfileRoute>() == true
 
-    AppScaffold {
+    AppScaffold(colorScheme = colorScheme) {
         Box(Modifier.fillMaxSize()) {
             val widthBreakpoint = currentWidthBreakpoint()
 
@@ -125,6 +130,8 @@ fun SocialApp() {
                 ) {
                     TabHost(
                         navController = navController,
+                        colorScheme = colorScheme,
+                        onColorSchemeChange = { colorScheme = it },
                         modifier = Modifier.fillMaxSize(),
                     )
                 }
@@ -227,6 +234,8 @@ fun SocialApp() {
 @Composable
 private fun TabHost(
     navController: NavHostController,
+    colorScheme: ColorScheme,
+    onColorSchemeChange: (ColorScheme) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     NavHost(
@@ -240,6 +249,8 @@ private fun TabHost(
     ) {
         composable<HomeRoute> {
             SocialFeed(
+                colorScheme = colorScheme,
+                onColorSchemeChange = onColorSchemeChange,
                 onPostClick = { post -> navController.navigate(PostDetailsRoute(post.id)) },
                 onProfileClick = { profileId -> navController.navigate(ProfileRoute(profileId)) },
                 onNewPostClick = {

@@ -1,10 +1,8 @@
 package com.composables.ui.sample
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,30 +43,30 @@ import com.composables.ui.components.Text
 import com.composables.ui.sample.components.AvatarButton
 import com.composables.ui.sample.components.FeedPost
 import com.composables.ui.sample.components.LandscapeMediaItem
-import com.composables.ui.sample.components.MobileToolbar
 import com.composables.ui.sample.components.PortraitMediaItem
 import com.composables.ui.sample.data.SocialPost
 import com.composables.ui.sample.data.authenticatedUser
 import com.composables.ui.sample.data.feedPosts
 import com.composables.ui.sample.data.profiles
-import com.composables.ui.theme.Medium
+import com.composables.ui.theme.ColorScheme
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
-import com.composables.ui.theme.onPanel
-import com.composables.ui.theme.panel
-import com.composeunstyled.ProvideContentColor
-import com.composeunstyled.currentWidthBreakpoint
 import com.composeunstyled.theme.Theme
 
 @Composable
 fun SocialFeed(
+    colorScheme: ColorScheme,
+    onColorSchemeChange: (ColorScheme) -> Unit,
     onPostClick: (SocialPost) -> Unit,
     onProfileClick: (String) -> Unit,
     onNewPostClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    TabContentScaffold {
+    TabContentScaffold(
+        colorScheme = colorScheme,
+        onColorSchemeChange = onColorSchemeChange,
+    ) {
         LazyColumn(
             modifier = modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = 96.dp),

@@ -18,9 +18,11 @@ import com.composables.ui.sample.data.authenticatedUser
 import com.composables.ui.theme.ColorScheme
 
 @Composable
-fun MobileToolbar() {
+fun MobileToolbar(
+    onColorSchemeChange: (ColorScheme) -> Unit,
+    colorScheme: ColorScheme,
+) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedColorScheme by remember { mutableStateOf(ColorScheme.System) }
 
     Toolbar(
         leading = {
@@ -31,8 +33,8 @@ fun MobileToolbar() {
                 panel = {
                     DropdownMenuPanel(minWidth = 280.dp) {
                         AppearanceSelector(
-                            selectedColorScheme = selectedColorScheme,
-                            onSelectedColorSchemeChange = { selectedColorScheme = it },
+                            selectedColorScheme = colorScheme,
+                            onSelectedColorSchemeChange = onColorSchemeChange,
                         )
                         DropdownMenuSeparator()
                         DropdownMenuItem(
