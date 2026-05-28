@@ -54,11 +54,6 @@ import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 import kotlinx.serialization.Serializable
 
-private const val NavigationTransitionDurationMillis = 350
-private const val NavigationParallaxDivisor = 5
-private const val NavigationDimmedAlpha = 0.86f
-private val NavigationTransitionEasing = CubicBezierEasing(0.32f, 0.72f, 0f, 1f)
-
 @Serializable
 data object HomeRoute
 
