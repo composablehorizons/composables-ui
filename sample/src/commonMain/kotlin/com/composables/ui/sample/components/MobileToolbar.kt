@@ -14,7 +14,6 @@ fun MobileToolbar() {
 
     Toolbar(
         leading = {
-            //
             AvatarButton(
                 url = authenticatedUser.avatarUrl,
                 onClick = {
