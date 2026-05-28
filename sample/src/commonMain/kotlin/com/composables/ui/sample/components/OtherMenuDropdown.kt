@@ -17,7 +17,7 @@ import com.composables.ui.components.Text
 import com.composables.ui.theme.ColorScheme
 
 @Composable
-fun AccountMenuDropdown(
+fun OtherMenuDropdown(
     colorScheme: ColorScheme,
     onColorSchemeChange: (ColorScheme) -> Unit,
     side: DropdownMenuSide = DropdownMenuSide.Bottom,

@@ -28,7 +28,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.composables.icons.lucide.Bell
-import com.composables.icons.lucide.Ellipsis
 import com.composables.icons.lucide.House
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Menu
@@ -48,7 +47,7 @@ import com.composables.ui.components.SidebarItem
 import com.composables.ui.components.SidebarMode
 import com.composables.ui.components.Text
 import com.composables.ui.components.Toolbar
-import com.composables.ui.sample.components.AccountMenuDropdown
+import com.composables.ui.sample.components.OtherMenuDropdown
 import com.composables.ui.sample.data.authenticatedUser
 import com.composables.ui.theme.AppScaffold
 import com.composables.ui.theme.ColorScheme
@@ -165,7 +164,7 @@ fun SocialApp() {
                     modifier = Modifier.align(Alignment.CenterStart),
                     mode = if (widthBreakpoint isAtLeast Large) SidebarMode.Expanded else SidebarMode.Compact,
                     footer = {
-                        AccountMenuDropdown(
+                        OtherMenuDropdown(
                             colorScheme = colorScheme,
                             onColorSchemeChange = { colorScheme = it },
                             side = DropdownMenuSide.End,

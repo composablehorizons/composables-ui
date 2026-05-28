@@ -12,7 +12,7 @@ fun MobileToolbar(
 ) {
     Toolbar(
         leading = {
-            AccountMenuDropdown(
+            OtherMenuDropdown(
                 colorScheme = colorScheme,
                 onColorSchemeChange = onColorSchemeChange,
             ) { openMenu ->
