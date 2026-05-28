@@ -112,7 +112,8 @@ fun SocialApp() {
                 if (widthBreakpoint isAtLeast Medium) {
                     Toolbar(
                         leading = {
-                            if (navController.previousBackStackEntry != null) {
+                            val canGoBack = navController.previousBackStackEntry != null
+                            if (canGoBack) {
                                 IconButton(
                                     onClick = { navController.navigateUp() },
                                     style = ButtonStyle.Ghost,
