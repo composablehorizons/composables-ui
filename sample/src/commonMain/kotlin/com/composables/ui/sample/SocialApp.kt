@@ -100,8 +100,8 @@ fun SocialApp() {
                         .align(Alignment.TopCenter)
                         .widthIn(max = 700.dp)
                         .fillMaxWidth(),
-                    animate = (widthBreakpoint isAtLeast Medium).not(),
                 )
+
                 if (widthBreakpoint isAtLeast Medium) {
                     Sidebar(
                         modifier = Modifier.align(Alignment.CenterStart),
@@ -188,16 +188,18 @@ fun SocialApp() {
 @Composable
 private fun TabContent(
     navController: NavHostController,
-    animate: Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val widthBreakpoint = currentWidthBreakpoint()
+    val animateTransition = (widthBreakpoint isAtLeast Medium).not()
+
     Box(modifier = modifier) {
         NavHost(
             navController = navController,
             startDestination = SocialFeedRoute,
             modifier = Modifier.fillMaxSize(),
             enterTransition = {
-                if (targetState.destination.isTabDestination() || !animate) {
+                if (targetState.destination.isTabDestination() || !animateTransition) {
                     EnterTransition.None
                 } else {
                     slideInHorizontally(
@@ -210,7 +212,7 @@ private fun TabContent(
                 }
             },
             exitTransition = {
-                if (targetState.destination.isTabDestination() || !animate) {
+                if (targetState.destination.isTabDestination() || !animateTransition) {
                     ExitTransition.None
                 } else {
                     slideOutHorizontally(
@@ -229,7 +231,7 @@ private fun TabContent(
                 }
             },
             popEnterTransition = {
-                if (targetState.destination.isTabDestination() || !animate) {
+                if (targetState.destination.isTabDestination() || !animateTransition) {
                     EnterTransition.None
                 } else {
                     slideInHorizontally(
@@ -248,7 +250,7 @@ private fun TabContent(
                 }
             },
             popExitTransition = {
-                if (targetState.destination.isTabDestination() || !animate) {
+                if (targetState.destination.isTabDestination() || !animateTransition) {
                     ExitTransition.None
                 } else {
                     slideOutHorizontally(
