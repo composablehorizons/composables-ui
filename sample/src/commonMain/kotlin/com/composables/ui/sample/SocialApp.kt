@@ -277,28 +277,13 @@ private fun TabContent(
                     onBack = { navController.navigateUp() },
                 )
             }
-            composable<SearchRoute>(
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None },
-                popEnterTransition = { EnterTransition.None },
-                popExitTransition = { ExitTransition.None },
-            ) {
+            composable<SearchRoute> {
                 Search()
             }
-            composable<NewPostRoute>(
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None },
-                popEnterTransition = { EnterTransition.None },
-                popExitTransition = { ExitTransition.None },
-            ) {
+            composable<NewPostRoute> {
                 PostComposer()
             }
-            composable<ActivityRoute>(
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None },
-                popEnterTransition = { EnterTransition.None },
-                popExitTransition = { ExitTransition.None },
-            ) {
+            composable<ActivityRoute> {
                 Activity()
             }
             composable<ProfileRoute> { backStackEntry ->
