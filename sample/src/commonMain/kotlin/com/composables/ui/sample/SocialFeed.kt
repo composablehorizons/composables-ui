@@ -74,7 +74,7 @@ fun SocialFeed(
 ) {
     val widthBreakpoint = currentWidthBreakpoint()
     val feedShape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)
-    Box(modifier = modifier.padding(horizontal = if (widthBreakpoint isAtLeast Medium) 80.dp else 0.dp)) {
+    Box(modifier = modifier) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()

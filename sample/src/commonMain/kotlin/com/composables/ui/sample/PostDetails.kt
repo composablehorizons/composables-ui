@@ -26,7 +26,6 @@ import com.composables.ui.theme.onBackground
 import com.composables.ui.theme.panel
 import com.composeunstyled.theme.Theme
 
-private val PostDetailMaxWidth = 700.dp
 
 @Composable
 fun PostDetails(
@@ -36,7 +35,6 @@ fun PostDetails(
     Box(Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
-                .widthIn(max = PostDetailMaxWidth)
                 .fillMaxWidth()
                 .background(Theme[colors][panel])
                 .align(Alignment.TopCenter),

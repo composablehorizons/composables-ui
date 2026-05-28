@@ -12,11 +12,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -46,6 +48,7 @@ import com.composables.ui.theme.Medium
 import com.composables.ui.theme.background
 import com.composables.ui.theme.colors
 import com.composeunstyled.currentWidthBreakpoint
+import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 import kotlinx.serialization.Serializable
 
@@ -94,10 +97,11 @@ fun SocialApp() {
                 .fillMaxSize()
                 .background(Theme[colors][background]),
             content = {
-                TabContent(
+                TabHost(
                     navController = navController,
                     modifier = Modifier
                         .align(Alignment.TopCenter)
+                        .padding(horizontal = if (widthBreakpoint isAtLeast Medium) 80.dp else 0.dp)
                         .widthIn(max = 700.dp)
                         .fillMaxWidth(),
                 )
@@ -186,115 +190,113 @@ fun SocialApp() {
 }
 
 @Composable
-private fun TabContent(
+private fun TabHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
     val widthBreakpoint = currentWidthBreakpoint()
     val animateTransition = (widthBreakpoint isAtLeast Medium).not()
 
-    Box(modifier = modifier) {
-        NavHost(
-            navController = navController,
-            startDestination = SocialFeedRoute,
-            modifier = Modifier.fillMaxSize(),
-            enterTransition = {
-                if (targetState.destination.isTabDestination() || !animateTransition) {
-                    EnterTransition.None
-                } else {
-                    slideInHorizontally(
-                        animationSpec = tween(
-                            durationMillis = NavigationTransitionDurationMillis,
-                            easing = NavigationTransitionEasing,
-                        ),
-                        initialOffsetX = { it },
-                    )
-                }
-            },
-            exitTransition = {
-                if (targetState.destination.isTabDestination() || !animateTransition) {
-                    ExitTransition.None
-                } else {
-                    slideOutHorizontally(
-                        animationSpec = tween(
-                            durationMillis = NavigationTransitionDurationMillis,
-                            easing = NavigationTransitionEasing,
-                        ),
-                        targetOffsetX = { -it / NavigationParallaxDivisor },
-                    ) + fadeOut(
-                        animationSpec = tween(
-                            durationMillis = NavigationTransitionDurationMillis,
-                            easing = NavigationTransitionEasing,
-                        ),
-                        targetAlpha = NavigationDimmedAlpha,
-                    )
-                }
-            },
-            popEnterTransition = {
-                if (targetState.destination.isTabDestination() || !animateTransition) {
-                    EnterTransition.None
-                } else {
-                    slideInHorizontally(
-                        animationSpec = tween(
-                            durationMillis = NavigationTransitionDurationMillis,
-                            easing = NavigationTransitionEasing,
-                        ),
-                        initialOffsetX = { -it / NavigationParallaxDivisor },
-                    ) + fadeIn(
-                        animationSpec = tween(
-                            durationMillis = NavigationTransitionDurationMillis,
-                            easing = NavigationTransitionEasing,
-                        ),
-                        initialAlpha = NavigationDimmedAlpha,
-                    )
-                }
-            },
-            popExitTransition = {
-                if (targetState.destination.isTabDestination() || !animateTransition) {
-                    ExitTransition.None
-                } else {
-                    slideOutHorizontally(
-                        animationSpec = tween(
-                            durationMillis = NavigationTransitionDurationMillis,
-                            easing = NavigationTransitionEasing,
-                        ),
-                        targetOffsetX = { it },
-                    )
-                }
-            },
-        ) {
-            composable<SocialFeedRoute> {
-                SocialFeed(
-                    onPostClick = { post -> navController.navigate(PostDetailsRoute(post.id)) },
-                    onProfileClick = { profileId -> navController.navigate(ProfileRoute(profileId)) },
-                    onNewPostClick = { navController.navigateToComposeTab() },
+    NavHost(
+        navController = navController,
+        startDestination = SocialFeedRoute,
+        modifier = modifier,
+        enterTransition = {
+            if (targetState.destination.isTabDestination() || !animateTransition) {
+                EnterTransition.None
+            } else {
+                slideInHorizontally(
+                    animationSpec = tween(
+                        durationMillis = NavigationTransitionDurationMillis,
+                        easing = NavigationTransitionEasing,
+                    ),
+                    initialOffsetX = { it },
                 )
             }
-            composable<PostDetailsRoute> { backStackEntry ->
-                val route = backStackEntry.toRoute<PostDetailsRoute>()
-                PostDetails(
-                    postId = route.postId,
-                    onBack = { navController.navigateUp() },
+        },
+        exitTransition = {
+            if (targetState.destination.isTabDestination() || !animateTransition) {
+                ExitTransition.None
+            } else {
+                slideOutHorizontally(
+                    animationSpec = tween(
+                        durationMillis = NavigationTransitionDurationMillis,
+                        easing = NavigationTransitionEasing,
+                    ),
+                    targetOffsetX = { -it / NavigationParallaxDivisor },
+                ) + fadeOut(
+                    animationSpec = tween(
+                        durationMillis = NavigationTransitionDurationMillis,
+                        easing = NavigationTransitionEasing,
+                    ),
+                    targetAlpha = NavigationDimmedAlpha,
                 )
             }
-            composable<SearchRoute> {
-                Search()
-            }
-            composable<NewPostRoute> {
-                PostComposer()
-            }
-            composable<ActivityRoute> {
-                Activity()
-            }
-            composable<ProfileRoute> { backStackEntry ->
-                val route = backStackEntry.toRoute<ProfileRoute>()
-                Profile(
-                    profileId = route.profileId,
-                    onBack = { navController.navigateUp() },
-                    onPostClick = { postId -> navController.navigate(PostDetailsRoute(postId)) },
-                    onProfileClick = { navController.navigateToProfile(authenticatedUser.id) },
+        },
+        popEnterTransition = {
+            if (targetState.destination.isTabDestination() || !animateTransition) {
+                EnterTransition.None
+            } else {
+                slideInHorizontally(
+                    animationSpec = tween(
+                        durationMillis = NavigationTransitionDurationMillis,
+                        easing = NavigationTransitionEasing,
+                    ),
+                    initialOffsetX = { -it / NavigationParallaxDivisor },
+                ) + fadeIn(
+                    animationSpec = tween(
+                        durationMillis = NavigationTransitionDurationMillis,
+                        easing = NavigationTransitionEasing,
+                    ),
+                    initialAlpha = NavigationDimmedAlpha,
                 )
             }
+        },
+        popExitTransition = {
+            if (targetState.destination.isTabDestination() || !animateTransition) {
+                ExitTransition.None
+            } else {
+                slideOutHorizontally(
+                    animationSpec = tween(
+                        durationMillis = NavigationTransitionDurationMillis,
+                        easing = NavigationTransitionEasing,
+                    ),
+                    targetOffsetX = { it },
+                )
+            }
+        },
+    ) {
+        composable<SocialFeedRoute> {
+            SocialFeed(
+                onPostClick = { post -> navController.navigate(PostDetailsRoute(post.id)) },
+                onProfileClick = { profileId -> navController.navigate(ProfileRoute(profileId)) },
+                onNewPostClick = { navController.navigateToComposeTab() },
+            )
+        }
+        composable<PostDetailsRoute> { backStackEntry ->
+            val route = backStackEntry.toRoute<PostDetailsRoute>()
+            PostDetails(
+                postId = route.postId,
+                onBack = { navController.navigateUp() },
+            )
+        }
+        composable<SearchRoute> {
+            Search()
+        }
+        composable<NewPostRoute> {
+            PostComposer()
+        }
+        composable<ActivityRoute> {
+            Activity()
+        }
+        composable<ProfileRoute> { backStackEntry ->
+            val route = backStackEntry.toRoute<ProfileRoute>()
+            Profile(
+                profileId = route.profileId,
+                onBack = { navController.navigateUp() },
+                onPostClick = { postId -> navController.navigate(PostDetailsRoute(postId)) },
+                onProfileClick = { navController.navigateToProfile(authenticatedUser.id) },
+            )
         }
     }
 }
