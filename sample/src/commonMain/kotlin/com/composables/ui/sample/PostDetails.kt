@@ -31,20 +31,18 @@ import com.composeunstyled.theme.Theme
 fun PostDetails(
     postId: String,
 ) {
-    Box(Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(24.dp),
-        ) {
-            Text(
-                text = "Post details",
-                style = TextStyle(fontWeight = FontWeight.Bold),
-            )
-            Text(
-                text = "Post id: $postId",
-                color = Theme[colors][onBackground],
-            )
-        }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(24.dp),
+    ) {
+        Text(
+            text = "Post details",
+            style = TextStyle(fontWeight = FontWeight.Bold),
+        )
+        Text(
+            text = "Post id: $postId",
+            color = Theme[colors][onBackground],
+        )
     }
 }
