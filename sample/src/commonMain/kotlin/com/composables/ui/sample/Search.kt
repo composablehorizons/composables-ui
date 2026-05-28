@@ -1,5 +1,6 @@
 package com.composables.ui.sample
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -40,71 +41,73 @@ import com.composables.ui.theme.colors
 import com.composables.ui.theme.field
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
+import com.composables.ui.theme.onPanel
+import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.theme.Theme
 
 @Composable
-fun Search(
-    modifier: Modifier = Modifier,
-) {
+fun Search() {
     val queryState = rememberTextFieldState(initialText = "nasa")
     val query = queryState.text.toString()
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(bottom = 96.dp),
-    ) {
-        item {
-            TextField(
-                state = queryState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 12.dp),
-                accessibilityLabel = "Search",
-                placeholder = { Text("Search") },
-                shape = CircleShape,
-                backgroundColor = Theme[colors][field],
-                borderColor = Theme[colors][border],
-                minHeight = 48.dp,
-                leading = {
-                    Icon(
-                        imageVector = Lucide.Search,
-                        contentDescription = null,
-                        modifier = Modifier.size(18.dp),
-                        tint = Theme[colors][muted],
-                    )
-                },
-                trailing = {
-                    if (query.isNotEmpty()) {
-                        IconButton(
-                            onClick = { queryState.clearText() },
-                            modifier = Modifier.size(32.dp),
-                            style = ButtonStyle.Ghost,
-                            buttonSize = ButtonSize.Small,
-                        ) {
-                            Icon(
-                                imageVector = Lucide.X,
-                                contentDescription = "Clear search",
-                                modifier = Modifier.size(15.dp),
-                                tint = Theme[colors][muted],
-                            )
+    ProvideContentColor(Theme[colors][onPanel]) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize().background(Theme[colors][onPanel]),
+            contentPadding = PaddingValues(bottom = 96.dp),
+        ) {
+            item {
+                TextField(
+                    state = queryState,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp, vertical = 12.dp),
+                    accessibilityLabel = "Search",
+                    placeholder = { Text("Search") },
+                    shape = CircleShape,
+                    backgroundColor = Theme[colors][field],
+                    borderColor = Theme[colors][border],
+                    minHeight = 48.dp,
+                    leading = {
+                        Icon(
+                            imageVector = Lucide.Search,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp),
+                            tint = Theme[colors][muted],
+                        )
+                    },
+                    trailing = {
+                        if (query.isNotEmpty()) {
+                            IconButton(
+                                onClick = { queryState.clearText() },
+                                modifier = Modifier.size(32.dp),
+                                style = ButtonStyle.Ghost,
+                                buttonSize = ButtonSize.Small,
+                            ) {
+                                Icon(
+                                    imageVector = Lucide.X,
+                                    contentDescription = "Clear search",
+                                    modifier = Modifier.size(15.dp),
+                                    tint = Theme[colors][muted],
+                                )
+                            }
                         }
-                    }
-                },
-            )
-        }
-
-        SearchSuggestions.forEach { suggestion ->
-            item(key = "suggestion-$suggestion") {
-                SearchSuggestionRow(suggestion)
-                HorizontalSeparator(modifier = Modifier.padding(start = 72.dp))
+                    },
+                )
             }
-        }
 
-        SearchProfiles.forEachIndexed { index, profile ->
-            item(key = profile.handle) {
-                SearchProfileRow(profile)
-                if (index < SearchProfiles.lastIndex) {
+            SearchSuggestions.forEach { suggestion ->
+                item(key = "suggestion-$suggestion") {
+                    SearchSuggestionRow(suggestion)
                     HorizontalSeparator(modifier = Modifier.padding(start = 72.dp))
+                }
+            }
+
+            SearchProfiles.forEachIndexed { index, profile ->
+                item(key = profile.handle) {
+                    SearchProfileRow(profile)
+                    if (index < SearchProfiles.lastIndex) {
+                        HorizontalSeparator(modifier = Modifier.padding(start = 72.dp))
+                    }
                 }
             }
         }

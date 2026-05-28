@@ -57,7 +57,9 @@ import com.composables.ui.theme.field
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
 import com.composables.ui.theme.onField
+import com.composables.ui.theme.onPanel
 import com.composables.ui.theme.panel
+import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.theme.Theme
 
 @kotlin.jvm.JvmInline
@@ -73,7 +75,6 @@ private value class ProfileFeedTab private constructor(val value: String) {
 fun Profile(
     profileId: String,
     onPostClick: (String) -> Unit,
-    onProfileClick: () -> Unit,
 ) {
     val profile = profiles.firstOrNull { it.id == profileId } ?: profiles.first()
     var selectedTab by remember { mutableStateOf(ProfileFeedTab.Posts) }
@@ -82,43 +83,46 @@ fun Profile(
         else -> profile.posts
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-    ) {
+    ProvideContentColor(Theme[colors][onPanel]) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxSize().background(Theme[colors][onPanel]),
+            contentAlignment = Alignment.Center,
         ) {
-            Column(
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .align(Alignment.TopCenter),
+                    .fillMaxWidth(),
             ) {
-                LazyColumn(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f)
-                        .background(Theme[colors][panel]),
+                        .fillMaxHeight()
+                        .align(Alignment.TopCenter),
                 ) {
-                    item {
-                        ProfileHeader(profile)
-                        ProfileTabs(
-                            selectedTab = selectedTab,
-                            onSelectedTabChange = { selectedTab = it },
-                        )
-                    }
-                    itemsIndexed(
-                        items = visiblePosts,
-                        key = { _, post -> post.id },
-                    ) { index, post ->
-                        ProfilePostRow(
-                            profile = profile,
-                            post = post,
-                            onClick = { onPostClick(post.id) },
-                        )
-                        if (index < visiblePosts.lastIndex) {
-                            HorizontalSeparator()
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .background(Theme[colors][panel]),
+                    ) {
+                        item {
+                            ProfileHeader(profile)
+                            ProfileTabs(
+                                selectedTab = selectedTab,
+                                onSelectedTabChange = { selectedTab = it },
+                            )
+                        }
+                        itemsIndexed(
+                            items = visiblePosts,
+                            key = { _, post -> post.id },
+                        ) { index, post ->
+                            ProfilePostRow(
+                                profile = profile,
+                                post = post,
+                                onClick = { onPostClick(post.id) },
+                            )
+                            if (index < visiblePosts.lastIndex) {
+                                HorizontalSeparator()
+                            }
                         }
                     }
                 }

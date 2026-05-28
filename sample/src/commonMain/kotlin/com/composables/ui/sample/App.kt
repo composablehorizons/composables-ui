@@ -341,7 +341,6 @@ private fun TabHost(
             Profile(
                 profileId = route.profileId,
                 onPostClick = { postId -> navController.navigate(PostDetailsRoute(postId)) },
-                onProfileClick = { navController.navigateToProfile(authenticatedUser.id) },
             )
         }
     }
