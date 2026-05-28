@@ -17,9 +17,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,9 +31,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.composables.icons.lucide.ArrowLeft
 import com.composables.icons.lucide.Bell
-import com.composables.icons.lucide.EllipsisVertical
 import com.composables.icons.lucide.House
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Plus
@@ -44,12 +39,6 @@ import com.composables.icons.lucide.Search
 import com.composables.icons.lucide.User
 import com.composables.ui.components.ButtonSize
 import com.composables.ui.components.ButtonStyle
-import com.composables.ui.components.DropdownMenu
-import com.composables.ui.components.DropdownMenuAlignment
-import com.composables.ui.components.DropdownMenuItem
-import com.composables.ui.components.DropdownMenuItemStyle
-import com.composables.ui.components.DropdownMenuPanel
-import com.composables.ui.components.DropdownMenuSide
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
 import com.composables.ui.components.NavigationBar
@@ -65,9 +54,6 @@ import com.composables.ui.theme.Large
 import com.composables.ui.theme.Medium
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
-import com.composables.ui.theme.onPanel
-import com.composables.ui.theme.panel
-import com.composeunstyled.LocalContentColor
 import com.composeunstyled.buildModifier
 import com.composeunstyled.currentWidthBreakpoint
 import com.composeunstyled.outline
@@ -122,63 +108,18 @@ fun SocialApp() {
                     .widthIn(max = if (widthBreakpoint isAtLeast Medium) 700.dp else Dp.Unspecified)
                     .fillMaxSize(),
             ) {
-                val toolbarColor = if (widthBreakpoint isAtLeast Medium) Color.Transparent else Theme[colors][panel]
-                val toolbarContentColor =
-                    if (widthBreakpoint isAtLeast Medium) LocalContentColor.current else Theme[colors][onPanel]
-                Toolbar(
-                    backgroundColor = toolbarColor,
-                    contentColor = toolbarContentColor,
-                    leading = {
-                        val canGoBack = currentDestination.isDetailDestination(navBackStackEntry)
-                        if (canGoBack) {
-                            IconButton(
-                                onClick = { navController.navigateUp() },
-                                style = ButtonStyle.Ghost,
-                            ) {
-                                Icon(Lucide.ArrowLeft, contentDescription = "Go back")
-                            }
-                        }
-
-                        if (widthBreakpoint isAtLeast Medium) {
+                if (widthBreakpoint isAtLeast Medium) {
+                    Toolbar(
+                        leading = {
                             when {
                                 homeSelected -> Text("My Feed")
                                 searchSelected -> Text("Search")
                                 activitySelected -> Text("Activity")
                                 profileSelected -> Text("Profile")
                             }
-                        }
-                    },
-                    trailing = {
-                        if ((widthBreakpoint isAtLeast Medium).not()) {
-                            var expanded by remember { mutableStateOf(false) }
-
-                            DropdownMenu(
-                                expanded = expanded,
-                                onExpandedChange = { expanded = it },
-                                side = DropdownMenuSide.Bottom,
-                                alignment = DropdownMenuAlignment.End,
-                                panel = {
-                                    DropdownMenuPanel {
-                                        DropdownMenuItem(onClick = {}) {
-                                            Text("Do thing")
-                                        }
-
-                                        DropdownMenuItem(onClick = {}, style = DropdownMenuItemStyle.Destructive) {
-                                            Text("Log out")
-                                        }
-                                    }
-                                }
-                            ) {
-                                IconButton(
-                                    onClick = { expanded = expanded.not() },
-                                    style = ButtonStyle.Ghost
-                                ) {
-                                    Icon(Lucide.EllipsisVertical, contentDescription = "More")
-                                }
-                            }
-                        }
-                    }
-                )
+                        },
+                    )
+                }
                 Box(
                     buildModifier {
                         if (widthBreakpoint isAtLeast Medium) {
