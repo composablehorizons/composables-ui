@@ -26,6 +26,7 @@ import com.composables.ui.theme.control
 import com.composables.ui.theme.onControl
 import com.composables.ui.theme.onSelectedControl
 import com.composables.ui.theme.selectedControl
+import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.buildModifier
 import com.composeunstyled.theme.Theme
 
@@ -50,7 +51,6 @@ fun AppearanceSelector(
             Icon(
                 imageVector = Lucide.Sun,
                 contentDescription = "Light appearance",
-                tint = it,
             )
         }
         AppearanceSegment(
@@ -60,14 +60,13 @@ fun AppearanceSelector(
             Icon(
                 imageVector = Lucide.Moon,
                 contentDescription = "Dark appearance",
-                tint = it,
             )
         }
         AppearanceSegment(
             selected = selectedColorScheme == ColorScheme.System,
             onClick = { onSelectedColorSchemeChange(ColorScheme.System) },
         ) {
-            Text("Auto", color = it)
+            Text("Auto")
         }
     }
 }
@@ -76,7 +75,7 @@ fun AppearanceSelector(
 private fun RowScope.AppearanceSegment(
     selected: Boolean,
     onClick: () -> Unit,
-    content: @Composable (androidx.compose.ui.graphics.Color) -> Unit,
+    content: @Composable () -> Unit,
 ) {
     val shape = RoundedCornerShape(12.dp)
     val contentColor = if (selected) Theme[colors][onSelectedControl] else Theme[colors][onControl]
@@ -95,6 +94,8 @@ private fun RowScope.AppearanceSegment(
         shape = shape,
         contentPadding = PaddingValues(0.dp),
     ) {
-        content(contentColor)
+        ProvideContentColor(contentColor) {
+            content()
+        }
     }
 }
