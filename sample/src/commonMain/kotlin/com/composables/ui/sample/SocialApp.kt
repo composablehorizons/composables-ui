@@ -26,13 +26,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.composables.icons.lucide.ArrowLeft
 import com.composables.icons.lucide.Bell
 import com.composables.icons.lucide.House
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Plus
 import com.composables.icons.lucide.Search
 import com.composables.icons.lucide.User
+import com.composables.ui.components.ButtonStyle
 import com.composables.ui.components.Icon
+import com.composables.ui.components.IconButton
 import com.composables.ui.components.NavigationBar
 import com.composables.ui.components.NavigationBarItem
 import com.composables.ui.components.Sidebar
@@ -81,7 +84,7 @@ fun SocialApp() {
             currentDestination.hasRoute<PostDetailsRoute>()
     val searchSelected = currentDestination?.hasRoute<SearchRoute>() == true
     val composeSelected = currentDestination?.hasRoute<NewPostRoute>() == true
-    val notificationsSelected = currentDestination?.hasRoute<ActivityRoute>() == true
+    val activitySelected = currentDestination?.hasRoute<ActivityRoute>() == true
     val profileSelected = currentDestination?.hasRoute<ProfileRoute>() == true
 
     AppScaffold {
@@ -94,11 +97,38 @@ fun SocialApp() {
                     .padding(horizontal = if (widthBreakpoint isAtLeast Medium) 80.dp else 0.dp)
                     .widthIn(max = 700.dp)
             ) {
-                Toolbar(
-                    leading = {
-                        Text("Hello")
-                    }
-                )
+                if (widthBreakpoint isAtLeast Medium) {
+                    Toolbar(
+                        leading = {
+                            // can go back
+                            IconButton(
+                                onClick = { /* TODO */ },
+                                style = ButtonStyle.Ghost,
+                            ) {
+                                Icon(Lucide.ArrowLeft, contentDescription = "Go back")
+                            }
+
+                            when {
+                                homeSelected -> {
+                                    Text("My Feed")
+                                }
+
+                                searchSelected -> {
+                                    Text("Search")
+                                }
+
+                                activitySelected -> {
+                                    Text("Activity")
+                                }
+
+                                profileSelected -> {
+                                    Text("Profile")
+                                }
+                            }
+
+                        }
+                    )
+                }
                 TabHost(
                     navController = navController,
                     modifier = Modifier.fillMaxSize(),
@@ -135,7 +165,7 @@ fun SocialApp() {
                             },
                         )
                         SidebarItem(
-                            selected = notificationsSelected,
+                            selected = activitySelected,
                             icon = { Icon(Lucide.Bell) },
                             onClick = { navController.navigateToNotificationsTab() },
                             text = {
@@ -173,7 +203,7 @@ fun SocialApp() {
                     )
                     NavigationBarItem(
                         modifier = Modifier.weight(1f),
-                        selected = notificationsSelected,
+                        selected = activitySelected,
                         onClick = { navController.navigateToNotificationsTab() },
                         icon = { Icon(Lucide.Bell, contentDescription = "Activity") })
                     NavigationBarItem(
