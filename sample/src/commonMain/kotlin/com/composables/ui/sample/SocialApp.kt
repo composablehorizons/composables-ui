@@ -319,6 +319,7 @@ private fun TabHost(
         }
         composable<ProfileRoute> { backStackEntry ->
             val route = backStackEntry.toRoute<ProfileRoute>()
+
             Profile(
                 profileId = route.profileId,
                 onPostClick = { postId -> navController.navigate(PostDetailsRoute(postId)) },
