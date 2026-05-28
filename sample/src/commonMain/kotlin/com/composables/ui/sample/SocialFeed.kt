@@ -1,5 +1,6 @@
 package com.composables.ui.sample
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -51,6 +52,9 @@ import com.composables.ui.sample.data.profiles
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
+import com.composables.ui.theme.onPanel
+import com.composables.ui.theme.panel
+import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.theme.Theme
 
 @Composable
@@ -60,67 +64,71 @@ fun SocialFeed(
     onNewPostClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(
-        modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(bottom = 96.dp),
-    ) {
-        item(key = "composer") {
-            FeedComposer(
-                onProfileClick = { onProfileClick(authenticatedUser.id) },
-                onNewPostClick = onNewPostClick,
-            )
-            HorizontalSeparator()
-        }
-        itemsIndexed(
-            items = feedPosts,
-            key = { _, post -> post.id },
-        ) { index, post ->
-            val onProfileClick1 = { onProfileClick(post.profileId) }
-            FeedPost(
-                onClick = { onPostClick(post) },
-                avatar = {
-                    AvatarButton(
-                        url = post.avatarUrl,
-                        onClick = onProfileClick1,
-                    )
-                },
-                authorName = {
-                    Button(onClick = onProfileClick1, style = ButtonStyle.Link) {
-                        Text(
-                            text = post.author,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
+    ProvideContentColor(Theme[colors][onPanel]) {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxSize()
+                .background(Theme[colors][panel]),
+            contentPadding = PaddingValues(bottom = 96.dp),
+        ) {
+            item(key = "composer") {
+                FeedComposer(
+                    onProfileClick = { onProfileClick(authenticatedUser.id) },
+                    onNewPostClick = onNewPostClick,
+                )
+                HorizontalSeparator()
+            }
+            itemsIndexed(
+                items = feedPosts,
+                key = { _, post -> post.id },
+            ) { index, post ->
+                val onProfileClick1 = { onProfileClick(post.profileId) }
+                FeedPost(
+                    onClick = { onPostClick(post) },
+                    avatar = {
+                        AvatarButton(
+                            url = post.avatarUrl,
+                            onClick = onProfileClick1,
                         )
-                    }
-                },
-                timestamp = {
-                    Text(post.age)
-                },
-                overflow = { PostOverflowMenu() },
-                body = {
-                    Text(
-                        text = post.body,
-                        color = Theme[colors][onBackground],
-                    )
-                },
-                media = run {
-                    if (post.media.isNotEmpty()) {
-                        {
-                            post.media.forEach { item ->
-                                if (post.portraitMedia) {
-                                    PortraitMediaItem(item.url)
-                                } else {
-                                    LandscapeMediaItem(item.url)
+                    },
+                    authorName = {
+                        Button(onClick = onProfileClick1, style = ButtonStyle.Link) {
+                            Text(
+                                text = post.author,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
+                    },
+                    timestamp = {
+                        Text(post.age)
+                    },
+                    overflow = { PostOverflowMenu() },
+                    body = {
+                        Text(
+                            text = post.body,
+                            color = Theme[colors][onBackground],
+                        )
+                    },
+                    media = run {
+                        if (post.media.isNotEmpty()) {
+                            {
+                                post.media.forEach { item ->
+                                    if (post.portraitMedia) {
+                                        PortraitMediaItem(item.url)
+                                    } else {
+                                        LandscapeMediaItem(item.url)
+                                    }
                                 }
                             }
-                        }
-                    } else null
-                },
-            ) {
-                PostActions(post = post)
-            }
-            if (index < feedPosts.lastIndex) {
-                HorizontalSeparator()
+                        } else null
+                    },
+                ) {
+                    PostActions(post = post)
+                }
+                if (index < feedPosts.lastIndex) {
+                    HorizontalSeparator()
+                }
             }
         }
     }

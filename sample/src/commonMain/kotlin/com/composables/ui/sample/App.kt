@@ -132,15 +132,15 @@ fun SocialApp() {
                         }
                     )
                 }
-                TabHost(
-                    navController = navController,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .outline(1.dp, Theme[colors][border], Theme[shapes][largeShape])
-                        .clip(Theme[shapes][largeShape])
-                        .background(Color.White)
-                    ,
-                )
+                Box(Modifier.background(Color.Black)) {
+                    TabHost(
+                        navController = navController,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .outline(1.dp, Theme[colors][border], Theme[shapes][largeShape])
+                            .clip(Theme[shapes][largeShape]),
+                    )
+                }
             }
 
             if (widthBreakpoint isAtLeast Medium) {
