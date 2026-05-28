@@ -18,7 +18,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -249,7 +248,12 @@ private fun TabHost(
             SocialFeed(
                 onPostClick = { post -> navController.navigate(PostDetailsRoute(post.id)) },
                 onProfileClick = { profileId -> navController.navigate(ProfileRoute(profileId)) },
-                onNewPostClick = { navController.navigateToComposeTab() },
+                onNewPostClick = {
+                    navController.navigate(NewPostRoute) {
+                        popUpTo(HomeRoute)
+                        launchSingleTop = true
+                    }
+                },
             )
         }
         composable<PostDetailsRoute> { backStackEntry ->
@@ -275,33 +279,5 @@ private fun TabHost(
                 onPostClick = { postId -> navController.navigate(PostDetailsRoute(postId)) },
             )
         }
-    }
-}
-
-private fun NavDestination.isTabDestination(): Boolean {
-    return hasRoute<SearchRoute>() ||
-            hasRoute<NewPostRoute>() ||
-            hasRoute<ActivityRoute>()
-}
-
-private fun NavDestination?.isDetailDestination(backStackEntry: androidx.navigation.NavBackStackEntry?): Boolean {
-    if (this == null || backStackEntry == null) return false
-    if (hasRoute<PostDetailsRoute>()) return true
-    if (hasRoute<ProfileRoute>()) {
-        return backStackEntry.toRoute<ProfileRoute>().profileId != authenticatedUser.id
-    }
-    return false
-}
-
-private fun NavHostController.navigateToProfile(profileId: String) {
-    navigate(ProfileRoute(profileId)) {
-        launchSingleTop = true
-    }
-}
-
-private fun NavHostController.navigateToComposeTab() {
-    navigate(NewPostRoute) {
-        popUpTo(HomeRoute)
-        launchSingleTop = true
     }
 }
