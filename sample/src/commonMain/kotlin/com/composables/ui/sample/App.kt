@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -48,7 +52,13 @@ import com.composables.ui.sample.data.authenticatedUser
 import com.composables.ui.theme.AppScaffold
 import com.composables.ui.theme.Large
 import com.composables.ui.theme.Medium
+import com.composables.ui.theme.border
+import com.composables.ui.theme.colors
+import com.composables.ui.theme.largeShape
+import com.composables.ui.theme.shapes
 import com.composeunstyled.currentWidthBreakpoint
+import com.composeunstyled.outline
+import com.composeunstyled.theme.Theme
 import kotlinx.serialization.Serializable
 
 private const val NavigationTransitionDurationMillis = 350
@@ -96,7 +106,7 @@ fun SocialApp() {
                 Modifier
                     .align(Alignment.TopCenter)
                     .padding(horizontal = if (widthBreakpoint isAtLeast Medium) 80.dp else 0.dp)
-                    .widthIn(max = if (widthBreakpoint isAtLeast Medium) 700.dp else 0.dp)
+                    .widthIn(max = if (widthBreakpoint isAtLeast Medium) 700.dp else Dp.Unspecified)
                     .fillMaxSize(),
             ) {
                 if (widthBreakpoint isAtLeast Medium) {
@@ -135,7 +145,11 @@ fun SocialApp() {
                 TabHost(
                     navController = navController,
                     modifier = Modifier
-                        .fillMaxSize(),
+                        .fillMaxSize()
+                        .outline(1.dp, Theme[colors][border], Theme[shapes][largeShape])
+                        .clip(Theme[shapes][largeShape])
+                        .background(Color.White)
+                    ,
                 )
             }
 
