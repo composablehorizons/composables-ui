@@ -26,6 +26,8 @@ import com.composables.ui.theme.control
 import com.composables.ui.theme.onControl
 import com.composables.ui.theme.onSelectedControl
 import com.composables.ui.theme.selectedControl
+import com.composables.ui.theme.shapes
+import com.composables.ui.theme.smallShape
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.buildModifier
 import com.composeunstyled.theme.Theme
@@ -77,7 +79,7 @@ private fun RowScope.AppearanceSegment(
     onClick: () -> Unit,
     content: @Composable () -> Unit,
 ) {
-    val shape = RoundedCornerShape(12.dp)
+    val shape = Theme[shapes][smallShape]
     val contentColor = if (selected) Theme[colors][onSelectedControl] else Theme[colors][onControl]
 
     Button(
