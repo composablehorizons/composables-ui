@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -84,65 +85,48 @@ fun Profile(
     }
 
     ProvideContentColor(Theme[colors][onPanel]) {
-        Box(
-            modifier = Modifier.fillMaxSize().background(Theme[colors][onPanel]),
-            contentAlignment = Alignment.Center,
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Theme[colors][panel]),
+            contentPadding = PaddingValues(vertical = 20.dp),
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(),
-            ) {
-                Column(
+            item {
+                ProfileHeader(profile)
+                TabGroup(
+                    selectedTab = selectedTab,
+                    onSelectedTabChange = { it: ProfileFeedTab -> selectedTab = it },
+                    tabs = ProfileFeedTab.all,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .fillMaxHeight()
-                        .align(Alignment.TopCenter),
+                        .padding(12.dp),
                 ) {
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .background(Theme[colors][panel]),
+                    this.TabList(
+                        modifier = Modifier.fillMaxWidth(),
+                        equalTabWidth = true,
                     ) {
-                        item {
-                            ProfileHeader(profile)
-                            TabGroup(
-                                selectedTab = selectedTab,
-                                onSelectedTabChange = { it: ProfileFeedTab -> selectedTab = it },
-                                tabs = ProfileFeedTab.all,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(12.dp),
-                            ) {
-                                this.TabList(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    equalTabWidth = true,
-                                ) {
-                                    ProfileFeedTab.all.forEach { tab ->
-                                        this.Tab(key = tab) {
-                                            Text(
-                                                text = tab.label,
-                                                fontWeight = FontWeight.Bold,
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        itemsIndexed(
-                            items = visiblePosts,
-                            key = { _, post -> post.id },
-                        ) { index, post ->
-                            ProfilePostRow(
-                                profile = profile,
-                                post = post,
-                                onClick = { onPostClick(post.id) },
-                            )
-                            if (index < visiblePosts.lastIndex) {
-                                HorizontalSeparator()
+                        ProfileFeedTab.all.forEach { tab ->
+                            this.Tab(key = tab) {
+                                Text(
+                                    text = tab.label,
+                                    fontWeight = FontWeight.Bold,
+                                )
                             }
                         }
                     }
+                }
+            }
+            itemsIndexed(
+                items = visiblePosts,
+                key = { _, post -> post.id },
+            ) { index, post ->
+                ProfilePostRow(
+                    profile = profile,
+                    post = post,
+                    onClick = { onPostClick(post.id) },
+                )
+                if (index < visiblePosts.lastIndex) {
+                    HorizontalSeparator()
                 }
             }
         }

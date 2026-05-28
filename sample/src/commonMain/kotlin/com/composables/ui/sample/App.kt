@@ -56,6 +56,7 @@ import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.largeShape
 import com.composables.ui.theme.shapes
+import com.composeunstyled.buildModifier
 import com.composeunstyled.currentWidthBreakpoint
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
@@ -109,36 +110,41 @@ fun SocialApp() {
                     .widthIn(max = if (widthBreakpoint isAtLeast Medium) 700.dp else Dp.Unspecified)
                     .fillMaxSize(),
             ) {
-                if (widthBreakpoint isAtLeast Medium) {
-                    Toolbar(
-                        leading = {
-                            val canGoBack = navController.previousBackStackEntry != null
-                            if (canGoBack) {
-                                IconButton(
-                                    onClick = { navController.navigateUp() },
-                                    style = ButtonStyle.Ghost,
-                                ) {
-                                    Icon(Lucide.ArrowLeft, contentDescription = "Go back")
-                                }
+                Toolbar(
+                    leading = {
+                        val canGoBack = navController.previousBackStackEntry != null
+                        if (canGoBack) {
+                            IconButton(
+                                onClick = { navController.navigateUp() },
+                                style = ButtonStyle.Ghost,
+                            ) {
+                                Icon(Lucide.ArrowLeft, contentDescription = "Go back")
                             }
-
-                            when {
-                                homeSelected -> Text("My Feed")
-                                searchSelected -> Text("Search")
-                                activitySelected -> Text("Activity")
-                                profileSelected -> Text("Profile")
-                            }
-
                         }
-                    )
-                }
+
+                        when {
+                            homeSelected -> Text("My Feed")
+                            searchSelected -> Text("Search")
+                            activitySelected -> Text("Activity")
+                            profileSelected -> Text("Profile")
+                        }
+
+                    }
+                )
                 Box(Modifier.background(Color.Black)) {
                     TabHost(
                         navController = navController,
                         modifier = Modifier
                             .fillMaxSize()
-                            .outline(1.dp, Theme[colors][border], Theme[shapes][largeShape])
-                            .clip(Theme[shapes][largeShape]),
+                                then buildModifier {
+                            if (widthBreakpoint isAtLeast Medium) {
+                                add(
+                                    Modifier
+                                        .outline(1.dp, Theme[colors][border], Theme[shapes][largeShape])
+                                        .clip(Theme[shapes][largeShape])
+                                )
+                            }
+                        },
                     )
                 }
             }
