@@ -110,27 +110,29 @@ fun SocialApp() {
                     .widthIn(max = if (widthBreakpoint isAtLeast Medium) 700.dp else Dp.Unspecified)
                     .fillMaxSize(),
             ) {
-                Toolbar(
-                    leading = {
-                        val canGoBack = navController.previousBackStackEntry != null
-                        if (canGoBack) {
-                            IconButton(
-                                onClick = { navController.navigateUp() },
-                                style = ButtonStyle.Ghost,
-                            ) {
-                                Icon(Lucide.ArrowLeft, contentDescription = "Go back")
+                if(widthBreakpoint isAtLeast Medium) {
+                    Toolbar(
+                        leading = {
+                            val canGoBack = navController.previousBackStackEntry != null
+                            if (canGoBack) {
+                                IconButton(
+                                    onClick = { navController.navigateUp() },
+                                    style = ButtonStyle.Ghost,
+                                ) {
+                                    Icon(Lucide.ArrowLeft, contentDescription = "Go back")
+                                }
                             }
-                        }
 
-                        when {
-                            homeSelected -> Text("My Feed")
-                            searchSelected -> Text("Search")
-                            activitySelected -> Text("Activity")
-                            profileSelected -> Text("Profile")
-                        }
+                            when {
+                                homeSelected -> Text("My Feed")
+                                searchSelected -> Text("Search")
+                                activitySelected -> Text("Activity")
+                                profileSelected -> Text("Profile")
+                            }
 
-                    }
-                )
+                        }
+                    )
+                }
                 Box(
                     // we want the exiting screen to look dimmed. to achieve this effect,
                     // we set a black background, while fading the page itself during the transition
