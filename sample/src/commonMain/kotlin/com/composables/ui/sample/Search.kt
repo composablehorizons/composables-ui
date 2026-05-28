@@ -1,20 +1,16 @@
 package com.composables.ui.sample
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,7 +19,6 @@ import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -40,72 +35,17 @@ import com.composables.ui.components.IconButton
 import com.composables.ui.components.Text
 import com.composables.ui.components.TextField
 import com.composables.ui.sample.components.Avatar
-import com.composables.ui.theme.Medium
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.field
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
-import com.composables.ui.theme.panel
-import com.composeunstyled.currentWidthBreakpoint
-import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
 
 @Composable
 fun Search(
     modifier: Modifier = Modifier,
 ) {
-    val widthBreakpoint = currentWidthBreakpoint()
-    val showPanelOutline = widthBreakpoint isAtLeast Medium
-    val panelShape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)
-
-    Box(modifier = modifier) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .then(
-                    if (showPanelOutline) {
-                        Modifier
-                            .background(Theme[colors][panel], panelShape)
-                            .outline(
-                                width = 1.dp,
-                                color = Theme[colors][border],
-                                shape = panelShape,
-                                offset = (-1).dp,
-                            )
-                            .clip(panelShape)
-                    } else {
-                        Modifier.background(Theme[colors][panel])
-                    },
-                )
-                .align(Alignment.TopCenter),
-        ) {
-            if (!showPanelOutline) {
-                SearchHeader()
-            }
-            SearchResults()
-        }
-    }
-}
-
-@Composable
-private fun SearchHeader() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = "Search",
-            fontWeight = FontWeight.SemiBold,
-        )
-    }
-}
-
-@Composable
-private fun SearchResults() {
     val queryState = rememberTextFieldState(initialText = "nasa")
     val query = queryState.text.toString()
 
