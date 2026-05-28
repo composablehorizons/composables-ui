@@ -52,6 +52,7 @@ import com.composables.ui.sample.components.FeedPost
 import com.composables.ui.sample.components.LandscapeMediaItem
 import com.composables.ui.sample.components.PortraitMediaItem
 import com.composables.ui.sample.data.SocialPost
+import com.composables.ui.sample.data.authenticatedUser
 import com.composables.ui.sample.data.feedPosts
 import com.composables.ui.sample.data.profiles
 import com.composables.ui.theme.Medium
@@ -63,8 +64,6 @@ import com.composables.ui.theme.panel
 import com.composeunstyled.currentWidthBreakpoint
 import com.composeunstyled.outline
 import com.composeunstyled.theme.Theme
-
-private const val LoggedInProfileId = "john_mobbin"
 
 @Composable
 fun SocialFeed(
@@ -102,7 +101,7 @@ fun SocialFeed(
             ) {
                 item(key = "composer") {
                     FeedComposer(
-                        onProfileClick = { onProfileClick(LoggedInProfileId) },
+                        onProfileClick = { onProfileClick(authenticatedUser.id) },
                         onNewPostClick = onNewPostClick,
                     )
                     HorizontalSeparator()
@@ -170,7 +169,7 @@ private fun FeedComposer(
     onNewPostClick: () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val loggedInProfile = profiles.first { it.id == LoggedInProfileId }
+    val loggedInProfile = profiles.first { it.id == authenticatedUser.id }
 
     Row(
         modifier = Modifier

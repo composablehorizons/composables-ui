@@ -286,7 +286,7 @@ private fun TabContent(
                     profileId = route.profileId,
                     onBack = { navController.navigateUp() },
                     onPostClick = { postId -> navController.navigate(PostDetailsRoute(postId)) },
-                    onProfileClick = { navController.navigateToProfile("john_mobbin") },
+                    onProfileClick = { navController.navigateToProfile(authenticatedUser.id) },
                 )
             }
         }
