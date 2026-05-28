@@ -8,6 +8,7 @@ Use it to wrap a screen, sample, or demo content when you want quick controls fo
 - portrait and landscape orientation for devices that support rotation
 - LTR and RTL layout direction
 - zooming in and out
+- triggering Compose Hot Reload from the toolbar when the app is running with Hot Reload enabled
 
 ## Basic Usage
 
@@ -18,6 +19,8 @@ DevicePreviewHost {
 ```
 
 By default, the host shows a toolbar with the built-in phone, tablet, and desktop devices.
+When the app is launched through a Compose Hot Reload run task, the toolbar also shows a reload button.
+Clicking it runs Gradle's `reload` task from inside the app.
 
 ## Controlled State
 
@@ -65,13 +68,19 @@ DevicePreviewHost(
 
 Devices with both `width` and `height` can rotate. A device without dimensions behaves like a desktop preview and fills the available window.
 
+## Hot Reload
+
+The hot reload button is shown only when Hot Reload is active. Pass `showHotReload = false` to hide it, or pass
+`onHotReloadRequest` when the surrounding app should own the reload trigger.
+
 ## Keyboard Shortcuts
 
 The module includes helpers for wiring common shortcuts from your window `onKeyEvent`:
 
 - `Cmd+1`, `Cmd+2`, `Cmd+3`: select phone, tablet, desktop
 - `Cmd+-`, `Cmd++`, `Cmd+0`: zoom out, zoom in, reset zoom
-- `Cmd+R`: rotate the selected device when rotation is available
+- `Cmd+R`: trigger Compose Hot Reload when Hot Reload is active
+- `Cmd+Shift+R`: rotate the selected device when rotation is available
 - `Cmd+backtick`: toggle LTR and RTL
 
-Use `deviceForPreviewShortcut`, `devicePreviewZoomForShortcut`, `isDevicePreviewRotationShortcut`, and `isDevicePreviewLayoutDirectionShortcut` if you want the sample app to support those shortcuts.
+Use `deviceForPreviewShortcut`, `devicePreviewZoomForShortcut`, `isDevicePreviewHotReloadShortcut`, `isDevicePreviewRotationShortcut`, and `isDevicePreviewLayoutDirectionShortcut` if you want the sample app to support those shortcuts.

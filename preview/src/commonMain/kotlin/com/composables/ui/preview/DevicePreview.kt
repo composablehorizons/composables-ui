@@ -44,6 +44,7 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isMetaPressed
+import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.PointerKeyboardModifiers
@@ -60,6 +61,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.composables.icons.lucide.Check
 import com.composables.icons.lucide.ChevronDown
+import com.composables.icons.lucide.Flame
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Minus
 import com.composables.icons.lucide.Monitor
@@ -214,6 +216,8 @@ fun DevicePreviewHost(
     onZoomSelected: (DevicePreviewZoom) -> Unit = {},
     zoomLevels: List<DevicePreviewZoom> = DevicePreviewZoomLevels.Default,
     showControls: Boolean = true,
+    showHotReload: Boolean = true,
+    onHotReloadRequest: (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
     require(devices.isNotEmpty()) { "DevicePreviewHost requires at least one device." }
@@ -269,6 +273,8 @@ fun DevicePreviewHost(
                 zoom = currentZoom,
                 zoomLevels = zoomLevels,
                 showControls = showControls,
+                showHotReload = showHotReload,
+                onHotReloadRequest = onHotReloadRequest,
                 onDeviceSelected = selectDevice,
                 onOrientationChange = selectOrientation,
                 onLayoutDirectionChange = selectLayoutDirection,
@@ -289,6 +295,8 @@ private fun DevicePreviewControls(
     layoutDirection: LayoutDirection,
     zoom: DevicePreviewZoom,
     zoomLevels: List<DevicePreviewZoom>,
+    showHotReload: Boolean,
+    onHotReloadRequest: (() -> Unit)?,
     onDeviceSelected: (DevicePreviewDevice) -> Unit,
     onOrientationChange: (DevicePreviewOrientation) -> Unit,
     onLayoutDirectionChange: (LayoutDirection) -> Unit,
@@ -338,8 +346,35 @@ private fun DevicePreviewControls(
                     onLayoutDirectionChange = onLayoutDirectionChange,
                     onOrientationChange = onOrientationChange,
                 )
+                if (showHotReload && (isDevicePreviewHotReloadAvailable() || onHotReloadRequest != null)) {
+                    VerticalSeparator(modifier = Modifier.height(24.dp))
+                    HotReloadButton(
+                        onClick = {
+                            runCatching {
+                                onHotReloadRequest?.invoke() ?: requestDevicePreviewHotReload()
+                            }
+                        },
+                    )
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun HotReloadButton(
+    onClick: () -> Unit,
+) {
+    IconButton(
+        onClick = onClick,
+        style = ButtonStyle.Ghost,
+        buttonSize = ButtonSize.Regular,
+    ) {
+        Icon(
+            imageVector = Lucide.Flame,
+            contentDescription = "Reload",
+            modifier = Modifier.size(18.dp),
+        )
     }
 }
 
@@ -609,7 +644,17 @@ fun deviceForPreviewShortcut(
 }
 
 fun isDevicePreviewRotationShortcut(event: KeyEvent): Boolean {
-    return event.type == KeyEventType.KeyDown && event.isMetaPressed && event.key == Key.R
+    return event.type == KeyEventType.KeyDown &&
+            event.isMetaPressed &&
+            event.isShiftPressed &&
+            event.key == Key.R
+}
+
+fun isDevicePreviewHotReloadShortcut(event: KeyEvent): Boolean {
+    return event.type == KeyEventType.KeyDown &&
+            event.isMetaPressed &&
+            !event.isShiftPressed &&
+            event.key == Key.R
 }
 
 fun isDevicePreviewLayoutDirectionShortcut(event: KeyEvent): Boolean {
@@ -644,6 +689,8 @@ private fun DevicePreviewStage(
     zoom: DevicePreviewZoom,
     zoomLevels: List<DevicePreviewZoom>,
     showControls: Boolean,
+    showHotReload: Boolean,
+    onHotReloadRequest: (() -> Unit)?,
     onDeviceSelected: (DevicePreviewDevice) -> Unit,
     onOrientationChange: (DevicePreviewOrientation) -> Unit,
     onLayoutDirectionChange: (LayoutDirection) -> Unit,
@@ -867,6 +914,8 @@ private fun DevicePreviewStage(
                     layoutDirection = layoutDirection,
                     zoom = zoom,
                     zoomLevels = zoomLevels,
+                    showHotReload = showHotReload,
+                    onHotReloadRequest = onHotReloadRequest,
                     onDeviceSelected = onDeviceSelected,
                     onOrientationChange = onOrientationChange,
                     onLayoutDirectionChange = onLayoutDirectionChange,

@@ -104,7 +104,7 @@ fun SocialApp() {
                         leading = {
                             if (navController.previousBackStackEntry != null) {
                                 IconButton(
-                                    onClick = { /* TODO */ },
+                                    onClick = { navController.navigateUp() },
                                     style = ButtonStyle.Ghost,
                                 ) {
                                     Icon(Lucide.ArrowLeft, contentDescription = "Go back")

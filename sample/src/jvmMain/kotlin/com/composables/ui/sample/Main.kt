@@ -18,9 +18,12 @@ import com.composables.ui.preview.DevicePreviewZoom
 import com.composables.ui.preview.canRotate
 import com.composables.ui.preview.deviceForPreviewShortcut
 import com.composables.ui.preview.devicePreviewZoomForShortcut
+import com.composables.ui.preview.isDevicePreviewHotReloadAvailable
+import com.composables.ui.preview.isDevicePreviewHotReloadShortcut
 import com.composables.ui.preview.isDevicePreviewLayoutDirectionShortcut
 import com.composables.ui.preview.isDevicePreviewRotationShortcut
 import com.composables.ui.preview.oppositePreviewLayoutDirection
+import com.composables.ui.preview.requestDevicePreviewHotReload
 import com.composables.ui.preview.rotated
 import java.awt.Dimension
 
@@ -39,6 +42,9 @@ fun main() = application {
             val shortcutDevice = deviceForPreviewShortcut(event)
             if (shortcutDevice != null) {
                 selectedDevice = shortcutDevice
+                true
+            } else if (isDevicePreviewHotReloadShortcut(event) && isDevicePreviewHotReloadAvailable()) {
+                runCatching { requestDevicePreviewHotReload() }
                 true
             } else if (isDevicePreviewRotationShortcut(event) && selectedDevice.canRotate) {
                 selectedOrientation = selectedOrientation.rotated()
