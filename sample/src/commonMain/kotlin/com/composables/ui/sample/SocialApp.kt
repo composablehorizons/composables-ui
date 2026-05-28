@@ -77,6 +77,7 @@ fun SocialApp() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+
     val homeSelected = currentDestination == null ||
             currentDestination.hasRoute<SocialFeedRoute>() ||
             currentDestination.hasRoute<PostDetailsRoute>()
