@@ -242,7 +242,7 @@ private fun TabHost(
     modifier: Modifier = Modifier,
 ) {
     val widthBreakpoint = currentWidthBreakpoint()
-    val animateTransition = (widthBreakpoint isAtLeast Medium).not()
+    val animateTransition = widthBreakpoint isAtMost Medium
 
     NavHost(
         navController = navController,
