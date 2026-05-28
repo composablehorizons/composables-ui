@@ -25,7 +25,7 @@ fun TabContentScaffold(
                 .background(Theme[colors][panel])
         ) {
             val breakpoint = currentWidthBreakpoint()
-            if (breakpoint == Breakpoint.Base) {
+            if (breakpoint isAt Breakpoint.Base) {
                 MobileToolbar()
             }
             content()

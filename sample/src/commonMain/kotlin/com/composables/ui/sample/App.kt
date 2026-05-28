@@ -3,11 +3,6 @@ package com.composables.ui.sample
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.CubicBezierEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -241,77 +236,14 @@ private fun TabHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
-    val widthBreakpoint = currentWidthBreakpoint()
-    val animateTransition = widthBreakpoint isAtMost Medium
-
     NavHost(
         navController = navController,
         startDestination = HomeRoute,
         modifier = modifier,
-        enterTransition = {
-            if (targetState.destination.isTabDestination() || !animateTransition) {
-                EnterTransition.None
-            } else {
-                slideInHorizontally(
-                    animationSpec = tween(
-                        durationMillis = NavigationTransitionDurationMillis,
-                        easing = NavigationTransitionEasing,
-                    ),
-                    initialOffsetX = { it },
-                )
-            }
-        },
-        exitTransition = {
-            if (targetState.destination.isTabDestination() || !animateTransition) {
-                ExitTransition.None
-            } else {
-                slideOutHorizontally(
-                    animationSpec = tween(
-                        durationMillis = NavigationTransitionDurationMillis,
-                        easing = NavigationTransitionEasing,
-                    ),
-                    targetOffsetX = { -it / NavigationParallaxDivisor },
-                ) + fadeOut(
-                    animationSpec = tween(
-                        durationMillis = NavigationTransitionDurationMillis,
-                        easing = NavigationTransitionEasing,
-                    ),
-                    targetAlpha = NavigationDimmedAlpha,
-                )
-            }
-        },
-        popEnterTransition = {
-            if (targetState.destination.isTabDestination() || !animateTransition) {
-                EnterTransition.None
-            } else {
-                slideInHorizontally(
-                    animationSpec = tween(
-                        durationMillis = NavigationTransitionDurationMillis,
-                        easing = NavigationTransitionEasing,
-                    ),
-                    initialOffsetX = { -it / NavigationParallaxDivisor },
-                ) + fadeIn(
-                    animationSpec = tween(
-                        durationMillis = NavigationTransitionDurationMillis,
-                        easing = NavigationTransitionEasing,
-                    ),
-                    initialAlpha = NavigationDimmedAlpha,
-                )
-            }
-        },
-        popExitTransition = {
-            if (targetState.destination.isTabDestination() || !animateTransition) {
-                ExitTransition.None
-            } else {
-                slideOutHorizontally(
-                    animationSpec = tween(
-                        durationMillis = NavigationTransitionDurationMillis,
-                        easing = NavigationTransitionEasing,
-                    ),
-                    targetOffsetX = { it },
-                )
-            }
-        },
+        enterTransition = { EnterTransition.None },
+        exitTransition = { ExitTransition.None },
+        popEnterTransition = { EnterTransition.None },
+        popExitTransition = { ExitTransition.None },
     ) {
         composable<HomeRoute> {
             SocialFeed(
