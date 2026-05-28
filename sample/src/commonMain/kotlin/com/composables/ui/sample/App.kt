@@ -171,7 +171,10 @@ fun SocialApp() {
                                     }
                                 }
                             ) {
-                                IconButton(onClick = { expanded = expanded.not() }) {
+                                IconButton(
+                                    onClick = { expanded = expanded.not() },
+                                    style = ButtonStyle.Ghost
+                                ) {
                                     Icon(Lucide.EllipsisVertical, contentDescription = "More")
                                 }
                             }
