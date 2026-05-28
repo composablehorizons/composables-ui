@@ -123,21 +123,10 @@ fun SocialApp() {
                             }
 
                             when {
-                                homeSelected -> {
-                                    Text("My Feed")
-                                }
-
-                                searchSelected -> {
-                                    Text("Search")
-                                }
-
-                                activitySelected -> {
-                                    Text("Activity")
-                                }
-
-                                profileSelected -> {
-                                    Text("Profile")
-                                }
+                                homeSelected -> Text("My Feed")
+                                searchSelected -> Text("Search")
+                                activitySelected -> Text("Activity")
+                                profileSelected -> Text("Profile")
                             }
 
                         }
