@@ -42,6 +42,7 @@ import com.composables.ui.theme.field
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
 import com.composables.ui.theme.onPanel
+import com.composables.ui.theme.panel
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.theme.Theme
 
@@ -52,7 +53,7 @@ fun Search() {
 
     ProvideContentColor(Theme[colors][onPanel]) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize().background(Theme[colors][onPanel]),
+            modifier = Modifier.fillMaxSize().background(Theme[colors][panel]),
             contentPadding = PaddingValues(bottom = 96.dp),
         ) {
             item {
