@@ -46,6 +46,7 @@ import com.composables.ui.components.ButtonStyle
 import com.composables.ui.components.DropdownMenu
 import com.composables.ui.components.DropdownMenuAlignment
 import com.composables.ui.components.DropdownMenuItem
+import com.composables.ui.components.DropdownMenuItemStyle
 import com.composables.ui.components.DropdownMenuPanel
 import com.composables.ui.components.DropdownMenuSide
 import com.composables.ui.components.Icon
@@ -155,6 +156,10 @@ fun SocialApp() {
                                 DropdownMenuPanel {
                                     DropdownMenuItem(onClick = {}) {
                                         Text("Do thing")
+                                    }
+
+                                    DropdownMenuItem(onClick = {}, style = DropdownMenuItemStyle.Destructive) {
+                                        Text("Log out")
                                     }
                                 }
                             }
