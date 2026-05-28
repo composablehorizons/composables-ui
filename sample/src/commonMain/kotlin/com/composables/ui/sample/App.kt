@@ -55,6 +55,8 @@ import com.composables.ui.theme.Medium
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.largeShape
+import com.composables.ui.theme.onPanel
+import com.composables.ui.theme.panel
 import com.composables.ui.theme.shapes
 import com.composeunstyled.buildModifier
 import com.composeunstyled.currentWidthBreakpoint
@@ -110,29 +112,29 @@ fun SocialApp() {
                     .widthIn(max = if (widthBreakpoint isAtLeast Medium) 700.dp else Dp.Unspecified)
                     .fillMaxSize(),
             ) {
-                if(widthBreakpoint isAtLeast Medium) {
-                    Toolbar(
-                        leading = {
-                            val canGoBack = navController.previousBackStackEntry != null
-                            if (canGoBack) {
-                                IconButton(
-                                    onClick = { navController.navigateUp() },
-                                    style = ButtonStyle.Ghost,
-                                ) {
-                                    Icon(Lucide.ArrowLeft, contentDescription = "Go back")
-                                }
+                Toolbar(
+                    backgroundColor = Theme[colors][panel],
+                    contentColor = Theme[colors][onPanel],
+                    leading = {
+                        val canGoBack = navController.previousBackStackEntry != null
+                        if (canGoBack) {
+                            IconButton(
+                                onClick = { navController.navigateUp() },
+                                style = ButtonStyle.Ghost,
+                            ) {
+                                Icon(Lucide.ArrowLeft, contentDescription = "Go back")
                             }
-
-                            when {
-                                homeSelected -> Text("My Feed")
-                                searchSelected -> Text("Search")
-                                activitySelected -> Text("Activity")
-                                profileSelected -> Text("Profile")
-                            }
-
                         }
-                    )
-                }
+
+                        when {
+                            homeSelected -> Text("My Feed")
+                            searchSelected -> Text("Search")
+                            activitySelected -> Text("Activity")
+                            profileSelected -> Text("Profile")
+                        }
+
+                    }
+                )
                 Box(
                     // we want the exiting screen to look dimmed. to achieve this effect,
                     // we set a black background, while fading the page itself during the transition
