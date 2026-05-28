@@ -34,10 +34,10 @@ import com.composables.icons.lucide.Menu
 import com.composables.icons.lucide.Plus
 import com.composables.icons.lucide.Search
 import com.composables.icons.lucide.User
-import com.composables.ui.components.DropdownMenuAlignment
-import com.composables.ui.components.DropdownMenuSide
 import com.composables.ui.components.ButtonSize
 import com.composables.ui.components.ButtonStyle
+import com.composables.ui.components.DropdownMenuAlignment
+import com.composables.ui.components.DropdownMenuSide
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
 import com.composables.ui.components.NavigationBar
@@ -164,16 +164,20 @@ fun SocialApp() {
                     modifier = Modifier.align(Alignment.CenterStart),
                     mode = if (widthBreakpoint isAtLeast Large) SidebarMode.Expanded else SidebarMode.Compact,
                     footer = {
+                        var expanded by remember { mutableStateOf(false) }
+
                         OtherMenuDropdown(
                             colorScheme = colorScheme,
                             onColorSchemeChange = { colorScheme = it },
-                            side = DropdownMenuSide.End,
-                            alignment = DropdownMenuAlignment.End,
-                        ) { openMenu ->
+                            side = DropdownMenuSide.Top,
+                            alignment = DropdownMenuAlignment.Start,
+                            expanded = expanded,
+                            onExpandedChange = { expanded = it }
+                        ) {
                             SidebarItem(
                                 selected = false,
                                 icon = { Icon(Lucide.Menu) },
-                                onClick = openMenu,
+                                onClick = { expanded = true },
                                 text = { Text(text = "More", singleLine = true) },
                             )
                         }

@@ -1,10 +1,6 @@
 package com.composables.ui.sample.components
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import com.composables.ui.components.DropdownMenu
 import com.composables.ui.components.DropdownMenuAlignment
@@ -18,17 +14,17 @@ import com.composables.ui.theme.ColorScheme
 
 @Composable
 fun OtherMenuDropdown(
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
     colorScheme: ColorScheme,
     onColorSchemeChange: (ColorScheme) -> Unit,
     side: DropdownMenuSide = DropdownMenuSide.Bottom,
     alignment: DropdownMenuAlignment = DropdownMenuAlignment.Start,
-    anchor: @Composable (openMenu: () -> Unit) -> Unit,
+    anchor: @Composable () -> Unit,
 ) {
-    var expanded by remember { mutableStateOf(false) }
-
     DropdownMenu(
         expanded = expanded,
-        onExpandedChange = { expanded = it },
+        onExpandedChange = onExpandedChange,
         side = side,
         alignment = alignment,
         panel = {
@@ -39,7 +35,7 @@ fun OtherMenuDropdown(
                 )
                 DropdownMenuSeparator()
                 DropdownMenuItem(
-                    onClick = { expanded = false },
+                    onClick = {  },
                     style = DropdownMenuItemStyle.Destructive,
                 ) {
                     Text("Log out")
@@ -47,6 +43,6 @@ fun OtherMenuDropdown(
             }
         },
     ) {
-        anchor { expanded = true }
+        anchor()
     }
 }
