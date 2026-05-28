@@ -129,7 +129,7 @@ fun SocialApp() {
                     backgroundColor = toolbarColor,
                     contentColor = toolbarContentColor,
                     leading = {
-                        val canGoBack = navController.previousBackStackEntry != null
+                        val canGoBack = currentDestination.isDetailDestination(navBackStackEntry)
                         if (canGoBack) {
                             IconButton(
                                 onClick = { navController.navigateUp() },
@@ -214,7 +214,7 @@ fun SocialApp() {
 
             fun onTabSelected(route: Any) {
                 navController.navigate(route) {
-                    popUpTo(route)
+                    popUpTo(HomeRoute)
                     launchSingleTop = true
                 }
             }
@@ -287,7 +287,7 @@ fun SocialApp() {
                     NavigationBarItem(
                         modifier = Modifier.weight(1f),
                         selected = profileSelected,
-                        onClick = { navController.navigateToProfile(authenticatedUser.id) },
+                        onClick = { onTabSelected(ProfileRoute(authenticatedUser.id)) },
                         icon = { Icon(Lucide.User, contentDescription = "Profile") })
                 }
             }
@@ -409,6 +409,15 @@ private fun NavDestination.isTabDestination(): Boolean {
     return hasRoute<SearchRoute>() ||
             hasRoute<NewPostRoute>() ||
             hasRoute<ActivityRoute>()
+}
+
+private fun NavDestination?.isDetailDestination(backStackEntry: androidx.navigation.NavBackStackEntry?): Boolean {
+    if (this == null || backStackEntry == null) return false
+    if (hasRoute<PostDetailsRoute>()) return true
+    if (hasRoute<ProfileRoute>()) {
+        return backStackEntry.toRoute<ProfileRoute>().profileId != authenticatedUser.id
+    }
+    return false
 }
 
 private fun NavHostController.navigateToProfile(profileId: String) {
