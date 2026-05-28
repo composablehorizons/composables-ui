@@ -68,6 +68,7 @@ import com.composables.ui.theme.largeShape
 import com.composables.ui.theme.onPanel
 import com.composables.ui.theme.panel
 import com.composables.ui.theme.shapes
+import com.composeunstyled.LocalContentColor
 import com.composeunstyled.buildModifier
 import com.composeunstyled.currentWidthBreakpoint
 import com.composeunstyled.outline
@@ -122,9 +123,12 @@ fun SocialApp() {
                     .widthIn(max = if (widthBreakpoint isAtLeast Medium) 700.dp else Dp.Unspecified)
                     .fillMaxSize(),
             ) {
+                val toolbarColor = if (widthBreakpoint isAtLeast Medium) Color.Transparent else Theme[colors][panel]
+                val toolbarContentColor =
+                    if (widthBreakpoint isAtLeast Medium) LocalContentColor.current else Theme[colors][onPanel]
                 Toolbar(
-                    backgroundColor = Theme[colors][panel],
-                    contentColor = Theme[colors][onPanel],
+                    backgroundColor = toolbarColor,
+                    contentColor = toolbarContentColor,
                     leading = {
                         val canGoBack = navController.previousBackStackEntry != null
                         if (canGoBack) {
@@ -146,48 +150,50 @@ fun SocialApp() {
                         }
                     },
                     trailing = {
-                        var expanded by remember { mutableStateOf(false) }
-                        DropdownMenu(
-                            expanded = expanded,
-                            onExpandedChange = { expanded = it },
-                            side = DropdownMenuSide.Bottom,
-                            alignment = DropdownMenuAlignment.End,
-                            panel = {
-                                DropdownMenuPanel {
-                                    DropdownMenuItem(onClick = {}) {
-                                        Text("Do thing")
-                                    }
+                        if ((widthBreakpoint isAtLeast Medium).not()) {
+                            var expanded by remember { mutableStateOf(false) }
 
-                                    DropdownMenuItem(onClick = {}, style = DropdownMenuItemStyle.Destructive) {
-                                        Text("Log out")
+                            DropdownMenu(
+                                expanded = expanded,
+                                onExpandedChange = { expanded = it },
+                                side = DropdownMenuSide.Bottom,
+                                alignment = DropdownMenuAlignment.End,
+                                panel = {
+                                    DropdownMenuPanel {
+                                        DropdownMenuItem(onClick = {}) {
+                                            Text("Do thing")
+                                        }
+
+                                        DropdownMenuItem(onClick = {}, style = DropdownMenuItemStyle.Destructive) {
+                                            Text("Log out")
+                                        }
                                     }
                                 }
-                            }
-                        ) {
-                            IconButton(onClick = { expanded = expanded.not() }) {
-                                Icon(Lucide.EllipsisVertical, contentDescription = "More")
+                            ) {
+                                IconButton(onClick = { expanded = expanded.not() }) {
+                                    Icon(Lucide.EllipsisVertical, contentDescription = "More")
+                                }
                             }
                         }
                     }
                 )
                 Box(
-                    // we want the exiting screen to look dimmed. to achieve this effect,
-                    // we set a black background, while fading the page itself during the transition
-                    Modifier.background(Color.Black)
+                    buildModifier {
+                        if (widthBreakpoint isAtLeast Medium) {
+                            add(
+                                Modifier
+                                    .outline(1.dp, Theme[colors][border], Theme[shapes][largeShape])
+                                    .clip(Theme[shapes][largeShape])
+                            )
+                        }
+                    }
+                        // we want the exiting screen to look dimmed. to achieve this effect,
+                        // we set a black background, while fading the page itself during the transition
+                        .background(Color.Black)
                 ) {
                     TabHost(
                         navController = navController,
-                        modifier = Modifier
-                            .fillMaxSize()
-                                then buildModifier {
-                            if (widthBreakpoint isAtLeast Medium) {
-                                add(
-                                    Modifier
-                                        .outline(1.dp, Theme[colors][border], Theme[shapes][largeShape])
-                                        .clip(Theme[shapes][largeShape])
-                                )
-                            }
-                        },
+                        modifier = Modifier.fillMaxSize(),
                     )
                 }
             }
