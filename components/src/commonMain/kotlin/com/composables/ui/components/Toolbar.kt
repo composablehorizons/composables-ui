@@ -21,7 +21,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.composeunstyled.LocalContentColor
 import com.composeunstyled.LocalTextStyle
+import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.ProvideTextStyle
 import com.composeunstyled.buildModifier
 import kotlin.jvm.JvmName
@@ -152,15 +154,17 @@ private fun LargeTitleToolbar(
 @Composable
 fun Toolbar(
     modifier: Modifier = Modifier,
-    backgroundColor: Color = Color.Transparent,
     leading: @Composable (RowScope.() -> Unit)? = null,
     centered: @Composable (RowScope.() -> Unit)? = null,
     trailing: @Composable (RowScope.() -> Unit)? = null,
+    backgroundColor: Color = Color.Transparent,
+    contentColor: Color = LocalContentColor.current,
 ) {
     ToolbarContainer(
         modifier = modifier,
         backgroundColor = backgroundColor,
         height = 64.dp,
+        contentColor = contentColor,
     ) {
         if (leading != null) {
             Row(
@@ -217,19 +221,22 @@ private fun ToolbarContainer(
     modifier: Modifier = Modifier,
     backgroundColor: Color,
     height: Dp,
+    contentColor: Color = LocalContentColor.current,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .then(buildModifier {
-                if (backgroundColor != Color.Transparent) {
-                    add(Modifier.background(backgroundColor))
-                }
-            })
-            .padding(WindowInsets.statusBars.asPaddingValues())
-            .height(height)
-            .padding(horizontal = 12.dp),
-        content = content,
-    )
+    ProvideContentColor(contentColor) {
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .then(buildModifier {
+                    if (backgroundColor != Color.Transparent) {
+                        add(Modifier.background(backgroundColor))
+                    }
+                })
+                .padding(WindowInsets.statusBars.asPaddingValues())
+                .height(height)
+                .padding(horizontal = 12.dp),
+            content = content,
+        )
+    }
 }

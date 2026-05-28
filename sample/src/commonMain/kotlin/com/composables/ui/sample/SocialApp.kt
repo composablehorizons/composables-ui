@@ -9,6 +9,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -38,6 +39,7 @@ import com.composables.ui.components.Sidebar
 import com.composables.ui.components.SidebarItem
 import com.composables.ui.components.SidebarMode
 import com.composables.ui.components.Text
+import com.composables.ui.components.Toolbar
 import com.composables.ui.sample.data.authenticatedUser
 import com.composables.ui.theme.AppScaffold
 import com.composables.ui.theme.Large
@@ -86,13 +88,22 @@ fun SocialApp() {
         Box(modifier = Modifier.fillMaxSize()) {
             val widthBreakpoint = currentWidthBreakpoint()
 
-            TabHost(
-                navController = navController,
-                modifier = Modifier
+            Column(
+                Modifier
+                    .fillMaxSize()
                     .padding(horizontal = if (widthBreakpoint isAtLeast Medium) 80.dp else 0.dp)
                     .widthIn(max = 700.dp)
-                    .fillMaxSize(),
-            )
+            ) {
+                Toolbar(
+                    leading = {
+                        Text("Hello")
+                    }
+                )
+                TabHost(
+                    navController = navController,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
 
             if (widthBreakpoint isAtLeast Medium) {
                 Sidebar(
