@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -180,10 +181,11 @@ fun SocialApp() {
                 Box(
                     buildModifier {
                         if (widthBreakpoint isAtLeast Medium) {
+                            val contentShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
                             add(
                                 Modifier
-                                    .outline(1.dp, Theme[colors][border], Theme[shapes][largeShape])
-                                    .clip(Theme[shapes][largeShape])
+                                    .outline(1.dp, Theme[colors][border], contentShape)
+                                    .clip(contentShape)
                             )
                         }
                     }
