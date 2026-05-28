@@ -33,6 +33,7 @@ import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Plus
 import com.composables.icons.lucide.Search
 import com.composables.icons.lucide.User
+import com.composables.ui.components.ButtonSize
 import com.composables.ui.components.ButtonStyle
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
@@ -134,6 +135,17 @@ fun SocialApp() {
                     navController = navController,
                     modifier = Modifier.fillMaxSize(),
                 )
+            }
+
+            if (widthBreakpoint isAtLeast Medium) {
+                IconButton(
+                    onClick = { navController.navigate(NewPostRoute) },
+                    style = ButtonStyle.Primary,
+                    modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
+                    buttonSize = ButtonSize.Large
+                ) {
+                    Icon(Lucide.Plus, contentDescription = "New Post")
+                }
             }
 
             if (widthBreakpoint isAtLeast Medium) {
