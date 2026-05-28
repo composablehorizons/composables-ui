@@ -30,15 +30,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.layer.GraphicsLayer
+import androidx.compose.ui.graphics.layer.drawLayer
+import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
@@ -60,6 +65,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.composables.icons.lucide.Check
+import com.composables.icons.lucide.Camera
 import com.composables.icons.lucide.ChevronDown
 import com.composables.icons.lucide.Flame
 import com.composables.icons.lucide.Lucide
@@ -97,6 +103,7 @@ import com.composables.ui.theme.shapes
 import com.composables.ui.theme.smallShape
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.theme.Theme
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
@@ -218,6 +225,9 @@ fun DevicePreviewHost(
     showControls: Boolean = true,
     showHotReload: Boolean = true,
     onHotReloadRequest: (() -> Unit)? = null,
+    showScreenshot: Boolean = true,
+    saveScreenshotRequest: Any? = null,
+    copyScreenshotRequest: Any? = null,
     content: @Composable () -> Unit,
 ) {
     require(devices.isNotEmpty()) { "DevicePreviewHost requires at least one device." }
@@ -275,6 +285,9 @@ fun DevicePreviewHost(
                 showControls = showControls,
                 showHotReload = showHotReload,
                 onHotReloadRequest = onHotReloadRequest,
+                showScreenshot = showScreenshot,
+                saveScreenshotRequest = saveScreenshotRequest,
+                copyScreenshotRequest = copyScreenshotRequest,
                 onDeviceSelected = selectDevice,
                 onOrientationChange = selectOrientation,
                 onLayoutDirectionChange = selectLayoutDirection,
@@ -297,6 +310,8 @@ private fun DevicePreviewControls(
     zoomLevels: List<DevicePreviewZoom>,
     showHotReload: Boolean,
     onHotReloadRequest: (() -> Unit)?,
+    showScreenshot: Boolean,
+    onSaveScreenshotRequest: () -> Unit,
     onDeviceSelected: (DevicePreviewDevice) -> Unit,
     onOrientationChange: (DevicePreviewOrientation) -> Unit,
     onLayoutDirectionChange: (LayoutDirection) -> Unit,
@@ -356,8 +371,29 @@ private fun DevicePreviewControls(
                         },
                     )
                 }
+                if (showScreenshot) {
+                    VerticalSeparator(modifier = Modifier.height(24.dp))
+                    ScreenshotButton(onClick = onSaveScreenshotRequest)
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun ScreenshotButton(
+    onClick: () -> Unit,
+) {
+    IconButton(
+        onClick = onClick,
+        style = ButtonStyle.Ghost,
+        buttonSize = ButtonSize.Regular,
+    ) {
+        Icon(
+            imageVector = Lucide.Camera,
+            contentDescription = "Save screenshot",
+            modifier = Modifier.size(18.dp),
+        )
     }
 }
 
@@ -646,15 +682,29 @@ fun deviceForPreviewShortcut(
 fun isDevicePreviewRotationShortcut(event: KeyEvent): Boolean {
     return event.type == KeyEventType.KeyDown &&
             event.isMetaPressed &&
-            event.isShiftPressed &&
+            !event.isShiftPressed &&
             event.key == Key.R
 }
 
 fun isDevicePreviewHotReloadShortcut(event: KeyEvent): Boolean {
     return event.type == KeyEventType.KeyDown &&
             event.isMetaPressed &&
-            !event.isShiftPressed &&
+            event.isShiftPressed &&
             event.key == Key.R
+}
+
+fun isDevicePreviewScreenshotSaveShortcut(event: KeyEvent): Boolean {
+    return event.type == KeyEventType.KeyDown &&
+            event.isMetaPressed &&
+            !event.isShiftPressed &&
+            event.key == Key.P
+}
+
+fun isDevicePreviewScreenshotCopyShortcut(event: KeyEvent): Boolean {
+    return event.type == KeyEventType.KeyDown &&
+            event.isMetaPressed &&
+            event.isShiftPressed &&
+            event.key == Key.P
 }
 
 fun isDevicePreviewLayoutDirectionShortcut(event: KeyEvent): Boolean {
@@ -691,6 +741,9 @@ private fun DevicePreviewStage(
     showControls: Boolean,
     showHotReload: Boolean,
     onHotReloadRequest: (() -> Unit)?,
+    showScreenshot: Boolean,
+    saveScreenshotRequest: Any?,
+    copyScreenshotRequest: Any?,
     onDeviceSelected: (DevicePreviewDevice) -> Unit,
     onOrientationChange: (DevicePreviewOrientation) -> Unit,
     onLayoutDirectionChange: (LayoutDirection) -> Unit,
@@ -700,6 +753,8 @@ private fun DevicePreviewStage(
 ) {
     val horizontalScrollState = rememberScrollState()
     val verticalScrollState = rememberScrollState()
+    val coroutineScope = rememberCoroutineScope()
+    val screenshotLayer = rememberGraphicsLayer()
     var rotationFrame by remember(device.id) {
         mutableStateOf(DeviceRotationFrame(orientation = orientation, rotationZ = 0f))
     }
@@ -708,6 +763,13 @@ private fun DevicePreviewStage(
 
     SideEffect {
         previousRenderedDeviceId = device.id
+    }
+
+    RunOnRequestChange(saveScreenshotRequest) {
+        saveCurrentDevicePreviewScreenshot(screenshotLayer)
+    }
+    RunOnRequestChange(copyScreenshotRequest) {
+        copyCurrentDevicePreviewScreenshot(screenshotLayer)
     }
 
     LaunchedEffect(device.id, device.canRotate, orientation) {
@@ -887,6 +949,7 @@ private fun DevicePreviewStage(
                                 frameCornerRadius = animatedFrameCornerRadius,
                                 contentCornerRadius = animatedContentCornerRadius,
                                 borderWidth = animatedFrameBorderWidth,
+                                screenshotLayer = screenshotLayer,
                                 modifier = Modifier.graphicsLayer {
                                     rotationZ = rotationFrame.rotationZ
                                 },
@@ -900,6 +963,7 @@ private fun DevicePreviewStage(
                             zoom = animatedZoom,
                             layoutDirection = layoutDirection,
                             frameCornerRadius = animatedFrameCornerRadius,
+                            screenshotLayer = screenshotLayer,
                             content = content,
                         )
                     }
@@ -916,6 +980,12 @@ private fun DevicePreviewStage(
                     zoomLevels = zoomLevels,
                     showHotReload = showHotReload,
                     onHotReloadRequest = onHotReloadRequest,
+                    showScreenshot = showScreenshot,
+                    onSaveScreenshotRequest = {
+                        coroutineScope.launch {
+                            saveCurrentDevicePreviewScreenshot(screenshotLayer)
+                        }
+                    },
                     onDeviceSelected = onDeviceSelected,
                     onOrientationChange = onOrientationChange,
                     onLayoutDirectionChange = onLayoutDirectionChange,
@@ -940,6 +1010,7 @@ private fun DesktopZoomedPreview(
     zoom: Float,
     layoutDirection: LayoutDirection,
     frameCornerRadius: Dp,
+    screenshotLayer: GraphicsLayer,
     content: @Composable () -> Unit,
 ) {
     val layoutWidth = width * (1f / zoom)
@@ -950,6 +1021,7 @@ private fun DesktopZoomedPreview(
         modifier = Modifier
             .requiredSize(width, height)
             .clip(shape)
+            .captureDevicePreviewScreenshot(screenshotLayer)
             .background(PreviewContentBackground),
         contentAlignment = Alignment.Center,
     ) {
@@ -1010,6 +1082,7 @@ private fun DevicePreviewFrame(
     frameCornerRadius: Dp,
     contentCornerRadius: Dp,
     borderWidth: Dp,
+    screenshotLayer: GraphicsLayer,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
@@ -1027,6 +1100,7 @@ private fun DevicePreviewFrame(
             modifier = Modifier
                 .requiredSize(width, height)
                 .clip(contentShape)
+                .captureDevicePreviewScreenshot(screenshotLayer)
                 .background(PreviewContentBackground)
                 .graphicsLayer {
                     alpha = contentAlpha
@@ -1040,6 +1114,44 @@ private fun DevicePreviewFrame(
                 )
             }
         }
+    }
+}
+
+private suspend fun saveCurrentDevicePreviewScreenshot(screenshotLayer: GraphicsLayer) {
+    runCatching {
+        saveDevicePreviewScreenshot(screenshotLayer.toImageBitmap())
+    }
+}
+
+private suspend fun copyCurrentDevicePreviewScreenshot(screenshotLayer: GraphicsLayer) {
+    runCatching {
+        copyDevicePreviewScreenshotToClipboard(screenshotLayer.toImageBitmap())
+    }
+}
+
+@Composable
+private fun RunOnRequestChange(
+    request: Any?,
+    block: suspend () -> Unit,
+) {
+    var previousRequest by remember { mutableStateOf(request) }
+
+    LaunchedEffect(request) {
+        if (request != previousRequest) {
+            previousRequest = request
+            block()
+        }
+    }
+}
+
+private fun Modifier.captureDevicePreviewScreenshot(
+    screenshotLayer: GraphicsLayer,
+): Modifier {
+    return drawWithContent {
+        screenshotLayer.record {
+            this@drawWithContent.drawContent()
+        }
+        drawLayer(screenshotLayer)
     }
 }
 

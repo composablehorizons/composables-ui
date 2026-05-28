@@ -22,6 +22,8 @@ import com.composables.ui.preview.isDevicePreviewHotReloadAvailable
 import com.composables.ui.preview.isDevicePreviewHotReloadShortcut
 import com.composables.ui.preview.isDevicePreviewLayoutDirectionShortcut
 import com.composables.ui.preview.isDevicePreviewRotationShortcut
+import com.composables.ui.preview.isDevicePreviewScreenshotCopyShortcut
+import com.composables.ui.preview.isDevicePreviewScreenshotSaveShortcut
 import com.composables.ui.preview.oppositePreviewLayoutDirection
 import com.composables.ui.preview.requestDevicePreviewHotReload
 import com.composables.ui.preview.rotated
@@ -33,6 +35,8 @@ fun main() = application {
     var selectedOrientation by remember { mutableStateOf(DevicePreviewOrientation.Portrait) }
     var selectedLayoutDirection by remember { mutableStateOf(LayoutDirection.Ltr) }
     var selectedZoom by remember { mutableStateOf(DevicePreviewZoom.Default) }
+    var saveScreenshotRequest by remember { mutableStateOf(0) }
+    var copyScreenshotRequest by remember { mutableStateOf(0) }
 
     Window(
         onCloseRequest = ::exitApplication,
@@ -45,6 +49,12 @@ fun main() = application {
                 true
             } else if (isDevicePreviewHotReloadShortcut(event) && isDevicePreviewHotReloadAvailable()) {
                 runCatching { requestDevicePreviewHotReload() }
+                true
+            } else if (isDevicePreviewScreenshotSaveShortcut(event)) {
+                saveScreenshotRequest++
+                true
+            } else if (isDevicePreviewScreenshotCopyShortcut(event)) {
+                copyScreenshotRequest++
                 true
             } else if (isDevicePreviewRotationShortcut(event) && selectedDevice.canRotate) {
                 selectedOrientation = selectedOrientation.rotated()
@@ -97,6 +107,8 @@ fun main() = application {
             onLayoutDirectionSelected = { selectedLayoutDirection = it },
             selectedZoom = selectedZoom,
             onZoomSelected = { selectedZoom = it },
+            saveScreenshotRequest = saveScreenshotRequest,
+            copyScreenshotRequest = copyScreenshotRequest,
         ) {
             SocialApp()
         }

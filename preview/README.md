@@ -73,14 +73,21 @@ Devices with both `width` and `height` can rotate. A device without dimensions b
 The hot reload button is shown only when Hot Reload is active. Pass `showHotReload = false` to hide it, or pass
 `onHotReloadRequest` when the surrounding app should own the reload trigger.
 
+## Screenshots
+
+The screenshot button saves the preview content without the device frame. For window shortcuts, pass changing
+values to `saveScreenshotRequest` or `copyScreenshotRequest`; each value change captures the current preview content.
+
 ## Keyboard Shortcuts
 
 The module includes helpers for wiring common shortcuts from your window `onKeyEvent`:
 
 - `Cmd+1`, `Cmd+2`, `Cmd+3`: select phone, tablet, desktop
 - `Cmd+-`, `Cmd++`, `Cmd+0`: zoom out, zoom in, reset zoom
-- `Cmd+R`: trigger Compose Hot Reload when Hot Reload is active
-- `Cmd+Shift+R`: rotate the selected device when rotation is available
+- `Cmd+R`: rotate the selected device when rotation is available
+- `Cmd+Shift+R`: trigger Compose Hot Reload when Hot Reload is active
+- `Cmd+P`: save a screenshot of the preview content without the device frame
+- `Cmd+Shift+P`: copy a screenshot of the preview content without the device frame to the clipboard
 - `Cmd+backtick`: toggle LTR and RTL
 
-Use `deviceForPreviewShortcut`, `devicePreviewZoomForShortcut`, `isDevicePreviewHotReloadShortcut`, `isDevicePreviewRotationShortcut`, and `isDevicePreviewLayoutDirectionShortcut` if you want the sample app to support those shortcuts.
+Use `deviceForPreviewShortcut`, `devicePreviewZoomForShortcut`, `isDevicePreviewHotReloadShortcut`, `isDevicePreviewRotationShortcut`, `isDevicePreviewScreenshotSaveShortcut`, `isDevicePreviewScreenshotCopyShortcut`, and `isDevicePreviewLayoutDirectionShortcut` if you want the sample app to support those shortcuts.
