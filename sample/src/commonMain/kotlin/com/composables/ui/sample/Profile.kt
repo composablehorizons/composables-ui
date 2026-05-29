@@ -60,14 +60,12 @@ import com.composables.ui.theme.panel
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.theme.Theme
 
-@kotlin.jvm.JvmInline
-private value class ProfileFeedTab private constructor(val value: String) {
-    companion object {
-        val Posts = ProfileFeedTab("posts")
-        val Replies = ProfileFeedTab("replies")
-        val all = listOf(Posts, Replies)
-    }
+private sealed interface ProfileFeedTab {
+    data object Posts : ProfileFeedTab
+    data object Replies : ProfileFeedTab
 }
+
+private val profileFeedTabs = listOf(ProfileFeedTab.Posts, ProfileFeedTab.Replies)
 
 @Composable
 fun Profile(
@@ -75,10 +73,10 @@ fun Profile(
     onPostClick: (String) -> Unit,
 ) {
     val profile = UserProfiles.findWithId(profileId)
-    var selectedTab by remember { mutableStateOf(ProfileFeedTab.Posts) }
+    var selectedTab by remember { mutableStateOf<ProfileFeedTab>(ProfileFeedTab.Posts) }
     val visiblePosts = when (selectedTab) {
+        ProfileFeedTab.Posts -> Posts.postsByProfileId(profile.id)
         ProfileFeedTab.Replies -> Posts.repliesByProfileId(profile.id)
-        else -> Posts.postsByProfileId(profile.id)
     }
 
     ProvideContentColor(Theme[colors][onPanel]) {
@@ -93,7 +91,7 @@ fun Profile(
                 TabGroup(
                     selectedTab = selectedTab,
                     onSelectedTabChange = { it: ProfileFeedTab -> selectedTab = it },
-                    tabs = ProfileFeedTab.all,
+                    tabs = profileFeedTabs,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(12.dp),
@@ -102,7 +100,7 @@ fun Profile(
                         modifier = Modifier.fillMaxWidth(),
                         equalTabWidth = true,
                     ) {
-                        ProfileFeedTab.all.forEach { tab ->
+                        profileFeedTabs.forEach { tab ->
                             this.Tab(key = tab) {
                                 Text(
                                     text = tab.label,
@@ -166,8 +164,8 @@ private fun ProfileHeader(profile: UserProfile) {
 
 private val ProfileFeedTab.label: String
     get() = when (this) {
+        ProfileFeedTab.Posts -> "Posts"
         ProfileFeedTab.Replies -> "Replies"
-        else -> "Posts"
     }
 
 @Composable
