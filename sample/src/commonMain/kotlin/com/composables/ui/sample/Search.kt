@@ -165,7 +165,7 @@ private fun SearchProfileRow(profile: SocialProfile, onProfileClick: (ProfileId)
         Button(
             onClick = { },
             modifier = Modifier.width(104.dp),
-            style = ButtonStyle.Outlined,
+            style = ButtonStyle.Primary,
             buttonSize = ButtonSize.Small,
             shape = RoundedCornerShape(12.dp),
         ) {
