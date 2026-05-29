@@ -37,6 +37,9 @@ import com.composables.ui.components.ButtonStyle
 import com.composables.ui.components.HorizontalSeparator
 import com.composables.ui.components.Icon
 import com.composables.ui.components.Text
+import com.composables.ui.sample.data.ActivityEvent
+import com.composables.ui.sample.data.ActivityEventType
+import com.composables.ui.sample.data.activityEvents
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.componentSizes
