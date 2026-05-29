@@ -101,7 +101,7 @@ fun Search(onProfileClick: (ProfileId) -> Unit) {
                 )
             }
 
-            profiles.take(1).forEachIndexed { index, profile ->
+            profiles.take(5).forEachIndexed { index, profile ->
                 item(key = profile.handle) {
                     if (index != 0) {
                         HorizontalSeparator()
@@ -135,7 +135,6 @@ private fun SearchProfileRow(profile: SocialProfile, onProfileClick: (ProfileId)
                     Text(profile.displayName.first().uppercase())
                 },
             )
-
             Spacer(Modifier.width(16.dp))
             Column(
                 modifier = Modifier.weight(1f),
