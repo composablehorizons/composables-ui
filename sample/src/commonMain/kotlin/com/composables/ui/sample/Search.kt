@@ -46,7 +46,7 @@ import com.composeunstyled.theme.Theme
 
 @Composable
 fun Search() {
-    val queryState = rememberTextFieldState(initialText = "nasa")
+    val queryState = rememberTextFieldState()
     val query = queryState.text.toString()
 
     ProvideContentColor(Theme[colors][onPanel]) {
@@ -92,13 +92,6 @@ fun Search() {
                         }
                     },
                 )
-            }
-
-            SearchSuggestions.forEach { suggestion ->
-                item(key = "suggestion-$suggestion") {
-                    SearchSuggestionRow(suggestion)
-                    HorizontalSeparator(modifier = Modifier.padding(start = 72.dp))
-                }
             }
 
             SearchProfiles.forEachIndexed { index, profile ->
@@ -205,12 +198,6 @@ private data class SearchProfile(
     val avatarUrl: String,
 )
 
-private val SearchSuggestions = listOf(
-    "nasa",
-    "nasa webb telescope",
-    "nasab",
-)
-
 private val SearchProfiles = listOf(
     SearchProfile(
         handle = "nasatpute",
@@ -241,11 +228,5 @@ private val SearchProfiles = listOf(
         name = "Nasai",
         followers = "31 followers",
         avatarUrl = "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=240",
-    ),
-    SearchProfile(
-        handle = "nasa.truck",
-        name = "Nasa Truck",
-        followers = "389 followers",
-        avatarUrl = "https://images.unsplash.com/photo-1544005313-94ddf0286df2c?q=80&w=240",
-    ),
+    )
 )
