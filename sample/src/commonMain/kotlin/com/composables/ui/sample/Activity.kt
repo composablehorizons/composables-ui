@@ -175,9 +175,6 @@ private fun ActivityAvatar(event: ActivityEvent) {
             Icon(
                 imageVector = event.type.icon,
                 contentDescription = event.type.contentDescription,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(Theme[componentSizes][focusRingOffset]),
                 tint = event.type.badgeContentColor(),
             )
         }
