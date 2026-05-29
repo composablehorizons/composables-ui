@@ -1,7 +1,6 @@
 package com.composables.ui.sample
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,13 +17,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.AtSign
 import com.composables.icons.lucide.Heart
 import com.composables.icons.lucide.Lucide
-import com.composables.icons.lucide.MessageCircleReply
+import com.composables.icons.lucide.Reply
 import com.composables.icons.lucide.UserPlus
 import com.composables.ui.components.Button
 import com.composables.ui.components.ButtonSize
@@ -37,17 +37,13 @@ import com.composables.ui.sample.data.ActivityEvent
 import com.composables.ui.sample.data.ActivityEventType
 import com.composables.ui.sample.data.activityEvents
 import com.composables.ui.theme.colors
-import com.composables.ui.theme.componentSizes
 import com.composables.ui.theme.destructive
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
 import com.composables.ui.theme.onPanel
-import com.composables.ui.theme.onPrimary
 import com.composables.ui.theme.panel
 import com.composables.ui.theme.primary
-import com.composables.ui.theme.secondary
 import com.composables.ui.theme.selectedControl
-import com.composables.ui.theme.textFieldHorizontalPadding
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.theme.Theme
 
@@ -58,7 +54,7 @@ fun Activity() {
             modifier = Modifier
                 .fillMaxSize()
                 .background(Theme[colors][panel]),
-            contentPadding = PaddingValues(bottom = 80.dp),
+            contentPadding = PaddingValues(bottom = 96.dp),
         ) {
             itemsIndexed(
                 items = activityEvents,
@@ -78,17 +74,17 @@ private fun ActivityEventRow(event: ActivityEvent) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+            .padding(horizontal = 24.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.Top,
     ) {
         ActivityAvatar(event)
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(Theme[componentSizes][textFieldHorizontalPadding] / 2),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(Theme[componentSizes][textFieldHorizontalPadding] / 2),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
@@ -158,43 +154,35 @@ private fun ActivityBadge(
 ) {
     val backgroundColor = when (event.type) {
         ActivityEventType.Mention -> Theme[colors][primary]
-        ActivityEventType.Comment -> Theme[colors][secondary]
+        ActivityEventType.Comment -> Color(0xFF5B21B6)
         ActivityEventType.Follow -> Theme[colors][selectedControl]
+        ActivityEventType.Like -> Color(0xFFE11D48)
         else -> Theme[colors][destructive]
     }
+
+    val contentColor = Color.White
+
+    val icon = when (event.type) {
+        ActivityEventType.Mention -> Lucide.AtSign
+        ActivityEventType.Comment -> Lucide.Reply
+        ActivityEventType.Follow -> Lucide.UserPlus
+        else -> Lucide.Heart
+    }
+
     Box(
         modifier = modifier
-            .size(20.dp)
+            .clip(CircleShape)
+            .background(Theme[colors][panel])
+            .padding(2.dp)
             .clip(CircleShape)
             .background(backgroundColor)
-            .border(1.dp, backgroundColor, CircleShape),
+            .padding(2.dp),
         contentAlignment = Alignment.Center,
     ) {
-        when (event.type) {
-            ActivityEventType.Mention -> Icon(
-                imageVector = Lucide.AtSign,
-                contentDescription = "Mention",
-                tint = Theme[colors][onPrimary]
-            )
-
-            ActivityEventType.Comment -> Icon(
-                imageVector = Lucide.MessageCircleReply,
-                contentDescription = "Reply",
-                tint = Theme[colors][onPrimary]
-            )
-
-            ActivityEventType.Follow -> Icon(
-                imageVector = Lucide.UserPlus,
-                contentDescription = "Follow",
-                tint = Theme[colors][onPrimary]
-            )
-
-            else -> Icon(
-                imageVector = Lucide.Heart,
-                contentDescription = "Like",
-                tint = Theme[colors][onPrimary]
-            )
-        }
+        Icon(
+            imageVector = icon,
+            tint = contentColor,
+            modifier = Modifier.size(14.dp)
+        )
     }
 }
-
