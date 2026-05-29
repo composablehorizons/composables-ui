@@ -35,6 +35,7 @@ import com.composables.ui.components.HorizontalSeparator
 import com.composables.ui.components.Icon
 import com.composables.ui.components.Text
 import com.composables.ui.sample.components.Avatar
+import com.composables.ui.sample.components.AvatarSize
 import com.composables.ui.sample.data.ActivityEvent
 import com.composables.ui.sample.data.ActivityEventType
 import com.composables.ui.sample.data.ProfileId
@@ -95,6 +96,7 @@ private fun ActivityEventRow(
         ) {
             Avatar(
                 url = event.author.avatarUrl,
+                size = AvatarSize.Large,
                 fallback = {
                     Text(event.author.displayName.first().uppercase())
                 },
