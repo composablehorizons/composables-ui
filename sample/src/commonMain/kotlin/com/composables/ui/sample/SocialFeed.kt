@@ -44,6 +44,7 @@ import com.composables.ui.components.Text
 import com.composables.ui.sample.components.AvatarButton
 import com.composables.ui.sample.components.FeedPost
 import com.composables.ui.sample.components.LandscapeMediaItem
+import com.composables.ui.sample.components.MediaAttachment
 import com.composables.ui.sample.components.PortraitMediaItem
 import com.composables.ui.sample.data.Post
 import com.composables.ui.sample.data.Posts
@@ -110,9 +111,9 @@ fun SocialFeed(
                             color = Theme[colors][onBackground],
                         )
                     },
-                    media = run {
+                    attachment = {
                         if (post.media.isNotEmpty()) {
-                            {
+                            MediaAttachment {
                                 post.media.forEach { item ->
                                     if (post.portraitMedia) {
                                         PortraitMediaItem(item.url)
@@ -121,7 +122,7 @@ fun SocialFeed(
                                     }
                                 }
                             }
-                        } else null
+                        }
                     },
                 ) {
                     PostActions(post = post)

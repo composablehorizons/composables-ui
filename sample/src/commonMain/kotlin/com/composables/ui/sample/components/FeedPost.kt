@@ -45,7 +45,7 @@ fun FeedPost(
     overflow: @Composable () -> Unit,
     body: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    media: (@Composable () -> Unit)? = null,
+    attachment: (@Composable () -> Unit)? = null,
     actions: @Composable () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -103,17 +103,8 @@ fun FeedPost(
                 body()
             }
         }
-        if (media != null) {
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState())
-                    .padding(start = 80.dp, end = 24.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                media()
-            }
+        if (attachment != null) {
+            attachment()
         }
         Row(
             modifier = Modifier
@@ -125,6 +116,20 @@ fun FeedPost(
         ) {
             actions()
         }
+    }
+}
+
+@Composable
+fun MediaAttachment(content: @Composable () -> Unit) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState())
+            .padding(start = 80.dp, end = 24.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        content()
     }
 }
 

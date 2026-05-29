@@ -199,7 +199,7 @@ private fun ProfilePostRow(
                 color = Theme[colors][onBackground],
             )
         },
-        media = if (post.quoteAuthor != null && post.quoteBody != null && post.quoteReplyCount != null) {
+        attachment = if (post.quoteAuthor != null && post.quoteBody != null && post.quoteReplyCount != null) {
             {
                 QuotedPost(
                     avatarUrl = author.avatarUrl,
