@@ -24,7 +24,9 @@ import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.AtSign
 import com.composables.icons.lucide.Heart
 import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.PersonStanding
 import com.composables.icons.lucide.Reply
+import com.composables.icons.lucide.User
 import com.composables.icons.lucide.UserPlus
 import com.composables.ui.components.Button
 import com.composables.ui.components.ButtonSize
@@ -155,7 +157,7 @@ private fun ActivityBadge(
     val backgroundColor = when (event.type) {
         ActivityEventType.Mention -> Theme[colors][primary]
         ActivityEventType.Comment -> Color(0xFF5B21B6)
-        ActivityEventType.Follow -> Theme[colors][selectedControl]
+        ActivityEventType.Follow -> Color(0xFF3B82F6)
         ActivityEventType.Like -> Color(0xFFE11D48)
         else -> Theme[colors][destructive]
     }
@@ -165,7 +167,7 @@ private fun ActivityBadge(
     val icon = when (event.type) {
         ActivityEventType.Mention -> Lucide.AtSign
         ActivityEventType.Comment -> Lucide.Reply
-        ActivityEventType.Follow -> Lucide.UserPlus
+        ActivityEventType.Follow -> Lucide.User
         else -> Lucide.Heart
     }
 
