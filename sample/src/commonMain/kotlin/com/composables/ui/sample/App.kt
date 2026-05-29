@@ -273,8 +273,6 @@ private fun TabHost(
     ) {
         composable<HomeRoute> {
             SocialFeed(
-                colorScheme = colorScheme,
-                onColorSchemeChange = onColorSchemeChange,
                 onPostClick = { post -> navController.navigate(PostDetailsRoute(post.id)) },
                 onProfileClick = { profileId -> navController.navigate(ProfileRoute(profileId)) },
                 onNewPostClick = {

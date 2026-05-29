@@ -48,7 +48,6 @@ import com.composables.ui.sample.data.SocialPost
 import com.composables.ui.sample.data.authenticatedUser
 import com.composables.ui.sample.data.feedPosts
 import com.composables.ui.sample.data.profiles
-import com.composables.ui.theme.ColorScheme
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
@@ -56,80 +55,73 @@ import com.composeunstyled.theme.Theme
 
 @Composable
 fun SocialFeed(
-    colorScheme: ColorScheme,
-    onColorSchemeChange: (ColorScheme) -> Unit,
     onPostClick: (SocialPost) -> Unit,
     onProfileClick: (String) -> Unit,
     onNewPostClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    TabContentScaffold(
-        colorScheme = colorScheme,
-        onColorSchemeChange = onColorSchemeChange,
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(bottom = 96.dp),
     ) {
-        LazyColumn(
-            modifier = modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 96.dp),
-        ) {
-            item(key = "composer") {
-                FeedComposer(
-                    onProfileClick = { onProfileClick(authenticatedUser.id) },
-                    onNewPostClick = onNewPostClick,
-                )
-                HorizontalSeparator()
-            }
-            if (true) {
-                itemsIndexed(
-                    items = feedPosts,
-                    key = { _, post -> post.id },
-                ) { index, post ->
-                    val onProfileClick1 = { onProfileClick(post.profileId) }
-                    FeedPost(
-                        onClick = { onPostClick(post) },
-                        avatar = {
-                            AvatarButton(
-                                url = post.avatarUrl,
-                                onClick = onProfileClick1,
-                            )
-                        },
-                        authorName = {
-                            Button(onClick = onProfileClick1, style = ButtonStyle.Link) {
-                                Text(
-                                    text = post.author,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                )
-                            }
-                        },
-                        timestamp = {
-                            Text(post.age)
-                        },
-                        overflow = { PostOverflowMenu() },
-                        body = {
+        item(key = "composer") {
+            FeedComposer(
+                onProfileClick = { onProfileClick(authenticatedUser.id) },
+                onNewPostClick = onNewPostClick,
+            )
+            HorizontalSeparator()
+        }
+        if (true) {
+            itemsIndexed(
+                items = feedPosts,
+                key = { _, post -> post.id },
+            ) { index, post ->
+                val onProfileClick1 = { onProfileClick(post.profileId) }
+                FeedPost(
+                    onClick = { onPostClick(post) },
+                    avatar = {
+                        AvatarButton(
+                            url = post.avatarUrl,
+                            onClick = onProfileClick1,
+                        )
+                    },
+                    authorName = {
+                        Button(onClick = onProfileClick1, style = ButtonStyle.Link) {
                             Text(
-                                text = post.body,
-                                color = Theme[colors][onBackground],
+                                text = post.author,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
                             )
-                        },
-                        media = run {
-                            if (post.media.isNotEmpty()) {
-                                {
-                                    post.media.forEach { item ->
-                                        if (post.portraitMedia) {
-                                            PortraitMediaItem(item.url)
-                                        } else {
-                                            LandscapeMediaItem(item.url)
-                                        }
+                        }
+                    },
+                    timestamp = {
+                        Text(post.age)
+                    },
+                    overflow = { PostOverflowMenu() },
+                    body = {
+                        Text(
+                            text = post.body,
+                            color = Theme[colors][onBackground],
+                        )
+                    },
+                    media = run {
+                        if (post.media.isNotEmpty()) {
+                            {
+                                post.media.forEach { item ->
+                                    if (post.portraitMedia) {
+                                        PortraitMediaItem(item.url)
+                                    } else {
+                                        LandscapeMediaItem(item.url)
                                     }
                                 }
-                            } else null
-                        },
-                    ) {
-                        PostActions(post = post)
-                    }
-                    if (index < feedPosts.lastIndex) {
-                        HorizontalSeparator()
-                    }
+                            }
+                        } else null
+                    },
+                ) {
+                    PostActions(post = post)
+                }
+                if (index < feedPosts.lastIndex) {
+                    HorizontalSeparator()
                 }
             }
         }
