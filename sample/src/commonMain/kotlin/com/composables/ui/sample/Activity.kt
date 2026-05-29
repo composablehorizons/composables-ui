@@ -91,9 +91,7 @@ private fun ActivityEventRow(
         verticalAlignment = Alignment.Top,
     ) {
         BadgedContent(
-            badge = {
-                ActivityBadge(event = event)
-            },
+            badge = { ActivityBadge(event) },
         ) {
             Avatar(
                 url = event.author.avatarUrl,
