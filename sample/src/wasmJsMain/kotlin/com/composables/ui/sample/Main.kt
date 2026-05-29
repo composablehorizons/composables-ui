@@ -7,6 +7,6 @@ import androidx.compose.ui.window.ComposeViewport
 
 fun main() {
     ComposeViewport {
-        SocialApp()
+        App()
     }
 }

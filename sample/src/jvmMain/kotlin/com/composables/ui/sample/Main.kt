@@ -110,7 +110,7 @@ fun main() = application {
             saveScreenshotRequest = saveScreenshotRequest,
             copyScreenshotRequest = copyScreenshotRequest,
         ) {
-            SocialApp()
+            App()
         }
     }
 }

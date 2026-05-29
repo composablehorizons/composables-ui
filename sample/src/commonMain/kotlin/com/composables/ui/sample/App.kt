@@ -25,6 +25,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.composables.icons.lucide.Bell
@@ -293,7 +294,7 @@ private fun TabHost(
         composable<SearchRoute> {
             Search()
         }
-        composable<NewPostRoute> {
+        dialog<NewPostRoute> {
             PostComposer()
         }
         composable<ActivityRoute> {

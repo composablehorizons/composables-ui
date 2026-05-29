@@ -10,6 +10,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.composables.ui.components.Text
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.onPanel
+import com.composables.ui.theme.panel
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.theme.Theme
 
@@ -17,10 +18,10 @@ import com.composeunstyled.theme.Theme
 fun PostComposer() {
     ProvideContentColor(Theme[colors][onPanel]) {
         Box(
-            modifier = Modifier.fillMaxSize().background(Theme[colors][onPanel]),
+            modifier = Modifier.fillMaxSize().background(Theme[colors][panel]),
             contentAlignment = Alignment.Center,
         ) {
-            Text(text = "New Post", fontWeight = FontWeight.SemiBold)
+            Text(text = "New Post")
         }
     }
 }
