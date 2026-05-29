@@ -2,6 +2,7 @@ package com.composables.ui.sample
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,7 +46,6 @@ import com.composables.ui.components.TabGroup
 import com.composables.ui.components.TabList
 import com.composables.ui.components.Text
 import com.composables.ui.sample.components.Avatar
-import com.composables.ui.sample.components.AvatarButton
 import com.composables.ui.sample.components.AvatarSize
 import com.composables.ui.sample.components.FeedPost
 import com.composables.ui.sample.data.Post
@@ -178,9 +179,9 @@ private fun ProfilePostRow(
     FeedPost(
         onClick = onClick,
         avatar = {
-            AvatarButton(
+            Avatar(
                 url = author.avatarUrl,
-                onClick = onClick,
+                modifier = Modifier.clip(CircleShape).clickable { onClick() },
             )
         },
         authorName = {

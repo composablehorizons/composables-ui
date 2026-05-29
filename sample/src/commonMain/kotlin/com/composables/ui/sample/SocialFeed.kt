@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
@@ -41,7 +43,7 @@ import com.composables.ui.components.HorizontalSeparator
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
 import com.composables.ui.components.Text
-import com.composables.ui.sample.components.AvatarButton
+import com.composables.ui.sample.components.Avatar
 import com.composables.ui.sample.components.FeedPost
 import com.composables.ui.sample.components.LandscapeMediaItem
 import com.composables.ui.sample.components.MediaAttachment
@@ -83,17 +85,17 @@ fun SocialFeed(
                 key = { _, post -> post.id },
             ) { index, post ->
                 val author = UserProfiles.findWithId(post.authorId)
-                val onProfileClick1 = { onProfileClick(author.id) }
+                val onProfileClick = { onProfileClick(author.id) }
                 FeedPost(
                     onClick = { onPostClick(post) },
                     avatar = {
-                        AvatarButton(
+                        Avatar(
                             url = author.avatarUrl,
-                            onClick = onProfileClick1,
+                            modifier = Modifier.clip(CircleShape).clickable { onProfileClick() },
                         )
                     },
                     authorName = {
-                        Button(onClick = onProfileClick1, style = ButtonStyle.Link) {
+                        Button(onClick = onProfileClick, style = ButtonStyle.Link) {
                             Text(
                                 text = author.handle,
                                 maxLines = 1,
@@ -150,9 +152,9 @@ private fun FeedComposer(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        AvatarButton(
+        Avatar(
             url = loggedInProfile.avatarUrl,
-            onClick = onProfileClick,
+            modifier = Modifier.clip(CircleShape).clickable { onProfileClick() },
         )
         Text(
             text = "What's up?",

@@ -81,25 +81,3 @@ value class AvatarSize(val value: Int) {
     }
 }
 
-
-@Composable
-fun AvatarButton(
-    url: String,
-    onClick: () -> Unit,
-    avatarSize: AvatarSize = AvatarSize.Medium,
-    modifier: Modifier = Modifier,
-) {
-    IconButton(
-        onClick = onClick,
-        modifier = modifier,
-        style = ButtonStyle.Ghost,
-        shape = CircleShape,
-        buttonSize = ButtonSize.Small,
-    ) {
-        Avatar(
-            url = url,
-            size = avatarSize,
-            modifier = Modifier.clip(CircleShape),
-        )
-    }
-}
