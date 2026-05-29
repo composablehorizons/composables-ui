@@ -98,7 +98,8 @@ private fun ActivityEventRow(
                 fallback = {
                     Text(event.author.displayName.first().uppercase())
                 },
-                modifier = Modifier.clip(CircleShape)
+                modifier = Modifier
+                    .clip(CircleShape)
                     .clickable { onProfileClick() },
             )
         }
