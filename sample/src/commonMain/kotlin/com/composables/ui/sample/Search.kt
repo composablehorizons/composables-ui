@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -45,6 +46,8 @@ import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
 import com.composables.ui.theme.onPanel
 import com.composables.ui.theme.panel
+import com.composables.ui.theme.shapes
+import com.composables.ui.theme.smallShape
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.theme.Theme
 
@@ -98,7 +101,7 @@ fun Search(onProfileClick: (ProfileId) -> Unit) {
                 )
             }
 
-            profiles.take(5).forEachIndexed { index, profile ->
+            profiles.take(1).forEachIndexed { index, profile ->
                 item(key = profile.handle) {
                     if (index != 0) {
                         HorizontalSeparator()
@@ -115,43 +118,48 @@ private fun SearchProfileRow(profile: SocialProfile, onProfileClick: (ProfileId)
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 14.dp),
+            .padding(horizontal = 24.dp, vertical = 14.dp)
+            .background(Color.Red),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Avatar(
-            url = profile.avatarUrl,
-            size = AvatarSize.Large,
-            fallback = {
-                Text(profile.displayName.first().uppercase())
-            },
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .clip(CircleShape)
-                .clickable { onProfileClick(profile.id) },
-        )
-
-        Spacer(Modifier.width(16.dp))
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+                .clip(Theme[shapes][smallShape])
+                .clickable { onProfileClick(profile.id) }
         ) {
-            Text(
-                text = profile.handle,
-                fontWeight = FontWeight.SemiBold,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
+            Avatar(
+                url = profile.avatarUrl,
+                size = AvatarSize.Large,
+                fallback = {
+                    Text(profile.displayName.first().uppercase())
+                },
             )
-            Text(
-                text = profile.displayName,
-                color = Theme[colors][muted],
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Text(
-                text = profile.followerCount,
-                color = Theme[colors][onBackground],
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+
+            Spacer(Modifier.width(16.dp))
+            Column(
+                modifier = Modifier.background(Color.Black).weight(1f),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                Text(
+                    text = profile.handle,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    text = profile.displayName,
+                    color = Theme[colors][muted],
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    text = profile.followerCount,
+                    color = Theme[colors][onBackground],
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
         Spacer(Modifier.width(16.dp))
         Button(
