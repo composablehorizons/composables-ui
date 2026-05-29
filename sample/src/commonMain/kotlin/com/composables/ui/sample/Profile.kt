@@ -199,8 +199,8 @@ private fun ProfilePostRow(
                 color = Theme[colors][onBackground],
             )
         },
-        attachment = if (post.quoteAuthor != null && post.quoteBody != null && post.quoteReplyCount != null) {
-            {
+        attachment = {
+            if (post.quoteAuthor != null && post.quoteBody != null && post.quoteReplyCount != null) {
                 QuotedPost(
                     avatarUrl = author.avatarUrl,
                     author = post.quoteAuthor,
@@ -208,8 +208,6 @@ private fun ProfilePostRow(
                     replyCountLabel = formatReplyCount(post.quoteReplyCount),
                 )
             }
-        } else {
-            null
         },
     ) {
         ProfilePostActions(post)
