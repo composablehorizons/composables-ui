@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -89,16 +90,19 @@ private fun ActivityEventRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.Top,
     ) {
-        IconButton(onClick = onProfileClick) {
-            Avatar(
-                url = event.author.avatarUrl,
-                fallback = {
-                    Text(event.author.displayName.first().uppercase())
-                },
-                badge = {
-                    ActivityBadge(event = event)
-                }
-            )
+        BadgedContent(
+            badge = {
+                ActivityBadge(event = event)
+            },
+        ) {
+            IconButton(onClick = onProfileClick) {
+                Avatar(
+                    url = event.author.avatarUrl,
+                    fallback = {
+                        Text(event.author.displayName.first().uppercase())
+                    }
+                )
+            }
         }
 
         Column(
@@ -150,6 +154,25 @@ private fun ActivityEventRow(
             ) {
                 Text("Follow back", color = Theme[colors][muted])
             }
+        }
+    }
+}
+
+@Composable
+private fun BadgedContent(
+    badge: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Box(modifier) {
+        content()
+
+        Box(
+            Modifier
+                .align(Alignment.BottomEnd)
+                .offset(x = 8.dp, y = 4.dp)
+        ) {
+            badge()
         }
     }
 }

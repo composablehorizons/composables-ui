@@ -31,7 +31,6 @@ fun Avatar(
     url: String,
     size: AvatarSize = AvatarSize.Default,
     fallback: (@Composable () -> Unit)? = null,
-    badge: (@Composable () -> Unit)? = null,
     modifier: Modifier = Modifier,
 ) {
     ProvideContentColor(Theme[colors][onSecondary]) {
@@ -66,16 +65,6 @@ fun Avatar(
                 modifier = modifier.matchParentSize().clip(CircleShape),
                 contentScale = ContentScale.Crop,
             )
-            if (badge != null) {
-                val size = avatarSizeDp / 4
-                Box(
-                    Modifier
-                        .align(Alignment.BottomEnd)
-                        .offset(size, size)
-                ) {
-                    badge()
-                }
-            }
         }
     }
 }
