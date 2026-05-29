@@ -456,7 +456,7 @@ val activityEvents = listOf(
         author = profiles.random(),
         timestamp = "4h",
         type = ActivityEventType.Mention,
-        body = "Here's a thread you should follow if you love botany @jane_mobbin",
+        body = feedPosts.random().body,
     ),
     ActivityEvent(
         id = "john-reply",
@@ -476,12 +476,14 @@ val activityEvents = listOf(
         author = profiles.random(),
         timestamp = "5h",
         type = ActivityEventType.Like,
+        context = feedPosts.random().body
     ),
     ActivityEvent(
         id = "berryjungle-like",
         author = profiles.random(),
         timestamp = "5h",
         type = ActivityEventType.Like,
+        context = feedPosts.random().body
     ),
 )
 
@@ -491,6 +493,7 @@ data class ActivityEvent(
     val author: SocialProfile,
     val type: ActivityEventType,
     val body: String? = null,
+    val context: String? = null,
 )
 
 @JvmInline

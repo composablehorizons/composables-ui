@@ -131,7 +131,7 @@ private fun ActivityEventRow(
                 ActivityEventType.Mention -> "Mentioned you"
                 ActivityEventType.Comment -> "Commented"
                 ActivityEventType.Follow -> "Followed you"
-                else -> null
+                else -> event.context
             }
             if (context != null) {
                 Text(
