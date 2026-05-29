@@ -94,7 +94,7 @@ private fun ActivityEventRow(event: ActivityEvent) {
                 Text(
                     text = event.author.displayName,
                     modifier = Modifier.weight(1f, fill = false),
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Medium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -104,14 +104,19 @@ private fun ActivityEventRow(event: ActivityEvent) {
                     singleLine = true,
                 )
             }
-            event.context?.let { context ->
+            val context = when (event.type) {
+                ActivityEventType.Mention -> "Mentioned you"
+                ActivityEventType.Comment -> "Commented"
+                ActivityEventType.Follow -> "Followed you"
+                else -> null
+            }
+            if (context != null) {
                 Text(
                     text = context,
                     color = Theme[colors][muted],
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
                 )
             }
+
             event.body?.let { body ->
                 Text(
                     text = body,
@@ -125,7 +130,7 @@ private fun ActivityEventRow(event: ActivityEvent) {
                 style = ButtonStyle.Outlined,
                 buttonSize = ButtonSize.Small,
             ) {
-                Text("Following", color = Theme[colors][muted])
+                Text("Follow back", color = Theme[colors][muted])
             }
         }
     }
@@ -153,7 +158,7 @@ private fun ActivityBadge(
 ) {
     val backgroundColor = when (event.type) {
         ActivityEventType.Mention -> Theme[colors][primary]
-        ActivityEventType.Reply -> Theme[colors][secondary]
+        ActivityEventType.Comment -> Theme[colors][secondary]
         ActivityEventType.Follow -> Theme[colors][selectedControl]
         else -> Theme[colors][destructive]
     }
@@ -172,7 +177,7 @@ private fun ActivityBadge(
                 tint = Theme[colors][onPrimary]
             )
 
-            ActivityEventType.Reply -> Icon(
+            ActivityEventType.Comment -> Icon(
                 imageVector = Lucide.MessageCircleReply,
                 contentDescription = "Reply",
                 tint = Theme[colors][onPrimary]

@@ -454,15 +454,13 @@ val activityEvents = listOf(
         author = profiles.random(),
         timestamp = "4h",
         type = ActivityEventType.Mention,
-        context = "Mentioned you",
         body = "Here's a thread you should follow if you love botany @jane_mobbin",
     ),
     ActivityEvent(
         id = "john-reply",
         author = profiles.random(),
         timestamp = "4h",
-        type = ActivityEventType.Reply,
-        context = "Starting out my gardening club with thr...",
+        type = ActivityEventType.Comment,
         body = "Count me in!",
     ),
     ActivityEvent(
@@ -470,21 +468,18 @@ val activityEvents = listOf(
         author = profiles.random(),
         timestamp = "5h",
         type = ActivityEventType.Follow,
-        context = "Followed you",
     ),
     ActivityEvent(
         id = "plantdads-like",
         author = profiles.random(),
         timestamp = "5h",
         type = ActivityEventType.Like,
-        context = "Definitely broken! 🧵 👀 🌱",
     ),
     ActivityEvent(
         id = "berryjungle-like",
         author = profiles.random(),
         timestamp = "5h",
         type = ActivityEventType.Like,
-        context = "🌱 👀 🧵",
     ),
 )
 
@@ -493,7 +488,6 @@ data class ActivityEvent(
     val timestamp: String,
     val author: SocialProfile,
     val type: ActivityEventType,
-    val context: String? = null,
     val body: String? = null,
 )
 
@@ -501,7 +495,7 @@ data class ActivityEvent(
 value class ActivityEventType private constructor(val value: Int) {
     companion object {
         val Mention = ActivityEventType(0)
-        val Reply = ActivityEventType(1)
+        val Comment = ActivityEventType(1)
         val Follow = ActivityEventType(2)
         val Like = ActivityEventType(3)
     }
