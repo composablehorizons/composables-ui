@@ -2,9 +2,11 @@ package com.composables.ui.sample.data
 
 import kotlin.jvm.JvmInline
 
+typealias ProfileId = String
+
 data class SocialPost(
     val id: String,
-    val profileId: String,
+    val profileId: ProfileId,
     val author: String,
     val age: String,
     val body: String,
@@ -18,7 +20,7 @@ data class SocialPost(
 data class PostMedia(val url: String)
 
 data class SocialProfile(
-    val id: String,
+    val id: ProfileId,
     val displayName: String,
     val handle: String,
     val badge: String,

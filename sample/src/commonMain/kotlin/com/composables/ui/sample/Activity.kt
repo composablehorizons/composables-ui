@@ -24,19 +24,19 @@ import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.AtSign
 import com.composables.icons.lucide.Heart
 import com.composables.icons.lucide.Lucide
-import com.composables.icons.lucide.PersonStanding
 import com.composables.icons.lucide.Reply
 import com.composables.icons.lucide.User
-import com.composables.icons.lucide.UserPlus
 import com.composables.ui.components.Button
 import com.composables.ui.components.ButtonSize
 import com.composables.ui.components.ButtonStyle
 import com.composables.ui.components.HorizontalSeparator
 import com.composables.ui.components.Icon
+import com.composables.ui.components.IconButton
 import com.composables.ui.components.Text
 import com.composables.ui.sample.components.Avatar
 import com.composables.ui.sample.data.ActivityEvent
 import com.composables.ui.sample.data.ActivityEventType
+import com.composables.ui.sample.data.ProfileId
 import com.composables.ui.sample.data.activityEvents
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.destructive
@@ -45,12 +45,13 @@ import com.composables.ui.theme.onBackground
 import com.composables.ui.theme.onPanel
 import com.composables.ui.theme.panel
 import com.composables.ui.theme.primary
-import com.composables.ui.theme.selectedControl
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.theme.Theme
 
 @Composable
-fun Activity() {
+fun Activity(
+    onProfileClick: (ProfileId) -> Unit,
+) {
     ProvideContentColor(Theme[colors][onPanel]) {
         LazyColumn(
             modifier = Modifier
@@ -65,14 +66,22 @@ fun Activity() {
                 if (index != 0) {
                     HorizontalSeparator()
                 }
-                ActivityEventRow(event)
+                ActivityEventRow(
+                    event = event,
+                    onProfileClick = {
+                        onProfileClick(event.author.id)
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-private fun ActivityEventRow(event: ActivityEvent) {
+private fun ActivityEventRow(
+    event: ActivityEvent,
+    onProfileClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -80,7 +89,18 @@ private fun ActivityEventRow(event: ActivityEvent) {
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.Top,
     ) {
-        ActivityAvatar(event)
+        IconButton(onClick = onProfileClick) {
+            Avatar(
+                url = event.author.avatarUrl,
+                fallback = {
+                    Text(event.author.displayName.first().uppercase())
+                },
+                badge = {
+                    ActivityBadge(event = event)
+                }
+            )
+        }
+
         Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -131,21 +151,6 @@ private fun ActivityEventRow(event: ActivityEvent) {
                 Text("Follow back", color = Theme[colors][muted])
             }
         }
-    }
-}
-
-@Composable
-private fun ActivityAvatar(event: ActivityEvent) {
-    Box {
-        Avatar(
-            url = event.author.avatarUrl,
-            fallback = {
-                Text(event.author.displayName.first().uppercase())
-            },
-            badge = {
-                ActivityBadge(event = event)
-            }
-        )
     }
 }
 
