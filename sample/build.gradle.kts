@@ -1,6 +1,42 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
+val injectWasmPreloads by tasks.registering {
+    description = "Injects preload links for generated Wasm distribution artifacts."
+
+    doLast {
+        val distDir = layout.buildDirectory.dir("dist/wasmJs/productionExecutable").get().asFile
+        val indexFile = distDir.resolve("index.html")
+        if (!indexFile.isFile) return@doLast
+
+        val scriptPreloads = distDir
+            .listFiles { file -> file.isFile && file.extension == "js" }
+            .orEmpty()
+            .sortedBy { it.name }
+            .map { """  <link rel="preload" href="${it.name}" as="script">""" }
+
+        val wasmPreloads = distDir
+            .listFiles { file -> file.isFile && file.extension == "wasm" }
+            .orEmpty()
+            .sortedBy { it.name }
+            .map { """  <link rel="preload" href="${it.name}" as="fetch" type="application/wasm" crossorigin>""" }
+
+        val preloadBlock = (scriptPreloads + wasmPreloads).joinToString(
+            separator = "\n",
+            prefix = "  <!-- wasm-preloads:start -->\n",
+            postfix = "\n  <!-- wasm-preloads:end -->",
+        )
+
+        val existingPreloadBlock = Regex(
+            pattern = """\n?  <!-- wasm-preloads:start -->.*?  <!-- wasm-preloads:end -->\n?""",
+            options = setOf(RegexOption.DOT_MATCHES_ALL),
+        )
+        val indexHtml = indexFile.readText().replace(existingPreloadBlock, "\n")
+        val updatedIndexHtml = indexHtml.replaceFirst("</title>", "</title>\n$preloadBlock")
+        indexFile.writeText(updatedIndexHtml)
+    }
+}
+
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.serialization)
@@ -64,6 +100,10 @@ kotlin {
             implementation(libs.androidx.activity.compose)
         }
     }
+}
+
+tasks.named("wasmJsBrowserDistribution") {
+    finalizedBy(injectWasmPreloads)
 }
 
 android {
