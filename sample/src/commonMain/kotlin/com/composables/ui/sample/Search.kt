@@ -118,8 +118,7 @@ private fun SearchProfileRow(profile: SocialProfile, onProfileClick: (ProfileId)
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 14.dp)
-            .background(Color.Red),
+            .padding(horizontal = 24.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(
@@ -127,6 +126,7 @@ private fun SearchProfileRow(profile: SocialProfile, onProfileClick: (ProfileId)
             modifier = Modifier
                 .clip(Theme[shapes][smallShape])
                 .clickable { onProfileClick(profile.id) }
+                .weight(1f)
         ) {
             Avatar(
                 url = profile.avatarUrl,
@@ -138,7 +138,7 @@ private fun SearchProfileRow(profile: SocialProfile, onProfileClick: (ProfileId)
 
             Spacer(Modifier.width(16.dp))
             Column(
-                modifier = Modifier.background(Color.Black).weight(1f),
+                modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 Text(
@@ -161,7 +161,7 @@ private fun SearchProfileRow(profile: SocialProfile, onProfileClick: (ProfileId)
                 )
             }
         }
-        Spacer(Modifier.width(16.dp))
+        Spacer(Modifier.width(8.dp))
         Button(
             onClick = { },
             modifier = Modifier.width(104.dp),
