@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import com.composables.ui.components.Text
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.onPanel
@@ -22,7 +21,7 @@ fun Activity() {
             modifier = Modifier.fillMaxSize().background(Theme[colors][panel]),
             contentAlignment = Alignment.Center,
         ) {
-            Text(text = "Notifications", fontWeight = FontWeight.SemiBold)
+            Text("Notifications")
         }
     }
 }
