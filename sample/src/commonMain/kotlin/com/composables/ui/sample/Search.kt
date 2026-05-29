@@ -39,8 +39,8 @@ import com.composables.ui.components.TextField
 import com.composables.ui.sample.components.Avatar
 import com.composables.ui.sample.components.AvatarSize
 import com.composables.ui.sample.data.ProfileId
-import com.composables.ui.sample.data.SocialProfile
-import com.composables.ui.sample.data.profiles
+import com.composables.ui.sample.data.UserProfile
+import com.composables.ui.sample.data.UserProfiles
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
@@ -101,7 +101,7 @@ fun Search(onProfileClick: (ProfileId) -> Unit) {
                 )
             }
 
-            profiles.take(5).forEachIndexed { index, profile ->
+            UserProfiles.searchResults().forEachIndexed { index, profile ->
                 item(key = profile.handle) {
                     if (index != 0) {
                         HorizontalSeparator()
@@ -114,7 +114,7 @@ fun Search(onProfileClick: (ProfileId) -> Unit) {
 }
 
 @Composable
-private fun SearchProfileRow(profile: SocialProfile, onProfileClick: (ProfileId) -> Unit) {
+private fun SearchProfileRow(profile: UserProfile, onProfileClick: (ProfileId) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -153,7 +153,7 @@ private fun SearchProfileRow(profile: SocialProfile, onProfileClick: (ProfileId)
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = profile.followerCount,
+                    text = formatFollowerCount(profile.followerCount),
                     color = Theme[colors][onBackground],
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

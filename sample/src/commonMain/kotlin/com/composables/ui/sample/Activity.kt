@@ -37,9 +37,11 @@ import com.composables.ui.components.Text
 import com.composables.ui.sample.components.Avatar
 import com.composables.ui.sample.components.AvatarSize
 import com.composables.ui.sample.data.ActivityEvent
+import com.composables.ui.sample.data.ActivityEvents
 import com.composables.ui.sample.data.ActivityEventType
 import com.composables.ui.sample.data.ProfileId
-import com.composables.ui.sample.data.activityEvents
+import com.composables.ui.sample.data.UserProfile
+import com.composables.ui.sample.data.UserProfiles
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.destructive
 import com.composables.ui.theme.muted
@@ -62,16 +64,18 @@ fun Activity(
             contentPadding = PaddingValues(bottom = 96.dp),
         ) {
             itemsIndexed(
-                items = activityEvents,
+                items = ActivityEvents.recent(),
                 key = { _, event -> event.id },
             ) { index, event ->
+                val author = UserProfiles.findWithId(event.authorId)
                 if (index != 0) {
                     HorizontalSeparator()
                 }
                 ActivityEventRow(
                     event = event,
+                    author = author,
                     onProfileClick = {
-                        onProfileClick(event.author.id)
+                        onProfileClick(author.id)
                     }
                 )
             }
@@ -82,6 +86,7 @@ fun Activity(
 @Composable
 private fun ActivityEventRow(
     event: ActivityEvent,
+    author: UserProfile,
     onProfileClick: () -> Unit
 ) {
     Row(
@@ -95,10 +100,10 @@ private fun ActivityEventRow(
             badge = { ActivityBadge(event) },
         ) {
             Avatar(
-                url = event.author.avatarUrl,
+                url = author.avatarUrl,
                 size = AvatarSize.Large,
                 fallback = {
-                    Text(event.author.displayName.first().uppercase())
+                    Text(author.displayName.first().uppercase())
                 },
                 modifier = Modifier
                     .clip(CircleShape)
@@ -115,7 +120,7 @@ private fun ActivityEventRow(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = event.author.displayName,
+                    text = author.displayName,
                     modifier = Modifier.weight(1f, fill = false),
                     fontWeight = FontWeight.Medium,
                     maxLines = 1,

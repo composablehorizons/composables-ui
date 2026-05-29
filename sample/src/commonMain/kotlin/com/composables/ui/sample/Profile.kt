@@ -47,9 +47,10 @@ import com.composables.ui.sample.components.Avatar
 import com.composables.ui.sample.components.AvatarButton
 import com.composables.ui.sample.components.AvatarSize
 import com.composables.ui.sample.components.FeedPost
-import com.composables.ui.sample.data.ProfilePost
-import com.composables.ui.sample.data.SocialProfile
-import com.composables.ui.sample.data.profiles
+import com.composables.ui.sample.data.Post
+import com.composables.ui.sample.data.Posts
+import com.composables.ui.sample.data.UserProfile
+import com.composables.ui.sample.data.UserProfiles
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.field
@@ -75,11 +76,11 @@ fun Profile(
     profileId: String,
     onPostClick: (String) -> Unit,
 ) {
-    val profile = profiles.firstOrNull { it.id == profileId } ?: profiles.first()
+    val profile = UserProfiles.findWithId(profileId)
     var selectedTab by remember { mutableStateOf(ProfileFeedTab.Posts) }
     val visiblePosts = when (selectedTab) {
-        ProfileFeedTab.Replies -> profile.replies
-        else -> profile.posts
+        ProfileFeedTab.Replies -> Posts.repliesByProfileId(profile.id)
+        else -> Posts.postsByProfileId(profile.id)
     }
 
     ProvideContentColor(Theme[colors][onPanel]) {
@@ -119,7 +120,6 @@ fun Profile(
                 key = { _, post -> post.id },
             ) { index, post ->
                 ProfilePostRow(
-                    profile = profile,
                     post = post,
                     onClick = { onPostClick(post.id) },
                 )
@@ -132,7 +132,7 @@ fun Profile(
 }
 
 @Composable
-private fun ProfileHeader(profile: SocialProfile) {
+private fun ProfileHeader(profile: UserProfile) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -166,7 +166,7 @@ private fun ProfileHeader(profile: SocialProfile) {
             text = profile.bio,
         )
         Text(
-            text = profile.followerCount,
+            text = formatFollowerCount(profile.followerCount),
             color = Theme[colors][muted],
         )
         Button(
@@ -187,26 +187,27 @@ private val ProfileFeedTab.label: String
 
 @Composable
 private fun ProfilePostRow(
-    profile: SocialProfile,
-    post: ProfilePost,
+    post: Post,
     onClick: () -> Unit,
 ) {
+    val author = UserProfiles.findWithId(post.authorId)
+
     FeedPost(
         onClick = onClick,
         avatar = {
             AvatarButton(
-                url = profile.avatarUrl,
+                url = author.avatarUrl,
                 onClick = onClick,
             )
         },
         authorName = {
             Text(
-                text = profile.handle,
+                text = author.handle,
                 fontWeight = FontWeight.Bold,
             )
         },
         timestamp = {
-            Text(post.age)
+            Text(post.timestamp)
         },
         overflow = { ProfilePostOverflowMenu() },
         body = {
@@ -215,13 +216,13 @@ private fun ProfilePostRow(
                 color = Theme[colors][onBackground],
             )
         },
-        media = if (post.quoteAuthor != null && post.quoteBody != null && post.quoteReplies != null) {
+        media = if (post.quoteAuthor != null && post.quoteBody != null && post.quoteReplyCount != null) {
             {
                 QuotedPost(
-                    avatarUrl = profile.avatarUrl,
+                    avatarUrl = author.avatarUrl,
                     author = post.quoteAuthor,
                     body = post.quoteBody,
-                    replies = post.quoteReplies,
+                    replyCountLabel = formatReplyCount(post.quoteReplyCount),
                 )
             }
         } else {
@@ -281,7 +282,7 @@ private fun QuotedPost(
     avatarUrl: String,
     author: String,
     body: String,
-    replies: String,
+    replyCountLabel: String,
 ) {
     Column(
         modifier = Modifier
@@ -299,18 +300,18 @@ private fun QuotedPost(
             Text(author, fontWeight = FontWeight.Bold)
         }
         Text(body)
-        Text(replies, color = Theme[colors][muted])
+        Text(replyCountLabel, color = Theme[colors][muted])
     }
 }
 
 @Composable
-private fun ProfilePostActions(post: ProfilePost) {
+private fun ProfilePostActions(post: Post) {
     val actionColor = Theme[colors][muted]
 
-    ProfileActionButton(count = post.likes, color = actionColor) { color ->
+    ProfileActionButton(count = formatCount(post.likeCount), color = actionColor) { color ->
         Icon(Lucide.Heart, contentDescription = "Like", modifier = Modifier.size(25.dp), tint = color)
     }
-    ProfileActionButton(count = post.replies, color = actionColor) { color ->
+    ProfileActionButton(count = formatCount(post.replyCount), color = actionColor) { color ->
         Icon(Lucide.MessageCircle, contentDescription = "Reply", modifier = Modifier.size(25.dp), tint = color)
     }
     Button(onClick = {}, style = ButtonStyle.Ghost) {

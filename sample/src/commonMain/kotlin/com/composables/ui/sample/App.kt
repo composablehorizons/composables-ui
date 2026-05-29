@@ -49,7 +49,7 @@ import com.composables.ui.components.SidebarMode
 import com.composables.ui.components.Text
 import com.composables.ui.components.Toolbar
 import com.composables.ui.sample.components.OtherMenuDropdown
-import com.composables.ui.sample.data.authenticatedUser
+import com.composables.ui.sample.data.UserProfiles
 import com.composables.ui.theme.AppScaffold
 import com.composables.ui.theme.ColorScheme
 import com.composables.ui.theme.Large
@@ -215,7 +215,7 @@ fun App() {
                         SidebarItem(
                             selected = profileSelected,
                             icon = { Icon(Lucide.User) },
-                            onClick = { onTabSelected(ProfileRoute(authenticatedUser.id)) },
+                            onClick = { onTabSelected(ProfileRoute(UserProfiles.johnMobbin.id)) },
                             text = { Text(text = "Profile", singleLine = true) },
                         )
                     },
@@ -247,7 +247,7 @@ fun App() {
                     NavigationBarItem(
                         modifier = Modifier.weight(1f),
                         selected = profileSelected,
-                        onClick = { onTabSelected(ProfileRoute(authenticatedUser.id)) },
+                        onClick = { onTabSelected(ProfileRoute(UserProfiles.johnMobbin.id)) },
                         icon = { Icon(Lucide.User, contentDescription = "Profile") })
                 }
             }

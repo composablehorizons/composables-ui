@@ -45,10 +45,9 @@ import com.composables.ui.sample.components.AvatarButton
 import com.composables.ui.sample.components.FeedPost
 import com.composables.ui.sample.components.LandscapeMediaItem
 import com.composables.ui.sample.components.PortraitMediaItem
-import com.composables.ui.sample.data.SocialPost
-import com.composables.ui.sample.data.authenticatedUser
-import com.composables.ui.sample.data.feedPosts
-import com.composables.ui.sample.data.profiles
+import com.composables.ui.sample.data.Post
+import com.composables.ui.sample.data.Posts
+import com.composables.ui.sample.data.UserProfiles
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
@@ -59,11 +58,13 @@ import com.composeunstyled.theme.Theme
 
 @Composable
 fun SocialFeed(
-    onPostClick: (SocialPost) -> Unit,
+    onPostClick: (Post) -> Unit,
     onProfileClick: (String) -> Unit,
     onNewPostClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val posts = Posts.homeFeed()
+
     ProvideContentColor(Theme[colors][onPanel]) {
         LazyColumn(
             modifier = modifier.fillMaxSize().background(Theme[colors][panel]),
@@ -71,35 +72,36 @@ fun SocialFeed(
         ) {
             item(key = "composer") {
                 FeedComposer(
-                    onProfileClick = { onProfileClick(authenticatedUser.id) },
+                    onProfileClick = { onProfileClick(UserProfiles.johnMobbin.id) },
                     onNewPostClick = onNewPostClick,
                 )
                 HorizontalSeparator()
             }
             itemsIndexed(
-                items = feedPosts,
+                items = posts,
                 key = { _, post -> post.id },
             ) { index, post ->
-                val onProfileClick1 = { onProfileClick(post.profileId) }
+                val author = UserProfiles.findWithId(post.authorId)
+                val onProfileClick1 = { onProfileClick(author.id) }
                 FeedPost(
                     onClick = { onPostClick(post) },
                     avatar = {
                         AvatarButton(
-                            url = post.avatarUrl,
+                            url = author.avatarUrl,
                             onClick = onProfileClick1,
                         )
                     },
                     authorName = {
                         Button(onClick = onProfileClick1, style = ButtonStyle.Link) {
                             Text(
-                                text = post.author,
+                                text = author.handle,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                             )
                         }
                     },
                     timestamp = {
-                        Text(post.age)
+                        Text(post.timestamp)
                     },
                     overflow = { PostOverflowMenu() },
                     body = {
@@ -124,7 +126,7 @@ fun SocialFeed(
                 ) {
                     PostActions(post = post)
                 }
-                if (index < feedPosts.lastIndex) {
+                if (index < posts.lastIndex) {
                     HorizontalSeparator()
                 }
             }
@@ -138,7 +140,7 @@ private fun FeedComposer(
     onNewPostClick: () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val loggedInProfile = profiles.first { it.id == authenticatedUser.id }
+    val loggedInProfile = UserProfiles.johnMobbin
 
     Row(
         modifier = Modifier
@@ -219,18 +221,18 @@ private fun PostOverflowMenu() {
 }
 
 @Composable
-private fun PostActions(post: SocialPost) {
+private fun PostActions(post: Post) {
     val actionColor = Theme[colors][muted]
 
     CountedActionButton(
-        count = post.likes,
+        count = formatCount(post.likeCount),
         color = actionColor,
         onClick = {},
     ) { color ->
         Icon(Lucide.Heart, contentDescription = "Like", modifier = Modifier.size(25.dp), tint = color)
     }
     CountedActionButton(
-        count = post.replies,
+        count = formatCount(post.replyCount),
         color = actionColor,
         onClick = {},
     ) { color ->
