@@ -83,7 +83,7 @@ private fun ActivityEventRow(event: ActivityEvent) {
         ActivityAvatar(event)
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
