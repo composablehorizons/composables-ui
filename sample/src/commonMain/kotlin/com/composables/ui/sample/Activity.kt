@@ -158,7 +158,7 @@ private fun ActivityEventRow(
                 style = ButtonStyle.Outlined,
                 buttonSize = ButtonSize.Small,
             ) {
-                Text("Follow back", color = Theme[colors][muted])
+                Text("Follow back")
             }
         }
     }
