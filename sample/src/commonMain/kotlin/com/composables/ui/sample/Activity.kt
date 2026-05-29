@@ -1,6 +1,7 @@
 package com.composables.ui.sample
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,7 +33,6 @@ import com.composables.ui.components.ButtonSize
 import com.composables.ui.components.ButtonStyle
 import com.composables.ui.components.HorizontalSeparator
 import com.composables.ui.components.Icon
-import com.composables.ui.components.IconButton
 import com.composables.ui.components.Text
 import com.composables.ui.sample.components.Avatar
 import com.composables.ui.sample.data.ActivityEvent
@@ -95,14 +95,14 @@ private fun ActivityEventRow(
                 ActivityBadge(event = event)
             },
         ) {
-            IconButton(onClick = onProfileClick) {
-                Avatar(
-                    url = event.author.avatarUrl,
-                    fallback = {
-                        Text(event.author.displayName.first().uppercase())
-                    }
-                )
-            }
+            Avatar(
+                url = event.author.avatarUrl,
+                fallback = {
+                    Text(event.author.displayName.first().uppercase())
+                },
+                modifier = Modifier.clip(CircleShape)
+                    .clickable { onProfileClick() },
+            )
         }
 
         Column(
