@@ -80,7 +80,7 @@ data class PostDetailsRoute(val postId: String)
 data class ProfileRoute(val profileId: String)
 
 @Composable
-fun SocialApp() {
+fun App() {
     val navController = rememberNavController()
     var colorScheme by remember { mutableStateOf(ColorScheme.System) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
