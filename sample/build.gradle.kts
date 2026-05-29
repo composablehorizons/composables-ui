@@ -44,7 +44,8 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":components"))
             implementation(libs.compose.foundation)
-            implementation(libs.androidx.navigation.compose)
+            implementation(libs.androidx.navigation3.runtime)
+            implementation(libs.androidx.navigation3.ui)
             implementation(libs.composables.icons.lucide)
             implementation(libs.composables.unstyled)
             implementation(libs.composables.uri.painter)

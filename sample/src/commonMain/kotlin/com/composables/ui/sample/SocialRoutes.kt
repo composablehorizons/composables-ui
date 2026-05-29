@@ -1,27 +1,30 @@
 package com.composables.ui.sample
 
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
-@Serializable
-data object HomeRoute
+sealed interface SocialRoute : NavKey
 
 @Serializable
-data object HomeTabRoute
+data object HomeRoute : SocialRoute
 
 @Serializable
-data object SearchTabRoute
+data object HomeTabRoute : SocialRoute
 
 @Serializable
-data object ComposeTabRoute
+data object SearchTabRoute : SocialRoute
 
 @Serializable
-data object NotificationsTabRoute
+data object ComposeTabRoute : SocialRoute
 
 @Serializable
-data class PostRoute(val postId: String)
+data object NotificationsTabRoute : SocialRoute
 
 @Serializable
-data class ProfileRoute(val profileId: String)
+data class PostRoute(val postId: String) : SocialRoute
 
 @Serializable
-data object ProfileTabRoute
+data class ProfileRoute(val profileId: String) : SocialRoute
+
+@Serializable
+data object ProfileTabRoute : SocialRoute
