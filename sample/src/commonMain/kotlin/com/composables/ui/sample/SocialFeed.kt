@@ -64,7 +64,7 @@ fun SocialFeed(
     onNewPostClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    ProvideContentColor(Theme[colors][onPanel]){
+    ProvideContentColor(Theme[colors][onPanel]) {
         LazyColumn(
             modifier = modifier.fillMaxSize().background(Theme[colors][panel]),
             contentPadding = PaddingValues(bottom = 96.dp),
@@ -76,58 +76,56 @@ fun SocialFeed(
                 )
                 HorizontalSeparator()
             }
-            if (true) {
-                itemsIndexed(
-                    items = feedPosts,
-                    key = { _, post -> post.id },
-                ) { index, post ->
-                    val onProfileClick1 = { onProfileClick(post.profileId) }
-                    FeedPost(
-                        onClick = { onPostClick(post) },
-                        avatar = {
-                            AvatarButton(
-                                url = post.avatarUrl,
-                                onClick = onProfileClick1,
-                            )
-                        },
-                        authorName = {
-                            Button(onClick = onProfileClick1, style = ButtonStyle.Link) {
-                                Text(
-                                    text = post.author,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                )
-                            }
-                        },
-                        timestamp = {
-                            Text(post.age)
-                        },
-                        overflow = { PostOverflowMenu() },
-                        body = {
+            itemsIndexed(
+                items = feedPosts,
+                key = { _, post -> post.id },
+            ) { index, post ->
+                val onProfileClick1 = { onProfileClick(post.profileId) }
+                FeedPost(
+                    onClick = { onPostClick(post) },
+                    avatar = {
+                        AvatarButton(
+                            url = post.avatarUrl,
+                            onClick = onProfileClick1,
+                        )
+                    },
+                    authorName = {
+                        Button(onClick = onProfileClick1, style = ButtonStyle.Link) {
                             Text(
-                                text = post.body,
-                                color = Theme[colors][onBackground],
+                                text = post.author,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
                             )
-                        },
-                        media = run {
-                            if (post.media.isNotEmpty()) {
-                                {
-                                    post.media.forEach { item ->
-                                        if (post.portraitMedia) {
-                                            PortraitMediaItem(item.url)
-                                        } else {
-                                            LandscapeMediaItem(item.url)
-                                        }
+                        }
+                    },
+                    timestamp = {
+                        Text(post.age)
+                    },
+                    overflow = { PostOverflowMenu() },
+                    body = {
+                        Text(
+                            text = post.body,
+                            color = Theme[colors][onBackground],
+                        )
+                    },
+                    media = run {
+                        if (post.media.isNotEmpty()) {
+                            {
+                                post.media.forEach { item ->
+                                    if (post.portraitMedia) {
+                                        PortraitMediaItem(item.url)
+                                    } else {
+                                        LandscapeMediaItem(item.url)
                                     }
                                 }
-                            } else null
-                        },
-                    ) {
-                        PostActions(post = post)
-                    }
-                    if (index < feedPosts.lastIndex) {
-                        HorizontalSeparator()
-                    }
+                            }
+                        } else null
+                    },
+                ) {
+                    PostActions(post = post)
+                }
+                if (index < feedPosts.lastIndex) {
+                    HorizontalSeparator()
                 }
             }
         }

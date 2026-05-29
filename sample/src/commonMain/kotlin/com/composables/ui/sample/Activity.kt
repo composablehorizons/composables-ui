@@ -1,6 +1,5 @@
 package com.composables.ui.sample
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -35,15 +32,13 @@ import com.composables.ui.components.ButtonStyle
 import com.composables.ui.components.HorizontalSeparator
 import com.composables.ui.components.Icon
 import com.composables.ui.components.Text
+import com.composables.ui.sample.components.Avatar
 import com.composables.ui.sample.data.ActivityEvent
 import com.composables.ui.sample.data.ActivityEventType
 import com.composables.ui.sample.data.activityEvents
-import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.componentSizes
 import com.composables.ui.theme.destructive
-import com.composables.ui.theme.dropdownMenuItemHeight
-import com.composables.ui.theme.focusRingOffset
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
 import com.composables.ui.theme.onPanel
@@ -53,7 +48,6 @@ import com.composables.ui.theme.primary
 import com.composables.ui.theme.secondary
 import com.composables.ui.theme.selectedControl
 import com.composables.ui.theme.textFieldHorizontalPadding
-import com.composables.uripainter.rememberUriPainter
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.theme.Theme
 
@@ -84,11 +78,8 @@ private fun ActivityEventRow(event: ActivityEvent) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(
-                horizontal = 24.dp,
-                vertical = 16.dp,
-            ),
-        horizontalArrangement = Arrangement.spacedBy(Theme[componentSizes][textFieldHorizontalPadding]),
+            .padding(horizontal = 24.dp, vertical = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.Top,
     ) {
         ActivityAvatar(event)
@@ -101,14 +92,14 @@ private fun ActivityEventRow(event: ActivityEvent) {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = event.author,
+                    text = event.author.displayName,
                     modifier = Modifier.weight(1f, fill = false),
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = event.age,
+                    text = event.timestamp,
                     color = Theme[colors][muted],
                     singleLine = true,
                 )
@@ -128,7 +119,7 @@ private fun ActivityEventRow(event: ActivityEvent) {
                 )
             }
         }
-        if (event.showFollowing) {
+        if (event.type == ActivityEventType.Follow) {
             Button(
                 onClick = {},
                 style = ButtonStyle.Outlined,
@@ -143,23 +134,14 @@ private fun ActivityEventRow(event: ActivityEvent) {
 @Composable
 private fun ActivityAvatar(event: ActivityEvent) {
     Box {
-        Image(
-            painter = rememberUriPainter(event.avatarUrl),
-            contentDescription = null,
-            modifier = Modifier
-                .size(Theme[componentSizes][dropdownMenuItemHeight])
-                .clip(CircleShape)
-                .background(Theme[colors][border]),
-            contentScale = ContentScale.Crop,
-        )
-        ActivityBadge(
-            event = event,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .offset(
-                    x = Theme[componentSizes][focusRingOffset],
-                    y = Theme[componentSizes][focusRingOffset],
-                )
+        Avatar(
+            url = event.author.avatarUrl,
+            fallback = {
+                Text(event.author.displayName.first().uppercase())
+            },
+            badge = {
+                ActivityBadge(event = event)
+            }
         )
     }
 }

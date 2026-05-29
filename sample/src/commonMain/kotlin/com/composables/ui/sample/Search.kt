@@ -152,7 +152,6 @@ private fun SearchProfileRow(
     ) {
         Avatar(
             url = profile.avatarUrl,
-            size = 44,
         )
         Spacer(Modifier.width(16.dp))
         Column(

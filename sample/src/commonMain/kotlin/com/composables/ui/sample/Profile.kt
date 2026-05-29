@@ -3,12 +3,9 @@ package com.composables.ui.sample
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -48,6 +45,7 @@ import com.composables.ui.components.TabList
 import com.composables.ui.components.Text
 import com.composables.ui.sample.components.Avatar
 import com.composables.ui.sample.components.AvatarButton
+import com.composables.ui.sample.components.AvatarSize
 import com.composables.ui.sample.components.FeedPost
 import com.composables.ui.sample.data.ProfilePost
 import com.composables.ui.sample.data.SocialProfile
@@ -146,7 +144,7 @@ private fun ProfileHeader(profile: SocialProfile) {
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                Text(profile.name, fontWeight = FontWeight.Bold)
+                Text(profile.displayName, fontWeight = FontWeight.Bold)
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -162,7 +160,7 @@ private fun ProfileHeader(profile: SocialProfile) {
                     )
                 }
             }
-            Avatar(profile.avatarUrl, size = 82)
+            Avatar(profile.avatarUrl, size = AvatarSize.Large)
         }
         Text(
             text = profile.bio,
@@ -297,7 +295,7 @@ private fun QuotedPost(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Avatar(avatarUrl, size = 28)
+            Avatar(avatarUrl, size = AvatarSize.Medium)
             Text(author, fontWeight = FontWeight.Bold)
         }
         Text(body)

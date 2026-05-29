@@ -19,7 +19,7 @@ data class PostMedia(val url: String)
 
 data class SocialProfile(
     val id: String,
-    val name: String,
+    val displayName: String,
     val handle: String,
     val badge: String,
     val bio: String,
@@ -240,7 +240,7 @@ val feedPosts = listOf(
 val profiles = listOf(
     SocialProfile(
         id = "john_mobbin",
-        name = "John",
+        displayName = "John",
         handle = "john_mobbin",
         badge = "social.app",
         bio = "Weekend trips, good coffee, and screenshots I swear I will organize.",
@@ -308,7 +308,7 @@ val profiles = listOf(
     ),
     SocialProfile(
         id = "miaruns",
-        name = "Mia",
+        displayName = "Mia",
         handle = "miaruns",
         badge = "gym log",
         bio = "Lifting, running, and documenting snacks as recovery science.",
@@ -344,7 +344,7 @@ val profiles = listOf(
     ),
     SocialProfile(
         id = "nikoafterdark",
-        name = "Niko",
+        displayName = "Niko",
         handle = "nikoafterdark",
         badge = "social.app",
         bio = "Dinner plans, blurry nights, and making the group chat leave the house.",
@@ -380,7 +380,7 @@ val profiles = listOf(
     ),
     SocialProfile(
         id = "coachcam",
-        name = "Cam",
+        displayName = "Cam",
         handle = "coachcam",
         badge = "coach",
         bio = "Strength training, practical advice, occasional protein bar reviews.",
@@ -416,7 +416,7 @@ val profiles = listOf(
     ),
     SocialProfile(
         id = "lena.jpg",
-        name = "Lena",
+        displayName = "Lena",
         handle = "lena.jpg",
         badge = "photo dump",
         bio = "Outfits, mirrors, city nights, and captions I rewrite six times.",
@@ -451,44 +451,38 @@ val authenticatedUser = profiles.first()
 val activityEvents = listOf(
     ActivityEvent(
         id = "john-mention",
-        author = "john_mobbin",
-        age = "4h",
-        avatarUrl = "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=240",
+        author = profiles.random(),
+        timestamp = "4h",
         type = ActivityEventType.Mention,
         context = "Mentioned you",
         body = "Here's a thread you should follow if you love botany @jane_mobbin",
     ),
     ActivityEvent(
         id = "john-reply",
-        author = "john_mobbin",
-        age = "4h",
-        avatarUrl = "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=240",
+        author = profiles.random(),
+        timestamp = "4h",
         type = ActivityEventType.Reply,
         context = "Starting out my gardening club with thr...",
         body = "Count me in!",
     ),
     ActivityEvent(
         id = "plantdads-follow",
-        author = "the.plantdads",
-        age = "5h",
-        avatarUrl = "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?q=80&w=240",
+        author = profiles.random(),
+        timestamp = "5h",
         type = ActivityEventType.Follow,
         context = "Followed you",
-        showFollowing = true,
     ),
     ActivityEvent(
         id = "plantdads-like",
-        author = "the.plantdads",
-        age = "5h",
-        avatarUrl = "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?q=80&w=240",
+        author = profiles.random(),
+        timestamp = "5h",
         type = ActivityEventType.Like,
         context = "Definitely broken! 🧵 👀 🌱",
     ),
     ActivityEvent(
         id = "berryjungle-like",
-        author = "theberryjungle",
-        age = "5h",
-        avatarUrl = "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?q=80&w=240",
+        author = profiles.random(),
+        timestamp = "5h",
         type = ActivityEventType.Like,
         context = "🌱 👀 🧵",
     ),
@@ -496,13 +490,11 @@ val activityEvents = listOf(
 
 data class ActivityEvent(
     val id: String,
-    val author: String,
-    val age: String,
-    val avatarUrl: String,
+    val timestamp: String,
+    val author: SocialProfile,
     val type: ActivityEventType,
     val context: String? = null,
     val body: String? = null,
-    val showFollowing: Boolean = false,
 )
 
 @JvmInline
