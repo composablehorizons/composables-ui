@@ -53,10 +53,8 @@ import com.composables.ui.sample.data.UserProfile
 import com.composables.ui.sample.data.UserProfiles
 import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
-import com.composables.ui.theme.field
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
-import com.composables.ui.theme.onField
 import com.composables.ui.theme.onPanel
 import com.composables.ui.theme.panel
 import com.composeunstyled.ProvideContentColor
@@ -145,20 +143,7 @@ private fun ProfileHeader(profile: UserProfile) {
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Text(profile.displayName, fontWeight = FontWeight.Bold)
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    Text(profile.handle)
-                    Text(
-                        text = profile.badge,
-                        color = Theme[colors][onField],
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(100))
-                            .background(Theme[colors][field])
-                            .padding(horizontal = 12.dp, vertical = 5.dp),
-                    )
-                }
+                Text(profile.handle)
             }
             Avatar(profile.avatarUrl, size = AvatarSize.Large)
         }
