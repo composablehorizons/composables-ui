@@ -16,13 +16,13 @@ This repository includes these modules:
 Start the desktop demo app:
 
 ```bash
-./gradlew :demo:run
+./gradlew :demo:hotRunJvm --auto
 ```
 
-Start the desktop sample app:
+Start the desktop sample app with hot reload:
 
 ```bash
-./gradlew :sample:run
+./gradlew :sample:hotRunJvm --auto
 ```
 
 Start the demo app in the browser:

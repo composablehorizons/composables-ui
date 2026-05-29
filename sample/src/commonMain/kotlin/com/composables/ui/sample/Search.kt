@@ -36,9 +36,7 @@ import com.composables.ui.components.IconButton
 import com.composables.ui.components.Text
 import com.composables.ui.components.TextField
 import com.composables.ui.sample.components.Avatar
-import com.composables.ui.theme.border
 import com.composables.ui.theme.colors
-import com.composables.ui.theme.field
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
 import com.composables.ui.theme.onPanel
@@ -53,7 +51,9 @@ fun Search() {
 
     ProvideContentColor(Theme[colors][onPanel]) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize().background(Theme[colors][panel]),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Theme[colors][panel]),
             contentPadding = PaddingValues(bottom = 96.dp),
         ) {
             item {
@@ -65,8 +65,6 @@ fun Search() {
                     accessibilityLabel = "Search",
                     placeholder = { Text("Search") },
                     shape = CircleShape,
-                    backgroundColor = Theme[colors][field],
-                    borderColor = Theme[colors][border],
                     minHeight = 48.dp,
                     leading = {
                         Icon(

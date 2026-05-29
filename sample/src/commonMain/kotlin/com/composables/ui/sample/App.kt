@@ -119,7 +119,7 @@ fun App() {
                     )
                 }
                 Box(
-                    buildModifier {
+                    modifier = buildModifier {
                         if (widthBreakpoint isAtLeast Medium) {
                             val contentShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
                             add(
