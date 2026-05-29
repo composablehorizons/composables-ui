@@ -10,8 +10,8 @@ import com.composeunstyled.UnstyledIcon
 @Composable
 fun Icon(
     imageVector: ImageVector,
-    contentDescription: String? = null,
     modifier: Modifier = Modifier,
+    contentDescription: String? = null,
     tint: Color = LocalContentColor.current,
 ) {
     UnstyledIcon(

@@ -20,8 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,19 +44,14 @@ import com.composables.ui.theme.componentSizes
 import com.composables.ui.theme.destructive
 import com.composables.ui.theme.dropdownMenuItemHeight
 import com.composables.ui.theme.focusRingOffset
-import com.composables.ui.theme.focusRingWidth
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
-import com.composables.ui.theme.onDestructive
 import com.composables.ui.theme.onPanel
 import com.composables.ui.theme.onPrimary
-import com.composables.ui.theme.onSecondary
-import com.composables.ui.theme.onSelectedControl
 import com.composables.ui.theme.panel
 import com.composables.ui.theme.primary
 import com.composables.ui.theme.secondary
 import com.composables.ui.theme.selectedControl
-import com.composables.ui.theme.textFieldHeight
 import com.composables.ui.theme.textFieldHorizontalPadding
 import com.composables.uripainter.rememberUriPainter
 import com.composeunstyled.ProvideContentColor
@@ -92,8 +85,8 @@ private fun ActivityEventRow(event: ActivityEvent) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                horizontal = Theme[componentSizes][textFieldHorizontalPadding] * 2,
-                vertical = Theme[componentSizes][textFieldHorizontalPadding] + Theme[componentSizes][focusRingWidth],
+                horizontal = 24.dp,
+                vertical = 16.dp,
             ),
         horizontalArrangement = Arrangement.spacedBy(Theme[componentSizes][textFieldHorizontalPadding]),
         verticalAlignment = Alignment.Top,
@@ -159,56 +152,62 @@ private fun ActivityAvatar(event: ActivityEvent) {
                 .background(Theme[colors][border]),
             contentScale = ContentScale.Crop,
         )
-        Box(
+        ActivityBadge(
+            event = event,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .offset(
                     x = Theme[componentSizes][focusRingOffset],
                     y = Theme[componentSizes][focusRingOffset],
                 )
-                .size(Theme[componentSizes][textFieldHeight] / 2)
-                .clip(CircleShape)
-                .background(event.type.badgeColor())
-                .border(Theme[componentSizes][focusRingWidth], Theme[colors][panel], CircleShape),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                imageVector = event.type.icon,
-                contentDescription = event.type.contentDescription,
-                tint = event.type.badgeContentColor(),
+        )
+    }
+}
+
+@Composable
+private fun ActivityBadge(
+    event: ActivityEvent,
+    modifier: Modifier = Modifier,
+) {
+    val backgroundColor = when (event.type) {
+        ActivityEventType.Mention -> Theme[colors][primary]
+        ActivityEventType.Reply -> Theme[colors][secondary]
+        ActivityEventType.Follow -> Theme[colors][selectedControl]
+        else -> Theme[colors][destructive]
+    }
+    Box(
+        modifier = modifier
+            .size(20.dp)
+            .clip(CircleShape)
+            .background(backgroundColor)
+            .border(1.dp, backgroundColor, CircleShape),
+        contentAlignment = Alignment.Center,
+    ) {
+        when (event.type) {
+            ActivityEventType.Mention -> Icon(
+                imageVector = Lucide.AtSign,
+                contentDescription = "Mention",
+                tint = Theme[colors][onPrimary]
+            )
+
+            ActivityEventType.Reply -> Icon(
+                imageVector = Lucide.MessageCircleReply,
+                contentDescription = "Reply",
+                tint = Theme[colors][onPrimary]
+            )
+
+            ActivityEventType.Follow -> Icon(
+                imageVector = Lucide.UserPlus,
+                contentDescription = "Follow",
+                tint = Theme[colors][onPrimary]
+            )
+
+            else -> Icon(
+                imageVector = Lucide.Heart,
+                contentDescription = "Like",
+                tint = Theme[colors][onPrimary]
             )
         }
     }
 }
 
-private val ActivityEventType.icon: ImageVector
-    get() = when (this) {
-        ActivityEventType.Mention -> Lucide.AtSign
-        ActivityEventType.Reply -> Lucide.MessageCircleReply
-        ActivityEventType.Follow -> Lucide.UserPlus
-        else -> Lucide.Heart
-    }
-
-private val ActivityEventType.contentDescription: String
-    get() = when (this) {
-        ActivityEventType.Mention -> "Mention"
-        ActivityEventType.Reply -> "Reply"
-        ActivityEventType.Follow -> "Follow"
-        else -> "Like"
-    }
-
-@Composable
-private fun ActivityEventType.badgeColor(): Color = when (this) {
-    ActivityEventType.Mention -> Theme[colors][primary]
-    ActivityEventType.Reply -> Theme[colors][secondary]
-    ActivityEventType.Follow -> Theme[colors][selectedControl]
-    else -> Theme[colors][destructive]
-}
-
-@Composable
-private fun ActivityEventType.badgeContentColor(): Color = when (this) {
-    ActivityEventType.Mention -> Theme[colors][onPrimary]
-    ActivityEventType.Reply -> Theme[colors][onSecondary]
-    ActivityEventType.Follow -> Theme[colors][onSelectedControl]
-    else -> Theme[colors][onDestructive]
-}

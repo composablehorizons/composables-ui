@@ -1,5 +1,7 @@
 package com.composables.ui.sample.data
 
+import kotlin.jvm.JvmInline
+
 data class SocialPost(
     val id: String,
     val profileId: String,
@@ -349,7 +351,13 @@ val profiles = listOf(
         followerCount = "4,208 followers",
         avatarUrl = "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=240",
         posts = listOf(
-            ProfilePost("niko-dinner", "5m", "Group chat said quick dinner and somehow we are on round three.", "6", "118"),
+            ProfilePost(
+                "niko-dinner",
+                "5m",
+                "Group chat said quick dinner and somehow we are on round three.",
+                "6",
+                "118"
+            ),
             ProfilePost("niko-rooftop", "3h", "Rooftop lighting is doing free brand strategy for everyone.", "9", "77"),
             ProfilePost("niko-uber", "9h", "The ride home playlist deserves its own post.", "5", "48"),
         ),
@@ -361,7 +369,13 @@ val profiles = listOf(
                 "4",
                 "19",
             ),
-            ProfilePost("niko-reply-photo", "7h", "The blurry photo is always the one with the best energy.", "2", "14"),
+            ProfilePost(
+                "niko-reply-photo",
+                "7h",
+                "The blurry photo is always the one with the best energy.",
+                "2",
+                "14"
+            ),
         ),
     ),
     SocialProfile(
@@ -416,7 +430,13 @@ val profiles = listOf(
                 "9",
                 "83",
             ),
-            ProfilePost("lena-jacket", "5h", "Bought the jacket for one dinner and immediately made it my personality.", "4", "36"),
+            ProfilePost(
+                "lena-jacket",
+                "5h",
+                "Bought the jacket for one dinner and immediately made it my personality.",
+                "4",
+                "36"
+            ),
             ProfilePost("lena-gallery", "1d", "Museum mirror pics are culture. I do not make the rules.", "7", "58"),
         ),
         replies = listOf(
@@ -485,12 +505,12 @@ data class ActivityEvent(
     val showFollowing: Boolean = false,
 )
 
-@kotlin.jvm.JvmInline
-value class ActivityEventType private constructor(val value: String) {
+@JvmInline
+value class ActivityEventType private constructor(val value: Int) {
     companion object {
-        val Mention = ActivityEventType("mention")
-        val Reply = ActivityEventType("reply")
-        val Follow = ActivityEventType("follow")
-        val Like = ActivityEventType("like")
+        val Mention = ActivityEventType(0)
+        val Reply = ActivityEventType(1)
+        val Follow = ActivityEventType(2)
+        val Like = ActivityEventType(3)
     }
 }
