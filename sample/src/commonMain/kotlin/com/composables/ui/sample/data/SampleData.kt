@@ -427,3 +427,70 @@ val profiles = listOf(
 )
 
 val authenticatedUser = profiles.first()
+
+val activityEvents = listOf(
+    ActivityEvent(
+        id = "john-mention",
+        author = "john_mobbin",
+        age = "4h",
+        avatarUrl = "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=240",
+        type = ActivityEventType.Mention,
+        context = "Mentioned you",
+        body = "Here's a thread you should follow if you love botany @jane_mobbin",
+    ),
+    ActivityEvent(
+        id = "john-reply",
+        author = "john_mobbin",
+        age = "4h",
+        avatarUrl = "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=240",
+        type = ActivityEventType.Reply,
+        context = "Starting out my gardening club with thr...",
+        body = "Count me in!",
+    ),
+    ActivityEvent(
+        id = "plantdads-follow",
+        author = "the.plantdads",
+        age = "5h",
+        avatarUrl = "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?q=80&w=240",
+        type = ActivityEventType.Follow,
+        context = "Followed you",
+        showFollowing = true,
+    ),
+    ActivityEvent(
+        id = "plantdads-like",
+        author = "the.plantdads",
+        age = "5h",
+        avatarUrl = "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?q=80&w=240",
+        type = ActivityEventType.Like,
+        context = "Definitely broken! 🧵 👀 🌱",
+    ),
+    ActivityEvent(
+        id = "berryjungle-like",
+        author = "theberryjungle",
+        age = "5h",
+        avatarUrl = "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?q=80&w=240",
+        type = ActivityEventType.Like,
+        context = "🌱 👀 🧵",
+    ),
+)
+
+data class ActivityEvent(
+    val id: String,
+    val author: String,
+    val age: String,
+    val avatarUrl: String,
+    val type: ActivityEventType,
+    val context: String? = null,
+    val body: String? = null,
+    val showFollowing: Boolean = false,
+)
+
+@kotlin.jvm.JvmInline
+value class ActivityEventType private constructor(val value: String) {
+    companion object {
+        val Mention = ActivityEventType("mention")
+        val Reply = ActivityEventType("reply")
+        val Follow = ActivityEventType("follow")
+        val Like = ActivityEventType("like")
+    }
+}
