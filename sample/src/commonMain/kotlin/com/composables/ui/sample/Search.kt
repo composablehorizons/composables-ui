@@ -1,6 +1,7 @@
 package com.composables.ui.sample
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -20,10 +20,10 @@ import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.composables.icons.lucide.ChevronRight
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Search
 import com.composables.icons.lucide.X
@@ -36,6 +36,10 @@ import com.composables.ui.components.IconButton
 import com.composables.ui.components.Text
 import com.composables.ui.components.TextField
 import com.composables.ui.sample.components.Avatar
+import com.composables.ui.sample.components.AvatarSize
+import com.composables.ui.sample.data.ProfileId
+import com.composables.ui.sample.data.SocialProfile
+import com.composables.ui.sample.data.profiles
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.muted
 import com.composables.ui.theme.onBackground
@@ -45,7 +49,7 @@ import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.theme.Theme
 
 @Composable
-fun Search() {
+fun Search(onProfileClick: (ProfileId) -> Unit) {
     val queryState = rememberTextFieldState()
     val query = queryState.text.toString()
 
@@ -94,12 +98,12 @@ fun Search() {
                 )
             }
 
-            SearchProfiles.forEachIndexed { index, profile ->
+            profiles.take(5).forEachIndexed { index, profile ->
                 item(key = profile.handle) {
-                    SearchProfileRow(profile)
-                    if (index < SearchProfiles.lastIndex) {
-                        HorizontalSeparator(modifier = Modifier.padding(start = 72.dp))
+                    if (index != 0) {
+                        HorizontalSeparator()
                     }
+                    SearchProfileRow(profile, onProfileClick = onProfileClick)
                 }
             }
         }
@@ -107,43 +111,7 @@ fun Search() {
 }
 
 @Composable
-private fun SearchSuggestionRow(
-    suggestion: String,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(64.dp)
-            .padding(horizontal = 24.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(
-            imageVector = Lucide.Search,
-            contentDescription = null,
-            modifier = Modifier.size(18.dp),
-            tint = Theme[colors][muted],
-        )
-        Spacer(Modifier.width(24.dp))
-        Text(
-            text = suggestion,
-            modifier = Modifier.weight(1f),
-            fontWeight = FontWeight.SemiBold,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-        Icon(
-            imageVector = Lucide.ChevronRight,
-            contentDescription = null,
-            modifier = Modifier.size(20.dp),
-            tint = Theme[colors][muted],
-        )
-    }
-}
-
-@Composable
-private fun SearchProfileRow(
-    profile: SearchProfile,
-) {
+private fun SearchProfileRow(profile: SocialProfile, onProfileClick: (ProfileId) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -152,7 +120,15 @@ private fun SearchProfileRow(
     ) {
         Avatar(
             url = profile.avatarUrl,
+            size = AvatarSize.Large,
+            fallback = {
+                Text(profile.displayName.first().uppercase())
+            },
+            modifier = Modifier
+                .clip(CircleShape)
+                .clickable { onProfileClick(profile.id) },
         )
+
         Spacer(Modifier.width(16.dp))
         Column(
             modifier = Modifier.weight(1f),
@@ -165,13 +141,13 @@ private fun SearchProfileRow(
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = profile.name,
+                text = profile.displayName,
                 color = Theme[colors][muted],
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = profile.followers,
+                text = profile.followerCount,
                 color = Theme[colors][onBackground],
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -189,43 +165,3 @@ private fun SearchProfileRow(
         }
     }
 }
-
-private data class SearchProfile(
-    val handle: String,
-    val name: String,
-    val followers: String,
-    val avatarUrl: String,
-)
-
-private val SearchProfiles = listOf(
-    SearchProfile(
-        handle = "nasatpute",
-        name = "Nisha Satpute",
-        followers = "137 followers",
-        avatarUrl = "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=240",
-    ),
-    SearchProfile(
-        handle = "a_f_r_o_d_i_t_e__7w",
-        name = "Nasa",
-        followers = "1,132 followers",
-        avatarUrl = "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=240",
-    ),
-    SearchProfile(
-        handle = "nasaan",
-        name = "nasaan",
-        followers = "3,401 followers",
-        avatarUrl = "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?q=80&w=240",
-    ),
-    SearchProfile(
-        handle = "nasa_farsi",
-        name = "Nasa Farsi",
-        followers = "9,502 followers",
-        avatarUrl = "https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=240",
-    ),
-    SearchProfile(
-        handle = "nasai.co.kr",
-        name = "Nasai",
-        followers = "31 followers",
-        avatarUrl = "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=240",
-    )
-)

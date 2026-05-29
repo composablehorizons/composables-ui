@@ -290,7 +290,9 @@ private fun TabHost(
             )
         }
         composable<SearchRoute> {
-            Search()
+            Search(
+                onProfileClick = { profileId -> navController.navigate(ProfileRoute(profileId)) }
+            )
         }
         dialog<NewPostRoute> {
             PostComposer()
