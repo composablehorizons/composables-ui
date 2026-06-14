@@ -1,0 +1,172 @@
+alert-dialog:
+  symbols:
+    - AlertDialog
+
+bottom-sheet:
+  symbols:
+    - rememberBottomSheetState
+    - BottomSheet
+    - name: BottomSheetDetent
+      values:
+        - Hidden
+        - FullyExpanded
+    - animateTo
+    - show
+    - hide
+
+buttons:
+  symbols:
+    - Button
+    - IconButton
+    - name: ButtonStyle
+      values:
+        - Default
+        - Primary
+        - Secondary
+        - Outlined
+        - Destructive
+        - Ghost
+    - name: ButtonSize
+      values:
+        - Small
+        - Regular
+        - Large
+        - Default
+
+checkbox:
+  symbols:
+    - Checkbox
+
+disclosure:
+  symbols:
+    - Disclosure
+    - DisclosureButton
+    - DisclosurePanel
+
+dropdown-menu:
+  symbols:
+    - DropdownMenu
+    - DropdownMenuPanel
+    - DropdownMenuItem
+    - DropdownMenuLabel
+    - DropdownMenuSeparator
+    - name: DropdownMenuSide
+      values:
+        - Top
+        - Bottom
+        - Start
+        - End
+    - name: DropdownMenuAlignment
+      values:
+        - Start
+        - Center
+        - End
+    - name: DropdownMenuItemStyle
+      values:
+        - Default
+        - Destructive
+
+icon:
+  symbols:
+    - Icon
+
+navigation-bar:
+  symbols:
+    - NavigationBar
+    - NavigationBarItem
+
+progress:
+  symbols:
+    - ProgressIndicator
+    - IndeterminateProgressIndicator
+
+radio-group:
+  symbols:
+    - RadioGroup
+    - Radio
+
+scrollbars:
+  symbols:
+    - rememberVerticalScrollbarState
+    - VerticalScrollbar
+    - HorizontalScrollbar
+
+separators:
+  symbols:
+    - HorizontalSeparator
+    - VerticalSeparator
+
+slider:
+  symbols:
+    - Slider
+
+switch:
+  symbols:
+    - Switch
+
+tabs:
+  symbols:
+    - Tabs
+    - Tab
+    - TabList
+    - TabPanel
+    - name: TabOrientation
+      values:
+        - Horizontal
+        - Vertical
+
+text:
+  symbols:
+    - Text
+
+text-fields:
+  symbols:
+    - TextField
+    - name: TextFieldStyle
+      values:
+        - Default
+        - Filled
+        - Ghost
+
+theming:
+  symbols:
+    - ComposablesTheme
+    - name: ColorScheme
+      values:
+        - Light
+        - Dark
+    - LocalColorScheme
+    - name: InteractionMode
+      values:
+        - Touch
+        - Pointer
+    - LocalInteractionMode
+
+toolbar:
+  symbols:
+    - Toolbar
+    - CenteredToolbar
+    - name: ToolbarSize
+      values:
+        - Medium
+        - Large
+
+tooltip:
+  symbols:
+    - Tooltip
+    - TooltipPanel
+    - name: TooltipSide
+      values:
+        - Top
+        - Bottom
+        - Start
+        - End
+    - name: TooltipAlignment
+      values:
+        - Start
+        - Center
+        - End
+
+tri-state-checkbox:
+  symbols:
+    - TriStateCheckbox

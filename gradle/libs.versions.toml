@@ -1,0 +1,43 @@
+[versions]
+#noinspection UnusedVersionCatalogEntry
+ui = "0.0.1"
+unstyled = "2.7.0"
+compose = "1.11.1"
+kotlin = "2.4.0"
+uriPainter = "1.0.4"
+navigation3 = "1.1.1"
+kotlinxSerialization = "1.9.0"
+agp = "9.0.0"
+android-compile-sdk = "37"
+android-min-sdk = "23"
+activityCompose = "1.13.0"
+interactionCapabilities = "1.1.0"
+rippleIndication = "1.1.0"
+iconsLucide = "1.0.0"
+vanniktechMavenPublish = "0.35.0"
+
+[libraries]
+composables-unstyled = { module = "com.composables:composeunstyled", version.ref = "unstyled" }
+composables-unstyled-build-modifier = { module = "com.composables:composeunstyled-build-modifier", version.ref = "unstyled" }
+composables-unstyled-theming = { module = "com.composables:composeunstyled-theming", version.ref = "unstyled" }
+composables-uri-painter = { module = "com.composables:compose-uri-painter", version.ref = "uriPainter" }
+composables-interaction-capabilities = { module = "com.composables:compose-interaction-capabilities", version.ref = "interactionCapabilities" }
+composables-ripple-indication = { module = "com.composables:ripple-indication", version.ref = "rippleIndication" }
+composables-icons-lucide = { module = "com.composables:icons-lucide", version.ref = "iconsLucide" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose" }
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose" }
+compose-animation = { module = "org.jetbrains.compose.animation:animation", version.ref = "compose" }
+compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose" }
+androidx-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+
+[plugins]
+compose = { id = "org.jetbrains.compose", version.ref = "compose" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktechMavenPublish" }

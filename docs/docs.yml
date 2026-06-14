@@ -1,0 +1,53 @@
+sections:
+  - title: Getting Started
+    pages:
+      - title: Overview
+        slug: overview
+      - title: Installation
+        slug: installation
+      - title: Components
+        slug: components
+      - title: Theming
+        slug: theming
+  - title: Components
+    pages:
+      - title: Buttons
+        slug: buttons
+      - title: Alert Dialog
+        slug: alert-dialog
+      - title: Bottom Sheet
+        slug: bottom-sheet
+      - title: Checkbox
+        slug: checkbox
+      - title: Disclosure
+        slug: disclosure
+      - title: Dropdown Menu
+        slug: dropdown-menu
+      - title: Icon
+        slug: icon
+      - title: Navigation Bar
+        slug: navigation-bar
+      - title: Progress Indicators
+        slug: progress
+      - title: Radio Group
+        slug: radio-group
+      - title: Scrollbars
+        slug: scrollbars
+      - title: Separators
+        slug: separators
+      - title: Slider
+        slug: slider
+      - title: Switch
+        slug: switch
+      - title: Tabs
+        slug: tabs
+      - title: Text
+        slug: text
+      - title: Text Fields
+        slug: text-fields
+      - title: Toolbar
+        slug: toolbar
+      - title: Tooltip
+        slug: tooltip
+      - title: Tri-State Checkbox
+        slug: tri-state-checkbox
