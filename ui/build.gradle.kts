@@ -22,14 +22,12 @@ val pomDescription = "Modern accessible components for Jetpack Compose and Compo
 
 java {
     toolchain {
-        vendor = JvmVendorSpec.JETBRAINS
         languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
 kotlin {
     jvmToolchain {
-        vendor = JvmVendorSpec.JETBRAINS
         languageVersion = JavaLanguageVersion.of(17)
     }
 
