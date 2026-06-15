@@ -1,6 +1,6 @@
 [versions]
 #noinspection UnusedVersionCatalogEntry
-ui = "0.0.2"
+ui = "0.1.0"
 unstyled = "2.7.0"
 compose = "1.11.1"
 kotlin = "2.4.0"
