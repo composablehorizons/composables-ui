@@ -22,7 +22,7 @@ jobs:
   publish:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    environment: maven-central
+    environment: publishing
     steps:
       - uses: actions/checkout@v5
         with:
