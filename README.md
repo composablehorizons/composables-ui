@@ -4,7 +4,7 @@ Composables UI is a collection of modern, fully accessible components for Jetpac
 
 ## Documentation
 
-Visit [https://composables.com/ui](https://composables.com/ui) to view the full documentation.
+Visit [https://composables.com/ui/docs](https://composables.com/ui/docs) to view the full documentation.
 
 ## License
 
