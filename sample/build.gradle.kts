@@ -50,6 +50,10 @@ kotlin {
             implementation(project(":preview-insets"))
         }
 
+        wasmJsMain.dependencies {
+            implementation(project(":preview"))
+        }
+
         jvmMain.dependencies {
             implementation(project(":preview"))
             implementation(compose.desktop.currentOs) {
