@@ -63,6 +63,7 @@ kotlin {
         commonMain.dependencies {
             api(libs.compose.foundation)
             implementation(libs.composables.unstyled)
+            api(libs.composables.unstyled.stack)
             api(libs.composables.unstyled.theming)
             implementation(libs.composables.unstyled.build.modifier)
             implementation(libs.composables.interaction.capabilities)
