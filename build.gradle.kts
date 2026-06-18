@@ -300,7 +300,6 @@ tasks.register<Sync>("bundleDocs") {
 
     doLast {
         val outputDirectory = bundleDirectory.get().asFile
-        val deploymentId = System.currentTimeMillis().toString()
         val demoManifest = docsDemoSources.entries.joinToString(",\n") { (id, fileName) ->
             """
                 "$id": {
@@ -326,8 +325,7 @@ tasks.register<Sync>("bundleDocs") {
                 "composables-ui-demos": {
                   "path": "apps/composables-ui-demos",
                   "entry": "index.html",
-                  "idQueryParameter": "id",
-                  "deploymentId": "$deploymentId"
+                  "idQueryParameter": "id"
                 }
               },
               "demos": {
