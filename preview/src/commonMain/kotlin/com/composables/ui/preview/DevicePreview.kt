@@ -129,6 +129,7 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.jvm.JvmInline
 import com.composables.ui.preview.iconography.Icons as PreviewIcons
 
 data class DevicePreviewDevice(
@@ -147,6 +148,7 @@ sealed interface DevicePreviewSize {
     data object Fill : DevicePreviewSize
 }
 
+@JvmInline
 value class DevicePreviewZoom internal constructor(val scale: Float) {
     companion object {
         val Default = DevicePreviewZoom(1f)
@@ -197,6 +199,7 @@ private fun DevicePreviewZoom.nextZoomLevel(
     }
 }
 
+@JvmInline
 value class DevicePreviewOrientation internal constructor(@Suppress("unused") private val value: Int) {
     companion object {
         val Portrait = DevicePreviewOrientation(0)
@@ -212,6 +215,7 @@ fun DevicePreviewOrientation.rotated(): DevicePreviewOrientation {
     }
 }
 
+@JvmInline
 value class DevicePreviewColorScheme internal constructor(@Suppress("unused") private val value: Int) {
     companion object {
         val Light = DevicePreviewColorScheme(0)
