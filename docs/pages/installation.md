@@ -3,6 +3,26 @@ title: Installation
 description: How to install Composables UI.
 ---
 
+## Create an app using the CLI
+
+The [Composables CLI](https://github.com/composablehorizons/composables-cli) is the fastest way to get started with Composables UI.
+
+Install it on your computer:
+
+```bash
+npm install -g composables-cli
+```
+
+then create a new app using the interactive wizard:
+
+```bash
+composables create-app
+```
+
+Note that the CLI is optimized for agenting coding. Ask your LLM to create an app for specific targets for you.
+
+## Install to an existing project
+
 There are 2 ways to add Composables UI to your project.
 
 Either via the gradle dependency, or by manually copy and pasting the sources in your project.
