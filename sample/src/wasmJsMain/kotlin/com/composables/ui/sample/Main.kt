@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2026 Composable Horizons
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 @file:OptIn(ExperimentalComposeUiApi::class, ExperimentalWasmJsInterop::class)
 
 package com.composables.ui.sample
@@ -10,9 +31,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
-import com.composables.ui.preview.DevicePreviewDevices
-import com.composables.ui.preview.DevicePreviewDevice
 import com.composables.ui.preview.DevicePreviewColorScheme
+import com.composables.ui.preview.DevicePreviewDevice
+import com.composables.ui.preview.DevicePreviewDevices
 import com.composables.ui.preview.DevicePreviewHost
 import com.composables.ui.preview.DevicePreviewOrientation
 import com.composables.ui.preview.canRotate
@@ -22,157 +43,159 @@ import kotlinx.browser.window
 
 @JsFun("(callback) => { window.setPreviewDevice = callback; }")
 private external fun installPreviewDeviceApiBridge(callback: (String) -> Unit)
+
 @JsFun("(callback) => { window.setPreviewOrientation = callback; }")
 private external fun installPreviewOrientationApiBridge(callback: (String) -> Unit)
+
 @JsFun("(callback) => { window.setPreviewColorScheme = callback; }")
 private external fun installPreviewColorSchemeApiBridge(callback: (String) -> Unit)
 
 fun main() {
-    var selectedDevice by mutableStateOf(deviceFromUrl())
-    var selectedOrientation by mutableStateOf(
-        orientationForDevice(
-            selectedDevice,
-            orientationFromUrl() ?: DevicePreviewOrientation.Portrait,
-        ),
-    )
-    var selectedColorScheme by mutableStateOf(colorSchemeFromUrl() ?: DevicePreviewColorScheme.Light)
-    var selectedInteractionMode by mutableStateOf(interactionModeFromUrl() ?: interactionModeForDevice(selectedDevice))
+  var selectedDevice by mutableStateOf(deviceFromUrl())
+  var selectedOrientation by mutableStateOf(
+    orientationForDevice(
+      selectedDevice,
+      orientationFromUrl() ?: DevicePreviewOrientation.Portrait,
+    ),
+  )
+  var selectedColorScheme by mutableStateOf(colorSchemeFromUrl() ?: DevicePreviewColorScheme.Light)
+  var selectedInteractionMode by mutableStateOf(interactionModeFromUrl() ?: interactionModeForDevice(selectedDevice))
 
-    installPreviewDeviceApi { deviceId ->
-        val device = deviceFromId(deviceId)
-        selectedDevice = device
-        selectedOrientation = orientationForDevice(device, selectedOrientation)
-        selectedInteractionMode = interactionModeForDevice(device)
-    }
-    installPreviewOrientationApi { orientationId ->
-        selectedOrientation = orientationForDevice(selectedDevice, orientationFromId(orientationId))
-    }
-    installPreviewColorSchemeApi { colorSchemeId ->
-        selectedColorScheme = colorSchemeFromId(colorSchemeId)
+  installPreviewDeviceApi { deviceId ->
+    val device = deviceFromId(deviceId)
+    selectedDevice = device
+    selectedOrientation = orientationForDevice(device, selectedOrientation)
+    selectedInteractionMode = interactionModeForDevice(device)
+  }
+  installPreviewOrientationApi { orientationId ->
+    selectedOrientation = orientationForDevice(selectedDevice, orientationFromId(orientationId))
+  }
+  installPreviewColorSchemeApi { colorSchemeId ->
+    selectedColorScheme = colorSchemeFromId(colorSchemeId)
+  }
+
+  ComposeViewport {
+    val currentDevice = selectedDevice
+    val currentOrientation = selectedOrientation
+    val currentColorScheme = selectedColorScheme
+    val currentInteractionMode = selectedInteractionMode
+    val previewDevice = remember(currentDevice) { currentDevice }
+    val content: @Composable () -> Unit = {
+      CompositionLocalProvider(
+        LocalInteractionMode provides currentInteractionMode,
+      ) {
+        App()
+      }
     }
 
-    ComposeViewport {
-        val currentDevice = selectedDevice
-        val currentOrientation = selectedOrientation
-        val currentColorScheme = selectedColorScheme
-        val currentInteractionMode = selectedInteractionMode
-        val previewDevice = remember(currentDevice) { currentDevice }
-        val content: @Composable () -> Unit = {
-            CompositionLocalProvider(
-                LocalInteractionMode provides currentInteractionMode,
-            ) {
-                App()
-            }
-        }
-
-        DevicePreviewHost(
-            selectedDevice = previewDevice,
-            onDeviceSelected = {
-                selectedDevice = it
-                selectedOrientation = orientationForDevice(it, selectedOrientation)
-                selectedInteractionMode = interactionModeForDevice(it)
-            },
-            selectedOrientation = currentOrientation,
-            onOrientationSelected = { selectedOrientation = orientationForDevice(currentDevice, it) },
-            selectedColorScheme = currentColorScheme,
-            onColorSchemeSelected = { selectedColorScheme = it },
-            showControls = false,
-            showScreenshot = false,
-        ) {
-            content()
-        }
+    DevicePreviewHost(
+      selectedDevice = previewDevice,
+      onDeviceSelected = {
+        selectedDevice = it
+        selectedOrientation = orientationForDevice(it, selectedOrientation)
+        selectedInteractionMode = interactionModeForDevice(it)
+      },
+      selectedOrientation = currentOrientation,
+      onOrientationSelected = { selectedOrientation = orientationForDevice(currentDevice, it) },
+      selectedColorScheme = currentColorScheme,
+      onColorSchemeSelected = { selectedColorScheme = it },
+      showControls = false,
+      showScreenshot = false,
+    ) {
+      content()
     }
+  }
 }
 
 private fun interactionModeFromUrl(): InteractionMode? {
-    return window.location.search
-        .removePrefix("?")
-        .split("&")
-        .firstNotNullOfOrNull { parameter ->
-            val separatorIndex = parameter.indexOf("=")
-            if (separatorIndex < 0) return@firstNotNullOfOrNull null
+  return window.location.search
+    .removePrefix("?")
+    .split("&")
+    .firstNotNullOfOrNull { parameter ->
+      val separatorIndex = parameter.indexOf("=")
+      if (separatorIndex < 0) return@firstNotNullOfOrNull null
 
-            val key = parameter.take(separatorIndex)
-            if (key != "interaction") return@firstNotNullOfOrNull null
+      val key = parameter.take(separatorIndex)
+      if (key != "interaction") return@firstNotNullOfOrNull null
 
-            when (parameter.drop(separatorIndex + 1).lowercase()) {
-                "touch" -> InteractionMode.Touch
-                "pointer" -> InteractionMode.Pointer
-                else -> null
-            }
-        }
+      when (parameter.drop(separatorIndex + 1).lowercase()) {
+        "touch" -> InteractionMode.Touch
+        "pointer" -> InteractionMode.Pointer
+        else -> null
+      }
+    }
 }
 
 private fun orientationFromUrl(): DevicePreviewOrientation? {
-    return queryParam("orientation")?.let(::orientationFromId)
+  return queryParam("orientation")?.let(::orientationFromId)
 }
 
 private fun colorSchemeFromUrl(): DevicePreviewColorScheme? {
-    return queryParam("theme")?.let(::colorSchemeFromId)
+  return queryParam("theme")?.let(::colorSchemeFromId)
 }
 
 private fun deviceFromUrl() = window.location.search
-    .let { queryParam("device")?.let(::deviceFromId) ?: DevicePreviewDevices.Mobile }
+  .let { queryParam("device")?.let(::deviceFromId) ?: DevicePreviewDevices.Mobile }
 
 private fun deviceFromId(value: String) = when (value.lowercase()) {
-    "phone", "mobile" -> DevicePreviewDevices.Mobile
-    "tablet" -> DevicePreviewDevices.Tablet
-    "desktop" -> DevicePreviewDevices.Desktop
-    else -> DevicePreviewDevices.Mobile
+  "phone", "mobile" -> DevicePreviewDevices.Mobile
+  "tablet" -> DevicePreviewDevices.Tablet
+  "desktop" -> DevicePreviewDevices.Desktop
+  else -> DevicePreviewDevices.Mobile
 }
 
 private fun orientationFromId(value: String): DevicePreviewOrientation {
-    return when (value.lowercase()) {
-        "landscape" -> DevicePreviewOrientation.Landscape
-        else -> DevicePreviewOrientation.Portrait
-    }
+  return when (value.lowercase()) {
+    "landscape" -> DevicePreviewOrientation.Landscape
+    else -> DevicePreviewOrientation.Portrait
+  }
 }
 
 private fun colorSchemeFromId(value: String): DevicePreviewColorScheme {
-    return when (value.lowercase()) {
-        "dark" -> DevicePreviewColorScheme.Dark
-        else -> DevicePreviewColorScheme.Light
-    }
+  return when (value.lowercase()) {
+    "dark" -> DevicePreviewColorScheme.Dark
+    else -> DevicePreviewColorScheme.Light
+  }
 }
 
 private fun orientationForDevice(
-    device: DevicePreviewDevice,
-    preferred: DevicePreviewOrientation,
+  device: DevicePreviewDevice,
+  preferred: DevicePreviewOrientation,
 ): DevicePreviewOrientation {
-    return if (device.canRotate) preferred else DevicePreviewOrientation.Portrait
+  return if (device.canRotate) preferred else DevicePreviewOrientation.Portrait
 }
 
 private fun interactionModeForDevice(device: DevicePreviewDevice): InteractionMode {
-    return if (device.id == DevicePreviewDevices.Desktop.id) {
-        InteractionMode.Pointer
-    } else {
-        InteractionMode.Touch
-    }
+  return if (device.id == DevicePreviewDevices.Desktop.id) {
+    InteractionMode.Pointer
+  } else {
+    InteractionMode.Touch
+  }
 }
 
 private fun queryParam(name: String): String? {
-    return window.location.search
-        .removePrefix("?")
-        .split("&")
-        .firstNotNullOfOrNull { parameter ->
-            val separatorIndex = parameter.indexOf("=")
-            if (separatorIndex < 0) return@firstNotNullOfOrNull null
+  return window.location.search
+    .removePrefix("?")
+    .split("&")
+    .firstNotNullOfOrNull { parameter ->
+      val separatorIndex = parameter.indexOf("=")
+      if (separatorIndex < 0) return@firstNotNullOfOrNull null
 
-            val key = parameter.take(separatorIndex)
-            if (key != name) return@firstNotNullOfOrNull null
+      val key = parameter.take(separatorIndex)
+      if (key != name) return@firstNotNullOfOrNull null
 
-            parameter.drop(separatorIndex + 1)
-        }
+      parameter.drop(separatorIndex + 1)
+    }
 }
 
 private fun installPreviewDeviceApi(setDevice: (String) -> Unit) {
-    installPreviewDeviceApiBridge(setDevice)
+  installPreviewDeviceApiBridge(setDevice)
 }
 
 private fun installPreviewOrientationApi(setOrientation: (String) -> Unit) {
-    installPreviewOrientationApiBridge(setOrientation)
+  installPreviewOrientationApiBridge(setOrientation)
 }
 
 private fun installPreviewColorSchemeApi(setColorScheme: (String) -> Unit) {
-    installPreviewColorSchemeApiBridge(setColorScheme)
+  installPreviewColorSchemeApiBridge(setColorScheme)
 }

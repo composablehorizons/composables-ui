@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2026 Composable Horizons
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.composables.ui.demo.examples
 
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,35 +30,35 @@ import com.composables.icons.lucide.ArrowLeft
 import com.composables.icons.lucide.EllipsisVertical
 import com.composables.icons.lucide.Lucide
 import com.composables.ui.components.ButtonStyle
+import com.composables.ui.components.CenteredToolbar
 import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
 import com.composables.ui.components.Text
-import com.composables.ui.components.CenteredToolbar
 
 @Composable
 fun CenteredToolbarExample() {
-    CenteredToolbar(
-        modifier = Modifier.fillMaxWidth(),
-        leading = {
-            IconButton(
-                onClick = { /* TODO */ },
-                style = ButtonStyle.Ghost,
-            ) {
-                Icon(Lucide.ArrowLeft, contentDescription = "Go back")
-            }
-        },
-        title = { Text("Centered") },
-        trailing = {
-            IconButton(
-                onClick = { /* TODO */ },
-                style = ButtonStyle.Ghost,
-            ) {
-                Icon(
-                    imageVector = Lucide.EllipsisVertical,
-                    contentDescription = "More options",
-                    modifier = Modifier.size(18.dp),
-                )
-            }
-        },
-    )
+  CenteredToolbar(
+    modifier = Modifier.fillMaxWidth(),
+    leading = {
+      IconButton(
+        onClick = { /* TODO */ },
+        style = ButtonStyle.Ghost,
+      ) {
+        Icon(Lucide.ArrowLeft, contentDescription = "Go back")
+      }
+    },
+    title = { Text("Centered") },
+    trailing = {
+      IconButton(
+        onClick = { /* TODO */ },
+        style = ButtonStyle.Ghost,
+      ) {
+        Icon(
+          imageVector = Lucide.EllipsisVertical,
+          contentDescription = "More options",
+          modifier = Modifier.size(18.dp),
+        )
+      }
+    },
+  )
 }

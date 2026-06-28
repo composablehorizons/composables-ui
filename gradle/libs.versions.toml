@@ -15,6 +15,7 @@ interactionCapabilities = "1.1.0"
 rippleIndication = "1.1.0"
 iconsLucide = "1.0.0"
 vanniktechMavenPublish = "0.35.0"
+spotless = "6.21.0"
 
 [libraries]
 composables-unstyled = { module = "com.composables:composeunstyled", version.ref = "unstyled" }
@@ -42,3 +43,4 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktechMavenPublish" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2026 Composable Horizons
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.composables.ui.components
 
 import androidx.compose.foundation.background
@@ -50,103 +71,103 @@ import com.composeunstyled.theme.Theme
  */
 @Composable
 fun Slider(
-    value: Float,
-    onValueChange: (Float) -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
-    steps: Int = 0,
-    orientation: Orientation = Orientation.Horizontal,
-    onValueChangeFinished: (() -> Unit)? = null,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+  value: Float,
+  onValueChange: (Float) -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
+  steps: Int = 0,
+  orientation: Orientation = Orientation.Horizontal,
+  onValueChangeFinished: (() -> Unit)? = null,
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
-    val shape = RoundedCornerShape(999.dp)
-    UnstyledSlider(
-        value = value,
-        onValueChange = onValueChange,
-        enabled = enabled,
-        valueRange = valueRange,
-        steps = steps,
-        onValueChangeFinished = onValueChangeFinished,
-        orientation = orientation,
-        interactionSource = interactionSource,
-        modifier = modifier
-            .heightIn(min = 32.dp)
-            .then(buildModifier { if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha])) }),
-        track = { SliderTrack(it, shape, filledColor = Theme[colors][primaryColor]) },
-        thumb = { SliderThumb(interactionSource) },
-    )
+  val shape = RoundedCornerShape(999.dp)
+  UnstyledSlider(
+    value = value,
+    onValueChange = onValueChange,
+    enabled = enabled,
+    valueRange = valueRange,
+    steps = steps,
+    onValueChangeFinished = onValueChangeFinished,
+    orientation = orientation,
+    interactionSource = interactionSource,
+    modifier = modifier
+      .heightIn(min = 32.dp)
+      .then(buildModifier { if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha])) }),
+    track = { SliderTrack(it, shape, filledColor = Theme[colors][primaryColor]) },
+    thumb = { SliderThumb(interactionSource) },
+  )
 }
 
 @Composable
 private fun SliderTrack(
-    state: SliderState,
-    shape: Shape,
-    backgroundColor: Color = Theme[colors][secondaryColor],
-    filledColor: Color,
+  state: SliderState,
+  shape: Shape,
+  backgroundColor: Color = Theme[colors][secondaryColor],
+  filledColor: Color,
 ) {
-    if (state.orientation == Orientation.Vertical) {
+  if (state.orientation == Orientation.Vertical) {
+    Box(
+      modifier = Modifier
+        .width(SliderThumbSize)
+        .fillMaxHeight(),
+      contentAlignment = Alignment.Center,
+    ) {
+      Box(
+        Modifier
+          .width(SliderTrackHeight)
+          .fillMaxHeight()
+          .padding(vertical = SliderThumbSize / 2)
+          .clip(shape)
+          .background(backgroundColor, shape),
+        contentAlignment = Alignment.BottomCenter,
+      ) {
         Box(
-            modifier = Modifier
-                .width(SliderThumbSize)
-                .fillMaxHeight(),
-            contentAlignment = Alignment.Center,
-        ) {
-            Box(
-                Modifier
-                    .width(SliderTrackHeight)
-                    .fillMaxHeight()
-                    .padding(vertical = SliderThumbSize / 2)
-                    .clip(shape)
-                    .background(backgroundColor, shape),
-                contentAlignment = Alignment.BottomCenter,
-            ) {
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(state.fraction)
-                        .background(filledColor)
-                )
-            }
-        }
-    } else {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(SliderThumbSize),
-            contentAlignment = Alignment.Center,
-        ) {
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = SliderThumbSize / 2)
-                    .height(SliderTrackHeight)
-                    .clip(shape)
-                    .background(backgroundColor, shape)
-            ) {
-                Box(
-                    Modifier.fillMaxWidth(state.fraction).height(SliderTrackHeight)
-                        .background(filledColor)
-                )
-            }
-        }
+          Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(state.fraction)
+            .background(filledColor),
+        )
+      }
     }
+  } else {
+    Box(
+      modifier = Modifier
+        .fillMaxWidth()
+        .height(SliderThumbSize),
+      contentAlignment = Alignment.Center,
+    ) {
+      Box(
+        Modifier
+          .fillMaxWidth()
+          .padding(horizontal = SliderThumbSize / 2)
+          .height(SliderTrackHeight)
+          .clip(shape)
+          .background(backgroundColor, shape),
+      ) {
+        Box(
+          Modifier.fillMaxWidth(state.fraction).height(SliderTrackHeight)
+            .background(filledColor),
+        )
+      }
+    }
+  }
 }
 
 @Composable
 private fun SliderThumb(interactionSource: MutableInteractionSource) {
-    Box(
-        Modifier
-            .focusRing(
-                interactionSource = interactionSource,
-                color = Theme[colors][ringColor],
-                shape = CircleShape,
-                visibility = FocusRingVisibility.Focused,
-            )
-            .border(1.dp, Theme[colors][ringColor], CircleShape)
-            .size(SliderThumbSize)
-            .background(Theme[colors][thumbColor], CircleShape)
-    )
+  Box(
+    Modifier
+      .focusRing(
+        interactionSource = interactionSource,
+        color = Theme[colors][ringColor],
+        shape = CircleShape,
+        visibility = FocusRingVisibility.Focused,
+      )
+      .border(1.dp, Theme[colors][ringColor], CircleShape)
+      .size(SliderThumbSize)
+      .background(Theme[colors][thumbColor], CircleShape),
+  )
 }
 
 private val SliderTrackHeight = 6.dp

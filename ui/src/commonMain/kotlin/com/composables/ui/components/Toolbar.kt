@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2026 Composable Horizons
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.composables.ui.components
 
 import androidx.compose.foundation.background
@@ -9,7 +30,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -36,16 +56,17 @@ import kotlin.jvm.JvmInline
  */
 @JvmInline
 value class ToolbarSize internal constructor(@Suppress("unused") private val value: Int) {
-    companion object {
-        /**
-         * Uses the standard single-row toolbar height.
-         */
-        val Medium = ToolbarSize(0)
-        /**
-         * Uses the large title toolbar layout.
-         */
-        val Large = ToolbarSize(1)
-    }
+  companion object {
+    /**
+     * Uses the standard single-row toolbar height.
+     */
+    val Medium = ToolbarSize(0)
+
+    /**
+     * Uses the large title toolbar layout.
+     */
+    val Large = ToolbarSize(1)
+  }
 }
 
 /**
@@ -61,131 +82,131 @@ value class ToolbarSize internal constructor(@Suppress("unused") private val val
  */
 @Composable
 fun Toolbar(
-    title: @Composable RowScope.() -> Unit,
-    modifier: Modifier = Modifier,
-    backgroundColor: Color = Color.Transparent,
-    contentColor: Color = LocalContentColor.current,
-    windowInsets: WindowInsets = toolbarWindowInsets(),
-    leading: @Composable (RowScope.() -> Unit)? = null,
-    trailing: @Composable (RowScope.() -> Unit)? = null,
-    size: ToolbarSize = ToolbarSize.Medium,
+  title: @Composable RowScope.() -> Unit,
+  modifier: Modifier = Modifier,
+  backgroundColor: Color = Color.Transparent,
+  contentColor: Color = LocalContentColor.current,
+  windowInsets: WindowInsets = toolbarWindowInsets(),
+  leading: @Composable (RowScope.() -> Unit)? = null,
+  trailing: @Composable (RowScope.() -> Unit)? = null,
+  size: ToolbarSize = ToolbarSize.Medium,
 ) {
-    if (size == ToolbarSize.Large) {
-        LargeTitleToolbar(
-            modifier = modifier,
-            backgroundColor = backgroundColor,
-            contentColor = contentColor,
-            windowInsets = windowInsets,
-            title = title,
-            size = size,
-            leading = leading,
-            trailing = trailing,
-        )
-    } else {
-        MediumTitleToolbar(
-            modifier = modifier,
-            backgroundColor = backgroundColor,
-            contentColor = contentColor,
-            windowInsets = windowInsets,
-            title = title,
-            size = size,
-            leading = leading,
-            trailing = trailing,
-        )
-    }
+  if (size == ToolbarSize.Large) {
+    LargeTitleToolbar(
+      modifier = modifier,
+      backgroundColor = backgroundColor,
+      contentColor = contentColor,
+      windowInsets = windowInsets,
+      title = title,
+      size = size,
+      leading = leading,
+      trailing = trailing,
+    )
+  } else {
+    MediumTitleToolbar(
+      modifier = modifier,
+      backgroundColor = backgroundColor,
+      contentColor = contentColor,
+      windowInsets = windowInsets,
+      title = title,
+      size = size,
+      leading = leading,
+      trailing = trailing,
+    )
+  }
 }
 
 @Composable
 private fun MediumTitleToolbar(
-    modifier: Modifier,
-    backgroundColor: Color,
-    contentColor: Color,
-    windowInsets: WindowInsets,
-    title: @Composable RowScope.() -> Unit,
-    size: ToolbarSize,
-    leading: @Composable (RowScope.() -> Unit)?,
-    trailing: @Composable (RowScope.() -> Unit)?,
+  modifier: Modifier,
+  backgroundColor: Color,
+  contentColor: Color,
+  windowInsets: WindowInsets,
+  title: @Composable RowScope.() -> Unit,
+  size: ToolbarSize,
+  leading: @Composable (RowScope.() -> Unit)?,
+  trailing: @Composable (RowScope.() -> Unit)?,
 ) {
-    ToolbarContainer(
-        modifier = modifier,
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
-        windowInsets = windowInsets,
-        height = toolbarHeightFor(size),
+  ToolbarContainer(
+    modifier = modifier,
+    backgroundColor = backgroundColor,
+    contentColor = contentColor,
+    windowInsets = windowInsets,
+    height = toolbarHeightFor(size),
+  ) {
+    Row(
+      modifier = Modifier.align(Alignment.CenterStart),
+      horizontalArrangement = Arrangement.spacedBy(8.dp),
+      verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            modifier = Modifier.align(Alignment.CenterStart),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            if (leading != null) {
-                leading()
-            }
-            ProvideTextStyle(LocalTextStyle.current.merge(ToolbarTitleTextStyle)) {
-                title()
-            }
-        }
-        if (trailing != null) {
-            Row(
-                modifier = Modifier.align(Alignment.CenterEnd),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                content = trailing,
-            )
-        }
+      if (leading != null) {
+        leading()
+      }
+      ProvideTextStyle(LocalTextStyle.current.merge(ToolbarTitleTextStyle)) {
+        title()
+      }
     }
+    if (trailing != null) {
+      Row(
+        modifier = Modifier.align(Alignment.CenterEnd),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        content = trailing,
+      )
+    }
+  }
 }
 
 @Composable
 private fun LargeTitleToolbar(
-    modifier: Modifier,
-    backgroundColor: Color,
-    contentColor: Color,
-    windowInsets: WindowInsets,
-    title: @Composable RowScope.() -> Unit,
-    size: ToolbarSize,
-    leading: @Composable (RowScope.() -> Unit)?,
-    trailing: @Composable (RowScope.() -> Unit)?,
+  modifier: Modifier,
+  backgroundColor: Color,
+  contentColor: Color,
+  windowInsets: WindowInsets,
+  title: @Composable RowScope.() -> Unit,
+  size: ToolbarSize,
+  leading: @Composable (RowScope.() -> Unit)?,
+  trailing: @Composable (RowScope.() -> Unit)?,
 ) {
-    ToolbarContainer(
-        modifier = modifier,
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
-        windowInsets = windowInsets,
-        height = toolbarHeightFor(size),
-    ) {
-        if (leading != null) {
-            Row(
-                modifier = Modifier
-                    .height(64.dp)
-                    .align(Alignment.TopStart),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                content = leading,
-            )
-        }
-        if (trailing != null) {
-            Row(
-                modifier = Modifier
-                    .height(64.dp)
-                    .align(Alignment.TopEnd),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                content = trailing,
-            )
-        }
-        Row(
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(bottom = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            ProvideTextStyle(LocalTextStyle.current.merge(ToolbarHeaderTextStyle)) {
-                title()
-            }
-        }
+  ToolbarContainer(
+    modifier = modifier,
+    backgroundColor = backgroundColor,
+    contentColor = contentColor,
+    windowInsets = windowInsets,
+    height = toolbarHeightFor(size),
+  ) {
+    if (leading != null) {
+      Row(
+        modifier = Modifier
+          .height(64.dp)
+          .align(Alignment.TopStart),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        content = leading,
+      )
     }
+    if (trailing != null) {
+      Row(
+        modifier = Modifier
+          .height(64.dp)
+          .align(Alignment.TopEnd),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        content = trailing,
+      )
+    }
+    Row(
+      modifier = Modifier
+        .align(Alignment.BottomStart)
+        .padding(bottom = 12.dp),
+      horizontalArrangement = Arrangement.spacedBy(8.dp),
+      verticalAlignment = Alignment.CenterVertically,
+    ) {
+      ProvideTextStyle(LocalTextStyle.current.merge(ToolbarHeaderTextStyle)) {
+        title()
+      }
+    }
+  }
 }
 
 /**
@@ -200,99 +221,101 @@ private fun LargeTitleToolbar(
  */
 @Composable
 fun CenteredToolbar(
-    title: @Composable (RowScope.() -> Unit),
-    modifier: Modifier = Modifier,
-    leading: @Composable (RowScope.() -> Unit)? = null,
-    trailing: @Composable (RowScope.() -> Unit)? = null,
-    backgroundColor: Color = Color.Transparent,
-    contentColor: Color = LocalContentColor.current,
-    windowInsets: WindowInsets = toolbarWindowInsets(),
+  title: @Composable (RowScope.() -> Unit),
+  modifier: Modifier = Modifier,
+  leading: @Composable (RowScope.() -> Unit)? = null,
+  trailing: @Composable (RowScope.() -> Unit)? = null,
+  backgroundColor: Color = Color.Transparent,
+  contentColor: Color = LocalContentColor.current,
+  windowInsets: WindowInsets = toolbarWindowInsets(),
 ) {
-    ToolbarContainer(
-        modifier = modifier,
-        backgroundColor = backgroundColor,
-        height = 64.dp,
-        contentColor = contentColor,
-        windowInsets = windowInsets,
-    ) {
-        if (leading != null) {
-            Row(
-                modifier = Modifier.align(Alignment.CenterStart),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                ProvideTextStyle(LocalTextStyle.current.merge(ToolbarTitleTextStyle)) {
-                    leading()
-                }
-            }
+  ToolbarContainer(
+    modifier = modifier,
+    backgroundColor = backgroundColor,
+    height = 64.dp,
+    contentColor = contentColor,
+    windowInsets = windowInsets,
+  ) {
+    if (leading != null) {
+      Row(
+        modifier = Modifier.align(Alignment.CenterStart),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+      ) {
+        ProvideTextStyle(LocalTextStyle.current.merge(ToolbarTitleTextStyle)) {
+          leading()
         }
-        Row(
-            modifier = Modifier.align(Alignment.Center),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            ProvideTextStyle(LocalTextStyle.current.merge(ToolbarTitleTextStyle)) {
-                title()
-            }
-        }
-        if (trailing != null) {
-            Row(
-                modifier = Modifier.align(Alignment.CenterEnd),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                content = trailing,
-            )
-        }
+      }
     }
+    Row(
+      modifier = Modifier.align(Alignment.Center),
+      horizontalArrangement = Arrangement.spacedBy(8.dp),
+      verticalAlignment = Alignment.CenterVertically,
+    ) {
+      ProvideTextStyle(LocalTextStyle.current.merge(ToolbarTitleTextStyle)) {
+        title()
+      }
+    }
+    if (trailing != null) {
+      Row(
+        modifier = Modifier.align(Alignment.CenterEnd),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        content = trailing,
+      )
+    }
+  }
 }
 
 private fun toolbarHeightFor(size: ToolbarSize): Dp = when (size) {
-    ToolbarSize.Large -> 112.dp
-    else -> 64.dp
+  ToolbarSize.Large -> 112.dp
+  else -> 64.dp
 }
 
 private val ToolbarTitleTextStyle = TextStyle(
-    fontSize = 20.sp,
-    lineHeight = 24.sp,
-    fontWeight = FontWeight.Medium,
+  fontSize = 20.sp,
+  lineHeight = 24.sp,
+  fontWeight = FontWeight.Medium,
 )
 
 private val ToolbarHeaderTextStyle = TextStyle(
-    fontSize = 26.sp,
-    lineHeight = 24.sp,
-    fontWeight = FontWeight.SemiBold,
+  fontSize = 26.sp,
+  lineHeight = 24.sp,
+  fontWeight = FontWeight.SemiBold,
 )
 
 @Composable
 private fun ToolbarContainer(
-    backgroundColor: Color,
-    height: Dp,
-    windowInsets: WindowInsets,
-    modifier: Modifier = Modifier,
-    contentColor: Color = LocalContentColor.current,
-    content: @Composable BoxScope.() -> Unit,
+  backgroundColor: Color,
+  height: Dp,
+  windowInsets: WindowInsets,
+  modifier: Modifier = Modifier,
+  contentColor: Color = LocalContentColor.current,
+  content: @Composable BoxScope.() -> Unit,
 ) {
-    ProvideContentColor(contentColor) {
-        Box(
-            modifier = modifier
-                .then(buildModifier {
-                    if (backgroundColor != Color.Transparent) {
-                        add(Modifier.background(backgroundColor))
-                    }
-                })
-                .windowInsetsPadding(windowInsets)
-                .height(height)
-                .padding(ToolbarContentPadding),
-            content = content,
+  ProvideContentColor(contentColor) {
+    Box(
+      modifier = modifier
+        .then(
+          buildModifier {
+            if (backgroundColor != Color.Transparent) {
+              add(Modifier.background(backgroundColor))
+            }
+          },
         )
-    }
+        .windowInsetsPadding(windowInsets)
+        .height(height)
+        .padding(ToolbarContentPadding),
+      content = content,
+    )
+  }
 }
 
 private val ToolbarContentPadding = PaddingValues(horizontal = 12.dp)
 
 @Composable
 private fun toolbarWindowInsets(): WindowInsets {
-    return WindowInsets.systemBars.only(
-        WindowInsetsSides.Horizontal + WindowInsetsSides.Top,
-    )
+  return WindowInsets.systemBars.only(
+    WindowInsetsSides.Horizontal + WindowInsetsSides.Top,
+  )
 }

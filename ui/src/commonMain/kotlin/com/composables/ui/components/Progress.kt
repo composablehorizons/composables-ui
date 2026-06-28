@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2026 Composable Horizons
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.composables.ui.components
 
 import androidx.compose.animation.core.LinearEasing
@@ -46,35 +67,35 @@ import com.composeunstyled.theme.Theme
  */
 @Composable
 fun ProgressIndicator(
-    progress: Float,
-    modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(999.dp),
-    trackColor: Color = Theme[colors][controlColor],
-    indicatorColor: Color = Theme[colors][primaryColor],
-    borderColor: Color = Color.Unspecified,
-    height: Dp = 6.dp,
+  progress: Float,
+  modifier: Modifier = Modifier,
+  shape: Shape = RoundedCornerShape(999.dp),
+  trackColor: Color = Theme[colors][controlColor],
+  indicatorColor: Color = Theme[colors][primaryColor],
+  borderColor: Color = Color.Unspecified,
+  height: Dp = 6.dp,
 ) {
-    val animatedProgress by animateFloatAsState(
-        targetValue = progress.coerceIn(0f, 1f),
-        animationSpec = tween(durationMillis = 250),
-        label = "ProgressIndicatorProgress",
-    )
+  val animatedProgress by animateFloatAsState(
+    targetValue = progress.coerceIn(0f, 1f),
+    animationSpec = tween(durationMillis = 250),
+    label = "ProgressIndicatorProgress",
+  )
 
-    UnstyledProgress(
-        progress = animatedProgress,
-        modifier = modifier.progressIndicatorContainer(
-            shape = shape,
-            trackColor = trackColor,
-            borderColor = borderColor,
-            height = height,
-        ),
-    ) {
-        Indicator(
-            modifier = Modifier
-                .clip(shape)
-                .background(indicatorColor, shape),
-        )
-    }
+  UnstyledProgress(
+    progress = animatedProgress,
+    modifier = modifier.progressIndicatorContainer(
+      shape = shape,
+      trackColor = trackColor,
+      borderColor = borderColor,
+      height = height,
+    ),
+  ) {
+    Indicator(
+      modifier = Modifier
+        .clip(shape)
+        .background(indicatorColor, shape),
+    )
+  }
 }
 
 /**
@@ -88,58 +109,60 @@ fun ProgressIndicator(
  */
 @Composable
 fun IndeterminateProgressIndicator(
-    modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(999.dp),
-    trackColor: Color = Theme[colors][controlColor],
-    indicatorColor: Color = Theme[colors][primaryColor],
-    borderColor: Color = Color.Unspecified,
-    height: Dp = 6.dp,
+  modifier: Modifier = Modifier,
+  shape: Shape = RoundedCornerShape(999.dp),
+  trackColor: Color = Theme[colors][controlColor],
+  indicatorColor: Color = Theme[colors][primaryColor],
+  borderColor: Color = Color.Unspecified,
+  height: Dp = 6.dp,
 ) {
-    val transition = rememberInfiniteTransition()
-    val offset by transition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1100, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart,
-        ),
-    )
-    UnstyledProgress(
-        modifier = modifier.progressIndicatorContainer(
-            shape = shape,
-            trackColor = trackColor,
-            borderColor = borderColor,
-            height = height,
-        ),
-    ) {
-        BoxWithConstraints(Modifier.fillMaxWidth().fillMaxHeight()) {
-            val indicatorWidth = maxWidth * 0.35f
-            val indicatorOffset = (maxWidth + indicatorWidth) * offset - indicatorWidth
-            Box(
-                Modifier
-                    .fillMaxHeight()
-                    .width(indicatorWidth)
-                    .offset(x = indicatorOffset)
-                    .clip(shape)
-                    .background(indicatorColor, shape),
-            )
-        }
+  val transition = rememberInfiniteTransition()
+  val offset by transition.animateFloat(
+    initialValue = 0f,
+    targetValue = 1f,
+    animationSpec = infiniteRepeatable(
+      animation = tween(durationMillis = 1100, easing = LinearEasing),
+      repeatMode = RepeatMode.Restart,
+    ),
+  )
+  UnstyledProgress(
+    modifier = modifier.progressIndicatorContainer(
+      shape = shape,
+      trackColor = trackColor,
+      borderColor = borderColor,
+      height = height,
+    ),
+  ) {
+    BoxWithConstraints(Modifier.fillMaxWidth().fillMaxHeight()) {
+      val indicatorWidth = maxWidth * 0.35f
+      val indicatorOffset = (maxWidth + indicatorWidth) * offset - indicatorWidth
+      Box(
+        Modifier
+          .fillMaxHeight()
+          .width(indicatorWidth)
+          .offset(x = indicatorOffset)
+          .clip(shape)
+          .background(indicatorColor, shape),
+      )
     }
+  }
 }
 
 private fun Modifier.progressIndicatorContainer(
-    shape: Shape,
-    trackColor: Color,
-    borderColor: Color,
-    height: Dp,
+  shape: Shape,
+  trackColor: Color,
+  borderColor: Color,
+  height: Dp,
 ): Modifier {
-    return this
-        .height(height)
-        .clip(shape)
-        .background(trackColor, shape)
-        .then(buildModifier {
-            if (borderColor.isSpecified && borderColor != Color.Transparent) {
-                add(Modifier.border(1.dp, borderColor, shape))
-            }
-        })
+  return this
+    .height(height)
+    .clip(shape)
+    .background(trackColor, shape)
+    .then(
+      buildModifier {
+        if (borderColor.isSpecified && borderColor != Color.Transparent) {
+          add(Modifier.border(1.dp, borderColor, shape))
+        }
+      },
+    )
 }

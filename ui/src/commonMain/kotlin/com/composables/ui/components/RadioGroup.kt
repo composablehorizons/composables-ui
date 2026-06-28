@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2026 Composable Horizons
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.composables.ui.components
 
 import androidx.compose.animation.fadeIn
@@ -26,10 +47,10 @@ import com.composables.ui.theme.colors
 import com.composables.ui.theme.controlColor
 import com.composables.ui.theme.defaultIndication
 import com.composables.ui.theme.disabledAlpha
-import com.composables.ui.theme.ringColor
 import com.composables.ui.theme.indications
 import com.composables.ui.theme.onPanelColor
 import com.composables.ui.theme.primaryColor
+import com.composables.ui.theme.ringColor
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.SelectedIndicator
 import com.composeunstyled.UnstyledRadioButton
@@ -47,15 +68,15 @@ import com.composeunstyled.theme.Theme
  */
 @Composable
 fun <T> RadioGroup(
-    value: T?,
-    onValueChange: (T) -> Unit,
-    modifier: Modifier = Modifier,
-    accessibilityLabel: String? = null,
-    content: @Composable () -> Unit,
+  value: T?,
+  onValueChange: (T) -> Unit,
+  modifier: Modifier = Modifier,
+  accessibilityLabel: String? = null,
+  content: @Composable () -> Unit,
 ) {
-    UnstyledRadioGroup(value, onValueChange, modifier, accessibilityLabel) {
-        content()
-    }
+  UnstyledRadioGroup(value, onValueChange, modifier, accessibilityLabel) {
+    content()
+  }
 }
 
 /**
@@ -68,53 +89,53 @@ fun <T> RadioGroup(
  */
 @Composable
 fun <T> Radio(
-    value: T,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    content: (@Composable RowScope.() -> Unit)? = null,
+  value: T,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+  content: (@Composable RowScope.() -> Unit)? = null,
 ) {
-    val rowShape = RoundedCornerShape(8.dp)
-    UnstyledRadioButton(
-        value = value,
-        enabled = enabled,
-        interactionSource = interactionSource,
-        modifier = modifier
-            .clip(rowShape)
-            .padding(2.dp)
-            .then(buildModifier { if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha])) }),
+  val rowShape = RoundedCornerShape(8.dp)
+  UnstyledRadioButton(
+    value = value,
+    enabled = enabled,
+    interactionSource = interactionSource,
+    modifier = modifier
+      .clip(rowShape)
+      .padding(2.dp)
+      .then(buildModifier { if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha])) }),
+  ) {
+    Row(
+      horizontalArrangement = Arrangement.spacedBy(10.dp),
+      verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalAlignment = Alignment.CenterVertically,
+      SelectedIndicator(
+        enter = fadeIn(),
+        exit = fadeOut(),
+        indication = Theme[indications][defaultIndication],
+        modifier = Modifier
+          .focusRing(
+            interactionSource = interactionSource,
+            color = Theme[colors][ringColor],
+            shape = CircleShape,
+          )
+          .clip(CircleShape)
+          .background(Theme[colors][controlColor], CircleShape)
+          .border(1.dp, Theme[colors][borderColor], CircleShape)
+          .size(20.dp),
+      ) {
+        Box(
+          modifier = Modifier.size(20.dp),
+          contentAlignment = Alignment.Center,
         ) {
-            SelectedIndicator(
-                enter = fadeIn(),
-                exit = fadeOut(),
-                indication = Theme[indications][defaultIndication],
-                modifier = Modifier
-                    .focusRing(
-                        interactionSource = interactionSource,
-                        color = Theme[colors][ringColor],
-                        shape = CircleShape,
-                    )
-                    .clip(CircleShape)
-                    .background(Theme[colors][controlColor], CircleShape)
-                    .border(1.dp, Theme[colors][borderColor], CircleShape)
-                    .size(20.dp)
-            ) {
-                Box(
-                    modifier = Modifier.size(20.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Box(Modifier.size(10.dp).background(Theme[colors][primaryColor], CircleShape))
-                }
-            }
-            if (content != null) {
-                ProvideContentColor(Theme[colors][onPanelColor]) {
-                    content()
-                }
-            }
+          Box(Modifier.size(10.dp).background(Theme[colors][primaryColor], CircleShape))
         }
+      }
+      if (content != null) {
+        ProvideContentColor(Theme[colors][onPanelColor]) {
+          content()
+        }
+      }
     }
+  }
 }

@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2026 Composable Horizons
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.composables.ui.components
 
 import androidx.compose.animation.animateColorAsState
@@ -26,8 +47,8 @@ import androidx.compose.ui.unit.dp
 import com.composables.ui.theme.alphas
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.disabledAlpha
-import com.composables.ui.theme.ringColor
 import com.composables.ui.theme.onPanelColor
+import com.composables.ui.theme.ringColor
 import com.composables.ui.theme.switchSelectedTrackColor
 import com.composables.ui.theme.switchThumbColor
 import com.composables.ui.theme.switchTrackColor
@@ -50,63 +71,65 @@ import com.composeunstyled.theme.Theme
  */
 @Composable
 fun Switch(
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    accessibilityLabel: String? = null,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    content: (@Composable RowScope.() -> Unit)? = null,
+  checked: Boolean,
+  onCheckedChange: (Boolean) -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  accessibilityLabel: String? = null,
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+  content: (@Composable RowScope.() -> Unit)? = null,
 ) {
-    val trackShape = RoundedCornerShape(999.dp)
-    val trackColor by animateColorAsState(
-        if (checked) Theme[colors][switchSelectedTrackColor] else Theme[colors][switchTrackColor]
-    )
+  val trackShape = RoundedCornerShape(999.dp)
+  val trackColor by animateColorAsState(
+    if (checked) Theme[colors][switchSelectedTrackColor] else Theme[colors][switchTrackColor],
+  )
 
-    UnstyledSwitch(
-        checked = checked,
-        onCheckedChange = onCheckedChange,
-        enabled = enabled,
-        interactionSource = interactionSource,
-        modifier = modifier
-            .then(buildModifier {
-                accessibilityLabel?.let { label ->
-                    add(Modifier.semantics { contentDescription = label })
-                }
-            })
-            .alpha(if (enabled) 1f else Theme[alphas][disabledAlpha]),
+  UnstyledSwitch(
+    checked = checked,
+    onCheckedChange = onCheckedChange,
+    enabled = enabled,
+    interactionSource = interactionSource,
+    modifier = modifier
+      .then(
+        buildModifier {
+          accessibilityLabel?.let { label ->
+            add(Modifier.semantics { contentDescription = label })
+          }
+        },
+      )
+      .alpha(if (enabled) 1f else Theme[alphas][disabledAlpha]),
+  ) {
+    Row(
+      horizontalArrangement = Arrangement.spacedBy(10.dp),
+      verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Track(
-                modifier = Modifier
-                    .focusRing(
-                        interactionSource = interactionSource,
-                        color = Theme[colors][ringColor],
-                        shape = trackShape,
-                        visibility = FocusRingVisibility.Focused,
-                    )
-                    .background(trackColor, trackShape)
-                    .border(Dp.Hairline, Theme[colors][ringColor], trackShape)
-                    .size(width = 44.dp, height = 24.dp)
-                    .padding(2.dp),
-            ) {
-                Thumb(animationSpec = spring()) {
-                    Box(
-                        Modifier
-                            .size(20.dp)
-                            .background(Theme[colors][switchThumbColor], CircleShape)
-                            .border(Dp.Hairline, Theme[colors][ringColor], CircleShape),
-                    )
-                }
-            }
-            if (content != null) {
-                ProvideContentColor(Theme[colors][onPanelColor]) {
-                    content()
-                }
-            }
+      Track(
+        modifier = Modifier
+          .focusRing(
+            interactionSource = interactionSource,
+            color = Theme[colors][ringColor],
+            shape = trackShape,
+            visibility = FocusRingVisibility.Focused,
+          )
+          .background(trackColor, trackShape)
+          .border(Dp.Hairline, Theme[colors][ringColor], trackShape)
+          .size(width = 44.dp, height = 24.dp)
+          .padding(2.dp),
+      ) {
+        Thumb(animationSpec = spring()) {
+          Box(
+            Modifier
+              .size(20.dp)
+              .background(Theme[colors][switchThumbColor], CircleShape)
+              .border(Dp.Hairline, Theme[colors][ringColor], CircleShape),
+          )
         }
+      }
+      if (content != null) {
+        ProvideContentColor(Theme[colors][onPanelColor]) {
+          content()
+        }
+      }
     }
+  }
 }
