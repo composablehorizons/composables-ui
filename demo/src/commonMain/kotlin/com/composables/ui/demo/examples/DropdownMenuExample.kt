@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2026 Composable Horizons
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.composables.ui.demo.examples
 
 import androidx.compose.foundation.layout.Arrangement
@@ -32,120 +53,120 @@ import com.composables.ui.components.Text
 
 @Composable
 fun DropdownMenuExample() {
-    var expanded by remember { mutableStateOf(false) }
-    var selectedColorScheme by remember { mutableStateOf("Light") }
+  var expanded by remember { mutableStateOf(false) }
+  var selectedColorScheme by remember { mutableStateOf("Light") }
 
-    DropdownMenu(
-        expanded = expanded,
-        onExpandedChange = { expanded = it },
-        alignment = DropdownMenuAlignment.End,
-        panel = {
-            DropdownMenuPanel {
-                DropdownMenuItem(
-                    onClick = {
-                        selectedColorScheme = "System"
-                        expanded = false
-                    },
-                    leading = {
-                        if (selectedColorScheme == "System") {
-                            Icon(
-                                imageVector = Lucide.Check,
-                                contentDescription = null,
-                                modifier = Modifier.size(16.dp),
-                            )
-                        } else {
-                            Spacer(Modifier.width(16.dp))
-                        }
-                    },
-                    trailing = {
-                        Icon(
-                            imageVector = Lucide.Monitor,
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp),
-                        )
-                    },
-                ) {
-                    Text("System")
-                }
-                DropdownMenuItem(
-                    onClick = {
-                        selectedColorScheme = "Dark"
-                        expanded = false
-                    },
-                    leading = {
-                        if (selectedColorScheme == "Dark") {
-                            Icon(
-                                imageVector = Lucide.Check,
-                                contentDescription = null,
-                                modifier = Modifier.size(16.dp),
-                            )
-                        } else {
-                            Spacer(Modifier.width(16.dp))
-                        }
-                    },
-                    trailing = {
-                        Icon(
-                            imageVector = Lucide.Moon,
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp),
-                        )
-                    },
-                ) {
-                    Text("Dark")
-                }
-                DropdownMenuItem(
-                    onClick = {
-                        selectedColorScheme = "Light"
-                        expanded = false
-                    },
-                    leading = {
-                        if (selectedColorScheme == "Light") {
-                            Icon(
-                                imageVector = Lucide.Check,
-                                contentDescription = null,
-                                modifier = Modifier.size(16.dp),
-                            )
-                        } else {
-                            Spacer(Modifier.width(16.dp))
-                        }
-                    },
-                    trailing = {
-                        Icon(
-                            imageVector = Lucide.Sun,
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp),
-                        )
-                    },
-                ) {
-                    Text("Light")
-                }
+  DropdownMenu(
+    expanded = expanded,
+    onExpandedChange = { expanded = it },
+    alignment = DropdownMenuAlignment.End,
+    panel = {
+      DropdownMenuPanel {
+        DropdownMenuItem(
+          onClick = {
+            selectedColorScheme = "System"
+            expanded = false
+          },
+          leading = {
+            if (selectedColorScheme == "System") {
+              Icon(
+                imageVector = Lucide.Check,
+                contentDescription = null,
+                modifier = Modifier.size(16.dp),
+              )
+            } else {
+              Spacer(Modifier.width(16.dp))
             }
-        },
-    ) {
-        Button(
-            onClick = { expanded = expanded.not() },
-            modifier = Modifier.fillMaxWidth(),
-            style = ButtonStyle.Ghost,
+          },
+          trailing = {
+            Icon(
+              imageVector = Lucide.Monitor,
+              contentDescription = null,
+              modifier = Modifier.size(16.dp),
+            )
+          },
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    imageVector = Lucide.Palette,
-                    contentDescription = null,
-                    modifier = Modifier.size(18.dp),
-                )
-                Text("Color scheme")
-                Spacer(Modifier.weight(1f))
-                Text(selectedColorScheme)
-                Icon(
-                    imageVector = Lucide.ChevronsUpDown,
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp),
-                )
-            }
+          Text("System")
         }
+        DropdownMenuItem(
+          onClick = {
+            selectedColorScheme = "Dark"
+            expanded = false
+          },
+          leading = {
+            if (selectedColorScheme == "Dark") {
+              Icon(
+                imageVector = Lucide.Check,
+                contentDescription = null,
+                modifier = Modifier.size(16.dp),
+              )
+            } else {
+              Spacer(Modifier.width(16.dp))
+            }
+          },
+          trailing = {
+            Icon(
+              imageVector = Lucide.Moon,
+              contentDescription = null,
+              modifier = Modifier.size(16.dp),
+            )
+          },
+        ) {
+          Text("Dark")
+        }
+        DropdownMenuItem(
+          onClick = {
+            selectedColorScheme = "Light"
+            expanded = false
+          },
+          leading = {
+            if (selectedColorScheme == "Light") {
+              Icon(
+                imageVector = Lucide.Check,
+                contentDescription = null,
+                modifier = Modifier.size(16.dp),
+              )
+            } else {
+              Spacer(Modifier.width(16.dp))
+            }
+          },
+          trailing = {
+            Icon(
+              imageVector = Lucide.Sun,
+              contentDescription = null,
+              modifier = Modifier.size(16.dp),
+            )
+          },
+        ) {
+          Text("Light")
+        }
+      }
+    },
+  ) {
+    Button(
+      onClick = { expanded = expanded.not() },
+      modifier = Modifier.fillMaxWidth(),
+      style = ButtonStyle.Ghost,
+    ) {
+      Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+      ) {
+        Icon(
+          imageVector = Lucide.Palette,
+          contentDescription = null,
+          modifier = Modifier.size(18.dp),
+        )
+        Text("Color scheme")
+        Spacer(Modifier.weight(1f))
+        Text(selectedColorScheme)
+        Icon(
+          imageVector = Lucide.ChevronsUpDown,
+          contentDescription = null,
+          modifier = Modifier.size(16.dp),
+        )
+      }
     }
+  }
 }

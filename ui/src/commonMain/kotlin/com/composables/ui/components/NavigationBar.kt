@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2026 Composable Horizons
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.composables.ui.components
 
 import androidx.compose.foundation.background
@@ -36,26 +57,26 @@ import com.composeunstyled.theme.Theme
  */
 @Composable
 fun NavigationBar(
-    modifier: Modifier = Modifier,
-    windowInsets: WindowInsets = navigationBarWindowInsets(),
-    content: @Composable RowScope.() -> Unit,
+  modifier: Modifier = Modifier,
+  windowInsets: WindowInsets = navigationBarWindowInsets(),
+  content: @Composable RowScope.() -> Unit,
 ) {
-    Column(
-        modifier
-            .pointerInput(Unit) {}
-            .background(Theme[colors][panelColor])
-    ) {
-        HorizontalSeparator()
-        Row(
-            modifier = Modifier
-                .windowInsetsPadding(windowInsets)
-                .height(NavigationBarHeight)
-                .padding(horizontal = 24.dp, vertical = 2.dp),
-            horizontalArrangement = Arrangement.spacedBy(NavigationBarItemSpacing),
-            verticalAlignment = Alignment.CenterVertically,
-            content = content,
-        )
-    }
+  Column(
+    modifier
+      .pointerInput(Unit) {}
+      .background(Theme[colors][panelColor]),
+  ) {
+    HorizontalSeparator()
+    Row(
+      modifier = Modifier
+        .windowInsetsPadding(windowInsets)
+        .height(NavigationBarHeight)
+        .padding(horizontal = 24.dp, vertical = 2.dp),
+      horizontalArrangement = Arrangement.spacedBy(NavigationBarItemSpacing),
+      verticalAlignment = Alignment.CenterVertically,
+      content = content,
+    )
+  }
 }
 
 /**
@@ -69,28 +90,28 @@ fun NavigationBar(
  */
 @Composable
 fun NavigationBarItem(
-    selected: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    shape: Shape = RoundedCornerShape(8.dp),
-    content: @Composable () -> Unit,
+  selected: Boolean,
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  shape: Shape = RoundedCornerShape(8.dp),
+  content: @Composable () -> Unit,
 ) {
-    IconButton(
-        onClick = onClick,
-        modifier = modifier then buildModifier {
-            if (selected) {
-                add(Modifier.background(Theme[colors][selectedControlColor], shape))
-            }
-        }.height(NavigationBarHeight),
-        enabled = enabled,
-        style = ButtonStyle.Ghost,
-        shape = shape,
-    ) {
-        ProvideContentColor(if (selected) Theme[colors][onSelectedControlColor] else Theme[colors][onPanelColor]) {
-            content()
-        }
+  IconButton(
+    onClick = onClick,
+    modifier = modifier then buildModifier {
+      if (selected) {
+        add(Modifier.background(Theme[colors][selectedControlColor], shape))
+      }
+    }.height(NavigationBarHeight),
+    enabled = enabled,
+    style = ButtonStyle.Ghost,
+    shape = shape,
+  ) {
+    ProvideContentColor(if (selected) Theme[colors][onSelectedControlColor] else Theme[colors][onPanelColor]) {
+      content()
     }
+  }
 }
 
 private val NavigationBarHeight = 64.dp
@@ -98,5 +119,5 @@ private val NavigationBarItemSpacing = 8.dp
 
 @Composable
 private fun navigationBarWindowInsets(): WindowInsets {
-    return WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom)
+  return WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom)
 }

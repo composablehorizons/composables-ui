@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2026 Composable Horizons
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.composables.ui.components
 
 import androidx.compose.foundation.Indication
@@ -61,42 +82,42 @@ import kotlin.jvm.JvmInline
  */
 @JvmInline
 value class ButtonStyle internal constructor(@Suppress("unused") private val value: Int) {
-    companion object {
-        /**
-         * Use for the primary action on a screen.
-         */
-        val Primary = ButtonStyle(0)
+  companion object {
+    /**
+     * Use for the primary action on a screen.
+     */
+    val Primary = ButtonStyle(0)
 
-        /**
-         * Use for secondary actions.
-         */
-        val Secondary = ButtonStyle(1)
+    /**
+     * Use for secondary actions.
+     */
+    val Secondary = ButtonStyle(1)
 
-        /**
-         * Use for lower-emphasis actions with an outline.
-         */
-        val Outlined = ButtonStyle(2)
+    /**
+     * Use for lower-emphasis actions with an outline.
+     */
+    val Outlined = ButtonStyle(2)
 
-        /**
-         * Use for destructive actions.
-         */
-        val Destructive = ButtonStyle(3)
+    /**
+     * Use for destructive actions.
+     */
+    val Destructive = ButtonStyle(3)
 
-        /**
-         * Use for low-emphasis actions without a container.
-         */
-        val Ghost = ButtonStyle(4)
+    /**
+     * Use for low-emphasis actions without a container.
+     */
+    val Ghost = ButtonStyle(4)
 
-        /**
-         * Style for clickable text links.
-         */
-        val Link = ButtonStyle(5)
+    /**
+     * Style for clickable text links.
+     */
+    val Link = ButtonStyle(5)
 
-        /**
-         * The default button style.
-         */
-        val Default = Secondary
-    }
+    /**
+     * The default button style.
+     */
+    val Default = Secondary
+  }
 }
 
 /**
@@ -104,27 +125,27 @@ value class ButtonStyle internal constructor(@Suppress("unused") private val val
  */
 @JvmInline
 value class ButtonSize internal constructor(@Suppress("unused") private val value: Int) {
-    companion object {
-        /**
-         * Small button size.
-         */
-        val Small = ButtonSize(0)
+  companion object {
+    /**
+     * Small button size.
+     */
+    val Small = ButtonSize(0)
 
-        /**
-         * Regular button size.
-         */
-        val Regular = ButtonSize(1)
+    /**
+     * Regular button size.
+     */
+    val Regular = ButtonSize(1)
 
-        /**
-         * Large button size.
-         */
-        val Large = ButtonSize(2)
+    /**
+     * Large button size.
+     */
+    val Large = ButtonSize(2)
 
-        /**
-         * The default button size.
-         */
-        val Default = Regular
-    }
+    /**
+     * The default button size.
+     */
+    val Default = Regular
+  }
 }
 
 /**
@@ -142,46 +163,46 @@ value class ButtonSize internal constructor(@Suppress("unused") private val valu
  */
 @Composable
 fun Button(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    style: ButtonStyle = ButtonStyle.Default,
-    shape: Shape = buttonShapeFor(style),
-    buttonSize: ButtonSize = ButtonSize.Default,
-    contentPadding: PaddingValues = buttonPaddingFor(buttonSize, style),
-    borderWidth: Dp = 1.dp,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    indication: Indication? = buttonIndicationFor(style),
-    contentColor: Color = buttonContentColorFor(style),
-    content: @Composable RowScope.() -> Unit,
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  style: ButtonStyle = ButtonStyle.Default,
+  shape: Shape = buttonShapeFor(style),
+  buttonSize: ButtonSize = ButtonSize.Default,
+  contentPadding: PaddingValues = buttonPaddingFor(buttonSize, style),
+  borderWidth: Dp = 1.dp,
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+  indication: Indication? = buttonIndicationFor(style),
+  contentColor: Color = buttonContentColorFor(style),
+  content: @Composable RowScope.() -> Unit,
 ) {
-    val hovered by interactionSource.collectIsHoveredAsState()
-    val backgroundColor = buttonBackgroundColorFor(style)
+  val hovered by interactionSource.collectIsHoveredAsState()
+  val backgroundColor = buttonBackgroundColorFor(style)
 
-    BaseButton(
-        onClick = onClick,
-        modifier = modifier.size(buttonSize, style),
-        enabled = enabled,
-        style = style,
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
-        shape = shape,
-        contentPadding = contentPadding,
-        borderColor = buttonBorderColorFor(style),
-        borderWidth = borderWidth,
-        interactionSource = interactionSource,
-        indication = indication,
-        content = {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                ProvideTextStyle(LocalTextStyle.current.merge(buttonLabelTextStyleFor(style, hovered))) {
-                    content()
-                }
-            }
-        },
-    )
+  BaseButton(
+    onClick = onClick,
+    modifier = modifier.size(buttonSize, style),
+    enabled = enabled,
+    style = style,
+    backgroundColor = backgroundColor,
+    contentColor = contentColor,
+    shape = shape,
+    contentPadding = contentPadding,
+    borderColor = buttonBorderColorFor(style),
+    borderWidth = borderWidth,
+    interactionSource = interactionSource,
+    indication = indication,
+    content = {
+      Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+        verticalAlignment = Alignment.CenterVertically,
+      ) {
+        ProvideTextStyle(LocalTextStyle.current.merge(buttonLabelTextStyleFor(style, hovered))) {
+          content()
+        }
+      }
+    },
+  )
 }
 
 /**
@@ -199,172 +220,174 @@ fun Button(
  */
 @Composable
 fun IconButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    style: ButtonStyle = ButtonStyle.Default,
-    shape: Shape = Theme[shapes][buttonShape],
-    buttonSize: ButtonSize = ButtonSize.Default,
-    borderWidth: Dp = 1.dp,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    indication: Indication? = buttonIndicationFor(style),
-    contentColor: Color = buttonContentColorFor(style),
-    content: @Composable () -> Unit,
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  style: ButtonStyle = ButtonStyle.Default,
+  shape: Shape = Theme[shapes][buttonShape],
+  buttonSize: ButtonSize = ButtonSize.Default,
+  borderWidth: Dp = 1.dp,
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+  indication: Indication? = buttonIndicationFor(style),
+  contentColor: Color = buttonContentColorFor(style),
+  content: @Composable () -> Unit,
 ) {
-    val backgroundColor = buttonBackgroundColorFor(style)
+  val backgroundColor = buttonBackgroundColorFor(style)
 
-    BaseButton(
-        onClick = onClick,
-        modifier = modifier.size(buttonHeightFor(buttonSize)),
-        enabled = enabled,
-        style = style,
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
-        shape = shape,
-        borderColor = buttonBorderColorFor(style),
-        borderWidth = borderWidth,
-        interactionSource = interactionSource,
-        indication = indication,
-        content = content,
-    )
+  BaseButton(
+    onClick = onClick,
+    modifier = modifier.size(buttonHeightFor(buttonSize)),
+    enabled = enabled,
+    style = style,
+    backgroundColor = backgroundColor,
+    contentColor = contentColor,
+    shape = shape,
+    borderColor = buttonBorderColorFor(style),
+    borderWidth = borderWidth,
+    interactionSource = interactionSource,
+    indication = indication,
+    content = content,
+  )
 }
 
 @Composable
 private fun buttonPaddingFor(buttonSize: ButtonSize, style: ButtonStyle): PaddingValues {
-    if (style == ButtonStyle.Link) {
-        return NoPadding
-    }
+  if (style == ButtonStyle.Link) {
+    return NoPadding
+  }
 
-    return PaddingValues(horizontal = buttonHorizontalPaddingFor(buttonSize))
+  return PaddingValues(horizontal = buttonHorizontalPaddingFor(buttonSize))
 }
 
 @Composable
 private fun buttonShapeFor(style: ButtonStyle): Shape {
-    return if (style == ButtonStyle.Link) Theme[shapes][smallShape] else Theme[shapes][buttonShape]
+  return if (style == ButtonStyle.Link) Theme[shapes][smallShape] else Theme[shapes][buttonShape]
 }
 
 @Composable
 private fun Modifier.size(buttonSize: ButtonSize, style: ButtonStyle): Modifier {
-    return if (style == ButtonStyle.Link) this else heightIn(min = buttonHeightFor(buttonSize))
+  return if (style == ButtonStyle.Link) this else heightIn(min = buttonHeightFor(buttonSize))
 }
 
 @Composable
 private fun buttonHeightFor(buttonSize: ButtonSize): Dp {
-    val baseHeight = if (LocalInteractionMode.current == InteractionMode.Touch) 48.dp else 36.dp
-    return when (buttonSize) {
-        ButtonSize.Small -> baseHeight - 4.dp
-        ButtonSize.Large -> baseHeight + 4.dp
-        else -> baseHeight
-    }
+  val baseHeight = if (LocalInteractionMode.current == InteractionMode.Touch) 48.dp else 36.dp
+  return when (buttonSize) {
+    ButtonSize.Small -> baseHeight - 4.dp
+    ButtonSize.Large -> baseHeight + 4.dp
+    else -> baseHeight
+  }
 }
 
 @Composable
 private fun buttonHorizontalPaddingFor(buttonSize: ButtonSize): Dp {
-    val basePadding = if (LocalInteractionMode.current == InteractionMode.Touch) 20.dp else 16.dp
-    return when (buttonSize) {
-        ButtonSize.Small -> basePadding - 4.dp
-        ButtonSize.Large -> basePadding + 4.dp
-        else -> basePadding
-    }
+  val basePadding = if (LocalInteractionMode.current == InteractionMode.Touch) 20.dp else 16.dp
+  return when (buttonSize) {
+    ButtonSize.Small -> basePadding - 4.dp
+    ButtonSize.Large -> basePadding + 4.dp
+    else -> basePadding
+  }
 }
 
 private val NoPadding = PaddingValues(0.dp)
 private val ButtonLabelTextStyle = TextStyle(
-    fontWeight = FontWeight.Medium,
+  fontWeight = FontWeight.Medium,
 )
 
 private fun buttonLabelTextStyleFor(style: ButtonStyle, hovered: Boolean): TextStyle {
-    return if (style == ButtonStyle.Link && hovered) {
-        ButtonLabelTextStyle.copy(textDecoration = TextDecoration.Underline)
-    } else {
-        ButtonLabelTextStyle
-    }
+  return if (style == ButtonStyle.Link && hovered) {
+    ButtonLabelTextStyle.copy(textDecoration = TextDecoration.Underline)
+  } else {
+    ButtonLabelTextStyle
+  }
 }
 
 @Composable
 private fun buttonBackgroundColorFor(style: ButtonStyle): Color {
-    return when (style) {
-        ButtonStyle.Primary -> Theme[colors][primaryColor]
-        ButtonStyle.Secondary -> Theme[colors][secondaryColor]
-        ButtonStyle.Outlined -> Theme[colors][panelColor]
-        ButtonStyle.Destructive -> Theme[colors][destructiveColor]
-        else -> Color.Transparent
-    }
+  return when (style) {
+    ButtonStyle.Primary -> Theme[colors][primaryColor]
+    ButtonStyle.Secondary -> Theme[colors][secondaryColor]
+    ButtonStyle.Outlined -> Theme[colors][panelColor]
+    ButtonStyle.Destructive -> Theme[colors][destructiveColor]
+    else -> Color.Transparent
+  }
 }
 
 @Composable
 private fun buttonContentColorFor(style: ButtonStyle): Color {
-    return when (style) {
-        ButtonStyle.Primary -> Theme[colors][onPrimaryColor]
-        ButtonStyle.Secondary -> Theme[colors][onSecondaryColor]
-        ButtonStyle.Destructive -> Theme[colors][onDestructiveColor]
-        ButtonStyle.Outlined -> Theme[colors][onPanelColor]
-        else -> LocalContentColor.current
-    }
+  return when (style) {
+    ButtonStyle.Primary -> Theme[colors][onPrimaryColor]
+    ButtonStyle.Secondary -> Theme[colors][onSecondaryColor]
+    ButtonStyle.Destructive -> Theme[colors][onDestructiveColor]
+    ButtonStyle.Outlined -> Theme[colors][onPanelColor]
+    else -> LocalContentColor.current
+  }
 }
 
 @Composable
 private fun buttonBorderColorFor(style: ButtonStyle): Color {
-    return when (style) {
-        ButtonStyle.Outlined -> Theme[colors][borderColor]
-        else -> Color.Unspecified
-    }
+  return when (style) {
+    ButtonStyle.Outlined -> Theme[colors][borderColor]
+    else -> Color.Unspecified
+  }
 }
 
 @Composable
 private fun BaseButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    style: ButtonStyle,
-    backgroundColor: Color,
-    contentColor: Color,
-    shape: Shape,
-    contentPadding: PaddingValues = NoPadding,
-    borderColor: Color,
-    borderWidth: Dp,
-    interactionSource: MutableInteractionSource,
-    indication: Indication?,
-    content: @Composable () -> Unit,
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  style: ButtonStyle,
+  backgroundColor: Color,
+  contentColor: Color,
+  shape: Shape,
+  contentPadding: PaddingValues = NoPadding,
+  borderColor: Color,
+  borderWidth: Dp,
+  interactionSource: MutableInteractionSource,
+  indication: Indication?,
+  content: @Composable () -> Unit,
 ) {
-    val alpha = if (enabled) 1f else Theme[alphas][disabledAlpha]
+  val alpha = if (enabled) 1f else Theme[alphas][disabledAlpha]
 
-    UnstyledButton(
-        onClick = onClick,
-        enabled = enabled,
-        contentPadding = contentPadding,
-        modifier = modifier
-            .focusRing(
-                interactionSource = interactionSource,
-                color = Theme[colors][ringColor],
-                shape = shape,
-            )
-            .bouncyPress(
-                interactionSource = interactionSource,
-                enabled = enabled && style != ButtonStyle.Link,
-            )
-            .graphicsLayer { this.alpha = alpha }
-            .then(buildModifier {
-                if (style != ButtonStyle.Link) {
-                    add(Modifier.clip(shape))
-                    add(Modifier.background(backgroundColor, shape))
-                    if (borderColor.isSpecified && borderColor != Color.Transparent && borderWidth > 0.dp) {
-                        add(Modifier.border(borderWidth, borderColor, shape))
-                    }
-                }
-            }),
+  UnstyledButton(
+    onClick = onClick,
+    enabled = enabled,
+    contentPadding = contentPadding,
+    modifier = modifier
+      .focusRing(
         interactionSource = interactionSource,
-        indication = indication,
-    ) {
-        ProvideContentColor(contentColor) {
-            content()
-        }
+        color = Theme[colors][ringColor],
+        shape = shape,
+      )
+      .bouncyPress(
+        interactionSource = interactionSource,
+        enabled = enabled && style != ButtonStyle.Link,
+      )
+      .graphicsLayer { this.alpha = alpha }
+      .then(
+        buildModifier {
+          if (style != ButtonStyle.Link) {
+            add(Modifier.clip(shape))
+            add(Modifier.background(backgroundColor, shape))
+            if (borderColor.isSpecified && borderColor != Color.Transparent && borderWidth > 0.dp) {
+              add(Modifier.border(borderWidth, borderColor, shape))
+            }
+          }
+        },
+      ),
+    interactionSource = interactionSource,
+    indication = indication,
+  ) {
+    ProvideContentColor(contentColor) {
+      content()
     }
+  }
 }
 
 @Composable
 private fun buttonIndicationFor(style: ButtonStyle) = when (style) {
-    ButtonStyle.Primary, ButtonStyle.Destructive -> Theme[indications][inverseIndication]
-    ButtonStyle.Link -> null
-    else -> Theme[indications][defaultIndication]
+  ButtonStyle.Primary, ButtonStyle.Destructive -> Theme[indications][inverseIndication]
+  ButtonStyle.Link -> null
+  else -> Theme[indications][defaultIndication]
 }

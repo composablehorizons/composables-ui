@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2026 Composable Horizons
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.composables.ui.components
 
 import androidx.compose.animation.fadeIn
@@ -25,13 +46,13 @@ import com.composeunstyled.ThumbVisibility
 import com.composeunstyled.UnstyledHorizontalScrollbar
 import com.composeunstyled.UnstyledVerticalScrollbar
 import com.composeunstyled.theme.Theme
+import kotlin.time.Duration.Companion.milliseconds
 import com.composeunstyled.ScrollbarState as UnstyledScrollbarState
 import com.composeunstyled.rememberScrollbarState as rememberUnstyledScrollbarState
-import kotlin.time.Duration.Companion.milliseconds
 
 @Stable
 class ScrollbarState internal constructor(
-    internal val unstyledState: UnstyledScrollbarState,
+  internal val unstyledState: UnstyledScrollbarState,
 )
 
 /**
@@ -40,7 +61,7 @@ class ScrollbarState internal constructor(
  */
 @Composable
 fun rememberVerticalScrollbarState(scrollState: ScrollState): ScrollbarState {
-    return rememberScrollbarState(rememberUnstyledScrollbarState(scrollState))
+  return rememberScrollbarState(rememberUnstyledScrollbarState(scrollState))
 }
 
 /**
@@ -49,7 +70,7 @@ fun rememberVerticalScrollbarState(scrollState: ScrollState): ScrollbarState {
  */
 @Composable
 fun rememberVerticalScrollbarState(lazyListState: LazyListState): ScrollbarState {
-    return rememberScrollbarState(rememberUnstyledScrollbarState(lazyListState))
+  return rememberScrollbarState(rememberUnstyledScrollbarState(lazyListState))
 }
 
 /**
@@ -58,12 +79,12 @@ fun rememberVerticalScrollbarState(lazyListState: LazyListState): ScrollbarState
  */
 @Composable
 fun rememberVerticalScrollbarState(lazyGridState: LazyGridState): ScrollbarState {
-    return rememberScrollbarState(rememberUnstyledScrollbarState(lazyGridState))
+  return rememberScrollbarState(rememberUnstyledScrollbarState(lazyGridState))
 }
 
 @Composable
 private fun rememberScrollbarState(unstyledState: UnstyledScrollbarState): ScrollbarState {
-    return remember(unstyledState) { ScrollbarState(unstyledState) }
+  return remember(unstyledState) { ScrollbarState(unstyledState) }
 }
 
 /**
@@ -79,28 +100,28 @@ private fun rememberScrollbarState(unstyledState: UnstyledScrollbarState): Scrol
  */
 @Composable
 fun VerticalScrollbar(
-    state: ScrollbarState,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    reverseLayout: Boolean = false,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    thumbColor: Color = Theme[colors][mutedColor],
-    thumbShape: Shape = RoundedCornerShape(999.dp),
-    autoHide: Boolean = true,
+  state: ScrollbarState,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  reverseLayout: Boolean = false,
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+  thumbColor: Color = Theme[colors][mutedColor],
+  thumbShape: Shape = RoundedCornerShape(999.dp),
+  autoHide: Boolean = true,
 ) {
-    UnstyledVerticalScrollbar(
-        scrollbarState = state.unstyledState,
-        modifier = modifier.width(10.dp),
-        enabled = enabled,
-        interactionSource = interactionSource,
-        reverseLayout = reverseLayout
-    ) {
-        Thumb(
-            thumbVisibility = scrollbarThumbVisibility(autoHide),
-            enabled = enabled,
-            modifier = Modifier.clip(thumbShape).background(thumbColor.copy(alpha = 0.5f), thumbShape).width(6.dp),
-        )
-    }
+  UnstyledVerticalScrollbar(
+    scrollbarState = state.unstyledState,
+    modifier = modifier.width(10.dp),
+    enabled = enabled,
+    interactionSource = interactionSource,
+    reverseLayout = reverseLayout,
+  ) {
+    Thumb(
+      thumbVisibility = scrollbarThumbVisibility(autoHide),
+      enabled = enabled,
+      modifier = Modifier.clip(thumbShape).background(thumbColor.copy(alpha = 0.5f), thumbShape).width(6.dp),
+    )
+  }
 }
 
 /**
@@ -116,28 +137,28 @@ fun VerticalScrollbar(
  */
 @Composable
 fun HorizontalScrollbar(
-    state: ScrollbarState,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    reverseLayout: Boolean = false,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    thumbColor: Color = Theme[colors][mutedColor],
-    thumbShape: Shape = RoundedCornerShape(999.dp),
-    autoHide: Boolean = true,
+  state: ScrollbarState,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  reverseLayout: Boolean = false,
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+  thumbColor: Color = Theme[colors][mutedColor],
+  thumbShape: Shape = RoundedCornerShape(999.dp),
+  autoHide: Boolean = true,
 ) {
-    UnstyledHorizontalScrollbar(state.unstyledState, modifier.height(10.dp), enabled, interactionSource, reverseLayout) {
-        Thumb(
-            thumbVisibility = scrollbarThumbVisibility(autoHide),
-            enabled = enabled,
-            modifier = Modifier.clip(thumbShape).background(thumbColor.copy(alpha = 0.45f), thumbShape).height(6.dp),
-        )
-    }
+  UnstyledHorizontalScrollbar(state.unstyledState, modifier.height(10.dp), enabled, interactionSource, reverseLayout) {
+    Thumb(
+      thumbVisibility = scrollbarThumbVisibility(autoHide),
+      enabled = enabled,
+      modifier = Modifier.clip(thumbShape).background(thumbColor.copy(alpha = 0.45f), thumbShape).height(6.dp),
+    )
+  }
 }
 
 private fun scrollbarThumbVisibility(autoHide: Boolean): ThumbVisibility {
-    return if (autoHide) {
-        ThumbVisibility.HideWhileIdle(fadeIn(), fadeOut(), 700.milliseconds)
-    } else {
-        ThumbVisibility.AlwaysVisible
-    }
+  return if (autoHide) {
+    ThumbVisibility.HideWhileIdle(fadeIn(), fadeOut(), 700.milliseconds)
+  } else {
+    ThumbVisibility.AlwaysVisible
+  }
 }

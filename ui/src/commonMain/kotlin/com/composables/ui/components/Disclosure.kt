@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2026 Composable Horizons
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.composables.ui.components
 
 import androidx.compose.animation.EnterTransition
@@ -33,9 +54,9 @@ import com.composables.ui.theme.alphas
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.defaultIndication
 import com.composables.ui.theme.disabledAlpha
-import com.composables.ui.theme.ringColor
 import com.composables.ui.theme.indications
 import com.composables.ui.theme.mediumShape
+import com.composables.ui.theme.ringColor
 import com.composables.ui.theme.shapes
 import com.composeunstyled.UnstyledDisclosedContent
 import com.composeunstyled.UnstyledDisclosure
@@ -51,22 +72,22 @@ import com.composeunstyled.theme.Theme
  */
 @Composable
 fun Disclosure(
-    expanded: Boolean,
-    onExpandedChange: (Boolean) -> Unit,
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
+  expanded: Boolean,
+  onExpandedChange: (Boolean) -> Unit,
+  modifier: Modifier = Modifier,
+  content: @Composable () -> Unit,
 ) {
-    UnstyledDisclosure(
-        expanded = expanded,
-        onExpandedChange = onExpandedChange,
-        modifier = modifier,
-    ) {
-        CompositionLocalProvider(LocalDisclosureExpanded provides expanded) {
-            Column {
-                content()
-            }
-        }
+  UnstyledDisclosure(
+    expanded = expanded,
+    onExpandedChange = onExpandedChange,
+    modifier = modifier,
+  ) {
+    CompositionLocalProvider(LocalDisclosureExpanded provides expanded) {
+      Column {
+        content()
+      }
     }
+  }
 }
 
 /**
@@ -80,50 +101,50 @@ fun Disclosure(
  */
 @Composable
 fun DisclosureButton(
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
-    indicator: (@Composable (expanded: Boolean) -> Unit)? = null,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    content: @Composable RowScope.() -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
+  indicator: (@Composable (expanded: Boolean) -> Unit)? = null,
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+  content: @Composable RowScope.() -> Unit,
 ) {
-    val expanded = LocalDisclosureExpanded.current
-    val shape = Theme[shapes][mediumShape]
-    val alpha = if (enabled) 1f else Theme[alphas][disabledAlpha]
+  val expanded = LocalDisclosureExpanded.current
+  val shape = Theme[shapes][mediumShape]
+  val alpha = if (enabled) 1f else Theme[alphas][disabledAlpha]
 
-    UnstyledDisclosureButton(
-        modifier = modifier
-            .focusRing(
-                interactionSource = interactionSource,
-                color = Theme[colors][ringColor],
-                shape = shape,
-            )
-            .bouncyPress(
-                interactionSource = interactionSource,
-                enabled = enabled,
-            )
-            .alpha(alpha)
-            .clip(shape),
-        enabled = enabled,
-        contentPadding = PaddingValues(0.dp),
-        indication = Theme[indications][defaultIndication],
+  UnstyledDisclosureButton(
+    modifier = modifier
+      .focusRing(
         interactionSource = interactionSource,
-        contentAlignment = Alignment.CenterStart,
+        color = Theme[colors][ringColor],
+        shape = shape,
+      )
+      .bouncyPress(
+        interactionSource = interactionSource,
+        enabled = enabled,
+      )
+      .alpha(alpha)
+      .clip(shape),
+    enabled = enabled,
+    contentPadding = PaddingValues(0.dp),
+    indication = Theme[indications][defaultIndication],
+    interactionSource = interactionSource,
+    contentAlignment = Alignment.CenterStart,
+  ) {
+    Row(
+      modifier = Modifier
+        .heightIn(min = disclosureButtonMinHeight())
+        .padding(contentPadding),
+      horizontalArrangement = Arrangement.spacedBy(8.dp),
+      verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            modifier = Modifier
-                .heightIn(min = disclosureButtonMinHeight())
-                .padding(contentPadding),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            content()
-            if (indicator != null) {
-                Spacer(Modifier.weight(1f))
-                indicator(expanded)
-            }
-        }
+      content()
+      if (indicator != null) {
+        Spacer(Modifier.weight(1f))
+        indicator(expanded)
+      }
     }
+  }
 }
 
 /**
@@ -136,29 +157,29 @@ fun DisclosureButton(
  */
 @Composable
 fun DisclosurePanel(
-    modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(12.dp),
-    enter: EnterTransition = expandVertically(animationSpec = spring()) + fadeIn(),
-    exit: ExitTransition = shrinkVertically(animationSpec = spring()) + fadeOut(),
-    content: @Composable () -> Unit,
+  modifier: Modifier = Modifier,
+  contentPadding: PaddingValues = PaddingValues(12.dp),
+  enter: EnterTransition = expandVertically(animationSpec = spring()) + fadeIn(),
+  exit: ExitTransition = shrinkVertically(animationSpec = spring()) + fadeOut(),
+  content: @Composable () -> Unit,
 ) {
-    UnstyledDisclosedContent(
-        modifier = modifier,
-        enter = enter,
-        exit = exit,
+  UnstyledDisclosedContent(
+    modifier = modifier,
+    enter = enter,
+    exit = exit,
+  ) {
+    Box(
+      Modifier
+        .padding(contentPadding),
     ) {
-        Box(
-            Modifier
-                .padding(contentPadding),
-        ) {
-            content()
-        }
+      content()
     }
+  }
 }
 
 private val LocalDisclosureExpanded = staticCompositionLocalOf { false }
 
 @Composable
 private fun disclosureButtonMinHeight(): Dp {
-    return if (LocalInteractionMode.current == InteractionMode.Touch) 48.dp else 36.dp
+  return if (LocalInteractionMode.current == InteractionMode.Touch) 48.dp else 36.dp
 }

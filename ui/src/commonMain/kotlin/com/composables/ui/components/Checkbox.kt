@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2026 Composable Horizons
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.composables.ui.components
 
 import androidx.compose.animation.fadeIn
@@ -25,16 +46,16 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.dp
 import com.composables.ui.theme.alphas
 import com.composables.ui.theme.borderColor
-import com.composables.ui.theme.defaultIndication
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.controlColor
-import com.composables.ui.theme.inverseIndication
+import com.composables.ui.theme.defaultIndication
 import com.composables.ui.theme.disabledAlpha
-import com.composables.ui.theme.ringColor
 import com.composables.ui.theme.indications
+import com.composables.ui.theme.inverseIndication
 import com.composables.ui.theme.onPanelColor
 import com.composables.ui.theme.onPrimaryColor
 import com.composables.ui.theme.primaryColor
+import com.composables.ui.theme.ringColor
 import com.composeunstyled.CheckedIndicator
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.UnstyledCheckbox
@@ -54,77 +75,77 @@ import com.composeunstyled.theme.Theme
  */
 @Composable
 fun Checkbox(
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    accessibilityLabel: String? = null,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    content: (@Composable RowScope.() -> Unit)? = null,
+  checked: Boolean,
+  onCheckedChange: (Boolean) -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  accessibilityLabel: String? = null,
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+  content: (@Composable RowScope.() -> Unit)? = null,
 ) {
-    val backgroundColor = if (checked) Theme[colors][primaryColor] else Theme[colors][controlColor]
-    val contentColor = if (checked) Theme[colors][onPrimaryColor] else Color.Transparent
-    val borderColor = if (checked) Theme[colors][primaryColor] else Theme[colors][borderColor]
-    val activeIndication = if (checked) Theme[indications][inverseIndication] else Theme[indications][defaultIndication]
-    UnstyledCheckbox(
-        checked = checked,
-        onCheckedChange = onCheckedChange,
-        enabled = enabled,
-        accessibilityLabel = accessibilityLabel,
-        interactionSource = interactionSource,
-        indication = null,
-        modifier = modifier.then(buildModifier { if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha])) }),
+  val backgroundColor = if (checked) Theme[colors][primaryColor] else Theme[colors][controlColor]
+  val contentColor = if (checked) Theme[colors][onPrimaryColor] else Color.Transparent
+  val borderColor = if (checked) Theme[colors][primaryColor] else Theme[colors][borderColor]
+  val activeIndication = if (checked) Theme[indications][inverseIndication] else Theme[indications][defaultIndication]
+  UnstyledCheckbox(
+    checked = checked,
+    onCheckedChange = onCheckedChange,
+    enabled = enabled,
+    accessibilityLabel = accessibilityLabel,
+    interactionSource = interactionSource,
+    indication = null,
+    modifier = modifier.then(buildModifier { if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha])) }),
+  ) {
+    Row(
+      horizontalArrangement = Arrangement.spacedBy(10.dp),
+      verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            CheckedIndicator(
-                enter = fadeIn(),
-                exit = fadeOut(),
-                modifier = Modifier
-                    .focusRing(
-                        interactionSource = interactionSource,
-                        color = Theme[colors][ringColor],
-                        shape = RoundedCornerShape(5.dp),
-                    )
-                    .clip(RoundedCornerShape(5.dp))
-                    .background(backgroundColor, RoundedCornerShape(5.dp))
-                    .border(1.dp, borderColor, RoundedCornerShape(5.dp))
-                    .size(20.dp),
-                indication = activeIndication
-            ) {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CheckMark(contentColor)
-                }
-            }
-
-            if (content != null) {
-                ProvideContentColor(Theme[colors][onPanelColor]) {
-                    content()
-                }
-            }
+      CheckedIndicator(
+        enter = fadeIn(),
+        exit = fadeOut(),
+        modifier = Modifier
+          .focusRing(
+            interactionSource = interactionSource,
+            color = Theme[colors][ringColor],
+            shape = RoundedCornerShape(5.dp),
+          )
+          .clip(RoundedCornerShape(5.dp))
+          .background(backgroundColor, RoundedCornerShape(5.dp))
+          .border(1.dp, borderColor, RoundedCornerShape(5.dp))
+          .size(20.dp),
+        indication = activeIndication,
+      ) {
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+          CheckMark(contentColor)
         }
+      }
+
+      if (content != null) {
+        ProvideContentColor(Theme[colors][onPanelColor]) {
+          content()
+        }
+      }
     }
+  }
 }
 
 @Composable
 private fun CheckMark(color: Color) {
-    Canvas(Modifier.size(14.dp)) {
-        val strokeWidth = 2.dp.toPx()
-        drawLine(
-            color,
-            Offset(size.width * 0.2f, size.height * 0.52f),
-            Offset(size.width * 0.42f, size.height * 0.74f),
-            strokeWidth,
-            cap = StrokeCap.Round
-        )
-        drawLine(
-            color,
-            Offset(size.width * 0.42f, size.height * 0.74f),
-            Offset(size.width * 0.8f, size.height * 0.28f),
-            strokeWidth,
-            cap = StrokeCap.Round
-        )
-    }
+  Canvas(Modifier.size(14.dp)) {
+    val strokeWidth = 2.dp.toPx()
+    drawLine(
+      color,
+      Offset(size.width * 0.2f, size.height * 0.52f),
+      Offset(size.width * 0.42f, size.height * 0.74f),
+      strokeWidth,
+      cap = StrokeCap.Round,
+    )
+    drawLine(
+      color,
+      Offset(size.width * 0.42f, size.height * 0.74f),
+      Offset(size.width * 0.8f, size.height * 0.28f),
+      strokeWidth,
+      cap = StrokeCap.Round,
+    )
+  }
 }
