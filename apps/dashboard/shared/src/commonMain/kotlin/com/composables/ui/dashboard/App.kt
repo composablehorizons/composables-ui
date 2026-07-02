@@ -1,44 +1,83 @@
 package com.composables.ui.dashboard
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.composables.icons.lucide.ChartNoAxesCombined
+import com.composables.icons.lucide.Cog
+import com.composables.icons.lucide.House
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Package
+import com.composables.ui.components.Icon
+import com.composables.ui.components.Sidebar
+import com.composables.ui.components.SidebarItem
 import com.composables.ui.components.Text
+import com.composables.ui.theme.colors
 import com.composables.ui.theme.ComposablesTheme
+import com.composables.ui.theme.backgroundColor
+import com.composeunstyled.theme.Theme
 
 @Composable
 fun App() {
+    data class DashboardDestination(
+        val label: String,
+        val icon: ImageVector,
+    )
+
+    val destinations = listOf(
+        DashboardDestination(label = "Home", icon = Lucide.House),
+        DashboardDestination(label = "Orders", icon = Lucide.ChartNoAxesCombined),
+        DashboardDestination(label = "Products", icon = Lucide.Package),
+        DashboardDestination(label = "Settings", icon = Lucide.Cog),
+    )
+    var selectedIndex by remember { mutableStateOf(0) }
+
     ComposablesTheme {
-        Box(
+        Row(
             modifier = Modifier
                 .safeDrawingPadding()
                 .fillMaxSize()
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
+                .background(Theme[colors][backgroundColor]),
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically)
+            Sidebar(
+                expanded = true,
+                modifier = Modifier.fillMaxHeight(),
+            ) {
+                destinations.forEachIndexed { index, destination ->
+                    SidebarItem(
+                        selected = selectedIndex == index,
+                        onClick = { selectedIndex = index },
+                        icon = {
+                            Icon(destination.icon, contentDescription = null)
+                        },
+                        text = {
+                            Text(destination.label, singleLine = true)
+                        },
+                    )
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(32.dp),
             ) {
                 Text(
-                    text = "Hello Beautiful World!",
-                    textAlign = TextAlign.Center,
-                )
-                Text(
-                    text = "Go to App.kt to edit your app",
-                    textAlign = TextAlign.Center,
-                )
-                Text(
-                    text = "Pro tip: Use the `dev` configuration in your IDE to auto-reload your app when you edit your code",
-                    textAlign = TextAlign.Center
+                    text = destinations[selectedIndex].label,
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         }

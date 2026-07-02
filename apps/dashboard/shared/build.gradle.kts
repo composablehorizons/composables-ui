@@ -42,6 +42,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":ui"))
+            implementation(libs.composables.icons.lucide)
+            implementation(libs.composables.uri.painter)
         }
     }
 }
