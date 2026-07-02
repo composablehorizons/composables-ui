@@ -131,14 +131,14 @@ fun <T> Tab(
           if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha]))
         },
       )
+      .bouncyPress(
+        interactionSource = interactionSource,
+        enabled = enabled,
+      )
       .focusRing(
         interactionSource = interactionSource,
         color = Theme[colors][ringColor],
         shape = shape,
-      )
-      .bouncyPress(
-        interactionSource = interactionSource,
-        enabled = enabled,
       )
       .clip(shape),
   ) {

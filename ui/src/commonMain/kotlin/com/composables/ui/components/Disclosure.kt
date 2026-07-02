@@ -114,14 +114,14 @@ fun DisclosureButton(
 
   UnstyledDisclosureButton(
     modifier = modifier
+      .bouncyPress(
+        interactionSource = interactionSource,
+        enabled = enabled,
+      )
       .focusRing(
         interactionSource = interactionSource,
         color = Theme[colors][ringColor],
         shape = shape,
-      )
-      .bouncyPress(
-        interactionSource = interactionSource,
-        enabled = enabled,
       )
       .alpha(alpha)
       .clip(shape),

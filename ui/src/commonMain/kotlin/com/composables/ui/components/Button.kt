@@ -355,14 +355,14 @@ private fun BaseButton(
     enabled = enabled,
     contentPadding = contentPadding,
     modifier = modifier
+      .bouncyPress(
+        interactionSource = interactionSource,
+        enabled = enabled && style != ButtonStyle.Link,
+      )
       .focusRing(
         interactionSource = interactionSource,
         color = Theme[colors][ringColor],
         shape = shape,
-      )
-      .bouncyPress(
-        interactionSource = interactionSource,
-        enabled = enabled && style != ButtonStyle.Link,
       )
       .graphicsLayer { this.alpha = alpha }
       .then(
