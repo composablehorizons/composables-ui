@@ -9,6 +9,8 @@ sections:
         slug: components
       - title: Theming
         slug: theming
+      - title: MCP Server
+        slug: mcp
   - title: Components
     pages:
       - title: Buttons
