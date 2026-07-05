@@ -96,8 +96,6 @@ composables mcp install --client zed
 ```
 
 </Tab>
-</Tabs>
-
 <Tab title="Other">
 
 If you are working with a different IDE or editor, and you need support for it, we are happy to add it.
@@ -105,6 +103,8 @@ If you are working with a different IDE or editor, and you need support for it, 
 Kindly [open a feature request](https://github.com/composablehorizons/composables-ui/issues/new).
 
 </Tab>
+</Tabs>
+
 ## Configurations
 
 ### HTTP MCP Server
