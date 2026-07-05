@@ -7,7 +7,9 @@
   "scripts": {
     "changeset:version": "npx --package @changesets/cli --package @changesets/changelog-github changeset version && node scripts/sync-release-versions.mjs",
     "release:check-versions": "node scripts/check-release-versions.mjs",
-    "release:plan": "node scripts/release-plan.mjs"
+    "release:plan": "node scripts/release-plan.mjs",
+    "release:publish": "node scripts/release-packages.mjs",
+    "release:publish:dry-run": "node scripts/release-packages.mjs --dry-run"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.1",
