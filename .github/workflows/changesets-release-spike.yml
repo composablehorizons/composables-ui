@@ -25,10 +25,10 @@ jobs:
           token: ${{ github.token }}
 
       - name: Install release tooling
-        run: npm install --ignore-scripts
+        run: npm ci --ignore-scripts
 
-      - name: Check Changesets state
-        run: npx changeset status --since=origin/main
+      - name: Check Changesets CLI
+        run: npx --package @changesets/cli changeset --help
 
       - name: Check release versions
         run: npm run release:check-versions
