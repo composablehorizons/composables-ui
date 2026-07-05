@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { readFile } from "node:fs/promises";
+import { readJsonFile } from "./release-versions.mjs";
 
 const packages = [
   {
@@ -24,14 +24,10 @@ function readBaseFile(path) {
   }
 }
 
-async function readJson(path) {
-  return JSON.parse(await readFile(new URL(`../${path}`, import.meta.url), "utf8"));
-}
-
 const releasePlan = [];
 
 for (const releasePackage of packages) {
-  const currentPackageJson = await readJson(releasePackage.versionFile);
+  const currentPackageJson = await readJsonFile(releasePackage.versionFile);
   const baseContent = readBaseFile(releasePackage.versionFile);
   const baseVersion = baseContent == null ? null : JSON.parse(baseContent).version;
 

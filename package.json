@@ -5,7 +5,8 @@
     "packages/*"
   ],
   "scripts": {
-    "changeset:version": "changeset version && node scripts/sync-changeset-versions.mjs",
+    "changeset:version": "npx --package @changesets/cli --package @changesets/changelog-github changeset version && node scripts/sync-release-versions.mjs",
+    "release:check-versions": "node scripts/check-release-versions.mjs",
     "release:plan": "node scripts/release-plan.mjs"
   },
   "devDependencies": {

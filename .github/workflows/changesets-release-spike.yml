@@ -30,5 +30,8 @@ jobs:
       - name: Check Changesets state
         run: npx changeset status --since=origin/main
 
+      - name: Check release versions
+        run: npm run release:check-versions
+
       - name: Print dry-run release plan
         run: npm run release:plan

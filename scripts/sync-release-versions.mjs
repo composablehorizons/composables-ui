@@ -1,9 +1,8 @@
 import { readFile, writeFile } from "node:fs/promises";
+import { readUiPackageVersion } from "./release-versions.mjs";
 
-const uiPackageJsonPath = new URL("../packages/ui/package.json", import.meta.url);
 const versionCatalogPath = new URL("../gradle/libs.versions.toml", import.meta.url);
-
-const uiPackageJson = JSON.parse(await readFile(uiPackageJsonPath, "utf8"));
+const uiPackageVersion = await readUiPackageVersion();
 const versionCatalog = await readFile(versionCatalogPath, "utf8");
 const uiVersionPattern = /^ui = ".*"$/m;
 
@@ -13,7 +12,7 @@ if (!uiVersionPattern.test(versionCatalog)) {
 
 const nextVersionCatalog = versionCatalog.replace(
   uiVersionPattern,
-  `ui = "${uiPackageJson.version}"`,
+  `ui = "${uiPackageVersion}"`,
 );
 
 await writeFile(versionCatalogPath, nextVersionCatalog);
