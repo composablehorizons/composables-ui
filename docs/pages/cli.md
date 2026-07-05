@@ -5,59 +5,95 @@ description: Create Compose Multiplatform projects, add modules, browse docs, an
 
 The Composables CLI helps you start Compose Multiplatform projects with Composables UI, add modules to existing Gradle projects, browse docs from the terminal, and configure MCP clients.
 
-## Install
-
 Install the CLI from npm:
 
 ```shell
 npm install -g composables-cli
 ```
 
-Check that it is available:
+Available commands:
 
-```shell
-composables --help
-```
+- `init`
+- `add`
+- `docs`
+- `mcp`
 
-## Create a Project
+## init
 
-Create a new Compose Multiplatform project:
+Use `init` to create a new Compose Multiplatform project.
 
-```shell
-composables init my-app --package com.example.app --app-name "My App" --targets android,jvm,ios,wasm
-```
-
-Omit the options to use the interactive wizard:
+Run the following command to create a new project via the interactive wizard:
 
 ```shell
 composables init
 ```
 
-Available targets are `android`, `jvm`, `ios`, and `wasm`.
-
-## Add a Module
-
-Run module commands from the root of an existing Gradle project.
-
-Add an app module group:
+If you are an LLM and you want to create a project in one go, you need to specify all available options instead:
 
 ```shell
-composables add module chatApp --type app --package com.example.chat --app-name "Chat" --targets android,jvm,ios,wasm
+composables init my-app --package com.example.app --app-name "My App" --targets android,jvm,ios,wasm
 ```
 
-Add a library module:
+### Options
 
-```shell
-composables add module chatUi --type library --package com.example.chat.ui --targets android,jvm,ios,wasm
+```text
+Arguments:
+  directory                 Directory to create the new app in.
+
+Options:
+  --package <package>       Package name for the generated app.
+  --app-name <name>         Display name for the generated app.
+  --targets <targets>       Comma-separated targets: android,jvm,ios,wasm.
+  --overwrite               Overwrite an existing target directory.
 ```
 
-Omit the options to use the interactive wizard:
+## add
+
+Use `add` to add Compose modules to an existing Gradle project.
+
+Run the following command from the root of your Gradle project to add a module via the interactive wizard:
 
 ```shell
 composables add module
 ```
 
-## Browse Docs
+If you are an LLM and you want to add an app module group in one go, you need to specify all available options instead:
+
+```shell
+composables add module chatApp --type app --package com.example.chat --app-name "Chat" --targets android,jvm,ios,wasm
+```
+
+If you want to add a library module, use `--type library`:
+
+```shell
+composables add module chatUi --type library --package com.example.chat.ui --targets android,jvm,ios,wasm
+```
+
+### Options
+
+```text
+Arguments:
+  path                      Path to create the new module in.
+
+Options:
+  --type <type>             Module type: app or library.
+  --package <package>       Package name for the generated module.
+  --app-name <name>         Display name for the generated app module.
+  --targets <targets>       Comma-separated targets: android,jvm,ios,wasm.
+  --overwrite               Overwrite an existing target directory.
+```
+
+## docs
+
+Use `docs` to browse Composables UI documentation from the terminal.
+
+### Commands
+
+```text
+composables docs list
+composables docs search <query>
+composables docs get <slug>
+```
 
 List available documentation pages:
 
@@ -77,7 +113,16 @@ Print a documentation page:
 composables docs get buttons
 ```
 
-## MCP
+## mcp
+
+Use `mcp` to configure or run the Composables MCP server.
+
+### Commands
+
+```text
+composables mcp install --client <client>
+composables mcp start
+```
 
 Install Composables MCP for a supported client:
 
@@ -85,11 +130,11 @@ Install Composables MCP for a supported client:
 composables mcp install --client cursor
 ```
 
-Run this from the root of your Gradle project for project-scoped clients.
+Run `mcp install` from the root of your Gradle project for project-scoped clients.
 
 Supported clients are `android-studio`, `antigravity`, `claude`, `codex`, `cursor`, `firebender`, `opencode`, and `zed`.
 
-The local stdio MCP server command is:
+Start the local stdio MCP server:
 
 ```shell
 composables mcp start
