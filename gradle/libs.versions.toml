@@ -1,6 +1,7 @@
 [versions]
 #noinspection UnusedVersionCatalogEntry
 ui = "0.1.0"
+composables-cli = "0.9.0"
 unstyled = "2.7.0"
 compose = "1.11.1"
 kotlin = "2.4.0"
@@ -15,7 +16,14 @@ interactionCapabilities = "1.1.0"
 rippleIndication = "1.1.0"
 iconsLucide = "1.0.0"
 vanniktechMavenPublish = "0.35.0"
+shadow = "8.3.8"
 spotless = "6.21.0"
+buildconfig = "6.0.6"
+debugln = "1.0.3"
+clikt = "5.0.3"
+mcpKotlin = "0.14.0"
+slf4j = "2.0.17"
+assertk = "0.28.1"
 
 [libraries]
 composables-unstyled = { module = "com.composables:composeunstyled", version.ref = "unstyled" }
@@ -34,8 +42,14 @@ compose-components-resources = { module = "org.jetbrains.compose.components:comp
 androidx-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+debugln = { group = "com.alexstyl", name = "debugln", version.ref = "debugln" }
+clikt = { group = "com.github.ajalt.clikt", name = "clikt", version.ref = "clikt" }
+mcp-kotlin-server = { group = "io.modelcontextprotocol", name = "kotlin-sdk-server", version.ref = "mcpKotlin" }
+slf4j-nop = { group = "org.slf4j", name = "slf4j-nop", version.ref = "slf4j" }
+assertk = { group = "com.willowtreeapps.assertk", name = "assertk", version.ref = "assertk" }
 
 [plugins]
+jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
@@ -43,4 +57,6 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktechMavenPublish" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }

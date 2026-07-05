@@ -6,13 +6,16 @@ const packages = [
     name: "composables-cli",
     type: "npm",
     versionFile: "packages/cli/package.json",
-    publishCommand: "npm publish --workspace packages/cli --dry-run",
+    publishCommands: [
+      "./gradlew :packages:cli:assembleNpmPackage --no-configuration-cache",
+      "npm publish packages/cli/build/npm/package --access public --dry-run",
+    ],
   },
   {
     name: "@composables/ui",
     type: "maven",
     versionFile: "packages/ui/package.json",
-    publishCommand: "./gradlew :ui:publishToMavenLocal --no-configuration-cache",
+    publishCommands: ["./gradlew :ui:publishToMavenLocal --no-configuration-cache"],
   },
 ];
 
@@ -50,5 +53,7 @@ for (const releasePackage of releasePlan) {
   console.log(
     `- ${releasePackage.name}: ${releasePackage.from} -> ${releasePackage.to} (${releasePackage.type})`,
   );
-  console.log(`  would run: ${releasePackage.publishCommand}`);
+  for (const command of releasePackage.publishCommands) {
+    console.log(`  would run: ${command}`);
+  }
 }

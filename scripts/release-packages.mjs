@@ -11,7 +11,10 @@ const packages = [
     releaseName: "composables-cli",
     type: "npm",
     versionFile: "packages/cli/package.json",
-    publishCommand: ["npm", ["publish", "--workspace", "packages/cli", "--access", "public"]],
+    publishCommands: [
+      ["./gradlew", [":packages:cli:assembleNpmPackage", "--no-configuration-cache"]],
+      ["npm", ["publish", "packages/cli/build/npm/package", "--access", "public"]],
+    ],
   },
   {
     name: "@composables/ui",
@@ -19,7 +22,7 @@ const packages = [
     type: "maven",
     versionFile: "packages/ui/package.json",
     mavenPomUrl: (version) => `https://repo1.maven.org/maven2/com/composables/ui/${version}/ui-${version}.pom`,
-    publishCommand: ["./gradlew", [":ui:publishAndReleaseToMavenCentral", "--no-configuration-cache"]],
+    publishCommands: [["./gradlew", [":ui:publishAndReleaseToMavenCentral", "--no-configuration-cache"]]],
   },
 ];
 
@@ -68,9 +71,10 @@ for (const releasePackage of packages) {
     continue;
   }
 
-  const [command, args] = releasePackage.publishCommand;
   console.log(`${dryRun ? "Would publish" : "Publishing"} ${releasePackage.name}@${version}.`);
-  run(command, args);
+  for (const [command, args] of releasePackage.publishCommands) {
+    run(command, args);
+  }
   publishedPackages.push({
     name: releasePackage.name,
     releaseName: releasePackage.releaseName,

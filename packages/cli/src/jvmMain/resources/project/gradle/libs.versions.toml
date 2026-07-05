@@ -1,0 +1,24 @@
+[versions]
+# Compose
+compose = "1.11.1"
+composablesUi = "0.1.0"
+iconsLucide = "1.0.0"
+uriPainter = "1.0.4"
+
+# Kotlin
+kotlin = "2.4.0"
+spotless = "7.2.1"
+
+{{android_versions}}
+[libraries]
+composables-icons-lucide = { group = "com.composables", name = "icons-lucide", version.ref = "iconsLucide" }
+composables-uri-painter = { group = "com.composables", name = "compose-uri-painter", version.ref = "uriPainter" }
+composables-ui = { group = "com.composables", name = "ui", version.ref = "composablesUi" }
+{{compose_libraries}}
+{{android_libraries}}
+[plugins]
+{{android_plugins}}
+jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose" }
+jetbrains-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+jetbrains-kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
