@@ -42,13 +42,13 @@ Run module commands from the root of an existing Gradle project.
 Add an app module group:
 
 ```shell
-composables add module features/chat --type app --package com.example.chat --app-name "Chat" --targets android,jvm,ios,wasm
+composables add module chatApp --type app --package com.example.chat --app-name "Chat" --targets android,jvm,ios,wasm
 ```
 
 Add a library module:
 
 ```shell
-composables add module features/chat-ui --type library --package com.example.chat.ui --targets android,jvm,ios,wasm
+composables add module chatUi --type library --package com.example.chat.ui --targets android,jvm,ios,wasm
 ```
 
 Omit the options to use the interactive wizard:
