@@ -1,0 +1,148 @@
+name: Release Packages
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  changesets:
+    runs-on: ubuntu-latest
+    outputs:
+      hasChangesets: ${{ steps.changesets.outputs.hasChangesets }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: "https://registry.npmjs.org"
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          token: ${{ github.token }}
+
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Install release tooling
+        run: npm ci --ignore-scripts
+
+      - name: Check release versions
+        run: npm run release:check-versions
+
+      - name: Create version PR
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: npm run changeset:version
+          title: Version packages
+          commit: Version packages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release-plan:
+    needs: changesets
+    if: needs.changesets.outputs.hasChangesets == 'false'
+    runs-on: ubuntu-latest
+    outputs:
+      shouldPublish: ${{ steps.plan.outputs.shouldPublish }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install release tooling
+        run: npm ci --ignore-scripts
+
+      - name: Check for unpublished package versions
+        run: npm run release:publish:dry-run
+
+      - name: Export release plan
+        id: plan
+        run: |
+          package_count="$(node -e 'const fs = require("fs"); const packages = JSON.parse(fs.readFileSync("build/release/published-packages.json", "utf8")); process.stdout.write(String(packages.length));')"
+          if [ "$package_count" -gt 0 ]; then
+            echo "shouldPublish=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "shouldPublish=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  publish:
+    needs: release-plan
+    if: needs.release-plan.outputs.shouldPublish == 'true'
+    runs-on: ubuntu-latest
+    environment: publishing
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: "https://registry.npmjs.org"
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          token: ${{ github.token }}
+
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Install release tooling
+        run: npm ci --ignore-scripts
+
+      - name: Publish unpublished packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+        run: npm run release:publish
+
+      - name: Create GitHub releases
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require("fs");
+            const path = "build/release/published-packages.json";
+
+            if (!fs.existsSync(path)) {
+              core.info("No release output file found.");
+              return;
+            }
+
+            const publishedPackages = JSON.parse(fs.readFileSync(path, "utf8"));
+            if (publishedPackages.length === 0) {
+              core.info("No packages were published.");
+              return;
+            }
+
+            for (const releasePackage of publishedPackages) {
+              await github.rest.repos.createRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag_name: releasePackage.tagName,
+                target_commitish: context.sha,
+                name: releasePackage.tagName,
+                draft: true,
+                generate_release_notes: true,
+              });
+            }
