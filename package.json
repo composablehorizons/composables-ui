@@ -1,0 +1,15 @@
+{
+  "name": "composables-ui-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "changeset:version": "changeset version && node scripts/sync-changeset-versions.mjs",
+    "release:plan": "node scripts/release-plan.mjs"
+  },
+  "devDependencies": {
+    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/cli": "^2.29.7"
+  }
+}
