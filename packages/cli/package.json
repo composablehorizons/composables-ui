@@ -1,9 +1,18 @@
 {
   "name": "composables-cli",
   "version": "0.9.0",
-  "description": "Command line tools for Composables projects.",
+  "description": "Composables CLI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/composablehorizons/composables-ui.git"
+  },
+  "homepage": "https://github.com/composablehorizons/composables-ui",
+  "bugs": {
+    "url": "https://github.com/composablehorizons/composables-ui/issues"
+  },
   "bin": {
-    "composables": "bin/composables.js"
+    "composables": "./bin/composables.js"
   },
   "files": [
     "bin",
@@ -11,5 +20,14 @@
   ],
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "compose",
+    "jetbrains-compose",
+    "kotlin",
+    "cli"
+  ]
 }

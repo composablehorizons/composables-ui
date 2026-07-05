@@ -1,3 +1,7 @@
+import org.apache.tools.ant.DirectoryScanner
+
+DirectoryScanner.removeDefaultExclude("**/.gitignore")
+
 pluginManagement {
     repositories {
         google {
@@ -45,3 +49,4 @@ include(":demo")
 include(":preview")
 include(":preview-insets")
 include(":apps:social")
+include(":packages:cli")
