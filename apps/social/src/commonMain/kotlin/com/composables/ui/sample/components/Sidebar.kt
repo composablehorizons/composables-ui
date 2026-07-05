@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.composables.ui.components
+package com.composables.ui.sample.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +40,9 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.composables.ui.components.Button
+import com.composables.ui.components.ButtonStyle
+import com.composables.ui.components.IconButton
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.mediumShape
 import com.composables.ui.theme.selectedControlColor

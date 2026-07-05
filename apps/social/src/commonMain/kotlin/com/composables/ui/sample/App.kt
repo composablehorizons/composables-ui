@@ -59,11 +59,11 @@ import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
 import com.composables.ui.components.NavigationBar
 import com.composables.ui.components.NavigationBarItem
-import com.composables.ui.components.Sidebar
-import com.composables.ui.components.SidebarItem
 import com.composables.ui.components.Text
 import com.composables.ui.components.Toolbar
 import com.composables.ui.sample.components.OtherMenuDropdown
+import com.composables.ui.sample.components.Sidebar
+import com.composables.ui.sample.components.SidebarItem
 import com.composables.ui.sample.data.UserProfiles
 import com.composables.ui.sample.iconography.ArrowLeft
 import com.composables.ui.sample.iconography.Bell
