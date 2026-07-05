@@ -1,4 +1,4 @@
-name: Release Packages
+name: Release
 
 on:
   push:
@@ -13,6 +13,7 @@ permissions:
 
 jobs:
   changesets:
+    name: Create Version PR or Publish Release
     runs-on: ubuntu-latest
     outputs:
       hasChangesets: ${{ steps.changesets.outputs.hasChangesets }}
