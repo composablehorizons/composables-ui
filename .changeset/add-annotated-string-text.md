@@ -1,5 +1,5 @@
 ---
-"@composables/ui": patch
+"@composables/ui": minor
 ---
 
 Add `AnnotatedString` support to `Text`.
