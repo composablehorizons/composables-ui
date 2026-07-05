@@ -1054,7 +1054,9 @@ class CliIntegrationTest {
     assertThat(readme).contains("./gradlew spotlessApply")
 
     val sharedApp =
-        File(projectDir, "shared/src/commonMain/kotlin/com/example/sampleapp/App.kt").readText()
+        File(projectDir, "shared/src/commonMain/kotlin/com/example/sampleapp/App.kt")
+            .readText()
+            .replace("\r\n", "\n")
     assertThat(sharedApp)
         .contains("modifier = Modifier.safeDrawingPadding().fillMaxSize().padding(16.dp),")
     assertThat(sharedApp)
