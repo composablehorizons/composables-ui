@@ -13,7 +13,7 @@ const packages = [
     versionFile: "packages/cli/package.json",
     publishCommands: [
       ["./gradlew", [":packages:cli:assembleNpmPackage", "--no-configuration-cache"]],
-      ["npm", ["publish", "packages/cli/build/npm/package", "--access", "public"]],
+      ["npm", ["publish", "packages/cli/build/npm/package", "--access", "public", "--provenance"]],
     ],
   },
   {
