@@ -1,0 +1,15 @@
+{
+  "name": "composables-cli",
+  "version": "0.9.0",
+  "description": "Command line tools for Composables projects.",
+  "bin": {
+    "composables": "bin/composables.js"
+  },
+  "files": [
+    "bin",
+    "composables.jar"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

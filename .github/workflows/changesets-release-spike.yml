@@ -1,0 +1,37 @@
+name: Changesets Release Spike
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          token: ${{ github.token }}
+
+      - name: Install release tooling
+        run: npm ci --ignore-scripts
+
+      - name: Check Changesets CLI
+        run: npx --package @changesets/cli changeset --help
+
+      - name: Check release versions
+        run: npm run release:check-versions
+
+      - name: Print dry-run release plan
+        run: npm run release:plan

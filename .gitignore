@@ -6,3 +6,4 @@ local.properties
 .idea/
 .kotlin/
 kotlin-js-store/
+node_modules/
