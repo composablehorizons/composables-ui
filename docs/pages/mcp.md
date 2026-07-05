@@ -7,20 +7,104 @@ The Composables MCP server enables your AI agents to build Compose apps with Com
 
 ### Quick Start
 
-The fastest way to use the Composables MCP server is installing it to Android Studio, using the [Composables CLI](https://github.com/composablehorizons/composables-cli).
+The fastest way to use the Composables MCP server is installing it with the [Composables CLI](https://github.com/composablehorizons/composables-cli).
 
-Make sure you have the CLI installed and then run the following command:
+Make sure you have the CLI installed:
 
 ```shell
-composables install --client android-studio
+npm install -g composables-cli
 ```
 
-then on Android Studio go to: **Settings > Tools > AI > MCP Servers**
+<Tabs>
+<Tab title="Android Studio">
 
-and in the **JSON View** tab turn on the `Enable MCP Servers` option.
+```shell
+composables mcp install --client android-studio
+```
+
+Then open Android Studio and go to **Settings > Tools > AI > MCP Servers**.
+
+In the **JSON View** tab turn on the `Enable MCP Servers` option.
 
 For more information, visit Android Studio's [Add an MCP server](https://developer.android.com/studio/gemini/add-mcp-server)
 
+</Tab>
+<Tab title="Antigravity">
+
+Run this from the root of your Gradle project:
+
+```shell
+composables mcp install --client antigravity
+```
+
+</Tab>
+<Tab title="Claude">
+
+Run this from the root of your Gradle project:
+
+```shell
+composables mcp install --client claude
+```
+
+This works both for Claude Code CLI and Claude Code Desktop.
+
+</Tab>
+<Tab title="Codex">
+
+Run this from the root of your Gradle project:
+
+```shell
+composables mcp install --client codex
+```
+
+This works both for the Codex CLI and Codex Desktop app.
+
+</Tab>
+<Tab title="Cursor">
+
+Run this from the root of your Gradle project:
+
+```shell
+composables mcp install --client cursor
+```
+
+</Tab>
+<Tab title="Firebender">
+
+Run this from the root of your Gradle project:
+
+```shell
+composables mcp install --client firebender
+```
+
+</Tab>
+<Tab title="OpenCode">
+
+Run this from the root of your Gradle project:
+
+```shell
+composables mcp install --client opencode
+```
+
+</Tab>
+<Tab title="Zed">
+
+Run this from the root of your Gradle project:
+
+```shell
+composables mcp install --client zed
+```
+
+</Tab>
+</Tabs>
+
+<Tab title="Other">
+
+If you are working with a different IDE or editor, and you need support for it, we are happy to add it.
+
+Kindly [open a feature request](https://github.com/composablehorizons/composables-ui/issues/new).
+
+</Tab>
 ## Configurations
 
 ### HTTP MCP Server
@@ -33,13 +117,17 @@ Use this endpoint when adding a new MCP server:
 https://composables.com/mcp
 ```
 
-## Limitations
+### Stdio MCP Server
 
-We currently support streamable HTTP transport only, because this is the transport Android Studio supports right now.
+The Composables MCP server can also run locally over stdio transport.
 
-If you are working with a different IDE or editor and you need support for it, we are happy to support it.
+Use stdio when your MCP client needs to run local project actions, like creating projects or adding modules:
 
-Kindly  [open a feature request](https://github.com/composablehorizons/composables-cli/issues/new?category=ideas).
+```shell
+composables mcp start
+```
+
+You do not need to run this command manually when you install with `composables mcp install`. The MCP client starts it when needed.
 
 ## Example prompts
 
