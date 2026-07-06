@@ -29,7 +29,9 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 
 val ANDROID = "android"
@@ -86,6 +88,36 @@ internal fun docsMarkdownUrl(slug: String): String = buildString {
   append("/ui/docs/")
   append(urlEncode(slug.trim()))
   append(".md")
+}
+
+internal fun renderDocsLinks(apiResponse: String): String {
+  val items = json.parseToJsonElement(apiResponse).jsonObject["items"]?.jsonArray ?: return ""
+  val links =
+      items
+          .mapNotNull { item ->
+            val entry = item.jsonObject
+            val slug =
+                entry["slug"]?.jsonPrimitive?.contentOrNull?.trim()?.takeIf { it.isNotEmpty() }
+            val url = entry["url"]?.jsonPrimitive?.contentOrNull
+            slug?.let { DocsLink(slug = it, url = docsPageUrl(slug = it, url = url)) }
+          }
+
+  val slugColumnWidth = links.maxOfOrNull { it.slug.length } ?: return ""
+  return links
+      .joinToString("\n") { link -> "${link.slug.padEnd(slugColumnWidth)}  ${link.url}" }
+}
+
+private data class DocsLink(
+    val slug: String,
+    val url: String,
+)
+
+private fun docsPageUrl(slug: String, url: String?): String {
+  val path = url?.trim()?.takeIf { it.isNotEmpty() } ?: "/ui/docs/${urlEncode(slug)}"
+  if (path.startsWith("http://") || path.startsWith("https://")) {
+    return path
+  }
+  return docsBaseUrl() + if (path.startsWith("/")) path else "/$path"
 }
 
 internal fun mcpUrl(): String = buildString {
@@ -381,7 +413,7 @@ class Add : CliktCommand("add") {
 class Docs : CliktCommand("docs") {
   override fun help(context: Context): String =
       """
-        Reads Composables UI documentation in a machine-friendly format.
+        Reads Composables UI documentation from the terminal.
     """
           .trimIndent()
 
@@ -395,8 +427,11 @@ class DocsList : CliktCommand("list") {
     """
           .trimIndent()
 
+  private val jsonOutput by option("--json", help = "Print the raw JSON response.").flag()
+
   override fun run() {
-    echo(fetchDocsApi("list"))
+    val response = fetchDocsApi("list")
+    echo(if (jsonOutput) response else renderDocsLinks(response))
   }
 }
 
@@ -408,9 +443,11 @@ class DocsSearch : CliktCommand("search") {
           .trimIndent()
 
   private val query by argument("query", help = "Search query")
+  private val jsonOutput by option("--json", help = "Print the raw JSON response.").flag()
 
   override fun run() {
-    echo(fetchDocsApi("search", mapOf("q" to query)))
+    val response = fetchDocsApi("search", mapOf("q" to query))
+    echo(if (jsonOutput) response else renderDocsLinks(response))
   }
 }
 

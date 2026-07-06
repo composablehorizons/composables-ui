@@ -381,6 +381,86 @@ class CliTest {
   }
 
   @Test
+  fun `renderDocsLinks prints slug and absolute docs link`() {
+    withDocsBaseUrl("http://127.0.0.1:8080/") {
+      val output =
+          renderDocsLinks(
+              """
+                {
+                  "items": [
+                    {
+                      "slug": "bottom-sheet",
+                      "title": "Bottom Sheet",
+                      "url": "/ui/docs/bottom-sheet"
+                    },
+                    {
+                      "slug": "buttons",
+                      "title": "Buttons",
+                      "url": "/ui/docs/buttons"
+                    }
+                  ]
+                }
+              """
+                  .trimIndent(),
+          )
+
+      assertThat(output)
+          .isEqualTo(
+              """
+                bottom-sheet  http://127.0.0.1:8080/ui/docs/bottom-sheet
+                buttons       http://127.0.0.1:8080/ui/docs/buttons
+              """
+                  .trimIndent(),
+          )
+    }
+  }
+
+  @Test
+  fun `renderDocsLinks preserves absolute docs links`() {
+    val output =
+        renderDocsLinks(
+            """
+              {
+                "items": [
+                  {
+                    "slug": "cli",
+                    "url": "https://composables.com/ui/docs/cli"
+                  }
+                ]
+              }
+            """
+                .trimIndent(),
+        )
+
+    assertThat(output).isEqualTo("cli  https://composables.com/ui/docs/cli")
+  }
+
+  @Test
+  fun `renderDocsLinks skips entries without a slug`() {
+    withDocsBaseUrl("http://127.0.0.1:8080/") {
+      val output =
+          renderDocsLinks(
+              """
+                {
+                  "items": [
+                    {
+                      "title": "Missing slug",
+                      "url": "/ui/docs/missing"
+                    },
+                    {
+                      "slug": "buttons"
+                    }
+                  ]
+                }
+              """
+                  .trimIndent(),
+          )
+
+      assertThat(output).isEqualTo("buttons  http://127.0.0.1:8080/ui/docs/buttons")
+    }
+  }
+
+  @Test
   fun `mcpUrl points at the hosted mcp endpoint`() {
     withDocsBaseUrl("http://127.0.0.1:8080/") {
       assertThat(mcpUrl()).isEqualTo("http://127.0.0.1:8080/mcp")
