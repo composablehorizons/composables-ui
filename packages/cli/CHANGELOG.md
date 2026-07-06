@@ -1,5 +1,11 @@
 # composables-cli
 
+## 0.10.1
+
+### Patch Changes
+
+- [`88a3377`](https://github.com/composablehorizons/composables-ui/commit/88a3377b6347d435c502cf514349c7360b175a49) Thanks [@alexstyl](https://github.com/alexstyl)! - Make docs command output plain text instead of JSON so its easier to read. You can still get results as json using `--json`.
+
 ## 0.10.0
 
 ### Minor Changes
