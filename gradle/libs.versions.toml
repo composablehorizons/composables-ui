@@ -2,7 +2,7 @@
 #noinspection UnusedVersionCatalogEntry
 ui = "0.2.0"
 composables-cli = "0.10.1"
-unstyled = "2.7.0"
+unstyled = "2.8.0"
 compose = "1.11.1"
 kotlin = "2.4.0"
 uriPainter = "1.0.4"
