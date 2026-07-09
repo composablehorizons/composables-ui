@@ -1,4 +1,4 @@
-name: CI
+name: PR Checks
 
 on:
   push:
@@ -8,9 +8,9 @@ permissions:
   contents: read
 
 jobs:
-  spotless-check:
+  ui-checks:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v5
 
@@ -23,5 +23,6 @@ jobs:
       - name: Gradle cache
         uses: gradle/actions/setup-gradle@v5
 
-      - name: Spotless Check
-        run: ./gradlew --console=plain spotlessCheck
+      - name: Run formatting and JVM tests
+        shell: bash
+        run: xvfb-run --auto-servernum ./gradlew --console=plain spotlessCheck jvmTest :packages:cli:test --no-daemon
