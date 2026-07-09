@@ -41,6 +41,8 @@ import com.composables.ui.components.BottomSheet
 import com.composables.ui.components.BottomSheetDetent
 import com.composables.ui.components.BottomSheetScrimAnimationDurationMillis
 import com.composables.ui.components.rememberBottomSheetState
+import com.composables.ui.theme.Large
+import com.composables.ui.theme.Tall
 import com.composeunstyled.currentWindowHeightBreakpoint
 import com.composeunstyled.currentWindowWidthBreakpoint
 import kotlin.time.Duration.Companion.milliseconds

@@ -70,6 +70,7 @@ import com.composables.ui.sample.iconography.Heart
 import com.composables.ui.sample.iconography.Icons
 import com.composables.ui.sample.iconography.MessageCircle
 import com.composables.ui.sample.iconography.Repeat2
+import com.composables.ui.theme.Medium
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.mutedColor
 import com.composables.ui.theme.onBackgroundColor

@@ -73,6 +73,8 @@ import com.composables.ui.sample.iconography.Menu
 import com.composables.ui.sample.iconography.Plus
 import com.composables.ui.sample.iconography.Search
 import com.composables.ui.sample.iconography.User
+import com.composables.ui.theme.Large
+import com.composables.ui.theme.Medium
 import com.composables.ui.theme.borderColor
 import com.composables.ui.theme.buttonShape
 import com.composables.ui.theme.colors

@@ -19,37 +19,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.composables.ui.sample
+package com.composables.ui
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import com.composables.tooling.insets.previewNavigationBarPaddingValue
-import com.composables.tooling.insets.previewStatusBarPaddingValue
-import com.composables.ui.theme.Medium
-import com.composeunstyled.currentWindowWidthBreakpoint
+import com.composables.ui.theme.ComposablesTheme
+import com.composables.ui.theme.HeightBreakpoints
+import com.composables.ui.theme.WidthBreakpoints
+import com.composeunstyled.FocusVisibilityProvider
+import com.composeunstyled.ProvideWindowBreakpoints
+import com.composeunstyled.TooltipHost
 
+/**
+ * Top level composable that wraps apps built using Composables UI
+ *
+ * This applies theming and wires important stuff that are required by the rest of the components.
+ */
 @Composable
-fun sampleScreenContentPadding(
-    extraTop: Dp = 0.dp,
-    extraBottom: Dp = 0.dp,
-): PaddingValues {
-  val widthBreakpoint = currentWindowWidthBreakpoint()
-  val statusBarPadding = previewStatusBarPaddingValue()
-  val navigationBarPadding = previewNavigationBarPaddingValue()
-  val useMobileChrome = !(widthBreakpoint isAtLeast Medium)
-
-  return PaddingValues(
-      top = extraTop + if (useMobileChrome) statusBarPadding else 0.dp,
-      bottom =
-          extraBottom +
-              if (useMobileChrome) {
-                SampleMobileNavigationBarHeight + navigationBarPadding
-              } else {
-                0.dp
-              },
-  )
+fun ComposablesApp(
+    content: @Composable () -> Unit,
+) {
+  ComposablesTheme {
+    ProvideWindowBreakpoints(width = WidthBreakpoints, height = HeightBreakpoints) {
+      TooltipHost { FocusVisibilityProvider { content() } }
+    }
+  }
 }
-
-val SampleMobileNavigationBarHeight = 64.dp

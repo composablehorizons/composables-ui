@@ -73,6 +73,7 @@ import com.composables.ui.sample.data.UserProfiles
 import com.composables.ui.sample.iconography.ArrowLeft
 import com.composables.ui.sample.iconography.Ellipsis
 import com.composables.ui.sample.iconography.Icons
+import com.composables.ui.theme.Compact
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.mutedColor
 import com.composables.ui.theme.onBackgroundColor

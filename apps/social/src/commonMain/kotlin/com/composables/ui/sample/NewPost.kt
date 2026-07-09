@@ -54,6 +54,8 @@ import com.composables.ui.sample.iconography.MapPin
 import com.composables.ui.sample.iconography.Smile
 import com.composables.ui.sample.iconography.Vote
 import com.composables.ui.sample.iconography.X
+import com.composables.ui.theme.Large
+import com.composables.ui.theme.Tall
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.mutedColor
 import com.composeunstyled.ProvideContentColor
