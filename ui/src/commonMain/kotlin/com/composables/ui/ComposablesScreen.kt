@@ -19,38 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.composables.ui.sample
+package com.composables.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import com.composables.ui.ComposablesApp
-import com.composables.ui.theme.ColorScheme
-import com.composables.ui.theme.LocalColorScheme
-import kotlin.jvm.JvmInline
-
-@JvmInline
-value class Appearance internal constructor(@Suppress("unused") private val value: Int) {
-  companion object {
-    val System = Appearance(0)
-    val Light = Appearance(1)
-    val Dark = Appearance(2)
-  }
-}
+import androidx.compose.ui.Modifier
+import com.composables.ui.theme.backgroundColor
+import com.composables.ui.theme.colors
+import com.composables.ui.theme.onBackgroundColor
+import com.composeunstyled.ProvideContentColor
+import com.composeunstyled.theme.Theme
 
 @Composable
-fun AppScaffold(
-  appearance: Appearance = Appearance.System,
-  content: @Composable () -> Unit,
+fun ComposablesScreen(
+    content: @Composable () -> Unit,
 ) {
-  val colorScheme =
-    when (appearance) {
-      Appearance.System -> LocalColorScheme.current
-      Appearance.Light -> ColorScheme.Light
-      else -> ColorScheme.Dark
-    }
-
-  CompositionLocalProvider(LocalColorScheme provides colorScheme) {
-    ComposablesApp {
+  ProvideContentColor(Theme[colors][onBackgroundColor]) {
+    Box(
+        modifier = Modifier.fillMaxSize().background(Theme[colors][backgroundColor]),
+    ) {
       content()
     }
   }

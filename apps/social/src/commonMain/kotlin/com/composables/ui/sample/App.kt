@@ -52,6 +52,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import com.composables.tooling.insets.previewNavigationBarPadding
 import com.composables.tooling.insets.previewNavigationBarPaddingValue
+import com.composables.ui.ComposablesScreen
 import com.composables.ui.components.ButtonStyle
 import com.composables.ui.components.DropdownMenuAlignment
 import com.composables.ui.components.DropdownMenuSide
@@ -99,8 +100,8 @@ fun App() {
   val searchSelected = visibleRoute is SearchRoute
   val activitySelected = visibleRoute is ActivityRoute
   val profileSelected =
-      visibleRoute == ProfileRoute(signedInProfile.id) ||
-          visibleRoute is PostRoute && visibleRoute.profileId == signedInProfile.id
+    visibleRoute == ProfileRoute(signedInProfile.id) ||
+      visibleRoute is PostRoute && visibleRoute.profileId == signedInProfile.id
 
   fun navigate(route: NavKey) {
     if (backStack.lastOrNull() != route) {
@@ -123,57 +124,58 @@ fun App() {
   AppScaffold(appearance = appearance) {
     val widthBreakpoint = currentWindowWidthBreakpoint()
 
-    Box(
+    ComposablesScreen {
+      Box(
         Modifier.fillMaxSize()
-            .then(
-                buildModifier {
-                  if (widthBreakpoint isAtLeast Medium) {
-                    add(Modifier.previewNavigationBarPadding())
-                  }
-                },
-            ),
-    ) {
-      Column(
-          Modifier.align(Alignment.TopCenter)
-              .padding(horizontal = if (widthBreakpoint isAtLeast Medium) 80.dp else 0.dp)
-              .widthIn(max = if (widthBreakpoint isAtLeast Medium) 700.dp else Dp.Unspecified)
-              .fillMaxSize(),
+          .then(
+            buildModifier {
+              if (widthBreakpoint isAtLeast Medium) {
+                add(Modifier.previewNavigationBarPadding())
+              }
+            },
+          ),
       ) {
-        if (widthBreakpoint isAtLeast Medium) {
-          Toolbar(
+        Column(
+          Modifier.align(Alignment.TopCenter)
+            .padding(horizontal = if (widthBreakpoint isAtLeast Medium) 80.dp else 0.dp)
+            .widthIn(max = if (widthBreakpoint isAtLeast Medium) 700.dp else Dp.Unspecified)
+            .fillMaxSize(),
+        ) {
+          if (widthBreakpoint isAtLeast Medium) {
+            Toolbar(
               modifier = Modifier.fillMaxWidth(),
               title = { Text(visibleRoute.screenTitle) },
               leading =
-                  if (canGoBack) {
-                    {
-                      IconButton(
-                          onClick = { popBackStack() },
-                          style = ButtonStyle.Ghost,
-                      ) {
-                        Icon(Icons.ArrowLeft, contentDescription = "Go back")
-                      }
+                if (canGoBack) {
+                  {
+                    IconButton(
+                      onClick = { popBackStack() },
+                      style = ButtonStyle.Ghost,
+                    ) {
+                      Icon(Icons.ArrowLeft, contentDescription = "Go back")
                     }
-                  } else {
-                    null
-                  },
-          )
-        }
-        Box(
+                  }
+                } else {
+                  null
+                },
+            )
+          }
+          Box(
             modifier =
-                buildModifier {
-                      if (widthBreakpoint isAtLeast Medium) {
-                        val contentShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
-                        add(
-                            Modifier.outline(1.dp, Theme[colors][borderColor], contentShape)
-                                .clip(contentShape),
-                        )
-                      }
-                    }
-                    // we want the exiting screen to look dimmed. to achieve this effect,
-                    // we set a black background, while fading the page itself during the transition
-                    .background(Color.Black),
-        ) {
-          NavDisplay(
+              buildModifier {
+                if (widthBreakpoint isAtLeast Medium) {
+                  val contentShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+                  add(
+                    Modifier.outline(1.dp, Theme[colors][borderColor], contentShape)
+                      .clip(contentShape),
+                  )
+                }
+              }
+                // we want the exiting screen to look dimmed. to achieve this effect,
+                // we set a black background, while fading the page itself during the transition
+                .background(Color.Black),
+          ) {
+            NavDisplay(
               backStack = backStack,
               modifier = Modifier.fillMaxSize(),
               sceneStrategies = listOf(ModalOverlaySceneStrategy()),
@@ -183,162 +185,163 @@ fun App() {
                 EnterTransition.None togetherWith ExitTransition.None
               },
               entryProvider =
-                  entryProvider {
-                    entry<HomeFeedRoute> {
-                      SocialFeed(
-                          onPostClick = { post ->
-                            navigate(
-                                PostRoute(
-                                    profileId = post.authorId,
-                                    postId = post.id,
-                                ),
-                            )
-                          },
-                          onProfileClick = { profileId -> navigate(ProfileRoute(profileId)) },
-                          onNewPostClick = { navigate(NewPostRoute) },
-                      )
-                    }
-                    entry<SearchRoute> {
-                      Search(
-                          onProfileClick = { profileId -> navigate(ProfileRoute(profileId)) },
-                      )
-                    }
-                    entry<ActivityRoute> {
-                      Activity(
-                          onProfileClick = { profileId -> navigate(ProfileRoute(profileId)) },
-                      )
-                    }
-                    entry<ProfileRoute> { route ->
-                      Profile(
-                          profileId = route.profileId,
-                          signedInProfileId = signedInProfile.id,
-                          onPostClick = { post ->
-                            navigate(
-                                PostRoute(
-                                    profileId = post.authorId,
-                                    postId = post.id,
-                                ),
-                            )
-                          },
-                      )
-                    }
-                    entry<PostRoute> { route ->
-                      PostDetails(
-                          postId = route.postId,
-                          onBackClick = { popBackStack() },
-                          onProfileClick = { profileId -> navigate(ProfileRoute(profileId)) },
-                      )
-                    }
-                    entry<NewPostRoute>(
-                        metadata = ModalOverlaySceneStrategy.modalOverlay(),
-                    ) {
-                      NewPost(onBackClick = { popBackStack() })
-                    }
-                  },
-          )
+                entryProvider {
+                  entry<HomeFeedRoute> {
+                    SocialFeed(
+                      onPostClick = { post ->
+                        navigate(
+                          PostRoute(
+                            profileId = post.authorId,
+                            postId = post.id,
+                          ),
+                        )
+                      },
+                      onProfileClick = { profileId -> navigate(ProfileRoute(profileId)) },
+                      onNewPostClick = { navigate(NewPostRoute) },
+                    )
+                  }
+                  entry<SearchRoute> {
+                    Search(
+                      onProfileClick = { profileId -> navigate(ProfileRoute(profileId)) },
+                    )
+                  }
+                  entry<ActivityRoute> {
+                    Activity(
+                      onProfileClick = { profileId -> navigate(ProfileRoute(profileId)) },
+                    )
+                  }
+                  entry<ProfileRoute> { route ->
+                    Profile(
+                      profileId = route.profileId,
+                      signedInProfileId = signedInProfile.id,
+                      onPostClick = { post ->
+                        navigate(
+                          PostRoute(
+                            profileId = post.authorId,
+                            postId = post.id,
+                          ),
+                        )
+                      },
+                    )
+                  }
+                  entry<PostRoute> { route ->
+                    PostDetails(
+                      postId = route.postId,
+                      onBackClick = { popBackStack() },
+                      onProfileClick = { profileId -> navigate(ProfileRoute(profileId)) },
+                    )
+                  }
+                  entry<NewPostRoute>(
+                    metadata = ModalOverlaySceneStrategy.modalOverlay(),
+                  ) {
+                    NewPost(onBackClick = { popBackStack() })
+                  }
+                },
+            )
+          }
         }
-      }
 
-      if (widthBreakpoint isAtLeast Medium) {
-        IconButton(
+        if (widthBreakpoint isAtLeast Medium) {
+          IconButton(
             onClick = { navigate(NewPostRoute) },
             style = ButtonStyle.Outlined,
             modifier =
-                Modifier.align(Alignment.BottomEnd)
-                    .padding(16.dp)
-                    .size(if (widthBreakpoint isAtLeast Large) 64.dp else Dp.Unspecified)
-                    .dropShadow(Theme[shapes][buttonShape], Theme[shadows][overlayShadow]),
-        ) {
-          Icon(Icons.Plus, contentDescription = "New Post")
+              Modifier.align(Alignment.BottomEnd)
+                .padding(16.dp)
+                .size(if (widthBreakpoint isAtLeast Large) 64.dp else Dp.Unspecified)
+                .dropShadow(Theme[shapes][buttonShape], Theme[shadows][overlayShadow]),
+          ) {
+            Icon(Icons.Plus, contentDescription = "New Post")
+          }
         }
-      }
 
-      if (widthBreakpoint isAtLeast Medium) {
-        Sidebar(
+        if (widthBreakpoint isAtLeast Medium) {
+          Sidebar(
             modifier = Modifier.align(Alignment.CenterStart),
             expanded = widthBreakpoint isAtLeast Large,
             footer = {
               var expanded by remember { mutableStateOf(false) }
 
               OtherMenuDropdown(
-                  appearance = appearance,
-                  onAppearanceChange = { appearance = it },
-                  side = DropdownMenuSide.Top,
-                  alignment = DropdownMenuAlignment.Start,
-                  expanded = expanded,
-                  onExpandedChange = { expanded = it },
+                appearance = appearance,
+                onAppearanceChange = { appearance = it },
+                side = DropdownMenuSide.Top,
+                alignment = DropdownMenuAlignment.Start,
+                expanded = expanded,
+                onExpandedChange = { expanded = it },
               ) {
                 SidebarItem(
-                    selected = false,
-                    icon = { Icon(Icons.Menu) },
-                    onClick = { expanded = true },
-                    text = { Text(text = "More", singleLine = true) },
+                  selected = false,
+                  icon = { Icon(Icons.Menu) },
+                  onClick = { expanded = true },
+                  text = { Text(text = "More", singleLine = true) },
                 )
               }
             },
             content = {
               SidebarItem(
-                  selected = homeSelected,
-                  icon = { Icon(Icons.House) },
-                  onClick = { resetBackstack(HomeFeedRoute) },
-                  text = { Text(text = "Home", singleLine = true) },
+                selected = homeSelected,
+                icon = { Icon(Icons.House) },
+                onClick = { resetBackstack(HomeFeedRoute) },
+                text = { Text(text = "Home", singleLine = true) },
               )
               SidebarItem(
-                  selected = searchSelected,
-                  icon = { Icon(Icons.Search) },
-                  onClick = { resetBackstack(SearchRoute) },
-                  text = { Text(text = "Search", singleLine = true) },
+                selected = searchSelected,
+                icon = { Icon(Icons.Search) },
+                onClick = { resetBackstack(SearchRoute) },
+                text = { Text(text = "Search", singleLine = true) },
               )
               SidebarItem(
-                  selected = activitySelected,
-                  icon = { Icon(Icons.Bell) },
-                  onClick = { resetBackstack(ActivityRoute) },
-                  text = { Text(text = "Activity", singleLine = true) },
+                selected = activitySelected,
+                icon = { Icon(Icons.Bell) },
+                onClick = { resetBackstack(ActivityRoute) },
+                text = { Text(text = "Activity", singleLine = true) },
               )
               SidebarItem(
-                  selected = profileSelected,
-                  icon = { Icon(Icons.User) },
-                  onClick = { resetBackstack(ProfileRoute(signedInProfile.id)) },
-                  text = { Text(text = "Profile", singleLine = true) },
+                selected = profileSelected,
+                icon = { Icon(Icons.User) },
+                onClick = { resetBackstack(ProfileRoute(signedInProfile.id)) },
+                text = { Text(text = "Profile", singleLine = true) },
               )
             },
-        )
-      } else {
-        NavigationBar(
+          )
+        } else {
+          NavigationBar(
             modifier = Modifier.align(Alignment.BottomCenter),
             windowInsets = WindowInsets(bottom = previewNavigationBarPaddingValue()),
-        ) {
-          NavigationBarItem(
+          ) {
+            NavigationBarItem(
               selected = homeSelected,
               onClick = { resetBackstack(HomeFeedRoute) },
               content = { Icon(Icons.House, contentDescription = "Home") },
               modifier = Modifier.weight(1f),
-          )
-          NavigationBarItem(
+            )
+            NavigationBarItem(
               selected = searchSelected,
               onClick = { resetBackstack(SearchRoute) },
               content = { Icon(Icons.Search, contentDescription = "Search") },
               modifier = Modifier.weight(1f),
-          )
-          NavigationBarItem(
+            )
+            NavigationBarItem(
               selected = false,
               onClick = { navigate(NewPostRoute) },
               modifier = Modifier.weight(1f),
-          ) {
-            Icon(Icons.Plus, contentDescription = "New post")
-          }
-          NavigationBarItem(
+            ) {
+              Icon(Icons.Plus, contentDescription = "New post")
+            }
+            NavigationBarItem(
               selected = activitySelected,
               onClick = { resetBackstack(ActivityRoute) },
               content = { Icon(Icons.Bell, contentDescription = "Activity") },
               modifier = Modifier.weight(1f),
-          )
-          NavigationBarItem(
+            )
+            NavigationBarItem(
               selected = profileSelected,
               onClick = { resetBackstack(ProfileRoute(signedInProfile.id)) },
               content = { Icon(Icons.User, contentDescription = "Profile") },
               modifier = Modifier.weight(1f),
-          )
+            )
+          }
         }
       }
     }
@@ -347,11 +350,11 @@ fun App() {
 
 private val NavKey?.screenTitle: String
   get() =
-      when (this) {
-        is HomeFeedRoute -> "My Feed"
-        is SearchRoute -> "Search"
-        is ActivityRoute -> "Activity"
-        is ProfileRoute -> "Profile"
-        is PostRoute -> "Post"
-        else -> "My Feed"
-      }
+    when (this) {
+      is HomeFeedRoute -> "My Feed"
+      is SearchRoute -> "Search"
+      is ActivityRoute -> "Activity"
+      is ProfileRoute -> "Profile"
+      is PostRoute -> "Post"
+      else -> "My Feed"
+    }
