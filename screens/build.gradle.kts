@@ -21,67 +21,58 @@
  */
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class)
 
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.compose)
-    alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.android.kotlin.multiplatform.library)
+  alias(libs.plugins.kotlin.multiplatform)
+  alias(libs.plugins.compose)
+  alias(libs.plugins.compose.compiler)
+  alias(libs.plugins.android.kotlin.multiplatform.library)
+  id("com.composables.devtools")
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
+java { toolchain { languageVersion = JavaLanguageVersion.of(17) } }
 
 kotlin {
-    jvmToolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+  jvmToolchain { languageVersion = JavaLanguageVersion.of(17) }
+
+  jvm()
+
+  js { browser() }
+
+  @OptIn(ExperimentalWasmDsl::class) wasmJs { browser() }
+
+  android {
+    namespace = "com.composables.ui.screens"
+    compileSdk = libs.versions.android.compile.sdk.get().toInt()
+    minSdk = libs.versions.android.min.sdk.get().toInt()
+
+    compilerOptions { jvmTarget = JvmTarget.JVM_17 }
+  }
+
+  listOf(iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
+    iosTarget.binaries.framework {
+      baseName = "Screens"
+      isStatic = true
+    }
+  }
+
+  sourceSets {
+    commonMain.dependencies {
+      api(project(":ui"))
+      api(libs.compose.foundation)
+      implementation(libs.composables.unstyled)
     }
 
-    jvm()
-
-    js {
-        browser()
+    jvmMain.dependencies {
+      implementation(compose.desktop.currentOs) {
+        exclude("org.jetbrains.compose.material")
+        exclude("org.jetbrains.compose.material3")
+      }
     }
-
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        browser()
-    }
-
-    android {
-        namespace = "com.composables.ui.screens"
-        compileSdk = libs.versions.android.compile.sdk.get().toInt()
-        minSdk = libs.versions.android.min.sdk.get().toInt()
-
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_17
-        }
-    }
-
-    listOf(iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "Screens"
-            isStatic = true
-        }
-    }
-
-    sourceSets {
-        commonMain.dependencies {
-            api(project(":ui"))
-            api(libs.compose.foundation)
-        }
-
-        jvmMain.dependencies {
-            implementation(compose.desktop.currentOs) {
-                exclude("org.jetbrains.compose.material")
-                exclude("org.jetbrains.compose.material3")
-            }
-        }
-    }
+  }
 }
+
+composablesDevTools { appComposable.set("com.composables.ui.screens.SignIn") }

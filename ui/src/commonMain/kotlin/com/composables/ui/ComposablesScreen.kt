@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.composables.ui.theme.backgroundColor
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.onBackgroundColor
@@ -34,11 +35,13 @@ import com.composeunstyled.theme.Theme
 
 @Composable
 fun ComposablesScreen(
+    contentColor: Color = Theme[colors][onBackgroundColor],
+    background: Color = Theme[colors][backgroundColor],
     content: @Composable () -> Unit,
 ) {
-  ProvideContentColor(Theme[colors][onBackgroundColor]) {
+  ProvideContentColor(contentColor) {
     Box(
-        modifier = Modifier.fillMaxSize().background(Theme[colors][backgroundColor]),
+        modifier = Modifier.fillMaxSize().background(background),
     ) {
       content()
     }
