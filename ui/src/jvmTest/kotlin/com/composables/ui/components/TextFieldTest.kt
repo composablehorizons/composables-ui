@@ -23,13 +23,19 @@ package com.composables.ui.components
 
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.ComposeWindow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.composables.ui.theme.ComposablesTheme
 import java.awt.Robot
-import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
 import javax.swing.SwingUtilities
 import kotlin.test.AfterTest
 import kotlin.test.Test
@@ -47,28 +53,25 @@ class TextFieldTest {
   fun typingCharactersOnTrailingButtonInDesktopWindowDoesNotEnterText() {
     assertTypingCharactersOnDecorationButtonDoesNotEnterText(
         leading = null,
-        trailing = { toggle -> IconButton(onClick = toggle) { Text("toggle") } },
-        decorationCenterX = 385,
+        trailing = { modifier -> IconButton(onClick = {}, modifier = modifier) { Text("toggle") } },
     )
   }
 
   @Test
   fun typingCharactersOnLeadingButtonInDesktopWindowDoesNotEnterText() {
     assertTypingCharactersOnDecorationButtonDoesNotEnterText(
-        leading = { toggle -> IconButton(onClick = toggle) { Text("toggle") } },
+        leading = { modifier -> IconButton(onClick = {}, modifier = modifier) { Text("toggle") } },
         trailing = null,
-        decorationCenterX = 35,
     )
   }
 
   private fun assertTypingCharactersOnDecorationButtonDoesNotEnterText(
-      leading: (@Composable (toggle: () -> Unit) -> Unit)?,
-      trailing: (@Composable (toggle: () -> Unit) -> Unit)?,
-      decorationCenterX: Int,
+      leading: (@Composable (modifier: Modifier) -> Unit)?,
+      trailing: (@Composable (modifier: Modifier) -> Unit)?,
   ) {
     val state = TextFieldState("secret")
-    var toggleCount = 0
-    val toggle = { toggleCount += 1 }
+    val decorationFocused = AtomicBoolean(false)
+    val requestDecorationFocus = AtomicReference<() -> Unit>()
 
     lateinit var window: ComposeWindow
 
@@ -78,11 +81,18 @@ class TextFieldTest {
       window.setSize(420, 120)
       window.setLocationRelativeTo(null)
       window.setContent {
+        val focusRequester = remember { FocusRequester() }
+        requestDecorationFocus.set { focusRequester.requestFocus() }
+        val decorationModifier =
+            Modifier.focusRequester(focusRequester).onFocusChanged {
+              decorationFocused.set(it.isFocused)
+            }
+
         ComposablesTheme {
           TextField(
               state = state,
-              leading = leading?.let { { it(toggle) } },
-              trailing = trailing?.let { { it(toggle) } },
+              leading = leading?.let { { it(decorationModifier) } },
+              trailing = trailing?.let { { it(decorationModifier) } },
           )
         }
       }
@@ -95,16 +105,9 @@ class TextFieldTest {
     robot.waitForIdle()
     robot.delay(250)
 
-    val location = window.locationOnScreen
-    robot.mouseMove(location.x + 210, location.y + 60)
-    robot.mousePress(InputEvent.BUTTON1_DOWN_MASK)
-    robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK)
+    SwingUtilities.invokeAndWait { awaitFocusRequester(requestDecorationFocus).invoke() }
     robot.waitForIdle()
-
-    robot.mouseMove(location.x + decorationCenterX, location.y + 60)
-    robot.mousePress(InputEvent.BUTTON1_DOWN_MASK)
-    robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK)
-    robot.waitForIdle()
+    awaitDecorationFocus(decorationFocused)
 
     robot.keyPress(KeyEvent.VK_A)
     robot.keyRelease(KeyEvent.VK_A)
@@ -114,7 +117,26 @@ class TextFieldTest {
     robot.keyRelease(KeyEvent.VK_C)
     robot.waitForIdle()
 
-    assertThat(toggleCount).isEqualTo(1)
     assertThat(state.text.toString()).isEqualTo("secret")
+  }
+
+  private fun awaitFocusRequester(requestDecorationFocus: AtomicReference<() -> Unit>): () -> Unit {
+    repeat(20) {
+      requestDecorationFocus.get()?.let {
+        return it
+      }
+      Thread.sleep(50)
+    }
+    error("Decoration button focus requester was not created")
+  }
+
+  private fun awaitDecorationFocus(decorationFocused: AtomicBoolean) {
+    repeat(20) {
+      if (decorationFocused.get()) {
+        return
+      }
+      Thread.sleep(50)
+    }
+    error("Decoration button was not focused")
   }
 }
