@@ -296,6 +296,7 @@ private fun buttonContentColorFor(style: ButtonStyle): Color {
     ButtonStyle.Secondary -> Theme[colors][onSecondaryColor]
     ButtonStyle.Destructive -> Theme[colors][onDestructiveColor]
     ButtonStyle.Outlined -> Theme[colors][onPanelColor]
+    ButtonStyle.Link -> Theme[colors][primaryColor]
     else -> LocalContentColor.current
   }
 }
