@@ -38,17 +38,15 @@ import com.composables.ui.components.Text
 @Composable
 fun DisabledButtonExample() {
   Row(
-    horizontalArrangement = Arrangement.spacedBy(8.dp),
-    verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.spacedBy(8.dp),
+      verticalAlignment = Alignment.CenterVertically,
   ) {
-    Button(onClick = { /* TODO */ }, enabled = false) {
-      Text("Button")
-    }
-    IconButton(onClick = { /* TODO */ }, enabled = false) {
+    Button(onClick = { /* TODO */}, enabled = false) { Text("Button") }
+    IconButton(onClick = { /* TODO */}, enabled = false) {
       Icon(
-        imageVector = Lucide.Plus,
-        contentDescription = "Add",
-        modifier = Modifier.size(18.dp),
+          imageVector = Lucide.Plus,
+          contentDescription = "Add",
+          modifier = Modifier.size(18.dp),
       )
     }
   }

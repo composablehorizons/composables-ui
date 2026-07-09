@@ -71,46 +71,43 @@ fun NewPost(onBackClick: () -> Unit) {
   val useDialog = widthBreakpoint isAtLeast Large || heightBreakpoint isAtLeast Tall
 
   Column(
-    Modifier
-      .padding(vertical = 8.dp)
-      .previewSoftKeyboardPadding()
-      .then(
-        buildModifier {
-          if (!useDialog) {
-            add(Modifier.previewNavigationBarPadding())
-          }
-        },
-      ),
+      Modifier.padding(vertical = 8.dp)
+          .previewSoftKeyboardPadding()
+          .then(
+              buildModifier {
+                if (!useDialog) {
+                  add(Modifier.previewNavigationBarPadding())
+                }
+              },
+          ),
   ) {
     CenteredToolbar(
-      modifier = Modifier.fillMaxWidth(),
-      leading = {
-        IconButton(
-          onClick = onBackClick,
-          style = ButtonStyle.Ghost,
-        ) {
-          Icon(Icons.X, contentDescription = "Dismiss")
-        }
-      },
-      title = {
-        Text("New Post")
-      },
+        modifier = Modifier.fillMaxWidth(),
+        leading = {
+          IconButton(
+              onClick = onBackClick,
+              style = ButtonStyle.Ghost,
+          ) {
+            Icon(Icons.X, contentDescription = "Dismiss")
+          }
+        },
+        title = { Text("New Post") },
     )
 
     Column(Modifier.padding(horizontal = 12.dp)) {
       Row(
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalAlignment = Alignment.Top,
+          horizontalArrangement = Arrangement.spacedBy(12.dp),
+          verticalAlignment = Alignment.Top,
       ) {
         Avatar(
-          url = signedInProfile.avatarUrl,
+            url = signedInProfile.avatarUrl,
         )
         TextField(
-          state = textFieldState,
-          modifier = Modifier.weight(1f),
-          style = TextFieldStyle.Ghost,
-          placeholder = { Text("What's up?") },
-          lineLimits = TextFieldLineLimits.MultiLine(),
+            state = textFieldState,
+            modifier = Modifier.weight(1f),
+            style = TextFieldStyle.Ghost,
+            placeholder = { Text("What's up?") },
+            lineLimits = TextFieldLineLimits.MultiLine(),
         )
       }
 
@@ -118,39 +115,39 @@ fun NewPost(onBackClick: () -> Unit) {
       Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
         ProvideContentColor(Theme[colors][mutedColor]) {
           IconButton(
-            onClick = { /* TODO */ },
-            style = ButtonStyle.Ghost,
+              onClick = { /* TODO */},
+              style = ButtonStyle.Ghost,
           ) {
             Icon(Icons.Image, contentDescription = "Pick image")
           }
           IconButton(
-            onClick = { /* TODO */ },
-            style = ButtonStyle.Ghost,
+              onClick = { /* TODO */},
+              style = ButtonStyle.Ghost,
           ) {
             Icon(Icons.Smile, contentDescription = "Add emoji")
           }
           IconButton(
-            onClick = { /* TODO */ },
-            style = ButtonStyle.Ghost,
+              onClick = { /* TODO */},
+              style = ButtonStyle.Ghost,
           ) {
             Icon(Icons.Film, contentDescription = "Add GIF")
           }
           IconButton(
-            onClick = { /* TODO */ },
-            style = ButtonStyle.Ghost,
+              onClick = { /* TODO */},
+              style = ButtonStyle.Ghost,
           ) {
             Icon(Icons.Vote, contentDescription = "Create poll")
           }
           IconButton(
-            onClick = { /* TODO */ },
-            style = ButtonStyle.Ghost,
+              onClick = { /* TODO */},
+              style = ButtonStyle.Ghost,
           ) {
             Icon(Icons.MapPin, contentDescription = "Add location")
           }
         }
 
         Spacer(Modifier.weight(1f))
-        Button(onClick = { /* TODO */ }, enabled = canPost, style = ButtonStyle.Primary) {
+        Button(onClick = { /* TODO */}, enabled = canPost, style = ButtonStyle.Primary) {
           Text("Post")
         }
       }

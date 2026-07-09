@@ -32,7 +32,5 @@ import com.composables.ui.components.Text
 @Composable
 fun CheckboxExample() {
   var checked by remember { mutableStateOf(true) }
-  Checkbox(checked = checked, onCheckedChange = { checked = it }) {
-    Text("Receive updates")
-  }
+  Checkbox(checked = checked, onCheckedChange = { checked = it }) { Text("Receive updates") }
 }

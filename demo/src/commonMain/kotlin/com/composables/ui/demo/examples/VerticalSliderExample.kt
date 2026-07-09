@@ -36,9 +36,9 @@ import com.composables.ui.components.Slider
 fun VerticalSliderExample() {
   var value by remember { mutableFloatStateOf(0.45f) }
   Slider(
-    value = value,
-    onValueChange = { value = it },
-    orientation = Orientation.Vertical,
-    modifier = Modifier.height(180.dp),
+      value = value,
+      onValueChange = { value = it },
+      orientation = Orientation.Vertical,
+      modifier = Modifier.height(180.dp),
   )
 }

@@ -77,38 +77,31 @@ import com.composables.ui.theme.textSelectionColors
 import com.composeunstyled.LocalTextStyle
 import com.composeunstyled.ProvideContentColor
 import com.composeunstyled.ProvideTextStyle
+import com.composeunstyled.TextFieldScope as UnstyledTextFieldScope
 import com.composeunstyled.TextInput
 import com.composeunstyled.UnstyledTextField
 import com.composeunstyled.buildModifier
-import com.composeunstyled.theme.Theme
-import com.composeunstyled.TextFieldScope as UnstyledTextFieldScope
 import com.composeunstyled.focusRing as unstyledFocusRing
+import com.composeunstyled.theme.Theme
 
-/**
- * Visual style variants for TextField.
- */
+/** Visual style variants for TextField. */
 @kotlin.jvm.JvmInline
 value class TextFieldStyle internal constructor(@Suppress("unused") private val value: Int) {
   companion object {
-    /**
-     * Uses the filled text field container.
-     */
+    /** Uses the filled text field container. */
     val Filled = TextFieldStyle(0)
 
-    /**
-     * Uses a transparent text field container.
-     */
+    /** Uses a transparent text field container. */
     val Ghost = TextFieldStyle(1)
 
-    /**
-     * Uses the default text field style.
-     */
+    /** Uses the default text field style. */
     val Default = Filled
   }
 }
 
 /**
  * A styled text input field.
+ *
  * @param state State object that holds and edits the text field value.
  * @param modifier Modifier applied to the text field.
  * @param enabled Whether the text field can be interacted with.
@@ -145,94 +138,95 @@ value class TextFieldStyle internal constructor(@Suppress("unused") private val 
  */
 @Composable
 fun TextField(
-  state: TextFieldState,
-  modifier: Modifier = Modifier,
-  enabled: Boolean = true,
-  readOnly: Boolean = false,
-  accessibilityLabel: String? = null,
-  placeholder: (@Composable () -> Unit)? = null,
-  leading: (@Composable () -> Unit)? = null,
-  trailing: (@Composable () -> Unit)? = null,
-  style: TextFieldStyle = TextFieldStyle.Default,
-  shape: Shape = Theme[shapes][fieldShape],
-  backgroundColor: Color = textFieldBackgroundColorFor(style),
-  contentColor: Color = Theme[colors][onFieldColor],
-  placeholderColor: Color = Theme[colors][mutedColor],
-  borderColor: Color = textFieldBorderColorFor(style),
-  contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp),
-  cursorBrush: Brush = SolidColor(contentColor),
-  selectionColors: TextSelectionColors = Theme[textSelectionColors][defaultTextSelectionColors],
-  textStyle: TextStyle = LocalTextStyle.current.merge(TextFieldInputTextStyle),
-  textAlign: TextAlign = TextAlign.Unspecified,
-  lineHeight: TextUnit = TextUnit.Unspecified,
-  fontSize: TextUnit = textStyle.fontSize,
-  letterSpacing: TextUnit = textStyle.letterSpacing,
-  fontWeight: FontWeight? = textStyle.fontWeight,
-  fontFamily: FontFamily? = textStyle.fontFamily,
-  textDecoration: TextDecoration? = textStyle.textDecoration,
-  lineLimits: TextFieldLineLimits = TextFieldLineLimits.SingleLine,
-  inputTransformation: InputTransformation? = null,
-  outputTransformation: OutputTransformation? = null,
-  onTextLayout: (Density.(getResult: () -> TextLayoutResult?) -> Unit)? = null,
-  onKeyboardAction: KeyboardActionHandler? = null,
-  keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-  scrollState: ScrollState = rememberScrollState(),
+    state: TextFieldState,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    accessibilityLabel: String? = null,
+    placeholder: (@Composable () -> Unit)? = null,
+    leading: (@Composable () -> Unit)? = null,
+    trailing: (@Composable () -> Unit)? = null,
+    style: TextFieldStyle = TextFieldStyle.Default,
+    shape: Shape = Theme[shapes][fieldShape],
+    backgroundColor: Color = textFieldBackgroundColorFor(style),
+    contentColor: Color = Theme[colors][onFieldColor],
+    placeholderColor: Color = Theme[colors][mutedColor],
+    borderColor: Color = textFieldBorderColorFor(style),
+    contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp),
+    cursorBrush: Brush = SolidColor(contentColor),
+    selectionColors: TextSelectionColors = Theme[textSelectionColors][defaultTextSelectionColors],
+    textStyle: TextStyle = LocalTextStyle.current.merge(TextFieldInputTextStyle),
+    textAlign: TextAlign = TextAlign.Unspecified,
+    lineHeight: TextUnit = TextUnit.Unspecified,
+    fontSize: TextUnit = textStyle.fontSize,
+    letterSpacing: TextUnit = textStyle.letterSpacing,
+    fontWeight: FontWeight? = textStyle.fontWeight,
+    fontFamily: FontFamily? = textStyle.fontFamily,
+    textDecoration: TextDecoration? = textStyle.textDecoration,
+    lineLimits: TextFieldLineLimits = TextFieldLineLimits.SingleLine,
+    inputTransformation: InputTransformation? = null,
+    outputTransformation: OutputTransformation? = null,
+    onTextLayout: (Density.(getResult: () -> TextLayoutResult?) -> Unit)? = null,
+    onKeyboardAction: KeyboardActionHandler? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    scrollState: ScrollState = rememberScrollState(),
 ) {
   UnstyledTextField(
-    state = state,
-    enabled = enabled,
-    readOnly = readOnly,
-    accessibilityLabel = accessibilityLabel,
-    cursorBrush = cursorBrush,
-    selectionColors = selectionColors,
-    textStyle = textStyle,
-    textAlign = textAlign,
-    lineHeight = lineHeight,
-    fontSize = fontSize,
-    letterSpacing = letterSpacing,
-    fontWeight = fontWeight,
-    fontFamily = fontFamily,
-    textDecoration = textDecoration,
-    lineLimits = lineLimits,
-    inputTransformation = inputTransformation,
-    outputTransformation = outputTransformation,
-    onTextLayout = onTextLayout,
-    onKeyboardAction = onKeyboardAction,
-    keyboardOptions = keyboardOptions,
-    interactionSource = interactionSource,
-    textColor = contentColor,
-    scrollState = scrollState,
-    modifier = modifier
-      .unstyledFocusRing(
-        interactionSource = interactionSource,
-        width = 2.dp,
-        color = Theme[colors][ringColor],
-        shape = shape,
-        offset = 2.dp,
-      )
-      .clip(shape)
-      .background(backgroundColor, shape)
-      .then(
-        buildModifier {
-          if (borderColor.isSpecified && borderColor != Color.Transparent) {
-            add(Modifier.border(1.dp, borderColor, shape))
-          }
-          if (!enabled) {
-            add(Modifier.alpha(Theme[alphas][disabledAlpha]))
-          }
-        },
-      ),
+      state = state,
+      enabled = enabled,
+      readOnly = readOnly,
+      accessibilityLabel = accessibilityLabel,
+      cursorBrush = cursorBrush,
+      selectionColors = selectionColors,
+      textStyle = textStyle,
+      textAlign = textAlign,
+      lineHeight = lineHeight,
+      fontSize = fontSize,
+      letterSpacing = letterSpacing,
+      fontWeight = fontWeight,
+      fontFamily = fontFamily,
+      textDecoration = textDecoration,
+      lineLimits = lineLimits,
+      inputTransformation = inputTransformation,
+      outputTransformation = outputTransformation,
+      onTextLayout = onTextLayout,
+      onKeyboardAction = onKeyboardAction,
+      keyboardOptions = keyboardOptions,
+      interactionSource = interactionSource,
+      textColor = contentColor,
+      scrollState = scrollState,
+      modifier =
+          modifier
+              .unstyledFocusRing(
+                  interactionSource = interactionSource,
+                  width = 2.dp,
+                  color = Theme[colors][ringColor],
+                  shape = shape,
+                  offset = 2.dp,
+              )
+              .clip(shape)
+              .background(backgroundColor, shape)
+              .then(
+                  buildModifier {
+                    if (borderColor.isSpecified && borderColor != Color.Transparent) {
+                      add(Modifier.border(1.dp, borderColor, shape))
+                    }
+                    if (!enabled) {
+                      add(Modifier.alpha(Theme[alphas][disabledAlpha]))
+                    }
+                  },
+              ),
   ) {
     TextFieldContent(
-      placeholder = placeholder,
-      placeholderColor = placeholderColor,
-      contentColor = contentColor,
-      textStyle = textStyle,
-      lineLimits = lineLimits,
-      contentPadding = contentPadding,
-      leading = leading,
-      trailing = trailing,
+        placeholder = placeholder,
+        placeholderColor = placeholderColor,
+        contentColor = contentColor,
+        textStyle = textStyle,
+        lineLimits = lineLimits,
+        contentPadding = contentPadding,
+        leading = leading,
+        trailing = trailing,
     )
   }
 }
@@ -261,50 +255,43 @@ private fun textFieldMinHeight(): Dp {
 
 @Composable
 private fun UnstyledTextFieldScope.TextFieldContent(
-  placeholder: (@Composable () -> Unit)?,
-  placeholderColor: Color,
-  contentColor: Color,
-  textStyle: TextStyle,
-  lineLimits: TextFieldLineLimits,
-  contentPadding: PaddingValues,
-  leading: (@Composable () -> Unit)?,
-  trailing: (@Composable () -> Unit)?,
+    placeholder: (@Composable () -> Unit)?,
+    placeholderColor: Color,
+    contentColor: Color,
+    textStyle: TextStyle,
+    lineLimits: TextFieldLineLimits,
+    contentPadding: PaddingValues,
+    leading: (@Composable () -> Unit)?,
+    trailing: (@Composable () -> Unit)?,
 ) {
   ProvideContentColor(contentColor) {
     ProvideTextStyle(textStyle) {
       Row(
-        modifier = Modifier
-          .heightIn(min = textFieldMinHeight())
-          .padding(contentPadding),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = if (lineLimits == TextFieldLineLimits.SingleLine) {
-          Alignment.CenterVertically
-        } else {
-          Alignment.Top
-        },
+          modifier = Modifier.heightIn(min = textFieldMinHeight()).padding(contentPadding),
+          horizontalArrangement = Arrangement.spacedBy(8.dp),
+          verticalAlignment =
+              if (lineLimits == TextFieldLineLimits.SingleLine) {
+                Alignment.CenterVertically
+              } else {
+                Alignment.Top
+              },
       ) {
         if (leading != null) {
           Box(
-            modifier = Modifier.sizeIn(minWidth = 16.dp, minHeight = 16.dp),
-            contentAlignment = Alignment.Center,
+              modifier = Modifier.sizeIn(minWidth = 16.dp, minHeight = 16.dp),
+              contentAlignment = Alignment.Center,
           ) {
             leading()
           }
         }
         TextInput(
-          modifier = Modifier.weight(1f),
-          placeholder = placeholder?.let {
-            {
-              ProvideContentColor(placeholderColor) {
-                it()
-              }
-            }
-          },
+            modifier = Modifier.weight(1f),
+            placeholder = placeholder?.let { { ProvideContentColor(placeholderColor) { it() } } },
         )
         if (trailing != null) {
           Box(
-            modifier = Modifier.sizeIn(minWidth = 16.dp, minHeight = 16.dp),
-            contentAlignment = Alignment.Center,
+              modifier = Modifier.sizeIn(minWidth = 16.dp, minHeight = 16.dp),
+              contentAlignment = Alignment.Center,
           ) {
             trailing()
           }

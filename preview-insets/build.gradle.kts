@@ -24,35 +24,27 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
-    alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.compose)
-    alias(libs.plugins.compose.compiler)
+  alias(libs.plugins.kotlin.multiplatform)
+  alias(libs.plugins.compose)
+  alias(libs.plugins.compose.compiler)
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
+java { toolchain { languageVersion = JavaLanguageVersion.of(17) } }
 
 kotlin {
-    jvmToolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
+  jvmToolchain { languageVersion = JavaLanguageVersion.of(17) }
 
-    jvm()
+  jvm()
 
-    wasmJs {
-        browser()
-    }
+  wasmJs { browser() }
 
-    sourceSets {
-        commonMain.dependencies {
-            implementation(project(":ui"))
-            implementation(libs.compose.animation)
-            api(libs.compose.foundation)
-            implementation(libs.compose.runtime)
-            implementation(libs.compose.ui)
-        }
+  sourceSets {
+    commonMain.dependencies {
+      implementation(project(":ui"))
+      implementation(libs.compose.animation)
+      api(libs.compose.foundation)
+      implementation(libs.compose.runtime)
+      implementation(libs.compose.ui)
     }
+  }
 }

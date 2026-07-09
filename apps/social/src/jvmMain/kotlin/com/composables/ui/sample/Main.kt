@@ -62,42 +62,42 @@ fun main() = application {
   var copyScreenshotRequest by remember { mutableStateOf(0) }
 
   Window(
-    onCloseRequest = ::exitApplication,
-    state = windowState,
-    title = "Sample App",
-    onKeyEvent = { event ->
-      val shortcutDevice = deviceForPreviewShortcut(event)
-      if (shortcutDevice != null) {
-        selectedDevice = shortcutDevice
-        true
-      } else if (isDevicePreviewHotReloadShortcut(event) && isDevicePreviewHotReloadAvailable()) {
-        runCatching { requestDevicePreviewHotReload() }
-        true
-      } else if (isDevicePreviewScreenshotSaveShortcut(event)) {
-        saveScreenshotRequest++
-        true
-      } else if (isDevicePreviewScreenshotCopyShortcut(event)) {
-        copyScreenshotRequest++
-        true
-      } else if (isDevicePreviewRotationShortcut(event) && selectedDevice.canRotate) {
-        selectedOrientation = selectedOrientation.rotated()
-        true
-      } else if (isDevicePreviewLayoutDirectionShortcut(event)) {
-        selectedLayoutDirection = selectedLayoutDirection.oppositePreviewLayoutDirection()
-        true
-      } else if (isDevicePreviewToolbarShortcut(event)) {
-        toolbarVisible = !toolbarVisible
-        true
-      } else {
-        val shortcutZoom = devicePreviewZoomForShortcut(event, selectedZoom)
-        if (shortcutZoom != null) {
-          selectedZoom = shortcutZoom
+      onCloseRequest = ::exitApplication,
+      state = windowState,
+      title = "Sample App",
+      onKeyEvent = { event ->
+        val shortcutDevice = deviceForPreviewShortcut(event)
+        if (shortcutDevice != null) {
+          selectedDevice = shortcutDevice
+          true
+        } else if (isDevicePreviewHotReloadShortcut(event) && isDevicePreviewHotReloadAvailable()) {
+          runCatching { requestDevicePreviewHotReload() }
+          true
+        } else if (isDevicePreviewScreenshotSaveShortcut(event)) {
+          saveScreenshotRequest++
+          true
+        } else if (isDevicePreviewScreenshotCopyShortcut(event)) {
+          copyScreenshotRequest++
+          true
+        } else if (isDevicePreviewRotationShortcut(event) && selectedDevice.canRotate) {
+          selectedOrientation = selectedOrientation.rotated()
+          true
+        } else if (isDevicePreviewLayoutDirectionShortcut(event)) {
+          selectedLayoutDirection = selectedLayoutDirection.oppositePreviewLayoutDirection()
+          true
+        } else if (isDevicePreviewToolbarShortcut(event)) {
+          toolbarVisible = !toolbarVisible
           true
         } else {
-          false
+          val shortcutZoom = devicePreviewZoomForShortcut(event, selectedZoom)
+          if (shortcutZoom != null) {
+            selectedZoom = shortcutZoom
+            true
+          } else {
+            false
+          }
         }
-      }
-    },
+      },
   ) {
     val density = LocalDensity.current
     val minimumWidth = with(density) { 220.dp.roundToPx() }
@@ -124,18 +124,18 @@ fun main() = application {
     }
 
     DevicePreviewHost(
-      initialDevice = DevicePreviewDevices.Desktop,
-      selectedDevice = selectedDevice,
-      onDeviceSelected = { selectedDevice = it },
-      selectedOrientation = selectedOrientation,
-      onOrientationSelected = { selectedOrientation = it },
-      selectedLayoutDirection = selectedLayoutDirection,
-      onLayoutDirectionSelected = { selectedLayoutDirection = it },
-      selectedZoom = selectedZoom,
-      onZoomSelected = { selectedZoom = it },
-      showControls = toolbarVisible,
-      saveScreenshotRequest = saveScreenshotRequest,
-      copyScreenshotRequest = copyScreenshotRequest,
+        initialDevice = DevicePreviewDevices.Desktop,
+        selectedDevice = selectedDevice,
+        onDeviceSelected = { selectedDevice = it },
+        selectedOrientation = selectedOrientation,
+        onOrientationSelected = { selectedOrientation = it },
+        selectedLayoutDirection = selectedLayoutDirection,
+        onLayoutDirectionSelected = { selectedLayoutDirection = it },
+        selectedZoom = selectedZoom,
+        onZoomSelected = { selectedZoom = it },
+        showControls = toolbarVisible,
+        saveScreenshotRequest = saveScreenshotRequest,
+        copyScreenshotRequest = copyScreenshotRequest,
     ) {
       App()
     }

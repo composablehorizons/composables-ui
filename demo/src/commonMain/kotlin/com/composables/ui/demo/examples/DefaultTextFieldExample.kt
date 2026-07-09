@@ -33,9 +33,9 @@ fun DefaultTextFieldExample() {
   val state = rememberTextFieldState()
 
   TextField(
-    state = state,
-    modifier = Modifier.fillMaxWidth(),
-    accessibilityLabel = "Email",
-    placeholder = { Text("name@example.com") },
+      state = state,
+      modifier = Modifier.fillMaxWidth(),
+      accessibilityLabel = "Email",
+      placeholder = { Text("name@example.com") },
   )
 }

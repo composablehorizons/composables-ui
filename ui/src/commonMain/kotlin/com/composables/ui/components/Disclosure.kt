@@ -65,6 +65,7 @@ import com.composeunstyled.theme.Theme
 
 /**
  * A container that coordinates disclosure state and content.
+ *
  * @param expanded Whether the disclosure content is expanded.
  * @param onExpandedChange Called when the disclosure expanded state changes.
  * @param modifier Modifier applied to the component.
@@ -72,26 +73,23 @@ import com.composeunstyled.theme.Theme
  */
 @Composable
 fun Disclosure(
-  expanded: Boolean,
-  onExpandedChange: (Boolean) -> Unit,
-  modifier: Modifier = Modifier,
-  content: @Composable () -> Unit,
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
 ) {
   UnstyledDisclosure(
-    expanded = expanded,
-    onExpandedChange = onExpandedChange,
-    modifier = modifier,
+      expanded = expanded,
+      onExpandedChange = onExpandedChange,
+      modifier = modifier,
   ) {
-    CompositionLocalProvider(LocalDisclosureExpanded provides expanded) {
-      Column {
-        content()
-      }
-    }
+    CompositionLocalProvider(LocalDisclosureExpanded provides expanded) { Column { content() } }
   }
 }
 
 /**
  * A button that toggles the disclosure between expanded and collapsed.
+ *
  * @param modifier Modifier applied to the component.
  * @param enabled Whether the disclosure button can be interacted with.
  * @param contentPadding Padding applied inside the component content.
@@ -101,42 +99,41 @@ fun Disclosure(
  */
 @Composable
 fun DisclosureButton(
-  modifier: Modifier = Modifier,
-  enabled: Boolean = true,
-  contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
-  indicator: (@Composable (expanded: Boolean) -> Unit)? = null,
-  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-  content: @Composable RowScope.() -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
+    indicator: (@Composable (expanded: Boolean) -> Unit)? = null,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    content: @Composable RowScope.() -> Unit,
 ) {
   val expanded = LocalDisclosureExpanded.current
   val shape = Theme[shapes][mediumShape]
   val alpha = if (enabled) 1f else Theme[alphas][disabledAlpha]
 
   UnstyledDisclosureButton(
-    modifier = modifier
-      .bouncyPress(
-        interactionSource = interactionSource,
-        enabled = enabled,
-      )
-      .focusRing(
-        interactionSource = interactionSource,
-        color = Theme[colors][ringColor],
-        shape = shape,
-      )
-      .alpha(alpha)
-      .clip(shape),
-    enabled = enabled,
-    contentPadding = PaddingValues(0.dp),
-    indication = Theme[indications][defaultIndication],
-    interactionSource = interactionSource,
-    contentAlignment = Alignment.CenterStart,
+      modifier =
+          modifier
+              .bouncyPress(
+                  interactionSource = interactionSource,
+                  enabled = enabled,
+              )
+              .focusRing(
+                  interactionSource = interactionSource,
+                  color = Theme[colors][ringColor],
+                  shape = shape,
+              )
+              .alpha(alpha)
+              .clip(shape),
+      enabled = enabled,
+      contentPadding = PaddingValues(0.dp),
+      indication = Theme[indications][defaultIndication],
+      interactionSource = interactionSource,
+      contentAlignment = Alignment.CenterStart,
   ) {
     Row(
-      modifier = Modifier
-        .heightIn(min = disclosureButtonMinHeight())
-        .padding(contentPadding),
-      horizontalArrangement = Arrangement.spacedBy(8.dp),
-      verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.heightIn(min = disclosureButtonMinHeight()).padding(contentPadding),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
       content()
       if (indicator != null) {
@@ -149,6 +146,7 @@ fun DisclosureButton(
 
 /**
  * The expandable content region of a disclosure.
+ *
  * @param modifier Modifier applied to the component.
  * @param contentPadding Padding applied inside the component content.
  * @param enter Transition used when the disclosure panel expands.
@@ -157,20 +155,19 @@ fun DisclosureButton(
  */
 @Composable
 fun DisclosurePanel(
-  modifier: Modifier = Modifier,
-  contentPadding: PaddingValues = PaddingValues(12.dp),
-  enter: EnterTransition = expandVertically(animationSpec = spring()) + fadeIn(),
-  exit: ExitTransition = shrinkVertically(animationSpec = spring()) + fadeOut(),
-  content: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(12.dp),
+    enter: EnterTransition = expandVertically(animationSpec = spring()) + fadeIn(),
+    exit: ExitTransition = shrinkVertically(animationSpec = spring()) + fadeOut(),
+    content: @Composable () -> Unit,
 ) {
   UnstyledDisclosedContent(
-    modifier = modifier,
-    enter = enter,
-    exit = exit,
+      modifier = modifier,
+      enter = enter,
+      exit = exit,
   ) {
     Box(
-      Modifier
-        .padding(contentPadding),
+        Modifier.padding(contentPadding),
     ) {
       content()
     }

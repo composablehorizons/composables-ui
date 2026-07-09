@@ -27,7 +27,5 @@ import com.composables.ui.components.Text
 
 @Composable
 fun DisabledCheckboxExample() {
-  Checkbox(checked = false, onCheckedChange = {}, enabled = false) {
-    Text("Receive updates")
-  }
+  Checkbox(checked = false, onCheckedChange = {}, enabled = false) { Text("Receive updates") }
 }

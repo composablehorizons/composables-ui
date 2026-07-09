@@ -38,17 +38,15 @@ import com.composables.ui.components.Text
 @Composable
 fun ButtonExample() {
   Row(
-    horizontalArrangement = Arrangement.spacedBy(8.dp),
-    verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.spacedBy(8.dp),
+      verticalAlignment = Alignment.CenterVertically,
   ) {
-    Button(onClick = { /* TODO */ }) {
-      Text("Button")
-    }
-    IconButton(onClick = { /* TODO */ }) {
+    Button(onClick = { /* TODO */}) { Text("Button") }
+    IconButton(onClick = { /* TODO */}) {
       Icon(
-        imageVector = Lucide.Plus,
-        contentDescription = "Add",
-        modifier = Modifier.size(18.dp),
+          imageVector = Lucide.Plus,
+          contentDescription = "Add",
+          modifier = Modifier.size(18.dp),
       )
     }
   }

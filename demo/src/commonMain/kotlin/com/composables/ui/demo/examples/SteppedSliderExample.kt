@@ -34,10 +34,10 @@ import com.composables.ui.components.Slider
 fun SteppedSliderExample() {
   var value by remember { mutableFloatStateOf(50f) }
   Slider(
-    value = value,
-    onValueChange = { value = it },
-    valueRange = 0f..100f,
-    steps = 4,
-    modifier = Modifier.fillMaxWidth(),
+      value = value,
+      onValueChange = { value = it },
+      valueRange = 0f..100f,
+      steps = 4,
+      modifier = Modifier.fillMaxWidth(),
   )
 }

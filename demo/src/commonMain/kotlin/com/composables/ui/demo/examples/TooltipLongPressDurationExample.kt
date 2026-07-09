@@ -31,15 +31,9 @@ import com.composables.ui.components.TooltipPanel
 @Composable
 fun TooltipLongPressDurationExample() {
   Tooltip(
-    longPressShowDurationMillis = 3_000L,
-    panel = {
-      TooltipPanel {
-        Text("Tooltip")
-      }
-    },
+      longPressShowDurationMillis = 3_000L,
+      panel = { TooltipPanel { Text("Tooltip") } },
   ) {
-    Button(onClick = {}, style = ButtonStyle.Outlined) {
-      Text("Long press me")
-    }
+    Button(onClick = {}, style = ButtonStyle.Outlined) { Text("Long press me") }
   }
 }

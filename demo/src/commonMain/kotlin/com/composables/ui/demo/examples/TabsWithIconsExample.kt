@@ -45,47 +45,42 @@ import com.composables.ui.components.Text
 
 @Composable
 fun TabsWithIconsExample() {
-  val tabs = listOf(
-    TabsExampleTab("Preview", Lucide.Eye),
-    TabsExampleTab("Code", Lucide.Code),
-    TabsExampleTab("Docs", Lucide.BookOpen),
-  )
+  val tabs =
+      listOf(
+          TabsExampleTab("Preview", Lucide.Eye),
+          TabsExampleTab("Code", Lucide.Code),
+          TabsExampleTab("Docs", Lucide.BookOpen),
+      )
   var selected by remember { mutableStateOf(tabs.first()) }
   Tabs(
-    selectedTab = selected,
-    onSelectedTabChange = { selected = it },
-    orderedTabs = tabs,
+      selectedTab = selected,
+      onSelectedTabChange = { selected = it },
+      orderedTabs = tabs,
   ) {
     Column(
-      verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
       TabList {
         tabs.forEach { tab ->
           Tab(
-            key = tab,
-            icon = {
-              Icon(
-                imageVector = tab.icon,
-                contentDescription = null,
-                modifier = Modifier.size(20.dp),
-              )
-            },
-            text = {
-              Text(tab.label)
-            },
+              key = tab,
+              icon = {
+                Icon(
+                    imageVector = tab.icon,
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp),
+                )
+              },
+              text = { Text(tab.label) },
           )
         }
       }
-      tabs.forEach { tab ->
-        TabPanel(tab) {
-          Text("${tab.label} content")
-        }
-      }
+      tabs.forEach { tab -> TabPanel(tab) { Text("${tab.label} content") } }
     }
   }
 }
 
 private data class TabsExampleTab(
-  val label: String,
-  val icon: ImageVector,
+    val label: String,
+    val icon: ImageVector,
 )

@@ -40,27 +40,23 @@ fun DisabledTabsExample() {
   val tabs = listOf("Preview", "Code", "Docs")
   var selected by remember { mutableStateOf(tabs.first()) }
   Tabs(
-    selectedTab = selected,
-    onSelectedTabChange = { selected = it },
-    orderedTabs = tabs,
+      selectedTab = selected,
+      onSelectedTabChange = { selected = it },
+      orderedTabs = tabs,
   ) {
     Column(
-      verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
       TabList {
         tabs.forEach { tab ->
           Tab(
-            key = tab,
-            enabled = tab != "Code",
-            text = { Text(tab) },
+              key = tab,
+              enabled = tab != "Code",
+              text = { Text(tab) },
           )
         }
       }
-      tabs.forEach { tab ->
-        TabPanel(tab) {
-          Text("$tab content")
-        }
-      }
+      tabs.forEach { tab -> TabPanel(tab) { Text("$tab content") } }
     }
   }
 }

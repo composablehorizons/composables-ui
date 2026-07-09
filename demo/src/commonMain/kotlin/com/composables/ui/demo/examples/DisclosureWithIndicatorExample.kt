@@ -44,27 +44,27 @@ import com.composables.ui.components.Text
 fun DisclosureWithIndicatorExample() {
   var expanded by remember { mutableStateOf(false) }
   Disclosure(
-    expanded = expanded,
-    onExpandedChange = { expanded = it },
+      expanded = expanded,
+      onExpandedChange = { expanded = it },
   ) {
     DisclosureButton(
-      indicator = {
-        val rotation by animateFloatAsState(
-          targetValue = if (it) -180f else 0f,
-        )
-        Icon(
-          imageVector = Lucide.ChevronDown,
-          modifier = Modifier
-            .size(16.dp)
-            .rotate(rotation),
-        )
-      },
-      modifier = Modifier.fillMaxWidth(),
+        indicator = {
+          val rotation by
+              animateFloatAsState(
+                  targetValue = if (it) -180f else 0f,
+              )
+          Icon(
+              imageVector = Lucide.ChevronDown,
+              modifier = Modifier.size(16.dp).rotate(rotation),
+          )
+        },
+        modifier = Modifier.fillMaxWidth(),
     ) {
       Text("What is your return policy?")
     }
     DisclosurePanel {
-      Text("Returns are accepted within 30 days in original condition. Refunds are issued to the original payment method.")
+      Text(
+          "Returns are accepted within 30 days in original condition. Refunds are issued to the original payment method.")
     }
   }
 }

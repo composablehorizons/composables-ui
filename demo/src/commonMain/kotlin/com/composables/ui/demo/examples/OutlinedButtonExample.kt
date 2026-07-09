@@ -39,23 +39,23 @@ import com.composables.ui.components.Text
 @Composable
 fun OutlinedButtonExample() {
   Row(
-    horizontalArrangement = Arrangement.spacedBy(8.dp),
-    verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.spacedBy(8.dp),
+      verticalAlignment = Alignment.CenterVertically,
   ) {
     Button(
-      onClick = { /* TODO */ },
-      style = ButtonStyle.Outlined,
+        onClick = { /* TODO */},
+        style = ButtonStyle.Outlined,
     ) {
       Text("Button")
     }
     IconButton(
-      onClick = { /* TODO */ },
-      style = ButtonStyle.Outlined,
+        onClick = { /* TODO */},
+        style = ButtonStyle.Outlined,
     ) {
       Icon(
-        imageVector = Lucide.Plus,
-        contentDescription = "Add",
-        modifier = Modifier.size(18.dp),
+          imageVector = Lucide.Plus,
+          contentDescription = "Add",
+          modifier = Modifier.size(18.dp),
       )
     }
   }

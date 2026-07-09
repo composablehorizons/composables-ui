@@ -68,6 +68,7 @@ import com.composeunstyled.theme.Theme
 
 /**
  * A checkbox that can represent on, off, or mixed selection state.
+ *
  * @param state Current toggleable state shown by the checkbox.
  * @param onStateChange Called when the tri-state checkbox changes state.
  * @param modifier Modifier applied to the checkbox row.
@@ -78,13 +79,13 @@ import com.composeunstyled.theme.Theme
  */
 @Composable
 fun TriStateCheckbox(
-  state: ToggleableState,
-  onStateChange: (ToggleableState) -> Unit,
-  modifier: Modifier = Modifier,
-  enabled: Boolean = true,
-  accessibilityLabel: String? = null,
-  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-  content: (@Composable RowScope.() -> Unit)? = null,
+    state: ToggleableState,
+    onStateChange: (ToggleableState) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    accessibilityLabel: String? = null,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    content: (@Composable RowScope.() -> Unit)? = null,
 ) {
   val checked = state != ToggleableState.Off
   val size = 20.dp
@@ -92,57 +93,62 @@ fun TriStateCheckbox(
   val backgroundColor = if (checked) Theme[colors][primaryColor] else Theme[colors][controlColor]
   val contentColor = if (checked) Theme[colors][onPrimaryColor] else Color.Transparent
   val borderColor = if (checked) Theme[colors][primaryColor] else Theme[colors][borderColor]
-  val activeIndication = if (checked) Theme[indications][inverseIndication] else Theme[indications][defaultIndication]
+  val activeIndication =
+      if (checked) Theme[indications][inverseIndication] else Theme[indications][defaultIndication]
 
   UnstyledTriStateCheckbox(
-    value = state,
-    onClick = {
-      onStateChange(
-        when (state) {
-          ToggleableState.Off -> ToggleableState.On
-          ToggleableState.Indeterminate -> ToggleableState.On
-          ToggleableState.On -> ToggleableState.Off
-        },
-      )
-    },
-    enabled = enabled,
-    accessibilityLabel = accessibilityLabel,
-    interactionSource = interactionSource,
-    indication = null,
-    modifier = modifier.then(buildModifier { if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha])) }),
+      value = state,
+      onClick = {
+        onStateChange(
+            when (state) {
+              ToggleableState.Off -> ToggleableState.On
+              ToggleableState.Indeterminate -> ToggleableState.On
+              ToggleableState.On -> ToggleableState.Off
+            },
+        )
+      },
+      enabled = enabled,
+      accessibilityLabel = accessibilityLabel,
+      interactionSource = interactionSource,
+      indication = null,
+      modifier =
+          modifier.then(
+              buildModifier { if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha])) }),
   ) {
     Row(
-      horizontalArrangement = Arrangement.spacedBy(10.dp),
-      verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
       StateIndicator(
-        modifier = Modifier
-          .focusRing(
-            interactionSource = interactionSource,
-            color = Theme[colors][ringColor],
-            shape = shape,
-          )
-          .clip(shape)
-          .background(backgroundColor, shape)
-          .border(1.dp, borderColor, shape)
-          .size(size),
-        indication = activeIndication,
+          modifier =
+              Modifier.focusRing(
+                      interactionSource = interactionSource,
+                      color = Theme[colors][ringColor],
+                      shape = shape,
+                  )
+                  .clip(shape)
+                  .background(backgroundColor, shape)
+                  .border(1.dp, borderColor, shape)
+                  .size(size),
+          indication = activeIndication,
       ) { value ->
         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-          this@Row.AnimatedVisibility(value != ToggleableState.Off, enter = fadeIn(), exit = fadeOut()) {
-            if (value == ToggleableState.Indeterminate) {
-              Box(Modifier.width(10.dp).height(2.dp).background(contentColor, RoundedCornerShape(999.dp)))
-            } else {
-              TriStateCheckMark(contentColor)
-            }
-          }
+          this@Row.AnimatedVisibility(
+              value != ToggleableState.Off, enter = fadeIn(), exit = fadeOut()) {
+                if (value == ToggleableState.Indeterminate) {
+                  Box(
+                      Modifier.width(10.dp)
+                          .height(2.dp)
+                          .background(contentColor, RoundedCornerShape(999.dp)))
+                } else {
+                  TriStateCheckMark(contentColor)
+                }
+              }
         }
       }
 
       if (content != null) {
-        ProvideContentColor(Theme[colors][onPanelColor]) {
-          content()
-        }
+        ProvideContentColor(Theme[colors][onPanelColor]) { content() }
       }
     }
   }
@@ -153,18 +159,18 @@ private fun TriStateCheckMark(color: Color) {
   Canvas(Modifier.size(14.dp)) {
     val strokeWidth = 2.dp.toPx()
     drawLine(
-      color,
-      Offset(size.width * 0.2f, size.height * 0.52f),
-      Offset(size.width * 0.42f, size.height * 0.74f),
-      strokeWidth,
-      cap = StrokeCap.Round,
+        color,
+        Offset(size.width * 0.2f, size.height * 0.52f),
+        Offset(size.width * 0.42f, size.height * 0.74f),
+        strokeWidth,
+        cap = StrokeCap.Round,
     )
     drawLine(
-      color,
-      Offset(size.width * 0.42f, size.height * 0.74f),
-      Offset(size.width * 0.8f, size.height * 0.28f),
-      strokeWidth,
-      cap = StrokeCap.Round,
+        color,
+        Offset(size.width * 0.42f, size.height * 0.74f),
+        Offset(size.width * 0.8f, size.height * 0.28f),
+        strokeWidth,
+        cap = StrokeCap.Round,
     )
   }
 }

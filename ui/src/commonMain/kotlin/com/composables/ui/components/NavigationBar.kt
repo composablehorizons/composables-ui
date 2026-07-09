@@ -51,36 +51,36 @@ import com.composeunstyled.theme.Theme
 
 /**
  * A bottom navigation bar container.
+ *
  * @param modifier Modifier applied to the component.
  * @param windowInsets Insets applied around the navigation bar content.
  * @param content Composable content displayed by the component.
  */
 @Composable
 fun NavigationBar(
-  modifier: Modifier = Modifier,
-  windowInsets: WindowInsets = navigationBarWindowInsets(),
-  content: @Composable RowScope.() -> Unit,
+    modifier: Modifier = Modifier,
+    windowInsets: WindowInsets = navigationBarWindowInsets(),
+    content: @Composable RowScope.() -> Unit,
 ) {
   Column(
-    modifier
-      .pointerInput(Unit) {}
-      .background(Theme[colors][panelColor]),
+      modifier.pointerInput(Unit) {}.background(Theme[colors][panelColor]),
   ) {
     HorizontalSeparator()
     Row(
-      modifier = Modifier
-        .windowInsetsPadding(windowInsets)
-        .height(NavigationBarHeight)
-        .padding(horizontal = 24.dp, vertical = 2.dp),
-      horizontalArrangement = Arrangement.spacedBy(NavigationBarItemSpacing),
-      verticalAlignment = Alignment.CenterVertically,
-      content = content,
+        modifier =
+            Modifier.windowInsetsPadding(windowInsets)
+                .height(NavigationBarHeight)
+                .padding(horizontal = 24.dp, vertical = 2.dp),
+        horizontalArrangement = Arrangement.spacedBy(NavigationBarItemSpacing),
+        verticalAlignment = Alignment.CenterVertically,
+        content = content,
     )
   }
 }
 
 /**
  * A single destination action inside a navigation bar.
+ *
  * @param selected Whether the navigation item is currently selected.
  * @param onClick Called when the navigation item is activated.
  * @param modifier Modifier applied to the component.
@@ -90,27 +90,31 @@ fun NavigationBar(
  */
 @Composable
 fun NavigationBarItem(
-  selected: Boolean,
-  onClick: () -> Unit,
-  modifier: Modifier = Modifier,
-  enabled: Boolean = true,
-  shape: Shape = RoundedCornerShape(8.dp),
-  content: @Composable () -> Unit,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    shape: Shape = RoundedCornerShape(8.dp),
+    content: @Composable () -> Unit,
 ) {
   IconButton(
-    onClick = onClick,
-    modifier = modifier then buildModifier {
-      if (selected) {
-        add(Modifier.background(Theme[colors][selectedControlColor], shape))
-      }
-    }.height(NavigationBarHeight),
-    enabled = enabled,
-    style = ButtonStyle.Ghost,
-    shape = shape,
+      onClick = onClick,
+      modifier =
+          modifier then
+              buildModifier {
+                    if (selected) {
+                      add(Modifier.background(Theme[colors][selectedControlColor], shape))
+                    }
+                  }
+                  .height(NavigationBarHeight),
+      enabled = enabled,
+      style = ButtonStyle.Ghost,
+      shape = shape,
   ) {
-    ProvideContentColor(if (selected) Theme[colors][onSelectedControlColor] else Theme[colors][onPanelColor]) {
-      content()
-    }
+    ProvideContentColor(
+        if (selected) Theme[colors][onSelectedControlColor] else Theme[colors][onPanelColor]) {
+          content()
+        }
   }
 }
 

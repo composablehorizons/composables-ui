@@ -39,37 +39,37 @@ import com.composables.ui.components.Toolbar
 @Composable
 fun ToolbarWithActionsExample() {
   Toolbar(
-    modifier = Modifier.fillMaxWidth(),
-    title = { Text("Title") },
-    leading = {
-      IconButton(
-        onClick = { /* TODO */ },
-        style = ButtonStyle.Ghost,
-      ) {
-        Icon(Lucide.ArrowLeft, contentDescription = "Go back")
-      }
-    },
-    trailing = {
-      IconButton(
-        onClick = { /* TODO */ },
-        style = ButtonStyle.Ghost,
-      ) {
-        Icon(
-          imageVector = Lucide.Share,
-          contentDescription = "Share",
-          modifier = Modifier.size(18.dp),
-        )
-      }
-      IconButton(
-        onClick = { /* TODO */ },
-        style = ButtonStyle.Ghost,
-      ) {
-        Icon(
-          imageVector = Lucide.EllipsisVertical,
-          contentDescription = "More options",
-          modifier = Modifier.size(18.dp),
-        )
-      }
-    },
+      modifier = Modifier.fillMaxWidth(),
+      title = { Text("Title") },
+      leading = {
+        IconButton(
+            onClick = { /* TODO */},
+            style = ButtonStyle.Ghost,
+        ) {
+          Icon(Lucide.ArrowLeft, contentDescription = "Go back")
+        }
+      },
+      trailing = {
+        IconButton(
+            onClick = { /* TODO */},
+            style = ButtonStyle.Ghost,
+        ) {
+          Icon(
+              imageVector = Lucide.Share,
+              contentDescription = "Share",
+              modifier = Modifier.size(18.dp),
+          )
+        }
+        IconButton(
+            onClick = { /* TODO */},
+            style = ButtonStyle.Ghost,
+        ) {
+          Icon(
+              imageVector = Lucide.EllipsisVertical,
+              contentDescription = "More options",
+              modifier = Modifier.size(18.dp),
+          )
+        }
+      },
   )
 }

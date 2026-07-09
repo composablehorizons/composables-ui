@@ -44,26 +44,22 @@ fun VerticalTabsExample() {
   val tabs = listOf("Preview", "Code", "Docs")
   var selected by remember { mutableStateOf(tabs.first()) }
   Tabs(
-    selectedTab = selected,
-    onSelectedTabChange = { selected = it },
-    orderedTabs = tabs,
-    modifier = Modifier.fillMaxWidth(),
+      selectedTab = selected,
+      onSelectedTabChange = { selected = it },
+      orderedTabs = tabs,
+      modifier = Modifier.fillMaxWidth(),
   ) {
     Row(
-      modifier = Modifier
-        .widthIn(max = 420.dp)
-        .fillMaxWidth(),
-      horizontalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier.widthIn(max = 420.dp).fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
       TabList(orientation = TabOrientation.Vertical) {
-        tabs.forEach { tab ->
-          Tab(key = tab, text = { Text(tab) })
-        }
+        tabs.forEach { tab -> Tab(key = tab, text = { Text(tab) }) }
       }
       tabs.forEach { tab ->
         TabPanel(
-          key = tab,
-          modifier = Modifier.weight(1f),
+            key = tab,
+            modifier = Modifier.weight(1f),
         ) {
           Text("$tab content")
         }

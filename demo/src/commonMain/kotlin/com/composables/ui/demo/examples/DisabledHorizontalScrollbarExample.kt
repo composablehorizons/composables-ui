@@ -51,36 +51,32 @@ fun DisabledHorizontalScrollbarExample() {
   val scrollState = rememberScrollState()
   val scrollbarState = rememberVerticalScrollbarState(scrollState)
   Box(
-    modifier = Modifier
-      .height(88.dp)
-      .widthIn(max = 340.dp)
-      .clip(RoundedCornerShape(8.dp))
-      .background(Theme[colors][controlColor]),
+      modifier =
+          Modifier.height(88.dp)
+              .widthIn(max = 340.dp)
+              .clip(RoundedCornerShape(8.dp))
+              .background(Theme[colors][controlColor]),
   ) {
     Row(
-      modifier = Modifier
-        .horizontalScroll(scrollState)
-        .padding(16.dp),
-      horizontalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = Modifier.horizontalScroll(scrollState).padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
       repeat(10) { index ->
         Box(
-          modifier = Modifier
-            .size(width = 96.dp, height = 40.dp)
-            .clip(RoundedCornerShape(6.dp))
-            .background(Theme[colors][panelColor]),
-          contentAlignment = Alignment.Center,
+            modifier =
+                Modifier.size(width = 96.dp, height = 40.dp)
+                    .clip(RoundedCornerShape(6.dp))
+                    .background(Theme[colors][panelColor]),
+            contentAlignment = Alignment.Center,
         ) {
           Text("Item ${index + 1}")
         }
       }
     }
     HorizontalScrollbar(
-      state = scrollbarState,
-      enabled = false,
-      modifier = Modifier
-        .align(Alignment.BottomCenter)
-        .fillMaxWidth(),
+        state = scrollbarState,
+        enabled = false,
+        modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth(),
     )
   }
 }

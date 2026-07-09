@@ -41,12 +41,12 @@ import com.composeunstyled.theme.Theme
 fun ThemedIconExample() {
   ProvideContentColor(Theme[colors][mutedColor]) {
     Row(
-      verticalAlignment = Alignment.CenterVertically,
-      horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
       Icon(
-        imageVector = Lucide.Bell,
-        modifier = Modifier.size(24.dp),
+          imageVector = Lucide.Bell,
+          modifier = Modifier.size(24.dp),
       )
       Text("3 Notifications")
     }

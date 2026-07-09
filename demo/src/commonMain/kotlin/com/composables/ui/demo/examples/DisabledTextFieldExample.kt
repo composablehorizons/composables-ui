@@ -40,17 +40,17 @@ fun DisabledTextFieldExample() {
   val state = rememberTextFieldState("alex@example.com")
 
   TextField(
-    state = state,
-    modifier = Modifier.fillMaxWidth(),
-    enabled = false,
-    accessibilityLabel = "Organization email",
-    leading = {
-      Icon(
-        imageVector = Lucide.Lock,
-        contentDescription = null,
-        modifier = Modifier.size(16.dp),
-        tint = Theme[colors][mutedColor],
-      )
-    },
+      state = state,
+      modifier = Modifier.fillMaxWidth(),
+      enabled = false,
+      accessibilityLabel = "Organization email",
+      leading = {
+        Icon(
+            imageVector = Lucide.Lock,
+            contentDescription = null,
+            modifier = Modifier.size(16.dp),
+            tint = Theme[colors][mutedColor],
+        )
+      },
   )
 }

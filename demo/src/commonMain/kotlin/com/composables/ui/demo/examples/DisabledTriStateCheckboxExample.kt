@@ -29,9 +29,9 @@ import com.composables.ui.components.TriStateCheckbox
 @Composable
 fun DisabledTriStateCheckboxExample() {
   TriStateCheckbox(
-    state = ToggleableState.Off,
-    onStateChange = {},
-    enabled = false,
+      state = ToggleableState.Off,
+      onStateChange = {},
+      enabled = false,
   ) {
     Text("Select all")
   }

@@ -77,45 +77,41 @@ fun Search(onProfileClick: (ProfileId) -> Unit) {
 
   ProvideContentColor(Theme[colors][onPanelColor]) {
     LazyColumn(
-      modifier = Modifier
-        .fillMaxSize()
-        .background(Theme[colors][panelColor]),
-      contentPadding = sampleScreenContentPadding(),
+        modifier = Modifier.fillMaxSize().background(Theme[colors][panelColor]),
+        contentPadding = sampleScreenContentPadding(),
     ) {
       item {
         TextField(
-          state = queryState,
-          modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 12.dp),
-          accessibilityLabel = "Search",
-          placeholder = { Text("Search") },
-          shape = CircleShape,
-          leading = {
-            Icon(
-              imageVector = Icons.Search,
-              contentDescription = null,
-              modifier = Modifier.size(18.dp),
-              tint = Theme[colors][mutedColor],
-            )
-          },
-          trailing = {
-            if (query.isNotEmpty()) {
-              IconButton(
-                onClick = { queryState.clearText() },
-                modifier = Modifier.size(32.dp),
-                style = ButtonStyle.Ghost,
-                buttonSize = ButtonSize.Small,
-              ) {
-                Icon(
-                  imageVector = Icons.X,
-                  contentDescription = "Clear search",
-                  modifier = Modifier.size(15.dp),
+            state = queryState,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 12.dp),
+            accessibilityLabel = "Search",
+            placeholder = { Text("Search") },
+            shape = CircleShape,
+            leading = {
+              Icon(
+                  imageVector = Icons.Search,
+                  contentDescription = null,
+                  modifier = Modifier.size(18.dp),
                   tint = Theme[colors][mutedColor],
-                )
+              )
+            },
+            trailing = {
+              if (query.isNotEmpty()) {
+                IconButton(
+                    onClick = { queryState.clearText() },
+                    modifier = Modifier.size(32.dp),
+                    style = ButtonStyle.Ghost,
+                    buttonSize = ButtonSize.Small,
+                ) {
+                  Icon(
+                      imageVector = Icons.X,
+                      contentDescription = "Clear search",
+                      modifier = Modifier.size(15.dp),
+                      tint = Theme[colors][mutedColor],
+                  )
+                }
               }
-            }
-          },
+            },
         )
       }
 
@@ -134,57 +130,53 @@ fun Search(onProfileClick: (ProfileId) -> Unit) {
 @Composable
 private fun SearchProfileRow(profile: UserProfile, onProfileClick: (ProfileId) -> Unit) {
   Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(horizontal = 24.dp, vertical = 14.dp),
-    verticalAlignment = Alignment.CenterVertically,
+      modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 14.dp),
+      verticalAlignment = Alignment.CenterVertically,
   ) {
     Row(
-      verticalAlignment = Alignment.CenterVertically,
-      modifier = Modifier
-        .clip(Theme[shapes][smallShape])
-        .clickable { onProfileClick(profile.id) }
-        .weight(1f),
+        verticalAlignment = Alignment.CenterVertically,
+        modifier =
+            Modifier.clip(Theme[shapes][smallShape])
+                .clickable { onProfileClick(profile.id) }
+                .weight(1f),
     ) {
       Avatar(
-        url = profile.avatarUrl,
-        size = AvatarSize.Large,
-        fallback = {
-          Text(profile.displayName.first().uppercase())
-        },
+          url = profile.avatarUrl,
+          size = AvatarSize.Large,
+          fallback = { Text(profile.displayName.first().uppercase()) },
       )
       Spacer(Modifier.width(16.dp))
       Column(
-        modifier = Modifier.weight(1f),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+          modifier = Modifier.weight(1f),
+          verticalArrangement = Arrangement.spacedBy(4.dp),
       ) {
         Text(
-          text = profile.handle,
-          fontWeight = FontWeight.SemiBold,
-          maxLines = 1,
-          overflow = TextOverflow.Ellipsis,
+            text = profile.handle,
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
         Text(
-          text = profile.displayName,
-          color = Theme[colors][mutedColor],
-          maxLines = 1,
-          overflow = TextOverflow.Ellipsis,
+            text = profile.displayName,
+            color = Theme[colors][mutedColor],
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
         Text(
-          text = formatFollowerCount(profile.followerCount),
-          color = Theme[colors][onBackgroundColor],
-          maxLines = 1,
-          overflow = TextOverflow.Ellipsis,
+            text = formatFollowerCount(profile.followerCount),
+            color = Theme[colors][onBackgroundColor],
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
       }
     }
     Spacer(Modifier.width(8.dp))
     Button(
-      onClick = { },
-      modifier = Modifier.width(104.dp),
-      style = ButtonStyle.Primary,
-      buttonSize = ButtonSize.Small,
-      shape = RoundedCornerShape(12.dp),
+        onClick = {},
+        modifier = Modifier.width(104.dp),
+        style = ButtonStyle.Primary,
+        buttonSize = ButtonSize.Small,
+        shape = RoundedCornerShape(12.dp),
     ) {
       Text("Follow")
     }

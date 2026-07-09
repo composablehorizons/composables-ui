@@ -32,7 +32,5 @@ import com.composables.ui.components.Text
 @Composable
 fun SwitchExample() {
   var checked by remember { mutableStateOf(true) }
-  Switch(checked = checked, onCheckedChange = { checked = it }) {
-    Text("Notifications")
-  }
+  Switch(checked = checked, onCheckedChange = { checked = it }) { Text("Notifications") }
 }

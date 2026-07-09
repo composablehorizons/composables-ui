@@ -21,12 +21,13 @@
  */
 package com.composables.ui.sample
 
-internal fun formatCount(count: Int): String = when {
-  count >= 1_000_000 -> formatCompact(count, 1_000_000, "M")
-  count >= 10_000 -> formatCompact(count, 1_000, "k")
-  count >= 1_000 -> formatGrouped(count)
-  else -> count.toString()
-}
+internal fun formatCount(count: Int): String =
+    when {
+      count >= 1_000_000 -> formatCompact(count, 1_000_000, "M")
+      count >= 10_000 -> formatCompact(count, 1_000, "k")
+      count >= 1_000 -> formatGrouped(count)
+      else -> count.toString()
+    }
 
 internal fun formatFollowerCount(count: Int): String {
   val label = if (count == 1) "follower" else "followers"

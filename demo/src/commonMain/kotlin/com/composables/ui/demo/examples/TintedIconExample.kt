@@ -35,8 +35,8 @@ import com.composeunstyled.theme.Theme
 @Composable
 fun TintedIconExample() {
   Icon(
-    imageVector = Lucide.Heart,
-    modifier = Modifier.size(24.dp),
-    tint = Theme[colors][destructiveColor],
+      imageVector = Lucide.Heart,
+      modifier = Modifier.size(24.dp),
+      tint = Theme[colors][destructiveColor],
   )
 }

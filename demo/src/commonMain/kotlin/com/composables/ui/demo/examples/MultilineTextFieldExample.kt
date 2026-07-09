@@ -36,14 +36,15 @@ fun MultilineTextFieldExample() {
   val state = rememberTextFieldState()
 
   TextField(
-    state = state,
-    modifier = Modifier.fillMaxWidth(),
-    accessibilityLabel = "Feedback",
-    placeholder = { Text("Tell us what could be better...") },
-    contentPadding = PaddingValues(12.dp),
-    lineLimits = TextFieldLineLimits.MultiLine(
-      minHeightInLines = 4,
-      maxHeightInLines = 4,
-    ),
+      state = state,
+      modifier = Modifier.fillMaxWidth(),
+      accessibilityLabel = "Feedback",
+      placeholder = { Text("Tell us what could be better...") },
+      contentPadding = PaddingValues(12.dp),
+      lineLimits =
+          TextFieldLineLimits.MultiLine(
+              minHeightInLines = 4,
+              maxHeightInLines = 4,
+          ),
   )
 }

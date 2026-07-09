@@ -32,11 +32,11 @@ import com.composeunstyled.ProvideTextStyle
 @Composable
 fun ThemedTextExample() {
   ProvideTextStyle(
-    TextStyle(
-      fontSize = 18.sp,
-      lineHeight = 28.sp,
-      fontWeight = FontWeight.Medium,
-    ),
+      TextStyle(
+          fontSize = 18.sp,
+          lineHeight = 28.sp,
+          fontWeight = FontWeight.Medium,
+      ),
   ) {
     Column {
       Text("This text is themed")

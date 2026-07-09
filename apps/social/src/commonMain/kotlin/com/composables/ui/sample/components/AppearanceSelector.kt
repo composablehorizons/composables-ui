@@ -55,39 +55,40 @@ import com.composeunstyled.theme.Theme
 
 @Composable
 fun AppearanceSelector(
-  selectedAppearance: Appearance,
-  onSelectedAppearanceChange: (Appearance) -> Unit,
-  modifier: Modifier = Modifier,
+    selectedAppearance: Appearance,
+    onSelectedAppearanceChange: (Appearance) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
   Row(
-    modifier = modifier
-      .fillMaxWidth()
-      .height(48.dp)
-      .clip(RoundedCornerShape(14.dp))
-      .background(Theme[colors][controlColor])
-      .padding(3.dp),
+      modifier =
+          modifier
+              .fillMaxWidth()
+              .height(48.dp)
+              .clip(RoundedCornerShape(14.dp))
+              .background(Theme[colors][controlColor])
+              .padding(3.dp),
   ) {
     AppearanceSegment(
-      selected = selectedAppearance == Appearance.Light,
-      onClick = { onSelectedAppearanceChange(Appearance.Light) },
+        selected = selectedAppearance == Appearance.Light,
+        onClick = { onSelectedAppearanceChange(Appearance.Light) },
     ) {
       Icon(
-        imageVector = Icons.Sun,
-        contentDescription = "Light appearance",
+          imageVector = Icons.Sun,
+          contentDescription = "Light appearance",
       )
     }
     AppearanceSegment(
-      selected = selectedAppearance == Appearance.Dark,
-      onClick = { onSelectedAppearanceChange(Appearance.Dark) },
+        selected = selectedAppearance == Appearance.Dark,
+        onClick = { onSelectedAppearanceChange(Appearance.Dark) },
     ) {
       Icon(
-        imageVector = Icons.Moon,
-        contentDescription = "Dark appearance",
+          imageVector = Icons.Moon,
+          contentDescription = "Dark appearance",
       )
     }
     AppearanceSegment(
-      selected = selectedAppearance == Appearance.System,
-      onClick = { onSelectedAppearanceChange(Appearance.System) },
+        selected = selectedAppearance == Appearance.System,
+        onClick = { onSelectedAppearanceChange(Appearance.System) },
     ) {
       Text("Auto")
     }
@@ -96,31 +97,29 @@ fun AppearanceSelector(
 
 @Composable
 private fun RowScope.AppearanceSegment(
-  selected: Boolean,
-  onClick: () -> Unit,
-  content: @Composable () -> Unit,
+    selected: Boolean,
+    onClick: () -> Unit,
+    content: @Composable () -> Unit,
 ) {
   val shape = Theme[shapes][smallShape]
   val contentColor = if (selected) Theme[colors][onPanelColor] else Theme[colors][onControlColor]
 
   Button(
-    onClick = onClick,
-    modifier = Modifier
-      .weight(1f)
-      .fillMaxHeight()
-      .then(
-        buildModifier {
-          if (selected) {
-            add(Modifier.background(Theme[colors][panelColor], shape))
-          }
-        },
-      ),
-    style = ButtonStyle.Ghost,
-    shape = shape,
-    contentPadding = PaddingValues(0.dp),
+      onClick = onClick,
+      modifier =
+          Modifier.weight(1f)
+              .fillMaxHeight()
+              .then(
+                  buildModifier {
+                    if (selected) {
+                      add(Modifier.background(Theme[colors][panelColor], shape))
+                    }
+                  },
+              ),
+      style = ButtonStyle.Ghost,
+      shape = shape,
+      contentPadding = PaddingValues(0.dp),
   ) {
-    ProvideContentColor(contentColor) {
-      content()
-    }
+    ProvideContentColor(contentColor) { content() }
   }
 }

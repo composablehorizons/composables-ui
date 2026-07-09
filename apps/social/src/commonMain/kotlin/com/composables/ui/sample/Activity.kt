@@ -74,29 +74,25 @@ import com.composeunstyled.theme.Theme
 
 @Composable
 fun Activity(
-  onProfileClick: (ProfileId) -> Unit,
+    onProfileClick: (ProfileId) -> Unit,
 ) {
   ProvideContentColor(Theme[colors][onPanelColor]) {
     LazyColumn(
-      modifier = Modifier
-        .fillMaxSize()
-        .background(Theme[colors][panelColor]),
-      contentPadding = sampleScreenContentPadding(),
+        modifier = Modifier.fillMaxSize().background(Theme[colors][panelColor]),
+        contentPadding = sampleScreenContentPadding(),
     ) {
       itemsIndexed(
-        items = ActivityEvents.recent(),
-        key = { _, event -> event.id },
+          items = ActivityEvents.recent(),
+          key = { _, event -> event.id },
       ) { index, event ->
         val author = UserProfiles.findWithId(event.authorId)
         if (index != 0) {
           HorizontalSeparator()
         }
         ActivityEventRow(
-          event = event,
-          author = author,
-          onProfileClick = {
-            onProfileClick(author.id)
-          },
+            event = event,
+            author = author,
+            onProfileClick = { onProfileClick(author.id) },
         )
       }
     }
@@ -105,78 +101,73 @@ fun Activity(
 
 @Composable
 private fun ActivityEventRow(
-  event: ActivityEvent,
-  author: UserProfile,
-  onProfileClick: () -> Unit,
+    event: ActivityEvent,
+    author: UserProfile,
+    onProfileClick: () -> Unit,
 ) {
   Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(horizontal = 24.dp, vertical = 12.dp),
-    horizontalArrangement = Arrangement.spacedBy(16.dp),
-    verticalAlignment = Alignment.Top,
+      modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 12.dp),
+      horizontalArrangement = Arrangement.spacedBy(16.dp),
+      verticalAlignment = Alignment.Top,
   ) {
     BadgedContent(
-      badge = { ActivityBadge(event) },
+        badge = { ActivityBadge(event) },
     ) {
       Avatar(
-        url = author.avatarUrl,
-        size = AvatarSize.Large,
-        fallback = {
-          Text(author.displayName.first().uppercase())
-        },
-        modifier = Modifier
-          .clip(CircleShape)
-          .clickable { onProfileClick() },
+          url = author.avatarUrl,
+          size = AvatarSize.Large,
+          fallback = { Text(author.displayName.first().uppercase()) },
+          modifier = Modifier.clip(CircleShape).clickable { onProfileClick() },
       )
     }
 
     Column(
-      modifier = Modifier.weight(1f),
-      verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.weight(1f),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
       Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
+          horizontalArrangement = Arrangement.spacedBy(8.dp),
+          verticalAlignment = Alignment.CenterVertically,
       ) {
         Text(
-          text = author.displayName,
-          modifier = Modifier.weight(1f, fill = false),
-          fontWeight = FontWeight.Medium,
-          maxLines = 1,
-          overflow = TextOverflow.Ellipsis,
+            text = author.displayName,
+            modifier = Modifier.weight(1f, fill = false),
+            fontWeight = FontWeight.Medium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
         Text(
-          text = event.timestamp,
-          color = Theme[colors][mutedColor],
-          singleLine = true,
+            text = event.timestamp,
+            color = Theme[colors][mutedColor],
+            singleLine = true,
         )
       }
-      val context = when (event.type) {
-        ActivityEventType.Mention -> "Mentioned you"
-        ActivityEventType.Comment -> "Commented"
-        ActivityEventType.Follow -> "Followed you"
-        else -> event.context
-      }
+      val context =
+          when (event.type) {
+            ActivityEventType.Mention -> "Mentioned you"
+            ActivityEventType.Comment -> "Commented"
+            ActivityEventType.Follow -> "Followed you"
+            else -> event.context
+          }
       if (context != null) {
         Text(
-          text = context,
-          color = Theme[colors][mutedColor],
+            text = context,
+            color = Theme[colors][mutedColor],
         )
       }
 
       event.body?.let { body ->
         Text(
-          text = body,
-          color = Theme[colors][onBackgroundColor],
+            text = body,
+            color = Theme[colors][onBackgroundColor],
         )
       }
     }
     if (event.type == ActivityEventType.Follow) {
       Button(
-        onClick = {},
-        style = ButtonStyle.Outlined,
-        buttonSize = ButtonSize.Small,
+          onClick = {},
+          style = ButtonStyle.Outlined,
+          buttonSize = ButtonSize.Small,
       ) {
         Text("Follow back")
       }
@@ -186,17 +177,15 @@ private fun ActivityEventRow(
 
 @Composable
 private fun BadgedContent(
-  badge: @Composable () -> Unit,
-  modifier: Modifier = Modifier,
-  content: @Composable () -> Unit,
+    badge: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
 ) {
   Box(modifier) {
     content()
 
     Box(
-      Modifier
-        .align(Alignment.BottomEnd)
-        .offset(x = 8.dp, y = 4.dp),
+        Modifier.align(Alignment.BottomEnd).offset(x = 8.dp, y = 4.dp),
     ) {
       badge()
     }
@@ -205,40 +194,43 @@ private fun BadgedContent(
 
 @Composable
 private fun ActivityBadge(
-  event: ActivityEvent,
-  modifier: Modifier = Modifier,
+    event: ActivityEvent,
+    modifier: Modifier = Modifier,
 ) {
-  val backgroundColor = when (event.type) {
-    ActivityEventType.Mention -> Theme[colors][primaryColor]
-    ActivityEventType.Comment -> Color(0xFF5B21B6)
-    ActivityEventType.Follow -> Color(0xFF3B82F6)
-    ActivityEventType.Like -> Color(0xFFE11D48)
-    else -> Theme[colors][destructiveColor]
-  }
+  val backgroundColor =
+      when (event.type) {
+        ActivityEventType.Mention -> Theme[colors][primaryColor]
+        ActivityEventType.Comment -> Color(0xFF5B21B6)
+        ActivityEventType.Follow -> Color(0xFF3B82F6)
+        ActivityEventType.Like -> Color(0xFFE11D48)
+        else -> Theme[colors][destructiveColor]
+      }
 
   val contentColor = Color.White
 
-  val icon = when (event.type) {
-    ActivityEventType.Mention -> Icons.AtSign
-    ActivityEventType.Comment -> Icons.Reply
-    ActivityEventType.Follow -> Icons.User
-    else -> Icons.Heart
-  }
+  val icon =
+      when (event.type) {
+        ActivityEventType.Mention -> Icons.AtSign
+        ActivityEventType.Comment -> Icons.Reply
+        ActivityEventType.Follow -> Icons.User
+        else -> Icons.Heart
+      }
 
   Box(
-    modifier = modifier
-      .clip(CircleShape)
-      .background(Theme[colors][panelColor])
-      .padding(2.dp)
-      .clip(CircleShape)
-      .background(backgroundColor)
-      .padding(2.dp),
-    contentAlignment = Alignment.Center,
+      modifier =
+          modifier
+              .clip(CircleShape)
+              .background(Theme[colors][panelColor])
+              .padding(2.dp)
+              .clip(CircleShape)
+              .background(backgroundColor)
+              .padding(2.dp),
+      contentAlignment = Alignment.Center,
   ) {
     Icon(
-      imageVector = icon,
-      tint = contentColor,
-      modifier = Modifier.size(14.dp),
+        imageVector = icon,
+        tint = contentColor,
+        modifier = Modifier.size(14.dp),
     )
   }
 }

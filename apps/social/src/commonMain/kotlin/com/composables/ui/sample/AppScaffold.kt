@@ -78,14 +78,15 @@ value class Appearance internal constructor(@Suppress("unused") private val valu
 
 @Composable
 fun AppScaffold(
-  appearance: Appearance = Appearance.System,
-  content: @Composable () -> Unit,
+    appearance: Appearance = Appearance.System,
+    content: @Composable () -> Unit,
 ) {
-  val colorScheme = when (appearance) {
-    Appearance.System -> LocalColorScheme.current
-    Appearance.Light -> ColorScheme.Light
-    else -> ColorScheme.Dark
-  }
+  val colorScheme =
+      when (appearance) {
+        Appearance.System -> LocalColorScheme.current
+        Appearance.Light -> ColorScheme.Light
+        else -> ColorScheme.Dark
+      }
 
   CompositionLocalProvider(LocalColorScheme provides colorScheme) {
     ComposablesTheme {
@@ -94,9 +95,7 @@ fun AppScaffold(
           FocusVisibilityProvider {
             ProvideContentColor(Theme[colors][onBackgroundColor]) {
               Box(
-                modifier = Modifier
-                  .fillMaxSize()
-                  .background(Theme[colors][backgroundColor]),
+                  modifier = Modifier.fillMaxSize().background(Theme[colors][backgroundColor]),
               ) {
                 content()
               }

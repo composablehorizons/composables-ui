@@ -35,43 +35,41 @@ import com.composables.ui.components.TooltipSide
 @Composable
 fun TooltipSideExample() {
   Row(
-    horizontalArrangement = Arrangement.spacedBy(12.dp),
+      horizontalArrangement = Arrangement.spacedBy(12.dp),
   ) {
     TooltipButton(
-      side = TooltipSide.Start,
-      label = "Start",
-      tooltipText = "Placed on the leading side",
+        side = TooltipSide.Start,
+        label = "Start",
+        tooltipText = "Placed on the leading side",
     )
     TooltipButton(
-      side = TooltipSide.Top,
-      label = "Top",
-      tooltipText = "Placed above the anchor",
+        side = TooltipSide.Top,
+        label = "Top",
+        tooltipText = "Placed above the anchor",
     )
     TooltipButton(
-      side = TooltipSide.Bottom,
-      label = "Bottom",
-      tooltipText = "Placed below the anchor",
+        side = TooltipSide.Bottom,
+        label = "Bottom",
+        tooltipText = "Placed below the anchor",
     )
     TooltipButton(
-      side = TooltipSide.End,
-      label = "End",
-      tooltipText = "Placed on the trailing side",
+        side = TooltipSide.End,
+        label = "End",
+        tooltipText = "Placed on the trailing side",
     )
   }
 }
 
 @Composable
 private fun TooltipButton(
-  label: String,
-  tooltipText: String,
-  side: TooltipSide,
+    label: String,
+    tooltipText: String,
+    side: TooltipSide,
 ) {
   Tooltip(
-    side = side,
-    panel = { TooltipPanel { Text(text = tooltipText) } },
+      side = side,
+      panel = { TooltipPanel { Text(text = tooltipText) } },
   ) {
-    Button(onClick = {}, style = ButtonStyle.Outlined) {
-      Text(text = label)
-    }
+    Button(onClick = {}, style = ButtonStyle.Outlined) { Text(text = label) }
   }
 }

@@ -35,34 +35,34 @@ import com.composables.ui.sample.Appearance
 
 @Composable
 fun OtherMenuDropdown(
-  expanded: Boolean,
-  onExpandedChange: (Boolean) -> Unit,
-  appearance: Appearance,
-  onAppearanceChange: (Appearance) -> Unit,
-  side: DropdownMenuSide = DropdownMenuSide.Bottom,
-  alignment: DropdownMenuAlignment = DropdownMenuAlignment.Start,
-  anchor: @Composable () -> Unit,
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
+    appearance: Appearance,
+    onAppearanceChange: (Appearance) -> Unit,
+    side: DropdownMenuSide = DropdownMenuSide.Bottom,
+    alignment: DropdownMenuAlignment = DropdownMenuAlignment.Start,
+    anchor: @Composable () -> Unit,
 ) {
   DropdownMenu(
-    expanded = expanded,
-    onExpandedChange = onExpandedChange,
-    side = side,
-    alignment = alignment,
-    panel = {
-      DropdownMenuPanel(minWidth = 280.dp) {
-        AppearanceSelector(
-          selectedAppearance = appearance,
-          onSelectedAppearanceChange = onAppearanceChange,
-        )
-        DropdownMenuSeparator()
-        DropdownMenuItem(
-          onClick = { },
-          style = DropdownMenuItemStyle.Destructive,
-        ) {
-          Text("Log out")
+      expanded = expanded,
+      onExpandedChange = onExpandedChange,
+      side = side,
+      alignment = alignment,
+      panel = {
+        DropdownMenuPanel(minWidth = 280.dp) {
+          AppearanceSelector(
+              selectedAppearance = appearance,
+              onSelectedAppearanceChange = onAppearanceChange,
+          )
+          DropdownMenuSeparator()
+          DropdownMenuItem(
+              onClick = {},
+              style = DropdownMenuItemStyle.Destructive,
+          ) {
+            Text("Log out")
+          }
         }
-      }
-    },
+      },
   ) {
     anchor()
   }

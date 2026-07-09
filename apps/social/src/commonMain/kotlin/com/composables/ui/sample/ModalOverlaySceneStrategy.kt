@@ -43,15 +43,13 @@ import com.composables.ui.components.BottomSheetScrimAnimationDurationMillis
 import com.composables.ui.components.rememberBottomSheetState
 import com.composeunstyled.currentWindowHeightBreakpoint
 import com.composeunstyled.currentWindowWidthBreakpoint
-import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.coroutines.delay
 
 class ModalOverlaySceneStrategy<T : Any> : SceneStrategy<T> {
 
   companion object {
-    fun modalOverlay(): Map<String, Any> = metadata {
-      put(ModalOverlaySceneKey, Unit)
-    }
+    fun modalOverlay(): Map<String, Any> = metadata { put(ModalOverlaySceneKey, Unit) }
   }
 
   override fun SceneStrategyScope<T>.calculateScene(entries: List<NavEntry<T>>): Scene<T>? {
@@ -59,21 +57,21 @@ class ModalOverlaySceneStrategy<T : Any> : SceneStrategy<T> {
     lastEntry.metadata[ModalOverlaySceneKey] ?: return null
 
     return ModalOverlayScene(
-      key = lastEntry.contentKey,
-      entry = lastEntry,
-      previousEntries = entries.dropLast(1),
-      overlaidEntries = entries.dropLast(1),
-      onDismissed = onBack,
+        key = lastEntry.contentKey,
+        entry = lastEntry,
+        previousEntries = entries.dropLast(1),
+        overlaidEntries = entries.dropLast(1),
+        onDismissed = onBack,
     )
   }
 }
 
 private class ModalOverlayScene<T : Any>(
-  override val key: Any,
-  private val entry: NavEntry<T>,
-  override val previousEntries: List<NavEntry<T>>,
-  override val overlaidEntries: List<NavEntry<T>>,
-  private val onDismissed: () -> Unit,
+    override val key: Any,
+    private val entry: NavEntry<T>,
+    override val previousEntries: List<NavEntry<T>>,
+    override val overlaidEntries: List<NavEntry<T>>,
+    private val onDismissed: () -> Unit,
 ) : OverlayScene<T> {
   private var dismissOverlay: (suspend () -> Unit)? = null
   private var removing = false
@@ -81,11 +79,7 @@ private class ModalOverlayScene<T : Any>(
   override val entries: List<NavEntry<T>> = listOf(entry)
 
   override val content: @Composable () -> Unit = {
-    val modalContent = remember(entry) {
-      movableContentOf {
-        entry.Content()
-      }
-    }
+    val modalContent = remember(entry) { movableContentOf { entry.Content() } }
 
     val widthBreakpoint = currentWindowWidthBreakpoint()
     val heightBreakpoint = currentWindowHeightBreakpoint()
@@ -100,23 +94,22 @@ private class ModalOverlayScene<T : Any>(
 
   @Composable
   private fun BottomSheetHost(content: @Composable () -> Unit) {
-    val sheetState = rememberBottomSheetState(
-      initialDetent = BottomSheetDetent.Hidden,
-    )
+    val sheetState =
+        rememberBottomSheetState(
+            initialDetent = BottomSheetDetent.Hidden,
+        )
     dismissOverlay = { sheetState.animateTo(BottomSheetDetent.Hidden) }
 
-    LaunchedEffect(sheetState) {
-      sheetState.animateTo(BottomSheetDetent.FullyExpanded)
-    }
+    LaunchedEffect(sheetState) { sheetState.animateTo(BottomSheetDetent.FullyExpanded) }
 
     BottomSheet(
-      state = sheetState,
-      contentPadding = NoModalOverlayPadding,
-      onDismissRequest = {
-        if (!removing) {
-          onDismissed()
-        }
-      },
+        state = sheetState,
+        contentPadding = NoModalOverlayPadding,
+        onDismissRequest = {
+          if (!removing) {
+            onDismissed()
+          }
+        },
     ) {
       content()
     }
@@ -127,19 +120,17 @@ private class ModalOverlayScene<T : Any>(
     val visible = remember { mutableStateOf(false) }
     dismissOverlay = { visible.value = false }
 
-    LaunchedEffect(Unit) {
-      visible.value = true
-    }
+    LaunchedEffect(Unit) { visible.value = true }
 
     AlertDialog(
-      paneTitle = "New post",
-      visible = visible.value,
-      contentPadding = NoModalOverlayPadding,
-      onDismissRequest = {
-        if (!removing) {
-          onDismissed()
-        }
-      },
+        paneTitle = "New post",
+        visible = visible.value,
+        contentPadding = NoModalOverlayPadding,
+        onDismissRequest = {
+          if (!removing) {
+            onDismissed()
+          }
+        },
     ) {
       content()
     }
@@ -151,10 +142,11 @@ private class ModalOverlayScene<T : Any>(
     // unstyled doesn't expose a way to wait for the scrim to animate away
     // so adding a delay until that is available
     delay(
-      maxOf(
-        BottomSheetScrimAnimationDurationMillis,
-        DialogExitDurationMillis,
-      ).milliseconds,
+        maxOf(
+                BottomSheetScrimAnimationDurationMillis,
+                DialogExitDurationMillis,
+            )
+            .milliseconds,
     )
   }
 
@@ -165,9 +157,9 @@ private class ModalOverlayScene<T : Any>(
     other as ModalOverlayScene<*>
 
     return key == other.key &&
-      entry == other.entry &&
-      previousEntries == other.previousEntries &&
-      overlaidEntries == other.overlaidEntries
+        entry == other.entry &&
+        previousEntries == other.previousEntries &&
+        overlaidEntries == other.overlaidEntries
   }
 
   override fun hashCode(): Int {

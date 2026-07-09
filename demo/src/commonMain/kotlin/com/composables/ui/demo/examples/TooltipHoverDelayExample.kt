@@ -31,15 +31,9 @@ import com.composables.ui.components.TooltipPanel
 @Composable
 fun TooltipHoverDelayExample() {
   Tooltip(
-    hoverDelayMillis = 600L,
-    panel = {
-      TooltipPanel {
-        Text("Tooltip")
-      }
-    },
+      hoverDelayMillis = 600L,
+      panel = { TooltipPanel { Text("Tooltip") } },
   ) {
-    Button(onClick = {}, style = ButtonStyle.Outlined) {
-      Text("Hover me")
-    }
+    Button(onClick = {}, style = ButtonStyle.Outlined) { Text("Hover me") }
   }
 }

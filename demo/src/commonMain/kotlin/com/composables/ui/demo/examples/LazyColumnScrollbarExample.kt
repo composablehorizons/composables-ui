@@ -49,27 +49,23 @@ fun LazyColumnScrollbarExample() {
   val lazyListState = rememberLazyListState()
   val scrollbarState = rememberVerticalScrollbarState(lazyListState)
   Box(
-    modifier = Modifier
-      .height(132.dp)
-      .width(340.dp)
-      .clip(RoundedCornerShape(8.dp))
-      .background(Theme[colors][controlColor]),
+      modifier =
+          Modifier.height(132.dp)
+              .width(340.dp)
+              .clip(RoundedCornerShape(8.dp))
+              .background(Theme[colors][controlColor]),
   ) {
     LazyColumn(
-      state = lazyListState,
-      verticalArrangement = Arrangement.spacedBy(10.dp),
-      contentPadding = PaddingValues(16.dp),
-      modifier = Modifier.fillMaxWidth(),
+        state = lazyListState,
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        contentPadding = PaddingValues(16.dp),
+        modifier = Modifier.fillMaxWidth(),
     ) {
-      items(200) { index ->
-        Text("Build artifact ${index + 1}")
-      }
+      items(200) { index -> Text("Build artifact ${index + 1}") }
     }
     VerticalScrollbar(
-      state = scrollbarState,
-      modifier = Modifier
-        .align(Alignment.CenterEnd)
-        .fillMaxHeight(),
+        state = scrollbarState,
+        modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
     )
   }
 }

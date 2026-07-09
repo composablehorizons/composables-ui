@@ -80,6 +80,7 @@ private val EmphasizedAccelerateEasing = CubicBezierEasing(0.3f, 0f, 0.8f, 0.15f
 
 /**
  * A modal dialog for confirmations and focused decisions.
+ *
  * @param visible Whether the dialog is currently shown.
  * @param onDismissRequest Called when the dialog should close.
  * @param modifier Modifier applied to the dialog container.
@@ -97,53 +98,51 @@ private val EmphasizedAccelerateEasing = CubicBezierEasing(0.3f, 0f, 0.8f, 0.15f
  */
 @Composable
 fun AlertDialog(
-  visible: Boolean,
-  onDismissRequest: () -> Unit,
-  modifier: Modifier = Modifier,
-  icon: (@Composable () -> Unit)? = null,
-  title: (@Composable () -> Unit)? = null,
-  text: @Composable () -> Unit,
-  positiveButton: @Composable () -> Unit,
-  neutralButton: (@Composable () -> Unit)? = null,
-  negativeButton: (@Composable () -> Unit)? = null,
-  shape: Shape = Theme[shapes][dialogShape],
-  backgroundColor: Color = Theme[colors][panelColor],
-  contentColor: Color = Theme[colors][onPanelColor],
-  supportingTextColor: Color = Theme[colors][mutedColor],
-  shadow: Shadow = Theme[shadows][overlayShadow],
+    visible: Boolean,
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier,
+    icon: (@Composable () -> Unit)? = null,
+    title: (@Composable () -> Unit)? = null,
+    text: @Composable () -> Unit,
+    positiveButton: @Composable () -> Unit,
+    neutralButton: (@Composable () -> Unit)? = null,
+    negativeButton: (@Composable () -> Unit)? = null,
+    shape: Shape = Theme[shapes][dialogShape],
+    backgroundColor: Color = Theme[colors][panelColor],
+    contentColor: Color = Theme[colors][onPanelColor],
+    supportingTextColor: Color = Theme[colors][mutedColor],
+    shadow: Shadow = Theme[shadows][overlayShadow],
 ) {
   AlertDialogPanel(
-    visible = visible,
-    onDismissRequest = onDismissRequest,
-    modifier = modifier,
-    paneTitle = "Alert dialog",
-    shape = shape,
-    backgroundColor = backgroundColor,
-    shadow = shadow,
-    contentPadding = PaddingValues(24.dp),
+      visible = visible,
+      onDismissRequest = onDismissRequest,
+      modifier = modifier,
+      paneTitle = "Alert dialog",
+      shape = shape,
+      backgroundColor = backgroundColor,
+      shadow = shadow,
+      contentPadding = PaddingValues(24.dp),
   ) {
     ProvideContentColor(contentColor) {
       Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+          modifier = Modifier.fillMaxWidth(),
+          horizontalAlignment = Alignment.CenterHorizontally,
+          verticalArrangement = Arrangement.spacedBy(16.dp),
       ) {
         if (icon != null) {
           Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center,
+              modifier = Modifier.fillMaxWidth(),
+              contentAlignment = Alignment.Center,
           ) {
-            Box(Modifier.size(24.dp)) {
-              icon()
-            }
+            Box(Modifier.size(24.dp)) { icon() }
           }
         }
 
         if (title != null) {
           ProvideTextStyle(LocalTextStyle.current.merge(AlertDialogTitleTextStyle)) {
             Box(
-              modifier = Modifier.fillMaxWidth(),
-              contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center,
             ) {
               title()
             }
@@ -151,22 +150,20 @@ fun AlertDialog(
         }
 
         Box(
-          modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f, fill = false)
-            .verticalScroll(rememberScrollState()),
-          contentAlignment = Alignment.Center,
+            modifier =
+                Modifier.fillMaxWidth()
+                    .weight(1f, fill = false)
+                    .verticalScroll(rememberScrollState()),
+            contentAlignment = Alignment.Center,
         ) {
           ProvideContentColor(supportingTextColor) {
-            ProvideTextStyle(LocalTextStyle.current.merge(AlertDialogBodyTextStyle)) {
-              text()
-            }
+            ProvideTextStyle(LocalTextStyle.current.merge(AlertDialogBodyTextStyle)) { text() }
           }
         }
 
         Column(
-          modifier = Modifier.fillMaxWidth(),
-          verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
           positiveButton()
           if (neutralButton != null) {
@@ -197,109 +194,117 @@ fun AlertDialog(
  */
 @Composable
 fun AlertDialog(
-  visible: Boolean,
-  onDismissRequest: () -> Unit,
-  modifier: Modifier = Modifier,
-  paneTitle: String = "Alert dialog",
-  shape: Shape = Theme[shapes][dialogShape],
-  backgroundColor: Color = Theme[colors][panelColor],
-  contentColor: Color = Theme[colors][onPanelColor],
-  contentPadding: PaddingValues = PaddingValues(24.dp),
-  shadow: Shadow = Theme[shadows][overlayShadow],
-  content: @Composable () -> Unit,
+    visible: Boolean,
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier,
+    paneTitle: String = "Alert dialog",
+    shape: Shape = Theme[shapes][dialogShape],
+    backgroundColor: Color = Theme[colors][panelColor],
+    contentColor: Color = Theme[colors][onPanelColor],
+    contentPadding: PaddingValues = PaddingValues(24.dp),
+    shadow: Shadow = Theme[shadows][overlayShadow],
+    content: @Composable () -> Unit,
 ) {
   AlertDialogPanel(
-    visible = visible,
-    onDismissRequest = onDismissRequest,
-    modifier = modifier,
-    paneTitle = paneTitle,
-    shape = shape,
-    backgroundColor = backgroundColor,
-    shadow = shadow,
-    contentPadding = contentPadding,
+      visible = visible,
+      onDismissRequest = onDismissRequest,
+      modifier = modifier,
+      paneTitle = paneTitle,
+      shape = shape,
+      backgroundColor = backgroundColor,
+      shadow = shadow,
+      contentPadding = contentPadding,
   ) {
-    ProvideContentColor(contentColor) {
-      content()
-    }
+    ProvideContentColor(contentColor) { content() }
   }
 }
 
 @Composable
 private fun AlertDialogPanel(
-  visible: Boolean,
-  onDismissRequest: () -> Unit,
-  modifier: Modifier,
-  paneTitle: String,
-  shape: Shape,
-  backgroundColor: Color,
-  shadow: Shadow,
-  contentPadding: PaddingValues,
-  content: @Composable () -> Unit,
+    visible: Boolean,
+    onDismissRequest: () -> Unit,
+    modifier: Modifier,
+    paneTitle: String,
+    shape: Shape,
+    backgroundColor: Color,
+    shadow: Shadow,
+    contentPadding: PaddingValues,
+    content: @Composable () -> Unit,
 ) {
   UnstyledDialog(
-    visible = visible,
-    onDismissRequest = onDismissRequest,
-    overlay = {
-      Scrim(
-        scrimColor = Theme[colors][scrimColor],
-        enter = fadeIn(
-          animationSpec = tween(
-            durationMillis = DialogEnterFadeDurationMillis,
-            easing = EmphasizedDecelerateEasing,
-          ),
-        ),
-        exit = fadeOut(
-          animationSpec = tween(
-            durationMillis = DialogExitFadeDurationMillis,
-            easing = EmphasizedAccelerateEasing,
-          ),
-        ),
-      )
-    },
+      visible = visible,
+      onDismissRequest = onDismissRequest,
+      overlay = {
+        Scrim(
+            scrimColor = Theme[colors][scrimColor],
+            enter =
+                fadeIn(
+                    animationSpec =
+                        tween(
+                            durationMillis = DialogEnterFadeDurationMillis,
+                            easing = EmphasizedDecelerateEasing,
+                        ),
+                ),
+            exit =
+                fadeOut(
+                    animationSpec =
+                        tween(
+                            durationMillis = DialogExitFadeDurationMillis,
+                            easing = EmphasizedAccelerateEasing,
+                        ),
+                ),
+        )
+      },
   ) {
     Box(
-      modifier = Modifier
-        .fillMaxSize()
-        .padding(horizontal = 24.dp)
-        .padding(vertical = 24.dp),
-      contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp).padding(vertical = 24.dp),
+        contentAlignment = Alignment.Center,
     ) {
       DialogPanel(
-        modifier = modifier
-          .widthIn(min = 280.dp, max = 560.dp)
-          .fillMaxWidth()
-          .heightIn(max = 560.dp)
-          .dropShadow(shape, shadow)
-          .clip(shape)
-          .background(backgroundColor, shape)
-          .padding(contentPadding),
-        paneTitle = paneTitle,
-        enter = scaleIn(
-          initialScale = 0.92f,
-          transformOrigin = TransformOrigin.Center,
-          animationSpec = tween(
-            durationMillis = DialogEnterDurationMillis,
-            easing = EmphasizedDecelerateEasing,
-          ),
-        ) + fadeIn(
-          animationSpec = tween(
-            durationMillis = DialogEnterFadeDurationMillis,
-            easing = EmphasizedDecelerateEasing,
-          ),
-        ),
-        exit = scaleOut(
-          targetScale = 0.92f,
-          transformOrigin = TransformOrigin.Center,
-          animationSpec = tween(
-            durationMillis = DialogExitDurationMillis,
-            easing = EmphasizedAccelerateEasing,
-          ),
-        ) + fadeOut(
-          animationSpec = tween(
-            durationMillis = DialogExitFadeDurationMillis,
-            easing = EmphasizedAccelerateEasing,
-          ),
-        ),
+          modifier =
+              modifier
+                  .widthIn(min = 280.dp, max = 560.dp)
+                  .fillMaxWidth()
+                  .heightIn(max = 560.dp)
+                  .dropShadow(shape, shadow)
+                  .clip(shape)
+                  .background(backgroundColor, shape)
+                  .padding(contentPadding),
+          paneTitle = paneTitle,
+          enter =
+              scaleIn(
+                  initialScale = 0.92f,
+                  transformOrigin = TransformOrigin.Center,
+                  animationSpec =
+                      tween(
+                          durationMillis = DialogEnterDurationMillis,
+                          easing = EmphasizedDecelerateEasing,
+                      ),
+              ) +
+                  fadeIn(
+                      animationSpec =
+                          tween(
+                              durationMillis = DialogEnterFadeDurationMillis,
+                              easing = EmphasizedDecelerateEasing,
+                          ),
+                  ),
+          exit =
+              scaleOut(
+                  targetScale = 0.92f,
+                  transformOrigin = TransformOrigin.Center,
+                  animationSpec =
+                      tween(
+                          durationMillis = DialogExitDurationMillis,
+                          easing = EmphasizedAccelerateEasing,
+                      ),
+              ) +
+                  fadeOut(
+                      animationSpec =
+                          tween(
+                              durationMillis = DialogExitFadeDurationMillis,
+                              easing = EmphasizedAccelerateEasing,
+                          ),
+                  ),
       ) {
         content()
       }
@@ -307,10 +312,11 @@ private fun AlertDialogPanel(
   }
 }
 
-private val AlertDialogTitleTextStyle = TextStyle(
-  fontSize = 20.sp,
-  lineHeight = 24.sp,
-  fontWeight = FontWeight.Medium,
-)
+private val AlertDialogTitleTextStyle =
+    TextStyle(
+        fontSize = 20.sp,
+        lineHeight = 24.sp,
+        fontWeight = FontWeight.Medium,
+    )
 
 private val AlertDialogBodyTextStyle = TextStyle()

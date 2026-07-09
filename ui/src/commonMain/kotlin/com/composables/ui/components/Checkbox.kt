@@ -75,55 +75,54 @@ import com.composeunstyled.theme.Theme
  */
 @Composable
 fun Checkbox(
-  checked: Boolean,
-  onCheckedChange: (Boolean) -> Unit,
-  modifier: Modifier = Modifier,
-  enabled: Boolean = true,
-  accessibilityLabel: String? = null,
-  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-  content: (@Composable RowScope.() -> Unit)? = null,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    accessibilityLabel: String? = null,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    content: (@Composable RowScope.() -> Unit)? = null,
 ) {
   val backgroundColor = if (checked) Theme[colors][primaryColor] else Theme[colors][controlColor]
   val contentColor = if (checked) Theme[colors][onPrimaryColor] else Color.Transparent
   val borderColor = if (checked) Theme[colors][primaryColor] else Theme[colors][borderColor]
-  val activeIndication = if (checked) Theme[indications][inverseIndication] else Theme[indications][defaultIndication]
+  val activeIndication =
+      if (checked) Theme[indications][inverseIndication] else Theme[indications][defaultIndication]
   UnstyledCheckbox(
-    checked = checked,
-    onCheckedChange = onCheckedChange,
-    enabled = enabled,
-    accessibilityLabel = accessibilityLabel,
-    interactionSource = interactionSource,
-    indication = null,
-    modifier = modifier.then(buildModifier { if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha])) }),
+      checked = checked,
+      onCheckedChange = onCheckedChange,
+      enabled = enabled,
+      accessibilityLabel = accessibilityLabel,
+      interactionSource = interactionSource,
+      indication = null,
+      modifier =
+          modifier.then(
+              buildModifier { if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha])) }),
   ) {
     Row(
-      horizontalArrangement = Arrangement.spacedBy(10.dp),
-      verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
       CheckedIndicator(
-        enter = fadeIn(),
-        exit = fadeOut(),
-        modifier = Modifier
-          .focusRing(
-            interactionSource = interactionSource,
-            color = Theme[colors][ringColor],
-            shape = RoundedCornerShape(5.dp),
-          )
-          .clip(RoundedCornerShape(5.dp))
-          .background(backgroundColor, RoundedCornerShape(5.dp))
-          .border(1.dp, borderColor, RoundedCornerShape(5.dp))
-          .size(20.dp),
-        indication = activeIndication,
+          enter = fadeIn(),
+          exit = fadeOut(),
+          modifier =
+              Modifier.focusRing(
+                      interactionSource = interactionSource,
+                      color = Theme[colors][ringColor],
+                      shape = RoundedCornerShape(5.dp),
+                  )
+                  .clip(RoundedCornerShape(5.dp))
+                  .background(backgroundColor, RoundedCornerShape(5.dp))
+                  .border(1.dp, borderColor, RoundedCornerShape(5.dp))
+                  .size(20.dp),
+          indication = activeIndication,
       ) {
-        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-          CheckMark(contentColor)
-        }
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CheckMark(contentColor) }
       }
 
       if (content != null) {
-        ProvideContentColor(Theme[colors][onPanelColor]) {
-          content()
-        }
+        ProvideContentColor(Theme[colors][onPanelColor]) { content() }
       }
     }
   }
@@ -134,18 +133,18 @@ private fun CheckMark(color: Color) {
   Canvas(Modifier.size(14.dp)) {
     val strokeWidth = 2.dp.toPx()
     drawLine(
-      color,
-      Offset(size.width * 0.2f, size.height * 0.52f),
-      Offset(size.width * 0.42f, size.height * 0.74f),
-      strokeWidth,
-      cap = StrokeCap.Round,
+        color,
+        Offset(size.width * 0.2f, size.height * 0.52f),
+        Offset(size.width * 0.42f, size.height * 0.74f),
+        strokeWidth,
+        cap = StrokeCap.Round,
     )
     drawLine(
-      color,
-      Offset(size.width * 0.42f, size.height * 0.74f),
-      Offset(size.width * 0.8f, size.height * 0.28f),
-      strokeWidth,
-      cap = StrokeCap.Round,
+        color,
+        Offset(size.width * 0.42f, size.height * 0.74f),
+        Offset(size.width * 0.8f, size.height * 0.28f),
+        strokeWidth,
+        cap = StrokeCap.Round,
     )
   }
 }

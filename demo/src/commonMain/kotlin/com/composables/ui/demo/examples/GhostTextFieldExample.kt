@@ -34,9 +34,9 @@ fun GhostTextFieldExample() {
   val state = rememberTextFieldState()
 
   TextField(
-    state = state,
-    modifier = Modifier.fillMaxWidth(),
-    placeholder = { Text("Type your name...") },
-    style = TextFieldStyle.Ghost,
+      state = state,
+      modifier = Modifier.fillMaxWidth(),
+      placeholder = { Text("Type your name...") },
+      style = TextFieldStyle.Ghost,
   )
 }

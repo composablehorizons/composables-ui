@@ -52,78 +52,78 @@ fun DropdownMenuToolbarExample() {
   var expanded by remember { mutableStateOf(false) }
 
   Toolbar(
-    modifier = Modifier.fillMaxWidth(),
-    title = { Text("Details") },
-    trailing = {
-      DropdownMenu(
-        expanded = expanded,
-        onExpandedChange = { expanded = it },
-        alignment = DropdownMenuAlignment.End,
-        panel = {
-          DropdownMenuPanel {
-            DropdownMenuItem(
-              onClick = { expanded = false },
-              leading = {
-                Icon(
-                  imageVector = Lucide.Share,
-                  contentDescription = null,
-                  modifier = Modifier.size(16.dp),
-                )
-              },
-            ) {
-              Text("Share")
-            }
-            DropdownMenuItem(
-              onClick = { expanded = false },
-              leading = {
-                Icon(
-                  imageVector = Lucide.Heart,
-                  contentDescription = null,
-                  modifier = Modifier.size(16.dp),
-                )
-              },
-            ) {
-              Text("Add to favorites")
-            }
-            DropdownMenuItem(
-              onClick = { expanded = false },
-              leading = {
-                Icon(
-                  imageVector = Lucide.Link,
-                  contentDescription = null,
-                  modifier = Modifier.size(16.dp),
-                )
-              },
-            ) {
-              Text("Copy link")
-            }
-            DropdownMenuItem(
-              onClick = { expanded = false },
-              style = DropdownMenuItemStyle.Destructive,
-              leading = {
-                Icon(
-                  imageVector = Lucide.Trash2,
-                  contentDescription = null,
-                  modifier = Modifier.size(16.dp),
-                )
-              },
-            ) {
-              Text("Delete")
-            }
-          }
-        },
-      ) {
-        IconButton(
-          onClick = { expanded = expanded.not() },
-          style = ButtonStyle.Ghost,
+      modifier = Modifier.fillMaxWidth(),
+      title = { Text("Details") },
+      trailing = {
+        DropdownMenu(
+            expanded = expanded,
+            onExpandedChange = { expanded = it },
+            alignment = DropdownMenuAlignment.End,
+            panel = {
+              DropdownMenuPanel {
+                DropdownMenuItem(
+                    onClick = { expanded = false },
+                    leading = {
+                      Icon(
+                          imageVector = Lucide.Share,
+                          contentDescription = null,
+                          modifier = Modifier.size(16.dp),
+                      )
+                    },
+                ) {
+                  Text("Share")
+                }
+                DropdownMenuItem(
+                    onClick = { expanded = false },
+                    leading = {
+                      Icon(
+                          imageVector = Lucide.Heart,
+                          contentDescription = null,
+                          modifier = Modifier.size(16.dp),
+                      )
+                    },
+                ) {
+                  Text("Add to favorites")
+                }
+                DropdownMenuItem(
+                    onClick = { expanded = false },
+                    leading = {
+                      Icon(
+                          imageVector = Lucide.Link,
+                          contentDescription = null,
+                          modifier = Modifier.size(16.dp),
+                      )
+                    },
+                ) {
+                  Text("Copy link")
+                }
+                DropdownMenuItem(
+                    onClick = { expanded = false },
+                    style = DropdownMenuItemStyle.Destructive,
+                    leading = {
+                      Icon(
+                          imageVector = Lucide.Trash2,
+                          contentDescription = null,
+                          modifier = Modifier.size(16.dp),
+                      )
+                    },
+                ) {
+                  Text("Delete")
+                }
+              }
+            },
         ) {
-          Icon(
-            imageVector = Lucide.EllipsisVertical,
-            contentDescription = "More options",
-            modifier = Modifier.size(18.dp),
-          )
+          IconButton(
+              onClick = { expanded = expanded.not() },
+              style = ButtonStyle.Ghost,
+          ) {
+            Icon(
+                imageVector = Lucide.EllipsisVertical,
+                contentDescription = "More options",
+                modifier = Modifier.size(18.dp),
+            )
+          }
         }
-      }
-    },
+      },
   )
 }

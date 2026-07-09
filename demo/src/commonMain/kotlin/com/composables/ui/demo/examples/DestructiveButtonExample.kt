@@ -39,23 +39,23 @@ import com.composables.ui.components.Text
 @Composable
 fun DestructiveButtonExample() {
   Row(
-    horizontalArrangement = Arrangement.spacedBy(8.dp),
-    verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.spacedBy(8.dp),
+      verticalAlignment = Alignment.CenterVertically,
   ) {
     Button(
-      onClick = { /* TODO */ },
-      style = ButtonStyle.Destructive,
+        onClick = { /* TODO */},
+        style = ButtonStyle.Destructive,
     ) {
       Text("Button")
     }
     IconButton(
-      onClick = { /* TODO */ },
-      style = ButtonStyle.Destructive,
+        onClick = { /* TODO */},
+        style = ButtonStyle.Destructive,
     ) {
       Icon(
-        imageVector = Lucide.Plus,
-        contentDescription = "Add",
-        modifier = Modifier.size(18.dp),
+          imageVector = Lucide.Plus,
+          contentDescription = "Add",
+          modifier = Modifier.size(18.dp),
       )
     }
   }

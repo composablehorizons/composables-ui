@@ -31,8 +31,8 @@ import com.composeunstyled.currentWindowWidthBreakpoint
 
 @Composable
 fun sampleScreenContentPadding(
-  extraTop: Dp = 0.dp,
-  extraBottom: Dp = 0.dp,
+    extraTop: Dp = 0.dp,
+    extraBottom: Dp = 0.dp,
 ): PaddingValues {
   val widthBreakpoint = currentWindowWidthBreakpoint()
   val statusBarPadding = previewStatusBarPaddingValue()
@@ -40,12 +40,14 @@ fun sampleScreenContentPadding(
   val useMobileChrome = !(widthBreakpoint isAtLeast Medium)
 
   return PaddingValues(
-    top = extraTop + if (useMobileChrome) statusBarPadding else 0.dp,
-    bottom = extraBottom + if (useMobileChrome) {
-      SampleMobileNavigationBarHeight + navigationBarPadding
-    } else {
-      0.dp
-    },
+      top = extraTop + if (useMobileChrome) statusBarPadding else 0.dp,
+      bottom =
+          extraBottom +
+              if (useMobileChrome) {
+                SampleMobileNavigationBarHeight + navigationBarPadding
+              } else {
+                0.dp
+              },
   )
 }
 

@@ -49,38 +49,38 @@ fun SearchTextFieldExample() {
   val state = rememberTextFieldState()
 
   TextField(
-    state = state,
-    modifier = Modifier.fillMaxWidth(),
-    accessibilityLabel = "Search",
-    placeholder = { Text("Search...") },
-    leading = {
-      Icon(
-        imageVector = Lucide.Search,
-        contentDescription = null,
-        modifier = Modifier.size(16.dp),
-        tint = Theme[colors][mutedColor],
-      )
-    },
-    trailing = {
-      AnimatedVisibility(
-        visible = state.text.isNotEmpty(),
-        enter = fadeIn(),
-        exit = fadeOut(),
-      ) {
-        IconButton(
-          onClick = { state.clearText() },
-          modifier = Modifier.size(32.dp),
-          style = ButtonStyle.Ghost,
-          buttonSize = ButtonSize.Small,
-        ) {
-          Icon(
-            imageVector = Lucide.X,
-            contentDescription = "Clear search",
-            modifier = Modifier.size(14.dp),
+      state = state,
+      modifier = Modifier.fillMaxWidth(),
+      accessibilityLabel = "Search",
+      placeholder = { Text("Search...") },
+      leading = {
+        Icon(
+            imageVector = Lucide.Search,
+            contentDescription = null,
+            modifier = Modifier.size(16.dp),
             tint = Theme[colors][mutedColor],
-          )
+        )
+      },
+      trailing = {
+        AnimatedVisibility(
+            visible = state.text.isNotEmpty(),
+            enter = fadeIn(),
+            exit = fadeOut(),
+        ) {
+          IconButton(
+              onClick = { state.clearText() },
+              modifier = Modifier.size(32.dp),
+              style = ButtonStyle.Ghost,
+              buttonSize = ButtonSize.Small,
+          ) {
+            Icon(
+                imageVector = Lucide.X,
+                contentDescription = "Clear search",
+                modifier = Modifier.size(14.dp),
+                tint = Theme[colors][mutedColor],
+            )
+          }
         }
-      }
-    },
+      },
   )
 }

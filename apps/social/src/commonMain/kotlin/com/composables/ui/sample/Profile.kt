@@ -84,6 +84,7 @@ import com.composeunstyled.theme.Theme
 
 private sealed interface ProfileFeedTab {
   data object Posts : ProfileFeedTab
+
   data object Replies : ProfileFeedTab
 }
 
@@ -91,62 +92,59 @@ private val profileFeedTabs = listOf(ProfileFeedTab.Posts, ProfileFeedTab.Replie
 
 @Composable
 fun Profile(
-  profileId: String,
-  signedInProfileId: String,
-  onPostClick: (Post) -> Unit,
+    profileId: String,
+    signedInProfileId: String,
+    onPostClick: (Post) -> Unit,
 ) {
   val profile = UserProfiles.findWithId(profileId)
   val isSignedInProfile = profile.id == signedInProfileId
   var selectedTab by remember { mutableStateOf<ProfileFeedTab>(ProfileFeedTab.Posts) }
-  val visiblePosts = when (selectedTab) {
-    ProfileFeedTab.Posts -> Posts.postsByProfileId(profile.id)
-    ProfileFeedTab.Replies -> Posts.repliesByProfileId(profile.id)
-  }
+  val visiblePosts =
+      when (selectedTab) {
+        ProfileFeedTab.Posts -> Posts.postsByProfileId(profile.id)
+        ProfileFeedTab.Replies -> Posts.repliesByProfileId(profile.id)
+      }
   ProvideContentColor(Theme[colors][onPanelColor]) {
     LazyColumn(
-      modifier = Modifier
-        .fillMaxWidth()
-        .background(Theme[colors][panelColor]),
-      contentPadding = sampleScreenContentPadding(extraTop = 20.dp, extraBottom = 20.dp),
+        modifier = Modifier.fillMaxWidth().background(Theme[colors][panelColor]),
+        contentPadding = sampleScreenContentPadding(extraTop = 20.dp, extraBottom = 20.dp),
     ) {
       item {
         ProfileHeader(
-          profile = profile,
-          isSignedInProfile = isSignedInProfile,
+            profile = profile,
+            isSignedInProfile = isSignedInProfile,
         )
         Tabs(
-          selectedTab = selectedTab,
-          onSelectedTabChange = { it: ProfileFeedTab -> selectedTab = it },
-          orderedTabs = profileFeedTabs,
-          modifier = Modifier
-            .fillMaxWidth()
-            .padding(12.dp),
+            selectedTab = selectedTab,
+            onSelectedTabChange = { it: ProfileFeedTab -> selectedTab = it },
+            orderedTabs = profileFeedTabs,
+            modifier = Modifier.fillMaxWidth().padding(12.dp),
         ) {
           this.TabList(
-            modifier = Modifier.fillMaxWidth(),
+              modifier = Modifier.fillMaxWidth(),
           ) {
             profileFeedTabs.forEach { tab ->
               Tab(
-                key = tab,
-                modifier = Modifier.weight(1f),
-                text = {
-                  Text(
-                    text = tab.label,
-                    fontWeight = FontWeight.Bold,
-                  )
-                },
+                  key = tab,
+                  modifier = Modifier.weight(1f),
+                  text = {
+                    Text(
+                        text = tab.label,
+                        fontWeight = FontWeight.Bold,
+                    )
+                  },
               )
             }
           }
         }
       }
       itemsIndexed(
-        items = visiblePosts,
-        key = { _, post -> post.id },
+          items = visiblePosts,
+          key = { _, post -> post.id },
       ) { index, post ->
         ProfilePostRow(
-          post = post,
-          onClick = { onPostClick(post) },
+            post = post,
+            onClick = { onPostClick(post) },
         )
         if (index < visiblePosts.lastIndex) {
           HorizontalSeparator()
@@ -158,19 +156,17 @@ fun Profile(
 
 @Composable
 private fun ProfileHeader(
-  profile: UserProfile,
-  isSignedInProfile: Boolean,
+    profile: UserProfile,
+    isSignedInProfile: Boolean,
 ) {
   Column(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(horizontal = 18.dp, vertical = 10.dp),
-    verticalArrangement = Arrangement.spacedBy(20.dp),
+      modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 10.dp),
+      verticalArrangement = Arrangement.spacedBy(20.dp),
   ) {
     Row(verticalAlignment = Alignment.Top) {
       Column(
-        modifier = Modifier.weight(1f),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+          modifier = Modifier.weight(1f),
+          verticalArrangement = Arrangement.spacedBy(8.dp),
       ) {
         Text(profile.displayName, fontWeight = FontWeight.Bold)
         Text(profile.handle)
@@ -178,11 +174,11 @@ private fun ProfileHeader(
       Avatar(profile.avatarUrl, size = AvatarSize.Large)
     }
     Text(
-      text = profile.bio,
+        text = profile.bio,
     )
     Text(
-      text = formatFollowerCount(profile.followerCount),
-      color = Theme[colors][mutedColor],
+        text = formatFollowerCount(profile.followerCount),
+        color = Theme[colors][mutedColor],
     )
     ProfileActionButton(isSignedInProfile)
   }
@@ -192,17 +188,17 @@ private fun ProfileHeader(
 private fun ProfileActionButton(isSignedInProfile: Boolean) {
   if (isSignedInProfile) {
     Button(
-      onClick = {},
-      style = ButtonStyle.Secondary,
-      modifier = Modifier.fillMaxWidth(),
+        onClick = {},
+        style = ButtonStyle.Secondary,
+        modifier = Modifier.fillMaxWidth(),
     ) {
       Text("Edit profile")
     }
   } else {
     Button(
-      onClick = {},
-      style = ButtonStyle.Primary,
-      modifier = Modifier.fillMaxWidth(),
+        onClick = {},
+        style = ButtonStyle.Primary,
+        modifier = Modifier.fillMaxWidth(),
     ) {
       Text("Follow")
     }
@@ -210,55 +206,52 @@ private fun ProfileActionButton(isSignedInProfile: Boolean) {
 }
 
 private val ProfileFeedTab.label: String
-  get() = when (this) {
-    ProfileFeedTab.Posts -> "Posts"
-    ProfileFeedTab.Replies -> "Replies"
-  }
+  get() =
+      when (this) {
+        ProfileFeedTab.Posts -> "Posts"
+        ProfileFeedTab.Replies -> "Replies"
+      }
 
 @Composable
 private fun ProfilePostRow(
-  post: Post,
-  onClick: () -> Unit,
+    post: Post,
+    onClick: () -> Unit,
 ) {
   val author = UserProfiles.findWithId(post.authorId)
 
   FeedPost(
-    onClick = onClick,
-    avatar = {
-      Avatar(
-        url = author.avatarUrl,
-        modifier = Modifier.clip(CircleShape).clickable { onClick() },
-      )
-    },
-    authorName = {
-      Text(
-        text = author.handle,
-        fontWeight = FontWeight.Bold,
-      )
-    },
-    timestamp = {
-      Text(post.timestamp)
-    },
-    overflow = { ProfilePostOverflowMenu() },
-    body = {
-      Text(
-        text = post.body,
-        color = Theme[colors][onBackgroundColor],
-      )
-    },
-    attachment = {
-      if (post.quoteAuthor != null && post.quoteBody != null && post.quoteReplyCount != null) {
-        QuotedPost(
-          avatarUrl = author.avatarUrl,
-          author = post.quoteAuthor,
-          body = post.quoteBody,
-          replyCountLabel = formatReplyCount(post.quoteReplyCount),
+      onClick = onClick,
+      avatar = {
+        Avatar(
+            url = author.avatarUrl,
+            modifier = Modifier.clip(CircleShape).clickable { onClick() },
         )
-      }
-    },
-    actions = {
-      ProfilePostActions(post)
-    },
+      },
+      authorName = {
+        Text(
+            text = author.handle,
+            fontWeight = FontWeight.Bold,
+        )
+      },
+      timestamp = { Text(post.timestamp) },
+      overflow = { ProfilePostOverflowMenu() },
+      body = {
+        Text(
+            text = post.body,
+            color = Theme[colors][onBackgroundColor],
+        )
+      },
+      attachment = {
+        if (post.quoteAuthor != null && post.quoteBody != null && post.quoteReplyCount != null) {
+          QuotedPost(
+              avatarUrl = author.avatarUrl,
+              author = post.quoteAuthor,
+              body = post.quoteBody,
+              replyCountLabel = formatReplyCount(post.quoteReplyCount),
+          )
+        }
+      },
+      actions = { ProfilePostActions(post) },
   )
 }
 
@@ -267,40 +260,34 @@ private fun ProfilePostOverflowMenu() {
   var expanded by remember { mutableStateOf(false) }
 
   DropdownMenu(
-    expanded = expanded,
-    onExpandedChange = { expanded = it },
-    alignment = DropdownMenuAlignment.End,
-    panel = {
-      DropdownMenuPanel {
-        DropdownMenuItem(onClick = { expanded = false }) {
-          Text("Save")
+      expanded = expanded,
+      onExpandedChange = { expanded = it },
+      alignment = DropdownMenuAlignment.End,
+      panel = {
+        DropdownMenuPanel {
+          DropdownMenuItem(onClick = { expanded = false }) { Text("Save") }
+          DropdownMenuItem(onClick = { expanded = false }) { Text("Copy link") }
+          DropdownMenuItem(onClick = { expanded = false }) { Text("Mute") }
+          DropdownMenuItem(
+              onClick = { expanded = false },
+              style = DropdownMenuItemStyle.Destructive,
+          ) {
+            Text("Report")
+          }
         }
-        DropdownMenuItem(onClick = { expanded = false }) {
-          Text("Copy link")
-        }
-        DropdownMenuItem(onClick = { expanded = false }) {
-          Text("Mute")
-        }
-        DropdownMenuItem(
-          onClick = { expanded = false },
-          style = DropdownMenuItemStyle.Destructive,
-        ) {
-          Text("Report")
-        }
-      }
-    },
+      },
   ) {
     IconButton(
-      onClick = { expanded = expanded.not() },
-      style = ButtonStyle.Ghost,
-      buttonSize = ButtonSize.Small,
-      indication = null,
+        onClick = { expanded = expanded.not() },
+        style = ButtonStyle.Ghost,
+        buttonSize = ButtonSize.Small,
+        indication = null,
     ) {
       Icon(
-        Icons.Ellipsis,
-        contentDescription = "Post options",
-        modifier = Modifier.size(22.dp),
-        tint = Theme[colors][onBackgroundColor],
+          Icons.Ellipsis,
+          contentDescription = "Post options",
+          modifier = Modifier.size(22.dp),
+          tint = Theme[colors][onBackgroundColor],
       )
     }
   }
@@ -308,27 +295,28 @@ private fun ProfilePostOverflowMenu() {
 
 @Composable
 private fun QuotedPost(
-  avatarUrl: String,
-  author: String,
-  body: String,
-  replyCountLabel: String,
+    avatarUrl: String,
+    author: String,
+    body: String,
+    replyCountLabel: String,
 ) {
   Box(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(start = 80.dp, end = 24.dp),
+      modifier = Modifier.fillMaxWidth().padding(start = 80.dp, end = 24.dp),
   ) {
     Column(
-      modifier = Modifier
-        .fillMaxWidth()
-        .clip(RoundedCornerShape(12.dp))
-        .border(width = 1.dp, color = Theme[colors][borderColor], shape = RoundedCornerShape(12.dp))
-        .padding(18.dp),
-      verticalArrangement = Arrangement.spacedBy(12.dp),
+        modifier =
+            Modifier.fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .border(
+                    width = 1.dp,
+                    color = Theme[colors][borderColor],
+                    shape = RoundedCornerShape(12.dp))
+                .padding(18.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
       Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+          verticalAlignment = Alignment.CenterVertically,
+          horizontalArrangement = Arrangement.spacedBy(8.dp),
       ) {
         Avatar(avatarUrl, size = AvatarSize.Medium)
         Text(author, fontWeight = FontWeight.Bold)
@@ -347,23 +335,31 @@ private fun ProfilePostActions(post: Post) {
     Icon(Icons.Heart, contentDescription = "Like", modifier = Modifier.size(25.dp), tint = color)
   }
   ProfileActionButton(count = formatCount(post.replyCount), color = actionColor) { color ->
-    Icon(Icons.MessageCircle, contentDescription = "Reply", modifier = Modifier.size(25.dp), tint = color)
+    Icon(
+        Icons.MessageCircle,
+        contentDescription = "Reply",
+        modifier = Modifier.size(25.dp),
+        tint = color)
   }
   Button(onClick = {}, style = ButtonStyle.Ghost) {
-    Icon(Icons.Repeat2, contentDescription = "Repost", modifier = Modifier.size(25.dp), tint = actionColor)
+    Icon(
+        Icons.Repeat2,
+        contentDescription = "Repost",
+        modifier = Modifier.size(25.dp),
+        tint = actionColor)
   }
 }
 
 @Composable
 private fun ProfileActionButton(
-  count: String,
-  color: Color,
-  content: @Composable (Color) -> Unit,
+    count: String,
+    color: Color,
+    content: @Composable (Color) -> Unit,
 ) {
   Button(onClick = {}, style = ButtonStyle.Ghost) {
     Row(
-      horizontalArrangement = Arrangement.spacedBy(5.dp),
-      verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(5.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
       content(color)
       Text(count, color = color)

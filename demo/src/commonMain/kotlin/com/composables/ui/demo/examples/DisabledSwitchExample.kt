@@ -27,7 +27,5 @@ import com.composables.ui.components.Text
 
 @Composable
 fun DisabledSwitchExample() {
-  Switch(checked = true, onCheckedChange = {}, enabled = false) {
-    Text("Notifications")
-  }
+  Switch(checked = true, onCheckedChange = {}, enabled = false) { Text("Notifications") }
 }

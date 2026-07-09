@@ -42,29 +42,23 @@ fun WeightedTabsExample() {
   val tabs = listOf("Preview", "Code", "Docs")
   var selected by remember { mutableStateOf(tabs.first()) }
   Tabs(
-    selectedTab = selected,
-    onSelectedTabChange = { selected = it },
-    orderedTabs = tabs,
+      selectedTab = selected,
+      onSelectedTabChange = { selected = it },
+      orderedTabs = tabs,
   ) {
     Column(
-      verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
       TabList(modifier = Modifier.fillMaxWidth()) {
         tabs.forEach { tab ->
           Tab(
-            key = tab,
-            modifier = Modifier.weight(1f),
-            text = {
-              Text(tab)
-            },
+              key = tab,
+              modifier = Modifier.weight(1f),
+              text = { Text(tab) },
           )
         }
       }
-      tabs.forEach { tab ->
-        TabPanel(tab) {
-          Text("$tab content")
-        }
-      }
+      tabs.forEach { tab -> TabPanel(tab) { Text("$tab content") } }
     }
   }
 }

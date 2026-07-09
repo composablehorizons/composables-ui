@@ -38,27 +38,27 @@ import com.composables.ui.components.Text
 @Composable
 fun CenteredToolbarExample() {
   CenteredToolbar(
-    modifier = Modifier.fillMaxWidth(),
-    leading = {
-      IconButton(
-        onClick = { /* TODO */ },
-        style = ButtonStyle.Ghost,
-      ) {
-        Icon(Lucide.ArrowLeft, contentDescription = "Go back")
-      }
-    },
-    title = { Text("Centered") },
-    trailing = {
-      IconButton(
-        onClick = { /* TODO */ },
-        style = ButtonStyle.Ghost,
-      ) {
-        Icon(
-          imageVector = Lucide.EllipsisVertical,
-          contentDescription = "More options",
-          modifier = Modifier.size(18.dp),
-        )
-      }
-    },
+      modifier = Modifier.fillMaxWidth(),
+      leading = {
+        IconButton(
+            onClick = { /* TODO */},
+            style = ButtonStyle.Ghost,
+        ) {
+          Icon(Lucide.ArrowLeft, contentDescription = "Go back")
+        }
+      },
+      title = { Text("Centered") },
+      trailing = {
+        IconButton(
+            onClick = { /* TODO */},
+            style = ButtonStyle.Ghost,
+        ) {
+          Icon(
+              imageVector = Lucide.EllipsisVertical,
+              contentDescription = "More options",
+              modifier = Modifier.size(18.dp),
+          )
+        }
+      },
   )
 }

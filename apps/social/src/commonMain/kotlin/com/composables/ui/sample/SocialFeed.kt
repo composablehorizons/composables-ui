@@ -82,74 +82,70 @@ import com.composeunstyled.theme.Theme
 
 @Composable
 fun SocialFeed(
-  onPostClick: (Post) -> Unit,
-  onProfileClick: (String) -> Unit,
-  onNewPostClick: () -> Unit,
-  modifier: Modifier = Modifier,
+    onPostClick: (Post) -> Unit,
+    onProfileClick: (String) -> Unit,
+    onNewPostClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
   val posts = Posts.homeFeed()
 
   ProvideContentColor(Theme[colors][onPanelColor]) {
     LazyColumn(
-      modifier = modifier.fillMaxSize().background(Theme[colors][panelColor]),
-      contentPadding = sampleScreenContentPadding(),
+        modifier = modifier.fillMaxSize().background(Theme[colors][panelColor]),
+        contentPadding = sampleScreenContentPadding(),
     ) {
       item(key = "composer") {
         FeedComposer(
-          onProfileClick = { onProfileClick(UserProfiles.johnMobbin.id) },
-          onNewPostClick = onNewPostClick,
+            onProfileClick = { onProfileClick(UserProfiles.johnMobbin.id) },
+            onNewPostClick = onNewPostClick,
         )
         HorizontalSeparator()
       }
       itemsIndexed(
-        items = posts,
-        key = { _, post -> post.id },
+          items = posts,
+          key = { _, post -> post.id },
       ) { index, post ->
         val author = UserProfiles.findWithId(post.authorId)
         val onProfileClick = { onProfileClick(author.id) }
         FeedPost(
-          onClick = { onPostClick(post) },
-          avatar = {
-            Avatar(
-              url = author.avatarUrl,
-              modifier = Modifier.clip(CircleShape).clickable { onProfileClick() },
-            )
-          },
-          authorName = {
-            Button(onClick = onProfileClick, style = ButtonStyle.Link) {
-              Text(
-                text = author.handle,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
+            onClick = { onPostClick(post) },
+            avatar = {
+              Avatar(
+                  url = author.avatarUrl,
+                  modifier = Modifier.clip(CircleShape).clickable { onProfileClick() },
               )
-            }
-          },
-          timestamp = {
-            Text(post.timestamp)
-          },
-          overflow = { PostOverflowMenu() },
-          body = {
-            Text(
-              text = post.body,
-              color = Theme[colors][onBackgroundColor],
-            )
-          },
-          attachment = {
-            if (post.media.isNotEmpty()) {
-              MediaAttachment {
-                post.media.forEach { item ->
-                  if (post.portraitMedia) {
-                    PortraitMediaItem(item.url)
-                  } else {
-                    LandscapeMediaItem(item.url)
+            },
+            authorName = {
+              Button(onClick = onProfileClick, style = ButtonStyle.Link) {
+                Text(
+                    text = author.handle,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+              }
+            },
+            timestamp = { Text(post.timestamp) },
+            overflow = { PostOverflowMenu() },
+            body = {
+              Text(
+                  text = post.body,
+                  color = Theme[colors][onBackgroundColor],
+              )
+            },
+            attachment = {
+              if (post.media.isNotEmpty()) {
+                MediaAttachment {
+                  post.media.forEach { item ->
+                    if (post.portraitMedia) {
+                      PortraitMediaItem(item.url)
+                    } else {
+                      LandscapeMediaItem(item.url)
+                    }
                   }
                 }
               }
-            }
-          },
-          actions = {
-            PostActions(post = post)
-          },
+            },
+            actions = { PostActions(post = post) },
         )
         if (index < posts.lastIndex) {
           HorizontalSeparator()
@@ -161,8 +157,8 @@ fun SocialFeed(
 
 @Composable
 private fun FeedComposer(
-  onProfileClick: () -> Unit,
-  onNewPostClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    onNewPostClick: () -> Unit,
 ) {
   val interactionSource = remember { MutableInteractionSource() }
   val loggedInProfile = UserProfiles.johnMobbin
@@ -170,38 +166,38 @@ private fun FeedComposer(
   val useDesktopComposer = widthBreakpoint isAtLeast Medium
 
   Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .then(
-        buildModifier {
-          if (useDesktopComposer) {
-            add(Modifier.height(112.dp))
-          }
-        },
-      )
-      .padding(horizontal = 24.dp, vertical = if (useDesktopComposer) 0.dp else 24.dp),
-    verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.spacedBy(16.dp),
+      modifier =
+          Modifier.fillMaxWidth()
+              .then(
+                  buildModifier {
+                    if (useDesktopComposer) {
+                      add(Modifier.height(112.dp))
+                    }
+                  },
+              )
+              .padding(horizontal = 24.dp, vertical = if (useDesktopComposer) 0.dp else 24.dp),
+      verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.spacedBy(16.dp),
   ) {
     Avatar(
-      url = loggedInProfile.avatarUrl,
-      modifier = Modifier.clip(CircleShape).clickable { onProfileClick() },
+        url = loggedInProfile.avatarUrl,
+        modifier = Modifier.clip(CircleShape).clickable { onProfileClick() },
     )
     Text(
-      text = "What's up?",
-      modifier = Modifier
-        .weight(1f)
-        .pointerHoverIcon(PointerIcon.Text)
-        .clickable(
-          interactionSource = interactionSource,
-          indication = null,
-          onClick = onNewPostClick,
-        ),
-      color = Theme[colors][mutedColor],
+        text = "What's up?",
+        modifier =
+            Modifier.weight(1f)
+                .pointerHoverIcon(PointerIcon.Text)
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    onClick = onNewPostClick,
+                ),
+        color = Theme[colors][mutedColor],
     )
     Button(
-      onClick = onNewPostClick,
-      style = ButtonStyle.Primary,
+        onClick = onNewPostClick,
+        style = ButtonStyle.Primary,
     ) {
       Text("Post")
     }
@@ -213,42 +209,34 @@ private fun PostOverflowMenu() {
   var expanded by remember { mutableStateOf(false) }
 
   DropdownMenu(
-    expanded = expanded,
-    onExpandedChange = { expanded = it },
-    alignment = DropdownMenuAlignment.End,
-    panel = {
-      DropdownMenuPanel {
-        DropdownMenuItem(onClick = { }) {
-          Text("Save")
+      expanded = expanded,
+      onExpandedChange = { expanded = it },
+      alignment = DropdownMenuAlignment.End,
+      panel = {
+        DropdownMenuPanel {
+          DropdownMenuItem(onClick = {}) { Text("Save") }
+          DropdownMenuItem(onClick = {}) { Text("Copy link") }
+          DropdownMenuItem(onClick = {}) { Text("Mute") }
+          DropdownMenuItem(onClick = {}) { Text("Not interested") }
+          DropdownMenuItem(
+              onClick = {},
+              style = DropdownMenuItemStyle.Destructive,
+          ) {
+            Text("Report")
+          }
         }
-        DropdownMenuItem(onClick = { }) {
-          Text("Copy link")
-        }
-        DropdownMenuItem(onClick = { }) {
-          Text("Mute")
-        }
-        DropdownMenuItem(onClick = { }) {
-          Text("Not interested")
-        }
-        DropdownMenuItem(
-          onClick = { },
-          style = DropdownMenuItemStyle.Destructive,
-        ) {
-          Text("Report")
-        }
-      }
-    },
+      },
   ) {
     IconButton(
-      onClick = { expanded = expanded.not() },
-      style = ButtonStyle.Ghost,
-      buttonSize = ButtonSize.Small,
-      indication = null,
+        onClick = { expanded = expanded.not() },
+        style = ButtonStyle.Ghost,
+        buttonSize = ButtonSize.Small,
+        indication = null,
     ) {
       Icon(
-        imageVector = Icons.Ellipsis,
-        contentDescription = "Post options",
-        tint = Theme[colors][onBackgroundColor],
+          imageVector = Icons.Ellipsis,
+          contentDescription = "Post options",
+          tint = Theme[colors][onBackgroundColor],
       )
     }
   }
@@ -257,9 +245,9 @@ private fun PostOverflowMenu() {
 @Composable
 fun PostActions(post: Post, modifier: Modifier = Modifier) {
   Row(
-    horizontalArrangement = Arrangement.spacedBy(6.dp),
-    verticalAlignment = Alignment.CenterVertically,
-    modifier = modifier,
+      horizontalArrangement = Arrangement.spacedBy(6.dp),
+      verticalAlignment = Alignment.CenterVertically,
+      modifier = modifier,
   ) {
     ProvideContentColor(Theme[colors][mutedColor]) {
       Button(onClick = {}, style = ButtonStyle.Ghost) {

@@ -79,20 +79,22 @@ import com.composeunstyled.Stack
 import com.composeunstyled.StackOrientation
 import com.composeunstyled.StackScope
 import com.composeunstyled.UnstyledTab
+import com.composeunstyled.UnstyledTabGroup as UnstyledTabs
 import com.composeunstyled.UnstyledTabList
 import com.composeunstyled.UnstyledTabPanel
 import com.composeunstyled.buildModifier
 import com.composeunstyled.theme.Theme
 import kotlin.jvm.JvmInline
-import com.composeunstyled.UnstyledTabGroup as UnstyledTabs
 
-class TabsScope<T> internal constructor(
-  internal val selectedTab: T,
-  internal val orderedTabs: List<T>,
+class TabsScope<T>
+internal constructor(
+    internal val selectedTab: T,
+    internal val orderedTabs: List<T>,
 )
 
 /**
  * An individual tab inside a tab list.
+ *
  * @param key Key represented by this tab or tab panel.
  * @param modifier Modifier applied to the component.
  * @param enabled Whether the tab can be interacted with.
@@ -104,89 +106,84 @@ class TabsScope<T> internal constructor(
  */
 @Composable
 fun <T> Tab(
-  key: T,
-  modifier: Modifier = Modifier,
-  enabled: Boolean = true,
-  activateOnFocus: Boolean = true,
-  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-  indication: Indication? = Theme[indications][defaultIndication],
-  icon: (@Composable () -> Unit)? = null,
-  text: @Composable () -> Unit,
+    key: T,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    activateOnFocus: Boolean = true,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    indication: Indication? = Theme[indications][defaultIndication],
+    icon: (@Composable () -> Unit)? = null,
+    text: @Composable () -> Unit,
 ) {
   val shape = RoundedCornerShape(4.dp)
   val updateTabIndicatorBounds = LocalTabIndicatorBoundsUpdater.current
   UnstyledTab(
-    key = key,
-    enabled = enabled,
-    activateOnFocus = activateOnFocus,
-    interactionSource = interactionSource,
-    indication = indication,
-    contentAlignment = Alignment.Center,
-    modifier = modifier
-      .then(
-        buildModifier {
-          if (updateTabIndicatorBounds != null) {
-            add(Modifier.onGloballyPositioned { updateTabIndicatorBounds(key, it) })
-          }
-          if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha]))
-        },
-      )
-      .bouncyPress(
-        interactionSource = interactionSource,
-        enabled = enabled,
-      )
-      .focusRing(
-        interactionSource = interactionSource,
-        color = Theme[colors][ringColor],
-        shape = shape,
-      )
-      .clip(shape),
+      key = key,
+      enabled = enabled,
+      activateOnFocus = activateOnFocus,
+      interactionSource = interactionSource,
+      indication = indication,
+      contentAlignment = Alignment.Center,
+      modifier =
+          modifier
+              .then(
+                  buildModifier {
+                    if (updateTabIndicatorBounds != null) {
+                      add(Modifier.onGloballyPositioned { updateTabIndicatorBounds(key, it) })
+                    }
+                    if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha]))
+                  },
+              )
+              .bouncyPress(
+                  interactionSource = interactionSource,
+                  enabled = enabled,
+              )
+              .focusRing(
+                  interactionSource = interactionSource,
+                  color = Theme[colors][ringColor],
+                  shape = shape,
+              )
+              .clip(shape),
   ) {
     Row(
-      modifier = Modifier
-        .heightIn(min = tabMinHeight())
-        .padding(horizontal = TabContentHorizontalPadding),
-      horizontalArrangement = Arrangement.spacedBy(2.dp),
-      verticalAlignment = Alignment.CenterVertically,
+        modifier =
+            Modifier.heightIn(min = tabMinHeight())
+                .padding(horizontal = TabContentHorizontalPadding),
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-      ProvideContentColor(if (selected) Theme[colors][primaryColor] else Theme[colors][mutedColor]) {
-        if (icon != null) {
-          Box(
-            modifier = Modifier.size(TabIconSize),
-            contentAlignment = Alignment.Center,
-          ) {
-            icon()
+      ProvideContentColor(
+          if (selected) Theme[colors][primaryColor] else Theme[colors][mutedColor]) {
+            if (icon != null) {
+              Box(
+                  modifier = Modifier.size(TabIconSize),
+                  contentAlignment = Alignment.Center,
+              ) {
+                icon()
+              }
+              Box(Modifier.width(TabIconSpacing))
+            }
+            ProvideTextStyle(LocalTextStyle.current.merge(TabTextStyle)) { text() }
           }
-          Box(Modifier.width(TabIconSpacing))
-        }
-        ProvideTextStyle(LocalTextStyle.current.merge(TabTextStyle)) {
-          text()
-        }
-      }
     }
   }
 }
 
-/**
- * Orientation options for arranging tab lists.
- */
+/** Orientation options for arranging tab lists. */
 @JvmInline
 value class TabOrientation internal constructor(internal val orientation: Orientation) {
   companion object {
-    /**
-     * Arranges tabs in a horizontal row.
-     */
+    /** Arranges tabs in a horizontal row. */
     val Horizontal = TabOrientation(Orientation.Horizontal)
 
-    /**
-     * Arranges tabs in a vertical column.
-     */
+    /** Arranges tabs in a vertical column. */
     val Vertical = TabOrientation(Orientation.Vertical)
   }
 }
 
 /**
  * Tabs that coordinate tab triggers and panels.
+ *
  * @param selectedTab Currently selected tab key.
  * @param onSelectedTabChange Called when the selected tab changes.
  * @param orderedTabs Ordered list of tab keys used for indicator placement and navigation.
@@ -195,22 +192,24 @@ value class TabOrientation internal constructor(internal val orientation: Orient
  */
 @Composable
 fun <T> Tabs(
-  selectedTab: T,
-  onSelectedTabChange: (T) -> Unit,
-  orderedTabs: List<T>,
-  modifier: Modifier = Modifier,
-  content: @Composable TabsScope<T>.() -> Unit,
+    selectedTab: T,
+    onSelectedTabChange: (T) -> Unit,
+    orderedTabs: List<T>,
+    modifier: Modifier = Modifier,
+    content: @Composable TabsScope<T>.() -> Unit,
 ) {
   UnstyledTabs(selectedTab, onSelectedTabChange, orderedTabs, modifier) {
     TabsScope(
-      selectedTab = selectedTab,
-      orderedTabs = orderedTabs,
-    ).content()
+            selectedTab = selectedTab,
+            orderedTabs = orderedTabs,
+        )
+        .content()
   }
 }
 
 /**
  * A container that arranges tab triggers and draws the active indicator.
+ *
  * @param modifier Modifier applied to the component.
  * @param orientation Orientation used to lay out the tab list.
  * @param dividerColor Color used for the indicator divider line.
@@ -218,10 +217,10 @@ fun <T> Tabs(
  */
 @Composable
 fun <T> TabsScope<T>.TabList(
-  modifier: Modifier = Modifier,
-  orientation: TabOrientation = TabOrientation.Horizontal,
-  dividerColor: Color = Theme[colors][borderColor],
-  content: @Composable StackScope.() -> Unit,
+    modifier: Modifier = Modifier,
+    orientation: TabOrientation = TabOrientation.Horizontal,
+    dividerColor: Color = Theme[colors][borderColor],
+    content: @Composable StackScope.() -> Unit,
 ) {
   val tabIndicatorBoundsByKey = remember { mutableStateMapOf<Any?, TabIndicatorBounds>() }
   var indicatorContainerCoordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
@@ -229,99 +228,102 @@ fun <T> TabsScope<T>.TabList(
   val density = LocalDensity.current
   val updateTabIndicatorBounds: (Any?, LayoutCoordinates) -> Unit = { key, tabCoordinates ->
     val containerCoordinates = indicatorContainerCoordinates
-    if (containerCoordinates != null && containerCoordinates.isAttached && tabCoordinates.isAttached) {
+    if (containerCoordinates != null &&
+        containerCoordinates.isAttached &&
+        tabCoordinates.isAttached) {
       if (orderedTabs.contains(key)) {
         val tabPosition = containerCoordinates.localPositionOf(tabCoordinates, Offset.Zero)
-        tabIndicatorBoundsByKey[key] = with(density) {
-          if (orientation == TabOrientation.Horizontal) {
-            TabIndicatorBounds(
-              start = tabPosition.x.toDp(),
-              size = tabCoordinates.size.width.toDp(),
-            )
-          } else {
-            TabIndicatorBounds(
-              start = tabPosition.y.toDp(),
-              size = tabCoordinates.size.height.toDp(),
-            )
-          }
-        }
+        tabIndicatorBoundsByKey[key] =
+            with(density) {
+              if (orientation == TabOrientation.Horizontal) {
+                TabIndicatorBounds(
+                    start = tabPosition.x.toDp(),
+                    size = tabCoordinates.size.width.toDp(),
+                )
+              } else {
+                TabIndicatorBounds(
+                    start = tabPosition.y.toDp(),
+                    size = tabCoordinates.size.height.toDp(),
+                )
+              }
+            }
       }
     }
   }
-  val indicatorBounds = resolveTabIndicatorBounds(
-    selectedTab = selectedTab,
-    tabBoundsByKey = tabIndicatorBoundsByKey,
-  )
+  val indicatorBounds =
+      resolveTabIndicatorBounds(
+          selectedTab = selectedTab,
+          tabBoundsByKey = tabIndicatorBoundsByKey,
+      )
   val tabListWidth = with(density) { indicatorContainerSize.width.toDp() }
   val tabListHeight = with(density) { indicatorContainerSize.height.toDp() }
 
   if (orientation == TabOrientation.Horizontal) {
     Column(modifier = modifier) {
       Box(
-        modifier = Modifier.onGloballyPositioned {
-          indicatorContainerCoordinates = it
-          indicatorContainerSize = it.size
-        },
+          modifier =
+              Modifier.onGloballyPositioned {
+                indicatorContainerCoordinates = it
+                indicatorContainerSize = it.size
+              },
       ) {
         UnstyledTabList(
-          orientation = orientation.orientation,
+            orientation = orientation.orientation,
         ) {
           Stack(orientation = orientation.toStackOrientation()) {
-            TabIndicatorBoundsProvider(updateTabIndicatorBounds) {
-              content()
-            }
+            TabIndicatorBoundsProvider(updateTabIndicatorBounds) { content() }
           }
         }
       }
       Spacer(Modifier.height(TabListBottomPadding))
       TabIndicatorLine(
-        modifier = Modifier.width(tabListWidth),
-        bounds = indicatorBounds,
-        dividerColor = dividerColor,
+          modifier = Modifier.width(tabListWidth),
+          bounds = indicatorBounds,
+          dividerColor = dividerColor,
       )
     }
   } else {
     Row(modifier = modifier.height(IntrinsicSize.Min)) {
       Box(
-        modifier = Modifier.onGloballyPositioned {
-          indicatorContainerCoordinates = it
-          indicatorContainerSize = it.size
-        },
+          modifier =
+              Modifier.onGloballyPositioned {
+                indicatorContainerCoordinates = it
+                indicatorContainerSize = it.size
+              },
       ) {
         UnstyledTabList(
-          orientation = orientation.orientation,
+            orientation = orientation.orientation,
         ) {
           Stack(orientation = orientation.toStackOrientation()) {
-            TabIndicatorBoundsProvider(updateTabIndicatorBounds) {
-              content()
-            }
+            TabIndicatorBoundsProvider(updateTabIndicatorBounds) { content() }
           }
         }
       }
       Spacer(Modifier.width(TabListBottomPadding))
       VerticalTabIndicatorLine(
-        modifier = Modifier.height(tabListHeight),
-        bounds = indicatorBounds,
-        dividerColor = dividerColor,
+          modifier = Modifier.height(tabListHeight),
+          bounds = indicatorBounds,
+          dividerColor = dividerColor,
       )
     }
   }
 }
 
 private fun TabOrientation.toStackOrientation(): StackOrientation {
-  return if (this == TabOrientation.Horizontal) StackOrientation.Horizontal else StackOrientation.Vertical
+  return if (this == TabOrientation.Horizontal) StackOrientation.Horizontal
+  else StackOrientation.Vertical
 }
 
 private val LocalTabIndicatorBoundsUpdater =
-  androidx.compose.runtime.compositionLocalOf<((Any?, LayoutCoordinates) -> Unit)?> { null }
+    androidx.compose.runtime.compositionLocalOf<((Any?, LayoutCoordinates) -> Unit)?> { null }
 
 @Composable
 private fun TabIndicatorBoundsProvider(
-  updateTabIndicatorBounds: ((Any?, LayoutCoordinates) -> Unit)? = null,
-  content: @Composable () -> Unit,
+    updateTabIndicatorBounds: ((Any?, LayoutCoordinates) -> Unit)? = null,
+    content: @Composable () -> Unit,
 ) {
   androidx.compose.runtime.CompositionLocalProvider(
-    LocalTabIndicatorBoundsUpdater provides updateTabIndicatorBounds,
+      LocalTabIndicatorBoundsUpdater provides updateTabIndicatorBounds,
   ) {
     content()
   }
@@ -329,31 +331,30 @@ private fun TabIndicatorBoundsProvider(
 
 @Composable
 private fun TabIndicatorLine(
-  modifier: Modifier = Modifier,
-  bounds: TabIndicatorBounds?,
-  dividerColor: Color,
+    modifier: Modifier = Modifier,
+    bounds: TabIndicatorBounds?,
+    dividerColor: Color,
 ) {
-  val placedBounds = placedTabIndicatorBounds(
-    bounds = bounds,
-    startLabel = "TabIndicatorStart",
-    sizeLabel = "TabIndicatorWidth",
-  )
+  val placedBounds =
+      placedTabIndicatorBounds(
+          bounds = bounds,
+          startLabel = "TabIndicatorStart",
+          sizeLabel = "TabIndicatorWidth",
+      )
 
   Box(
-    modifier = modifier
-      .height(TabIndicatorHeight)
-      .background(dividerColor, TabIndicatorShape),
+      modifier = modifier.height(TabIndicatorHeight).background(dividerColor, TabIndicatorShape),
   ) {
     if (bounds != null) {
       Box(
-        modifier = Modifier
-          .offset(x = placedBounds.start)
-          .width(placedBounds.size)
-          .height(TabIndicatorHeight)
-          .background(
-            color = Theme[colors][primaryColor],
-            shape = TabIndicatorShape,
-          ),
+          modifier =
+              Modifier.offset(x = placedBounds.start)
+                  .width(placedBounds.size)
+                  .height(TabIndicatorHeight)
+                  .background(
+                      color = Theme[colors][primaryColor],
+                      shape = TabIndicatorShape,
+                  ),
       )
     }
   }
@@ -361,31 +362,30 @@ private fun TabIndicatorLine(
 
 @Composable
 private fun VerticalTabIndicatorLine(
-  modifier: Modifier = Modifier,
-  bounds: TabIndicatorBounds?,
-  dividerColor: Color,
+    modifier: Modifier = Modifier,
+    bounds: TabIndicatorBounds?,
+    dividerColor: Color,
 ) {
-  val placedBounds = placedTabIndicatorBounds(
-    bounds = bounds,
-    startLabel = "VerticalTabIndicatorStart",
-    sizeLabel = "VerticalTabIndicatorHeight",
-  )
+  val placedBounds =
+      placedTabIndicatorBounds(
+          bounds = bounds,
+          startLabel = "VerticalTabIndicatorStart",
+          sizeLabel = "VerticalTabIndicatorHeight",
+      )
 
   Box(
-    modifier = modifier
-      .width(TabIndicatorHeight)
-      .background(dividerColor, TabIndicatorShape),
+      modifier = modifier.width(TabIndicatorHeight).background(dividerColor, TabIndicatorShape),
   ) {
     if (bounds != null) {
       Box(
-        modifier = Modifier
-          .offset(y = placedBounds.start)
-          .width(TabIndicatorHeight)
-          .height(placedBounds.size)
-          .background(
-            color = Theme[colors][primaryColor],
-            shape = TabIndicatorShape,
-          ),
+          modifier =
+              Modifier.offset(y = placedBounds.start)
+                  .width(TabIndicatorHeight)
+                  .height(placedBounds.size)
+                  .background(
+                      color = Theme[colors][primaryColor],
+                      shape = TabIndicatorShape,
+                  ),
       )
     }
   }
@@ -393,9 +393,9 @@ private fun VerticalTabIndicatorLine(
 
 @Composable
 private fun placedTabIndicatorBounds(
-  bounds: TabIndicatorBounds?,
-  startLabel: String,
-  sizeLabel: String,
+    bounds: TabIndicatorBounds?,
+    startLabel: String,
+    sizeLabel: String,
 ): TabIndicatorBounds {
   var initialBoundsPlaced by remember { mutableStateOf(false) }
   if (bounds == null) {
@@ -409,39 +409,41 @@ private fun placedTabIndicatorBounds(
   }
 
   return TabIndicatorBounds(
-    start = animateTabIndicatorDp(bounds.start, startLabel),
-    size = animateTabIndicatorDp(bounds.size, sizeLabel),
+      start = animateTabIndicatorDp(bounds.start, startLabel),
+      size = animateTabIndicatorDp(bounds.size, sizeLabel),
   )
 }
 
 @Composable
 private fun animateTabIndicatorDp(
-  targetValue: Dp,
-  label: String,
+    targetValue: Dp,
+    label: String,
 ): Dp {
-  val animatedValue by animateDpAsState(
-    targetValue = targetValue,
-    animationSpec = tween(durationMillis = 180),
-    label = label,
-  )
+  val animatedValue by
+      animateDpAsState(
+          targetValue = targetValue,
+          animationSpec = tween(durationMillis = 180),
+          label = label,
+      )
   return animatedValue
 }
 
 private fun resolveTabIndicatorBounds(
-  selectedTab: Any?,
-  tabBoundsByKey: Map<Any?, TabIndicatorBounds>,
+    selectedTab: Any?,
+    tabBoundsByKey: Map<Any?, TabIndicatorBounds>,
 ): TabIndicatorBounds? {
   return tabBoundsByKey[selectedTab]
 }
 
 private data class TabIndicatorBounds(
-  val start: Dp,
-  val size: Dp,
+    val start: Dp,
+    val size: Dp,
 )
 
-private val TabTextStyle = TextStyle(
-  fontWeight = FontWeight.SemiBold,
-)
+private val TabTextStyle =
+    TextStyle(
+        fontWeight = FontWeight.SemiBold,
+    )
 
 private val TabContentHorizontalPadding = 12.dp
 private val TabIconSize = 24.dp
@@ -457,17 +459,16 @@ private fun tabMinHeight(): Dp {
 
 /**
  * Content associated with a specific tab key.
+ *
  * @param key Key represented by this tab or tab panel.
  * @param modifier Modifier applied to the component.
  * @param content Composable content displayed by the component.
  */
 @Composable
 fun <T> TabsScope<T>.TabPanel(
-  key: T,
-  modifier: Modifier = Modifier,
-  content: @Composable () -> Unit,
+    key: T,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
 ) {
-  UnstyledTabPanel(key = key, modifier = modifier) {
-    content()
-  }
+  UnstyledTabPanel(key = key, modifier = modifier) { content() }
 }

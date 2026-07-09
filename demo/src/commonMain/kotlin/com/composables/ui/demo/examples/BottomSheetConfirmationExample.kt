@@ -50,55 +50,58 @@ import com.composeunstyled.theme.Theme
 
 @Composable
 fun BottomSheetConfirmationExample() {
-  val sheetState = rememberBottomSheetState(
-    detents = listOf(BottomSheetDetent.Hidden, BottomSheetDetent.FullyExpanded),
-  )
+  val sheetState =
+      rememberBottomSheetState(
+          detents = listOf(BottomSheetDetent.Hidden, BottomSheetDetent.FullyExpanded),
+      )
 
   Button(onClick = { sheetState.targetDetent = BottomSheetDetent.FullyExpanded }) {
     Text("Show confirmation")
   }
 
   BottomSheet(
-    state = sheetState,
-    onDismissRequest = { sheetState.targetDetent = BottomSheetDetent.Hidden },
-    toolbar = {
-      Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-      ) {
-        Icon(
-          imageVector = Lucide.Bell,
-          contentDescription = null,
-          modifier = Modifier.size(28.dp),
-        )
-        Text("Allow notifications?")
-      }
-    },
-    footer = {
-      Button(
-        onClick = { sheetState.targetDetent = BottomSheetDetent.Hidden },
-        modifier = Modifier.fillMaxWidth(),
-        style = ButtonStyle.Primary,
-      ) {
-        Text("Allow")
-      }
-      Button(
-        onClick = { sheetState.targetDetent = BottomSheetDetent.Hidden },
-        modifier = Modifier.fillMaxWidth(),
-        style = ButtonStyle.Secondary,
-      ) {
-        Text("Maybe later")
-      }
-    },
+      state = sheetState,
+      onDismissRequest = { sheetState.targetDetent = BottomSheetDetent.Hidden },
+      toolbar = {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+          Icon(
+              imageVector = Lucide.Bell,
+              contentDescription = null,
+              modifier = Modifier.size(28.dp),
+          )
+          Text("Allow notifications?")
+        }
+      },
+      footer = {
+        Button(
+            onClick = { sheetState.targetDetent = BottomSheetDetent.Hidden },
+            modifier = Modifier.fillMaxWidth(),
+            style = ButtonStyle.Primary,
+        ) {
+          Text("Allow")
+        }
+        Button(
+            onClick = { sheetState.targetDetent = BottomSheetDetent.Hidden },
+            modifier = Modifier.fillMaxWidth(),
+            style = ButtonStyle.Secondary,
+        ) {
+          Text("Maybe later")
+        }
+      },
   ) {
     ProvideContentColor(Theme[colors][mutedColor]) {
-      ProvideTextStyle(LocalTextStyle.current.merge(TextStyle(fontSize = 16.sp, lineHeight = 24.sp))) {
-        Text(
-          text = "Get notified when projects finish syncing, comments mention you, or billing needs attention.",
-          modifier = Modifier.fillMaxWidth(),
-          textAlign = TextAlign.Center,
-        )
-      }
+      ProvideTextStyle(
+          LocalTextStyle.current.merge(TextStyle(fontSize = 16.sp, lineHeight = 24.sp))) {
+            Text(
+                text =
+                    "Get notified when projects finish syncing, comments mention you, or billing needs attention.",
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+            )
+          }
     }
   }
 }

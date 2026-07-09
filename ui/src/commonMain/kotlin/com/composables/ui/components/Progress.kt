@@ -57,6 +57,7 @@ import com.composeunstyled.theme.Theme
 
 /**
  * A determinate progress indicator for known completion state.
+ *
  * @param progress Current progress value clamped between 0 and 1.
  * @param modifier Modifier applied to the indicator.
  * @param shape Shape used for the track and indicator.
@@ -67,39 +68,40 @@ import com.composeunstyled.theme.Theme
  */
 @Composable
 fun ProgressIndicator(
-  progress: Float,
-  modifier: Modifier = Modifier,
-  shape: Shape = RoundedCornerShape(999.dp),
-  trackColor: Color = Theme[colors][controlColor],
-  indicatorColor: Color = Theme[colors][primaryColor],
-  borderColor: Color = Color.Unspecified,
-  height: Dp = 6.dp,
+    progress: Float,
+    modifier: Modifier = Modifier,
+    shape: Shape = RoundedCornerShape(999.dp),
+    trackColor: Color = Theme[colors][controlColor],
+    indicatorColor: Color = Theme[colors][primaryColor],
+    borderColor: Color = Color.Unspecified,
+    height: Dp = 6.dp,
 ) {
-  val animatedProgress by animateFloatAsState(
-    targetValue = progress.coerceIn(0f, 1f),
-    animationSpec = tween(durationMillis = 250),
-    label = "ProgressIndicatorProgress",
-  )
+  val animatedProgress by
+      animateFloatAsState(
+          targetValue = progress.coerceIn(0f, 1f),
+          animationSpec = tween(durationMillis = 250),
+          label = "ProgressIndicatorProgress",
+      )
 
   UnstyledProgress(
-    progress = animatedProgress,
-    modifier = modifier.progressIndicatorContainer(
-      shape = shape,
-      trackColor = trackColor,
-      borderColor = borderColor,
-      height = height,
-    ),
+      progress = animatedProgress,
+      modifier =
+          modifier.progressIndicatorContainer(
+              shape = shape,
+              trackColor = trackColor,
+              borderColor = borderColor,
+              height = height,
+          ),
   ) {
     Indicator(
-      modifier = Modifier
-        .clip(shape)
-        .background(indicatorColor, shape),
+        modifier = Modifier.clip(shape).background(indicatorColor, shape),
     )
   }
 }
 
 /**
  * A looping progress indicator for ongoing work without a known end point.
+ *
  * @param modifier Modifier applied to the indicator.
  * @param shape Shape used for the track and indicator.
  * @param trackColor Color used for the indicator track.
@@ -109,60 +111,61 @@ fun ProgressIndicator(
  */
 @Composable
 fun IndeterminateProgressIndicator(
-  modifier: Modifier = Modifier,
-  shape: Shape = RoundedCornerShape(999.dp),
-  trackColor: Color = Theme[colors][controlColor],
-  indicatorColor: Color = Theme[colors][primaryColor],
-  borderColor: Color = Color.Unspecified,
-  height: Dp = 6.dp,
+    modifier: Modifier = Modifier,
+    shape: Shape = RoundedCornerShape(999.dp),
+    trackColor: Color = Theme[colors][controlColor],
+    indicatorColor: Color = Theme[colors][primaryColor],
+    borderColor: Color = Color.Unspecified,
+    height: Dp = 6.dp,
 ) {
   val transition = rememberInfiniteTransition()
-  val offset by transition.animateFloat(
-    initialValue = 0f,
-    targetValue = 1f,
-    animationSpec = infiniteRepeatable(
-      animation = tween(durationMillis = 1100, easing = LinearEasing),
-      repeatMode = RepeatMode.Restart,
-    ),
-  )
+  val offset by
+      transition.animateFloat(
+          initialValue = 0f,
+          targetValue = 1f,
+          animationSpec =
+              infiniteRepeatable(
+                  animation = tween(durationMillis = 1100, easing = LinearEasing),
+                  repeatMode = RepeatMode.Restart,
+              ),
+      )
   UnstyledProgress(
-    modifier = modifier.progressIndicatorContainer(
-      shape = shape,
-      trackColor = trackColor,
-      borderColor = borderColor,
-      height = height,
-    ),
+      modifier =
+          modifier.progressIndicatorContainer(
+              shape = shape,
+              trackColor = trackColor,
+              borderColor = borderColor,
+              height = height,
+          ),
   ) {
     BoxWithConstraints(Modifier.fillMaxWidth().fillMaxHeight()) {
       val indicatorWidth = maxWidth * 0.35f
       val indicatorOffset = (maxWidth + indicatorWidth) * offset - indicatorWidth
       Box(
-        Modifier
-          .fillMaxHeight()
-          .width(indicatorWidth)
-          .offset(x = indicatorOffset)
-          .clip(shape)
-          .background(indicatorColor, shape),
+          Modifier.fillMaxHeight()
+              .width(indicatorWidth)
+              .offset(x = indicatorOffset)
+              .clip(shape)
+              .background(indicatorColor, shape),
       )
     }
   }
 }
 
 private fun Modifier.progressIndicatorContainer(
-  shape: Shape,
-  trackColor: Color,
-  borderColor: Color,
-  height: Dp,
+    shape: Shape,
+    trackColor: Color,
+    borderColor: Color,
+    height: Dp,
 ): Modifier {
-  return this
-    .height(height)
-    .clip(shape)
-    .background(trackColor, shape)
-    .then(
-      buildModifier {
-        if (borderColor.isSpecified && borderColor != Color.Transparent) {
-          add(Modifier.border(1.dp, borderColor, shape))
-        }
-      },
-    )
+  return this.height(height)
+      .clip(shape)
+      .background(trackColor, shape)
+      .then(
+          buildModifier {
+            if (borderColor.isSpecified && borderColor != Color.Transparent) {
+              add(Modifier.border(1.dp, borderColor, shape))
+            }
+          },
+      )
 }

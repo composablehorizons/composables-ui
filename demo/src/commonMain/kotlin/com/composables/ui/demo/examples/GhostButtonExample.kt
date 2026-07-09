@@ -39,23 +39,23 @@ import com.composables.ui.components.Text
 @Composable
 fun GhostButtonExample() {
   Row(
-    horizontalArrangement = Arrangement.spacedBy(8.dp),
-    verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.spacedBy(8.dp),
+      verticalAlignment = Alignment.CenterVertically,
   ) {
     Button(
-      onClick = { /* TODO */ },
-      style = ButtonStyle.Ghost,
+        onClick = { /* TODO */},
+        style = ButtonStyle.Ghost,
     ) {
       Text("Button")
     }
     IconButton(
-      onClick = { /* TODO */ },
-      style = ButtonStyle.Ghost,
+        onClick = { /* TODO */},
+        style = ButtonStyle.Ghost,
     ) {
       Icon(
-        imageVector = Lucide.Plus,
-        contentDescription = "Add",
-        modifier = Modifier.size(18.dp),
+          imageVector = Lucide.Plus,
+          contentDescription = "Add",
+          modifier = Modifier.size(18.dp),
       )
     }
   }

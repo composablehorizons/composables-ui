@@ -41,9 +41,10 @@ import kotlin.jvm.JvmInline
 fun Modifier.previewStatusBarPadding(): Modifier {
   val windowInsets = LocalWindowInsets.current ?: return this.statusBarsPadding()
 
-  return this then Modifier.padding(
-    top = windowInsets.statusBarSize,
-  )
+  return this then
+      Modifier.padding(
+          top = windowInsets.statusBarSize,
+      )
 }
 
 @Composable
@@ -52,44 +53,49 @@ fun Modifier.previewNavigationBarPadding(): Modifier {
   val navigationBarSize = windowInsets.navigationBarSize
   val softKeyboardSize = windowInsets.softKeyboardSize
   val placeNavigationBarAtEnd = windowInsets.orientation == PreviewInsetsOrientation.Landscape
-  val remainingBottomNavigationBarSize = if (softKeyboardSize >= navigationBarSize) {
-    0.dp
-  } else {
-    navigationBarSize - softKeyboardSize
-  }
+  val remainingBottomNavigationBarSize =
+      if (softKeyboardSize >= navigationBarSize) {
+        0.dp
+      } else {
+        navigationBarSize - softKeyboardSize
+      }
 
-  return this then Modifier.padding(
-    bottom = if (placeNavigationBarAtEnd) 0.dp else remainingBottomNavigationBarSize,
-    end = if (placeNavigationBarAtEnd) navigationBarSize else 0.dp,
-  )
+  return this then
+      Modifier.padding(
+          bottom = if (placeNavigationBarAtEnd) 0.dp else remainingBottomNavigationBarSize,
+          end = if (placeNavigationBarAtEnd) navigationBarSize else 0.dp,
+      )
 }
 
 @Composable
 fun Modifier.previewSoftKeyboardPadding(): Modifier {
   val windowInsets = LocalWindowInsets.current ?: return this.imePadding()
 
-  return this then Modifier.padding(
-    bottom = windowInsets.softKeyboardSize,
-  )
+  return this then
+      Modifier.padding(
+          bottom = windowInsets.softKeyboardSize,
+      )
 }
 
 @Composable
 fun previewStatusBarPaddingValue(): Dp {
-  return LocalWindowInsets.current?.statusBarSize ?: WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+  return LocalWindowInsets.current?.statusBarSize
+      ?: WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
 }
 
 @Composable
 fun previewNavigationBarPaddingValue(): Dp {
-  return LocalWindowInsets.current?.navigationBarSize ?: WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+  return LocalWindowInsets.current?.navigationBarSize
+      ?: WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
 }
 
 val LocalWindowInsets = staticCompositionLocalOf<PreviewWindowInsets?> { null }
 
 class PreviewWindowInsets(
-  val statusBarSize: Dp = 0.dp,
-  val navigationBarSize: Dp = 0.dp,
-  val softKeyboardSize: Dp = 0.dp,
-  val orientation: PreviewInsetsOrientation = PreviewInsetsOrientation.Portrait,
+    val statusBarSize: Dp = 0.dp,
+    val navigationBarSize: Dp = 0.dp,
+    val softKeyboardSize: Dp = 0.dp,
+    val orientation: PreviewInsetsOrientation = PreviewInsetsOrientation.Portrait,
 )
 
 @JvmInline
@@ -102,10 +108,8 @@ value class PreviewInsetsOrientation internal constructor(private val value: Int
 
 @Composable
 fun ProvidePreviewWindowInsets(
-  windowInsets: PreviewWindowInsets,
-  content: @Composable () -> Unit,
+    windowInsets: PreviewWindowInsets,
+    content: @Composable () -> Unit,
 ) {
-  CompositionLocalProvider(LocalWindowInsets provides windowInsets) {
-    content()
-  }
+  CompositionLocalProvider(LocalWindowInsets provides windowInsets) { content() }
 }

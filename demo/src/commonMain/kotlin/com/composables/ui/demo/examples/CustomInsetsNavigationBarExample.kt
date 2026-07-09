@@ -44,34 +44,34 @@ import com.composables.ui.components.NavigationBarItem
 fun CustomInsetsNavigationBarExample() {
   var selectedItem by remember { mutableStateOf("Feed") }
   NavigationBar(
-    modifier = Modifier.fillMaxWidth(),
-    windowInsets = WindowInsets(bottom = 32.dp),
+      modifier = Modifier.fillMaxWidth(),
+      windowInsets = WindowInsets(bottom = 32.dp),
   ) {
     NavigationBarItem(
-      selected = selectedItem == "Feed",
-      onClick = { selectedItem = "Feed" },
-      modifier = Modifier.weight(1f),
+        selected = selectedItem == "Feed",
+        onClick = { selectedItem = "Feed" },
+        modifier = Modifier.weight(1f),
     ) {
       Icon(Lucide.Heart, contentDescription = "Feed", modifier = Modifier.size(20.dp))
     }
     NavigationBarItem(
-      selected = selectedItem == "Search",
-      onClick = { selectedItem = "Search" },
-      modifier = Modifier.weight(1f),
+        selected = selectedItem == "Search",
+        onClick = { selectedItem = "Search" },
+        modifier = Modifier.weight(1f),
     ) {
       Icon(Lucide.Search, contentDescription = "Search", modifier = Modifier.size(20.dp))
     }
     NavigationBarItem(
-      selected = selectedItem == "Create",
-      onClick = { selectedItem = "Create" },
-      modifier = Modifier.weight(1f),
+        selected = selectedItem == "Create",
+        onClick = { selectedItem = "Create" },
+        modifier = Modifier.weight(1f),
     ) {
       Icon(Lucide.Plus, contentDescription = "Create", modifier = Modifier.size(20.dp))
     }
     NavigationBarItem(
-      selected = selectedItem == "Activity",
-      onClick = { selectedItem = "Activity" },
-      modifier = Modifier.weight(1f),
+        selected = selectedItem == "Activity",
+        onClick = { selectedItem = "Activity" },
+        modifier = Modifier.weight(1f),
     ) {
       Icon(Lucide.Bell, contentDescription = "Activity", modifier = Modifier.size(20.dp))
     }

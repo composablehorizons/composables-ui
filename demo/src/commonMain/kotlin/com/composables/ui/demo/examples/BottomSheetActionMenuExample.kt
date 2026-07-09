@@ -52,102 +52,101 @@ import com.composeunstyled.theme.Theme
 
 @Composable
 fun BottomSheetActionMenuExample() {
-  val sheetState = rememberBottomSheetState(
-    detents = listOf(BottomSheetDetent.Hidden, BottomSheetDetent.FullyExpanded),
-  )
+  val sheetState =
+      rememberBottomSheetState(
+          detents = listOf(BottomSheetDetent.Hidden, BottomSheetDetent.FullyExpanded),
+      )
 
   Button(onClick = { sheetState.targetDetent = BottomSheetDetent.FullyExpanded }) {
     Text("Open actions")
   }
 
   BottomSheet(
-    state = sheetState,
-    onDismissRequest = { sheetState.targetDetent = BottomSheetDetent.Hidden },
+      state = sheetState,
+      onDismissRequest = { sheetState.targetDetent = BottomSheetDetent.Hidden },
   ) {
     Column(
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 4.dp),
-      verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
       Button(
-        onClick = { sheetState.targetDetent = BottomSheetDetent.Hidden },
-        modifier = Modifier.fillMaxWidth(),
-        style = ButtonStyle.Secondary,
-        contentPadding = PaddingValues(horizontal = 16.dp),
+          onClick = { sheetState.targetDetent = BottomSheetDetent.Hidden },
+          modifier = Modifier.fillMaxWidth(),
+          style = ButtonStyle.Secondary,
+          contentPadding = PaddingValues(horizontal = 16.dp),
       ) {
         Row(
-          modifier = Modifier.fillMaxWidth(),
-          horizontalArrangement = Arrangement.spacedBy(12.dp),
-          verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
           Text("Rename")
           Spacer(Modifier.weight(1f))
           Icon(
-            imageVector = Lucide.Pencil,
-            contentDescription = null,
-            modifier = Modifier.size(16.dp),
+              imageVector = Lucide.Pencil,
+              contentDescription = null,
+              modifier = Modifier.size(16.dp),
           )
         }
       }
       Button(
-        onClick = { sheetState.targetDetent = BottomSheetDetent.Hidden },
-        modifier = Modifier.fillMaxWidth(),
-        style = ButtonStyle.Secondary,
-        contentPadding = PaddingValues(horizontal = 16.dp),
+          onClick = { sheetState.targetDetent = BottomSheetDetent.Hidden },
+          modifier = Modifier.fillMaxWidth(),
+          style = ButtonStyle.Secondary,
+          contentPadding = PaddingValues(horizontal = 16.dp),
       ) {
         Row(
-          modifier = Modifier.fillMaxWidth(),
-          horizontalArrangement = Arrangement.spacedBy(12.dp),
-          verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
           Text("Duplicate")
           Spacer(Modifier.weight(1f))
           Icon(
-            imageVector = Lucide.Copy,
-            contentDescription = null,
-            modifier = Modifier.size(16.dp),
+              imageVector = Lucide.Copy,
+              contentDescription = null,
+              modifier = Modifier.size(16.dp),
           )
         }
       }
       Button(
-        onClick = { sheetState.targetDetent = BottomSheetDetent.Hidden },
-        modifier = Modifier.fillMaxWidth(),
-        style = ButtonStyle.Secondary,
-        contentPadding = PaddingValues(horizontal = 16.dp),
+          onClick = { sheetState.targetDetent = BottomSheetDetent.Hidden },
+          modifier = Modifier.fillMaxWidth(),
+          style = ButtonStyle.Secondary,
+          contentPadding = PaddingValues(horizontal = 16.dp),
       ) {
         Row(
-          modifier = Modifier.fillMaxWidth(),
-          horizontalArrangement = Arrangement.spacedBy(12.dp),
-          verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
           Text("Share")
           Spacer(Modifier.weight(1f))
           Icon(
-            imageVector = Lucide.Share,
-            contentDescription = null,
-            modifier = Modifier.size(16.dp),
+              imageVector = Lucide.Share,
+              contentDescription = null,
+              modifier = Modifier.size(16.dp),
           )
         }
       }
       Button(
-        onClick = { sheetState.targetDetent = BottomSheetDetent.Hidden },
-        modifier = Modifier.fillMaxWidth(),
-        style = ButtonStyle.Secondary,
-        contentPadding = PaddingValues(horizontal = 16.dp),
+          onClick = { sheetState.targetDetent = BottomSheetDetent.Hidden },
+          modifier = Modifier.fillMaxWidth(),
+          style = ButtonStyle.Secondary,
+          contentPadding = PaddingValues(horizontal = 16.dp),
       ) {
         ProvideContentColor(Theme[colors][destructiveColor]) {
           Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
+              modifier = Modifier.fillMaxWidth(),
+              horizontalArrangement = Arrangement.spacedBy(12.dp),
+              verticalAlignment = Alignment.CenterVertically,
           ) {
             Text("Delete")
             Spacer(Modifier.weight(1f))
             Icon(
-              imageVector = Lucide.Trash2,
-              contentDescription = null,
-              modifier = Modifier.size(16.dp),
+                imageVector = Lucide.Trash2,
+                contentDescription = null,
+                modifier = Modifier.size(16.dp),
             )
           }
         }

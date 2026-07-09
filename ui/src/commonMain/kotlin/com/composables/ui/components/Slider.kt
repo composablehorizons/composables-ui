@@ -59,6 +59,7 @@ import com.composeunstyled.theme.Theme
 
 /**
  * A slider for selecting a value from a bounded range.
+ *
  * @param value Current value shown by the slider.
  * @param onValueChange Called when the slider value changes.
  * @param modifier Modifier applied to the slider.
@@ -71,83 +72,77 @@ import com.composeunstyled.theme.Theme
  */
 @Composable
 fun Slider(
-  value: Float,
-  onValueChange: (Float) -> Unit,
-  modifier: Modifier = Modifier,
-  enabled: Boolean = true,
-  valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
-  steps: Int = 0,
-  orientation: Orientation = Orientation.Horizontal,
-  onValueChangeFinished: (() -> Unit)? = null,
-  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    value: Float,
+    onValueChange: (Float) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
+    steps: Int = 0,
+    orientation: Orientation = Orientation.Horizontal,
+    onValueChangeFinished: (() -> Unit)? = null,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
   val shape = RoundedCornerShape(999.dp)
   UnstyledSlider(
-    value = value,
-    onValueChange = onValueChange,
-    enabled = enabled,
-    valueRange = valueRange,
-    steps = steps,
-    onValueChangeFinished = onValueChangeFinished,
-    orientation = orientation,
-    interactionSource = interactionSource,
-    modifier = modifier
-      .heightIn(min = 32.dp)
-      .then(buildModifier { if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha])) }),
-    track = { SliderTrack(it, shape, filledColor = Theme[colors][primaryColor]) },
-    thumb = { SliderThumb(interactionSource) },
+      value = value,
+      onValueChange = onValueChange,
+      enabled = enabled,
+      valueRange = valueRange,
+      steps = steps,
+      onValueChangeFinished = onValueChangeFinished,
+      orientation = orientation,
+      interactionSource = interactionSource,
+      modifier =
+          modifier
+              .heightIn(min = 32.dp)
+              .then(
+                  buildModifier {
+                    if (!enabled) add(Modifier.alpha(Theme[alphas][disabledAlpha]))
+                  }),
+      track = { SliderTrack(it, shape, filledColor = Theme[colors][primaryColor]) },
+      thumb = { SliderThumb(interactionSource) },
   )
 }
 
 @Composable
 private fun SliderTrack(
-  state: SliderState,
-  shape: Shape,
-  backgroundColor: Color = Theme[colors][secondaryColor],
-  filledColor: Color,
+    state: SliderState,
+    shape: Shape,
+    backgroundColor: Color = Theme[colors][secondaryColor],
+    filledColor: Color,
 ) {
   if (state.orientation == Orientation.Vertical) {
     Box(
-      modifier = Modifier
-        .width(SliderThumbSize)
-        .fillMaxHeight(),
-      contentAlignment = Alignment.Center,
+        modifier = Modifier.width(SliderThumbSize).fillMaxHeight(),
+        contentAlignment = Alignment.Center,
     ) {
       Box(
-        Modifier
-          .width(SliderTrackHeight)
-          .fillMaxHeight()
-          .padding(vertical = SliderThumbSize / 2)
-          .clip(shape)
-          .background(backgroundColor, shape),
-        contentAlignment = Alignment.BottomCenter,
+          Modifier.width(SliderTrackHeight)
+              .fillMaxHeight()
+              .padding(vertical = SliderThumbSize / 2)
+              .clip(shape)
+              .background(backgroundColor, shape),
+          contentAlignment = Alignment.BottomCenter,
       ) {
         Box(
-          Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(state.fraction)
-            .background(filledColor),
+            Modifier.fillMaxWidth().fillMaxHeight(state.fraction).background(filledColor),
         )
       }
     }
   } else {
     Box(
-      modifier = Modifier
-        .fillMaxWidth()
-        .height(SliderThumbSize),
-      contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxWidth().height(SliderThumbSize),
+        contentAlignment = Alignment.Center,
     ) {
       Box(
-        Modifier
-          .fillMaxWidth()
-          .padding(horizontal = SliderThumbSize / 2)
-          .height(SliderTrackHeight)
-          .clip(shape)
-          .background(backgroundColor, shape),
+          Modifier.fillMaxWidth()
+              .padding(horizontal = SliderThumbSize / 2)
+              .height(SliderTrackHeight)
+              .clip(shape)
+              .background(backgroundColor, shape),
       ) {
         Box(
-          Modifier.fillMaxWidth(state.fraction).height(SliderTrackHeight)
-            .background(filledColor),
+            Modifier.fillMaxWidth(state.fraction).height(SliderTrackHeight).background(filledColor),
         )
       }
     }
@@ -157,16 +152,15 @@ private fun SliderTrack(
 @Composable
 private fun SliderThumb(interactionSource: MutableInteractionSource) {
   Box(
-    Modifier
-      .focusRing(
-        interactionSource = interactionSource,
-        color = Theme[colors][ringColor],
-        shape = CircleShape,
-        visibility = FocusRingVisibility.Focused,
-      )
-      .border(1.dp, Theme[colors][ringColor], CircleShape)
-      .size(SliderThumbSize)
-      .background(Theme[colors][thumbColor], CircleShape),
+      Modifier.focusRing(
+              interactionSource = interactionSource,
+              color = Theme[colors][ringColor],
+              shape = CircleShape,
+              visibility = FocusRingVisibility.Focused,
+          )
+          .border(1.dp, Theme[colors][ringColor], CircleShape)
+          .size(SliderThumbSize)
+          .background(Theme[colors][thumbColor], CircleShape),
   )
 }
 

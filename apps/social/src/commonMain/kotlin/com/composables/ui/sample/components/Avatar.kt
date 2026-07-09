@@ -45,42 +45,45 @@ import kotlin.jvm.JvmInline
 
 @Composable
 fun Avatar(
-  url: String,
-  size: AvatarSize = AvatarSize.Default,
-  fallback: (@Composable () -> Unit)? = null,
-  modifier: Modifier = Modifier,
+    url: String,
+    size: AvatarSize = AvatarSize.Default,
+    fallback: (@Composable () -> Unit)? = null,
+    modifier: Modifier = Modifier,
 ) {
   ProvideContentColor(Theme[colors][onSecondaryColor]) {
-    val avatarSizeDp = when (size) {
-      AvatarSize.Large -> 40.dp
-      AvatarSize.Medium -> 32.dp
-      AvatarSize.Small -> 24.dp
-      else -> 24.dp
-    }
+    val avatarSizeDp =
+        when (size) {
+          AvatarSize.Large -> 40.dp
+          AvatarSize.Medium -> 32.dp
+          AvatarSize.Small -> 24.dp
+          else -> 24.dp
+        }
     Box(
-      modifier = modifier.size(
-        avatarSizeDp,
-      )
-        .background(Theme[colors][secondaryColor], CircleShape),
-      contentAlignment = Alignment.Center,
+        modifier =
+            modifier
+                .size(
+                    avatarSizeDp,
+                )
+                .background(Theme[colors][secondaryColor], CircleShape),
+        contentAlignment = Alignment.Center,
     ) {
       if (fallback != null) {
         Box(
-          modifier = Modifier.matchParentSize().clip(CircleShape),
-          contentAlignment = Alignment.Center,
+            modifier = Modifier.matchParentSize().clip(CircleShape),
+            contentAlignment = Alignment.Center,
         ) {
           ProvideTextStyle(
-            LocalTextStyle.current.copy(fontSize = 12.sp),
+              LocalTextStyle.current.copy(fontSize = 12.sp),
           ) {
             fallback()
           }
         }
       }
       Image(
-        painter = rememberUriPainter(url),
-        contentDescription = null,
-        modifier = modifier.matchParentSize().clip(CircleShape),
-        contentScale = ContentScale.Crop,
+          painter = rememberUriPainter(url),
+          contentDescription = null,
+          modifier = modifier.matchParentSize().clip(CircleShape),
+          contentScale = ContentScale.Crop,
       )
     }
   }

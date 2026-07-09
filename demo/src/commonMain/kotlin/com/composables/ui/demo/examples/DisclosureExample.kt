@@ -37,15 +37,14 @@ import com.composables.ui.components.Text
 fun DisclosureExample() {
   var expanded by remember { mutableStateOf(false) }
   Disclosure(
-    expanded = expanded,
-    onExpandedChange = { expanded = it },
-    modifier = Modifier.fillMaxWidth(),
+      expanded = expanded,
+      onExpandedChange = { expanded = it },
+      modifier = Modifier.fillMaxWidth(),
   ) {
-    DisclosureButton(modifier = Modifier.fillMaxWidth()) {
-      Text("What is your return policy?")
-    }
+    DisclosureButton(modifier = Modifier.fillMaxWidth()) { Text("What is your return policy?") }
     DisclosurePanel {
-      Text("Returns are accepted within 30 days in original condition. Refunds are issued to the original payment method.")
+      Text(
+          "Returns are accepted within 30 days in original condition. Refunds are issued to the original payment method.")
     }
   }
 }

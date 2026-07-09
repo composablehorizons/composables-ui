@@ -71,13 +71,14 @@ import com.composeunstyled.Scrim
 import com.composeunstyled.Sheet
 import com.composeunstyled.SheetDetent
 import com.composeunstyled.UnstyledModalBottomSheet
+import com.composeunstyled.rememberModalBottomSheetState as rememberUnstyledModalBottomSheetState
 import com.composeunstyled.theme.Theme
 import kotlin.jvm.JvmInline
-import com.composeunstyled.rememberModalBottomSheetState as rememberUnstyledModalBottomSheetState
 
 @Stable
-class BottomSheetState internal constructor(
-  internal val unstyledState: ModalBottomSheetState,
+class BottomSheetState
+internal constructor(
+    internal val unstyledState: ModalBottomSheetState,
 ) {
   var targetDetent: BottomSheetDetent
     get() = BottomSheetDetent.from(unstyledState.targetDetent)
@@ -87,49 +88,42 @@ class BottomSheetState internal constructor(
 
   /**
    * Animates a BottomSheetState to the requested detent.
+   *
    * @param detent Target detent to animate the sheet toward.
    */
   suspend fun animateTo(detent: BottomSheetDetent) {
     unstyledState.animateTo(detent.unstyledDetent)
   }
 
-  /**
-   * Animates the bottom sheet to its fully expanded state.
-   */
+  /** Animates the bottom sheet to its fully expanded state. */
   suspend fun show() {
     animateTo(BottomSheetDetent.FullyExpanded)
   }
 
-  /**
-   * Animates the bottom sheet to its hidden state.
-   */
+  /** Animates the bottom sheet to its hidden state. */
   suspend fun hide() {
     animateTo(BottomSheetDetent.Hidden)
   }
 }
 
-/**
- * Supported resting positions for the bottom sheet.
- */
+/** Supported resting positions for the bottom sheet. */
 @JvmInline
-value class BottomSheetDetent internal constructor(
-  @Suppress("unused") private val value: Int,
+value class BottomSheetDetent
+internal constructor(
+    @Suppress("unused") private val value: Int,
 ) {
   internal val unstyledDetent: SheetDetent
-    get() = when (this) {
-      FullyExpanded -> SheetDetent.FullyExpanded
-      else -> SheetDetent.Hidden
-    }
+    get() =
+        when (this) {
+          FullyExpanded -> SheetDetent.FullyExpanded
+          else -> SheetDetent.Hidden
+        }
 
   companion object {
-    /**
-     * Keeps the bottom sheet off screen.
-     */
+    /** Keeps the bottom sheet off screen. */
     val Hidden = BottomSheetDetent(0)
 
-    /**
-     * Shows the bottom sheet at its expanded position.
-     */
+    /** Shows the bottom sheet at its expanded position. */
     val FullyExpanded = BottomSheetDetent(1)
 
     internal fun from(detent: SheetDetent): BottomSheetDetent {
@@ -144,23 +138,27 @@ value class BottomSheetDetent internal constructor(
 
 /**
  * Creates and remembers a [BottomSheetState] to be used in a [BottomSheet].
+ *
  * @param initialDetent Detent to be used when the bottom sheet state is first created.
  * @param detents Available detents that the bottom sheet can move between.
  */
 @Composable
 fun rememberBottomSheetState(
-  initialDetent: BottomSheetDetent = BottomSheetDetent.Hidden,
-  detents: List<BottomSheetDetent> = listOf(BottomSheetDetent.Hidden, BottomSheetDetent.FullyExpanded),
+    initialDetent: BottomSheetDetent = BottomSheetDetent.Hidden,
+    detents: List<BottomSheetDetent> =
+        listOf(BottomSheetDetent.Hidden, BottomSheetDetent.FullyExpanded),
 ): BottomSheetState {
-  val unstyledState = rememberUnstyledModalBottomSheetState(
-    initialDetent = initialDetent.unstyledDetent,
-    detents = detents.map { it.unstyledDetent },
-  )
+  val unstyledState =
+      rememberUnstyledModalBottomSheetState(
+          initialDetent = initialDetent.unstyledDetent,
+          detents = detents.map { it.unstyledDetent },
+      )
   return remember(unstyledState) { BottomSheetState(unstyledState) }
 }
 
 /**
  * A modal bottom sheet with optional header and footer content.
+ *
  * @param state State object that controls the bottom sheet.
  * @param onDismissRequest Called when the sheet should dismiss.
  * @param modifier Modifier applied to the bottom sheet container.
@@ -175,99 +173,94 @@ fun rememberBottomSheetState(
  */
 @Composable
 fun BottomSheet(
-  state: BottomSheetState,
-  onDismissRequest: () -> Unit,
-  modifier: Modifier = Modifier,
-  toolbar: (@Composable () -> Unit)? = null,
-  footer: (@Composable ColumnScope.() -> Unit)? = null,
-  shape: Shape = Theme[shapes][sheetShape],
-  backgroundColor: Color = Theme[colors][panelColor],
-  contentColor: Color = Theme[colors][onPanelColor],
-  contentPadding: PaddingValues = PaddingValues(20.dp),
-  shadow: Shadow = Theme[shadows][overlayShadow],
-  body: @Composable ColumnScope.() -> Unit,
+    state: BottomSheetState,
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier,
+    toolbar: (@Composable () -> Unit)? = null,
+    footer: (@Composable ColumnScope.() -> Unit)? = null,
+    shape: Shape = Theme[shapes][sheetShape],
+    backgroundColor: Color = Theme[colors][panelColor],
+    contentColor: Color = Theme[colors][onPanelColor],
+    contentPadding: PaddingValues = PaddingValues(20.dp),
+    shadow: Shadow = Theme[shadows][overlayShadow],
+    body: @Composable ColumnScope.() -> Unit,
 ) {
   val dragIndicationInteractionSource = remember { MutableInteractionSource() }
 
   UnstyledModalBottomSheet(
-    state = state.unstyledState,
-    onDismiss = onDismissRequest,
-    overlay = {
-      Scrim(
-        scrimColor = Theme[colors][scrimColor],
-        enter = fadeIn(tween(BottomSheetScrimAnimationDurationMillis)),
-        exit = fadeOut(tween(BottomSheetScrimAnimationDurationMillis)),
-      )
-    },
+      state = state.unstyledState,
+      onDismiss = onDismissRequest,
+      overlay = {
+        Scrim(
+            scrimColor = Theme[colors][scrimColor],
+            enter = fadeIn(tween(BottomSheetScrimAnimationDurationMillis)),
+            exit = fadeOut(tween(BottomSheetScrimAnimationDurationMillis)),
+        )
+      },
   ) {
     Box(
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(top = 16.dp),
-      contentAlignment = Alignment.TopCenter,
+        modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+        contentAlignment = Alignment.TopCenter,
     ) {
       Sheet(
-        modifier = modifier
-          .widthIn(max = 640.dp)
-          .fillMaxWidth()
-          .dropShadow(shape, shadow)
-          .clip(shape)
-          .background(backgroundColor, shape),
+          modifier =
+              modifier
+                  .widthIn(max = 640.dp)
+                  .fillMaxWidth()
+                  .dropShadow(shape, shadow)
+                  .clip(shape)
+                  .background(backgroundColor, shape),
       ) {
         ProvideContentColor(contentColor) {
           Box(
-            modifier = Modifier.fillMaxWidth(),
+              modifier = Modifier.fillMaxWidth(),
           ) {
             Column(
-              modifier = Modifier.fillMaxWidth(),
-              horizontalAlignment = Alignment.CenterHorizontally,
-              verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
               if (toolbar != null) {
                 ProvideTextStyle(LocalTextStyle.current.merge(BottomSheetHeaderTextStyle)) {
                   Box(
-                    modifier = Modifier
-                      .fillMaxWidth()
-                      .padding(top = 20.dp),
-                    contentAlignment = Alignment.Center,
+                      modifier = Modifier.fillMaxWidth().padding(top = 20.dp),
+                      contentAlignment = Alignment.Center,
                   ) {
                     toolbar()
                   }
                 }
               }
               Column(
-                modifier = Modifier
-                  .fillMaxWidth()
-                  .padding(contentPadding),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp),
+                  modifier = Modifier.fillMaxWidth().padding(contentPadding),
+                  horizontalAlignment = Alignment.CenterHorizontally,
+                  verticalArrangement = Arrangement.spacedBy(16.dp),
               ) {
                 Column(
-                  modifier = Modifier.fillMaxWidth(),
-                  content = body,
+                    modifier = Modifier.fillMaxWidth(),
+                    content = body,
                 )
                 if (footer != null) {
                   Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    content = footer,
+                      modifier = Modifier.fillMaxWidth(),
+                      verticalArrangement = Arrangement.spacedBy(8.dp),
+                      content = footer,
                   )
                 }
               }
             }
             DragIndication(
-              modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 8.dp)
-                .size(width = 32.dp, height = 4.dp)
-                .focusRing(
-                  interactionSource = dragIndicationInteractionSource,
-                  color = Theme[colors][ringColor],
-                  shape = RoundedCornerShape(100),
-                )
-                .background(Theme[colors][borderColor], RoundedCornerShape(100)),
-              indication = Theme[indications][defaultIndication],
-              interactionSource = dragIndicationInteractionSource,
+                modifier =
+                    Modifier.align(Alignment.TopCenter)
+                        .padding(top = 8.dp)
+                        .size(width = 32.dp, height = 4.dp)
+                        .focusRing(
+                            interactionSource = dragIndicationInteractionSource,
+                            color = Theme[colors][ringColor],
+                            shape = RoundedCornerShape(100),
+                        )
+                        .background(Theme[colors][borderColor], RoundedCornerShape(100)),
+                indication = Theme[indications][defaultIndication],
+                interactionSource = dragIndicationInteractionSource,
             )
           }
         }
@@ -276,10 +269,11 @@ fun BottomSheet(
   }
 }
 
-private val BottomSheetHeaderTextStyle = TextStyle(
-  fontSize = 20.sp,
-  lineHeight = 24.sp,
-  fontWeight = FontWeight.Medium,
-)
+private val BottomSheetHeaderTextStyle =
+    TextStyle(
+        fontSize = 20.sp,
+        lineHeight = 24.sp,
+        fontWeight = FontWeight.Medium,
+    )
 
 const val BottomSheetScrimAnimationDurationMillis = 300

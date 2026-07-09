@@ -37,14 +37,15 @@ import com.composables.ui.components.Text
 fun DisabledDisclosureExample() {
   var expanded by remember { mutableStateOf(false) }
   Disclosure(
-    expanded = expanded,
-    onExpandedChange = { expanded = it },
+      expanded = expanded,
+      onExpandedChange = { expanded = it },
   ) {
     DisclosureButton(enabled = false, modifier = Modifier.fillMaxWidth()) {
       Text("Show installation notes")
     }
     DisclosurePanel {
-      Text("Wall mounting requires a solid surface, a level, and two anchor points spaced 40 cm apart.")
+      Text(
+          "Wall mounting requires a solid surface, a level, and two anchor points spaced 40 cm apart.")
     }
   }
 }

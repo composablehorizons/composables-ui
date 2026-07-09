@@ -40,17 +40,17 @@ fun ReadOnlyTextFieldExample() {
   val state = rememberTextFieldState("proj_1K9xF4vQm2")
 
   TextField(
-    state = state,
-    modifier = Modifier.fillMaxWidth(),
-    readOnly = true,
-    accessibilityLabel = "Project ID",
-    leading = {
-      Icon(
-        imageVector = Lucide.KeyRound,
-        contentDescription = null,
-        modifier = Modifier.size(16.dp),
-        tint = Theme[colors][mutedColor],
-      )
-    },
+      state = state,
+      modifier = Modifier.fillMaxWidth(),
+      readOnly = true,
+      accessibilityLabel = "Project ID",
+      leading = {
+        Icon(
+            imageVector = Lucide.KeyRound,
+            contentDescription = null,
+            modifier = Modifier.size(16.dp),
+            tint = Theme[colors][mutedColor],
+        )
+      },
   )
 }

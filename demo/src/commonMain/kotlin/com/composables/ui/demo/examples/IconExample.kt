@@ -32,7 +32,7 @@ import com.composables.ui.components.Icon
 @Composable
 fun IconExample() {
   Icon(
-    imageVector = Lucide.Heart,
-    modifier = Modifier.size(24.dp),
+      imageVector = Lucide.Heart,
+      modifier = Modifier.size(24.dp),
   )
 }

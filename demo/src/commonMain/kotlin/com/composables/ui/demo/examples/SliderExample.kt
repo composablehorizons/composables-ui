@@ -37,8 +37,8 @@ import com.composables.ui.components.Slider
 fun SliderExample() {
   var value by remember { mutableFloatStateOf(0.45f) }
   Column(
-    modifier = Modifier,
-    verticalArrangement = Arrangement.spacedBy(12.dp),
+      modifier = Modifier,
+      verticalArrangement = Arrangement.spacedBy(12.dp),
   ) {
     Slider(value = value, onValueChange = { value = it }, modifier = Modifier.fillMaxWidth())
   }

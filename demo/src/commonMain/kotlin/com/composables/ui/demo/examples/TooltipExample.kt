@@ -31,14 +31,8 @@ import com.composables.ui.components.TooltipPanel
 @Composable
 fun TooltipExample() {
   Tooltip(
-    panel = {
-      TooltipPanel {
-        Text("Tooltip")
-      }
-    },
+      panel = { TooltipPanel { Text("Tooltip") } },
   ) {
-    Button(onClick = {}, style = ButtonStyle.Outlined) {
-      Text("Hover me")
-    }
+    Button(onClick = {}, style = ButtonStyle.Outlined) { Text("Hover me") }
   }
 }

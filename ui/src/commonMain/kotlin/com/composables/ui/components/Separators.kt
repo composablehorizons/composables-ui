@@ -36,38 +36,40 @@ import com.composeunstyled.theme.Theme
 
 /**
  * A horizontal divider line.
+ *
  * @param modifier Modifier applied to the separator.
  * @param color Color used for the separator line.
  * @param thickness Thickness of the separator line.
  */
 @Composable
 fun HorizontalSeparator(
-  modifier: Modifier = Modifier,
-  color: Color = Theme[colors][borderColor],
-  thickness: Dp = 1.dp,
+    modifier: Modifier = Modifier,
+    color: Color = Theme[colors][borderColor],
+    thickness: Dp = 1.dp,
 ) {
   UnstyledHorizontalSeparator(
-    color = color,
-    modifier = modifier.clip(RoundedCornerShape(100)),
-    thickness = thickness,
+      color = color,
+      modifier = modifier.clip(RoundedCornerShape(100)),
+      thickness = thickness,
   )
 }
 
 /**
  * A vertical divider line.
+ *
  * @param modifier Modifier applied to the separator.
  * @param color Color used for the separator line.
  * @param thickness Thickness of the separator line.
  */
 @Composable
 fun VerticalSeparator(
-  modifier: Modifier = Modifier,
-  color: Color = Theme[colors][borderColor],
-  thickness: Dp = 1.dp,
+    modifier: Modifier = Modifier,
+    color: Color = Theme[colors][borderColor],
+    thickness: Dp = 1.dp,
 ) {
   UnstyledVerticalSeparator(
-    color = color,
-    modifier = modifier.clip(RoundedCornerShape(100)),
-    thickness = thickness,
+      color = color,
+      modifier = modifier.clip(RoundedCornerShape(100)),
+      thickness = thickness,
   )
 }

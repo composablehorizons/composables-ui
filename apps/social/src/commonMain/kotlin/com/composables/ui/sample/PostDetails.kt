@@ -84,9 +84,9 @@ import com.composeunstyled.theme.Theme
 
 @Composable
 fun PostDetails(
-  onBackClick: () -> Unit,
-  onProfileClick: (String) -> Unit,
-  postId: PostId,
+    onBackClick: () -> Unit,
+    onProfileClick: (String) -> Unit,
+    postId: PostId,
 ) {
   val post = Posts.findWithId(postId)
   val replies = Posts.repliesByPostId(post.id)
@@ -94,33 +94,29 @@ fun PostDetails(
   val breakpoint = currentWindowWidthBreakpoint()
   ProvideContentColor(Theme[colors][onPanelColor]) {
     LazyColumn(
-      modifier = Modifier
-        .fillMaxSize()
-        .background(Theme[colors][panelColor]),
-      contentPadding = sampleScreenContentPadding(),
+        modifier = Modifier.fillMaxSize().background(Theme[colors][panelColor]),
+        contentPadding = sampleScreenContentPadding(),
     ) {
       if (breakpoint isAt Compact) {
-        stickyHeader {
-          ThreadToolbar(onBackClick)
-        }
+        stickyHeader { ThreadToolbar(onBackClick) }
       }
       item(key = post.id) {
         MainPost(
-          post = post,
-          onProfileClick = onProfileClick,
+            post = post,
+            onProfileClick = onProfileClick,
         )
         HorizontalSeparator()
       }
       itemsIndexed(
-        items = replies,
-        key = { _, reply -> reply.id },
+          items = replies,
+          key = { _, reply -> reply.id },
       ) { index, reply ->
         if (index != 0) {
           HorizontalSeparator()
         }
         ThreadReplyPost(
-          post = reply,
-          onProfileClick = onProfileClick,
+            post = reply,
+            onProfileClick = onProfileClick,
         )
       }
     }
@@ -130,53 +126,49 @@ fun PostDetails(
 @Composable
 private fun ThreadToolbar(onBackClick: () -> Unit) {
   CenteredToolbar(
-    modifier = Modifier.fillMaxWidth(),
-    backgroundColor = Theme[colors][panelColor],
-    contentColor = Theme[colors][onPanelColor],
-    windowInsets = WindowInsets(top = previewStatusBarPaddingValue()),
-    leading = {
-      IconButton(
-        onClick = onBackClick,
-        style = ButtonStyle.Ghost,
-      ) {
-        Icon(Icons.ArrowLeft, contentDescription = "Go back")
-      }
-    },
-    title = {
-      Text("Post", fontWeight = FontWeight.Bold)
-    },
+      modifier = Modifier.fillMaxWidth(),
+      backgroundColor = Theme[colors][panelColor],
+      contentColor = Theme[colors][onPanelColor],
+      windowInsets = WindowInsets(top = previewStatusBarPaddingValue()),
+      leading = {
+        IconButton(
+            onClick = onBackClick,
+            style = ButtonStyle.Ghost,
+        ) {
+          Icon(Icons.ArrowLeft, contentDescription = "Go back")
+        }
+      },
+      title = { Text("Post", fontWeight = FontWeight.Bold) },
   )
 }
 
 @Composable
 private fun MainPost(
-  onProfileClick: (String) -> Unit,
-  post: Post,
+    onProfileClick: (String) -> Unit,
+    post: Post,
 ) {
   val author = UserProfiles.findWithId(post.authorId)
   val openAuthor = { onProfileClick(author.id) }
 
   Column(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(vertical = 12.dp),
-    verticalArrangement = Arrangement.spacedBy(14.dp),
+      modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
+      verticalArrangement = Arrangement.spacedBy(14.dp),
   ) {
     ThreadPostHeader(
-      post = post,
-      authorHandle = author.handle,
-      avatarUrl = author.avatarUrl,
-      onAuthorClick = openAuthor,
-      modifier = Modifier.padding(horizontal = 24.dp),
+        post = post,
+        authorHandle = author.handle,
+        avatarUrl = author.avatarUrl,
+        onAuthorClick = openAuthor,
+        modifier = Modifier.padding(horizontal = 24.dp),
     )
     Text(
-      text = post.body,
-      modifier = Modifier.padding(horizontal = 24.dp),
-      color = Theme[colors][onBackgroundColor],
+        text = post.body,
+        modifier = Modifier.padding(horizontal = 24.dp),
+        color = Theme[colors][onBackgroundColor],
     )
     if (post.media.isNotEmpty()) {
       MediaAttachment(
-        contentPadding = PaddingValues(horizontal = 24.dp),
+          contentPadding = PaddingValues(horizontal = 24.dp),
       ) {
         post.media.forEach { item ->
           if (post.portraitMedia) {
@@ -193,36 +185,36 @@ private fun MainPost(
 
 @Composable
 private fun ThreadPostHeader(
-  post: Post,
-  authorHandle: String,
-  avatarUrl: String,
-  onAuthorClick: () -> Unit,
-  modifier: Modifier = Modifier,
+    post: Post,
+    authorHandle: String,
+    avatarUrl: String,
+    onAuthorClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
   Row(
-    modifier = modifier.fillMaxWidth(),
-    verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.spacedBy(12.dp),
+      modifier = modifier.fillMaxWidth(),
+      verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.spacedBy(12.dp),
   ) {
     Avatar(
-      url = avatarUrl,
-      modifier = Modifier.clip(CircleShape).clickable { onAuthorClick() },
+        url = avatarUrl,
+        modifier = Modifier.clip(CircleShape).clickable { onAuthorClick() },
     )
     Button(
-      onClick = onAuthorClick,
-      style = ButtonStyle.Link,
+        onClick = onAuthorClick,
+        style = ButtonStyle.Link,
     ) {
       Text(
-        text = authorHandle,
-        fontWeight = FontWeight.Bold,
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
+          text = authorHandle,
+          fontWeight = FontWeight.Bold,
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis,
       )
     }
     Spacer(Modifier.weight(1f))
     Text(
-      text = post.timestamp,
-      color = Theme[colors][mutedColor],
+        text = post.timestamp,
+        color = Theme[colors][mutedColor],
     )
     ThreadPostOverflowMenu()
   }
@@ -230,56 +222,52 @@ private fun ThreadPostHeader(
 
 @Composable
 private fun ThreadReplyPost(
-  post: Post,
-  onProfileClick: (String) -> Unit,
+    post: Post,
+    onProfileClick: (String) -> Unit,
 ) {
   val author = UserProfiles.findWithId(post.authorId)
   val openAuthor = { onProfileClick(author.id) }
 
   FeedPost(
-    onClick = {},
-    avatar = {
-      Avatar(
-        url = author.avatarUrl,
-        modifier = Modifier.clip(CircleShape).clickable { openAuthor() },
-      )
-    },
-    authorName = {
-      Button(onClick = openAuthor, style = ButtonStyle.Link) {
-        Text(
-          text = author.handle,
-          fontWeight = FontWeight.Bold,
-          maxLines = 1,
-          overflow = TextOverflow.Ellipsis,
+      onClick = {},
+      avatar = {
+        Avatar(
+            url = author.avatarUrl,
+            modifier = Modifier.clip(CircleShape).clickable { openAuthor() },
         )
-      }
-    },
-    timestamp = {
-      Text(post.timestamp)
-    },
-    overflow = { ThreadPostOverflowMenu() },
-    body = {
-      Text(
-        text = post.body,
-        color = Theme[colors][onBackgroundColor],
-      )
-    },
-    attachment = {
-      if (post.media.isNotEmpty()) {
-        MediaAttachment {
-          post.media.forEach { item ->
-            if (post.portraitMedia) {
-              PortraitMediaItem(item.url)
-            } else {
-              LandscapeMediaItem(item.url)
+      },
+      authorName = {
+        Button(onClick = openAuthor, style = ButtonStyle.Link) {
+          Text(
+              text = author.handle,
+              fontWeight = FontWeight.Bold,
+              maxLines = 1,
+              overflow = TextOverflow.Ellipsis,
+          )
+        }
+      },
+      timestamp = { Text(post.timestamp) },
+      overflow = { ThreadPostOverflowMenu() },
+      body = {
+        Text(
+            text = post.body,
+            color = Theme[colors][onBackgroundColor],
+        )
+      },
+      attachment = {
+        if (post.media.isNotEmpty()) {
+          MediaAttachment {
+            post.media.forEach { item ->
+              if (post.portraitMedia) {
+                PortraitMediaItem(item.url)
+              } else {
+                LandscapeMediaItem(item.url)
+              }
             }
           }
         }
-      }
-    },
-    actions = {
-      PostActions(post)
-    },
+      },
+      actions = { PostActions(post) },
   )
 }
 
@@ -288,39 +276,33 @@ private fun ThreadPostOverflowMenu() {
   var expanded by remember { mutableStateOf(false) }
 
   DropdownMenu(
-    expanded = expanded,
-    onExpandedChange = { expanded = it },
-    alignment = DropdownMenuAlignment.End,
-    panel = {
-      DropdownMenuPanel {
-        DropdownMenuItem(onClick = { expanded = false }) {
-          Text("Save")
+      expanded = expanded,
+      onExpandedChange = { expanded = it },
+      alignment = DropdownMenuAlignment.End,
+      panel = {
+        DropdownMenuPanel {
+          DropdownMenuItem(onClick = { expanded = false }) { Text("Save") }
+          DropdownMenuItem(onClick = { expanded = false }) { Text("Copy link") }
+          DropdownMenuItem(onClick = { expanded = false }) { Text("Mute") }
+          DropdownMenuItem(
+              onClick = { expanded = false },
+              style = DropdownMenuItemStyle.Destructive,
+          ) {
+            Text("Report")
+          }
         }
-        DropdownMenuItem(onClick = { expanded = false }) {
-          Text("Copy link")
-        }
-        DropdownMenuItem(onClick = { expanded = false }) {
-          Text("Mute")
-        }
-        DropdownMenuItem(
-          onClick = { expanded = false },
-          style = DropdownMenuItemStyle.Destructive,
-        ) {
-          Text("Report")
-        }
-      }
-    },
+      },
   ) {
     IconButton(
-      onClick = { expanded = expanded.not() },
-      style = ButtonStyle.Ghost,
-      buttonSize = ButtonSize.Small,
-      indication = null,
+        onClick = { expanded = expanded.not() },
+        style = ButtonStyle.Ghost,
+        buttonSize = ButtonSize.Small,
+        indication = null,
     ) {
       Icon(
-        imageVector = Icons.Ellipsis,
-        contentDescription = "Post options",
-        tint = Theme[colors][onBackgroundColor],
+          imageVector = Icons.Ellipsis,
+          contentDescription = "Post options",
+          tint = Theme[colors][onBackgroundColor],
       )
     }
   }
@@ -328,10 +310,8 @@ private fun ThreadPostOverflowMenu() {
 
 @Composable
 private fun ThreadActionButton(
-  color: Color,
-  content: @Composable (Color) -> Unit,
+    color: Color,
+    content: @Composable (Color) -> Unit,
 ) {
-  IconButton(onClick = {}, style = ButtonStyle.Ghost) {
-    content(color)
-  }
+  IconButton(onClick = {}, style = ButtonStyle.Ghost) { content(color) }
 }

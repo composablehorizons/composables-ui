@@ -38,20 +38,20 @@ import com.composables.ui.components.ToolbarSize
 @Composable
 fun LargeToolbarExample() {
   Toolbar(
-    modifier = Modifier.fillMaxWidth(),
-    title = { Text("Large title") },
-    size = ToolbarSize.Large,
-    trailing = {
-      IconButton(
-        onClick = { /* TODO */ },
-        style = ButtonStyle.Ghost,
-      ) {
-        Icon(
-          imageVector = Lucide.EllipsisVertical,
-          contentDescription = "More options",
-          modifier = Modifier.size(18.dp),
-        )
-      }
-    },
+      modifier = Modifier.fillMaxWidth(),
+      title = { Text("Large title") },
+      size = ToolbarSize.Large,
+      trailing = {
+        IconButton(
+            onClick = { /* TODO */},
+            style = ButtonStyle.Ghost,
+        ) {
+          Icon(
+              imageVector = Lucide.EllipsisVertical,
+              contentDescription = "More options",
+              modifier = Modifier.size(18.dp),
+          )
+        }
+      },
   )
 }

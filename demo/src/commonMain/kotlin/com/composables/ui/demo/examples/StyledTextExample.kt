@@ -29,9 +29,9 @@ import com.composables.ui.components.Text
 @Composable
 fun StyledTextExample() {
   Text(
-    text = "Styled headline",
-    fontSize = 24.sp,
-    lineHeight = 32.sp,
-    fontWeight = FontWeight.SemiBold,
+      text = "Styled headline",
+      fontSize = 24.sp,
+      lineHeight = 32.sp,
+      fontWeight = FontWeight.SemiBold,
   )
 }

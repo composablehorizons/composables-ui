@@ -49,27 +49,21 @@ fun ScrollbarExample() {
   val scrollState = rememberScrollState()
   val scrollbarState = rememberVerticalScrollbarState(scrollState)
   Box(
-    modifier = Modifier
-      .height(220.dp)
-      .widthIn(max = 340.dp)
-      .clip(RoundedCornerShape(8.dp))
-      .background(Theme[colors][controlColor]),
+      modifier =
+          Modifier.height(220.dp)
+              .widthIn(max = 340.dp)
+              .clip(RoundedCornerShape(8.dp))
+              .background(Theme[colors][controlColor]),
   ) {
     Column(
-      modifier = Modifier
-        .verticalScroll(scrollState)
-        .padding(16.dp),
-      verticalArrangement = Arrangement.spacedBy(10.dp),
+        modifier = Modifier.verticalScroll(scrollState).padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-      repeat(16) { index ->
-        Text("Scrollable row ${index + 1}")
-      }
+      repeat(16) { index -> Text("Scrollable row ${index + 1}") }
     }
     VerticalScrollbar(
-      state = scrollbarState,
-      modifier = Modifier
-        .align(Alignment.CenterEnd)
-        .fillMaxHeight(),
+        state = scrollbarState,
+        modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
     )
   }
 }

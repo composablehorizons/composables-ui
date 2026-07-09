@@ -20,101 +20,88 @@
  * SOFTWARE.
  */
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
-    alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.compose)
-    alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.android.application)
+  alias(libs.plugins.kotlin.multiplatform)
+  alias(libs.plugins.compose)
+  alias(libs.plugins.compose.compiler)
+  alias(libs.plugins.android.application)
 }
 
-compose.resources {
-    packageOfResClass = "com.composables.ui.demo.generated.resources"
-}
+compose.resources { packageOfResClass = "com.composables.ui.demo.generated.resources" }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
+java { toolchain { languageVersion = JavaLanguageVersion.of(17) } }
 
 kotlin {
-    jvmToolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
+  jvmToolchain { languageVersion = JavaLanguageVersion.of(17) }
 
-    jvm()
+  jvm()
 
-    wasmJs {
-        browser {
-            val rootDirPath = project.rootDir.path
-            val projectDirPath = project.projectDir.path
-            commonWebpackConfig {
-                outputFileName = "composeApp.js"
+  wasmJs {
+    browser {
+      val rootDirPath = project.rootDir.path
+      val projectDirPath = project.projectDir.path
+      commonWebpackConfig {
+        outputFileName = "composeApp.js"
 
-                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                    static = (static ?: mutableListOf()).apply {
-                        add(rootDirPath)
-                        add(projectDirPath)
-                    }
-                }
+        devServer =
+            (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+              static =
+                  (static ?: mutableListOf()).apply {
+                    add(rootDirPath)
+                    add(projectDirPath)
+                  }
             }
-        }
-        binaries.executable()
+      }
+    }
+    binaries.executable()
+  }
+
+  androidTarget { compilerOptions { jvmTarget = JvmTarget.JVM_17 } }
+
+  sourceSets {
+    commonMain.dependencies {
+      implementation(project(":ui"))
+      implementation(libs.composables.icons.lucide)
+      implementation(libs.androidx.navigation3.ui)
+      implementation(libs.composables.unstyled)
+      implementation(libs.composables.unstyled.build.modifier)
+      implementation(libs.compose.components.resources)
     }
 
-    androidTarget {
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_17
-        }
+    jvmMain.dependencies {
+      implementation(compose.desktop.currentOs) {
+        exclude("org.jetbrains.compose.material")
+        exclude("org.jetbrains.compose.material3")
+      }
     }
-
-    sourceSets {
-        commonMain.dependencies {
-            implementation(project(":ui"))
-            implementation(libs.composables.icons.lucide)
-            implementation(libs.androidx.navigation3.ui)
-            implementation(libs.composables.unstyled)
-            implementation(libs.composables.unstyled.build.modifier)
-            implementation(libs.compose.components.resources)
-        }
-
-        jvmMain.dependencies {
-            implementation(compose.desktop.currentOs) {
-                exclude("org.jetbrains.compose.material")
-                exclude("org.jetbrains.compose.material3")
-            }
-        }
-        androidMain.dependencies {
-            implementation(libs.androidx.activity.compose)
-        }
-    }
+    androidMain.dependencies { implementation(libs.androidx.activity.compose) }
+  }
 }
 
 android {
-    namespace = "com.composables.ui.demo"
-    compileSdk = libs.versions.android.compile.sdk.get().toInt()
+  namespace = "com.composables.ui.demo"
+  compileSdk = libs.versions.android.compile.sdk.get().toInt()
 
-    defaultConfig {
-        applicationId = "com.composables.ui.demo"
-        minSdk = libs.versions.android.min.sdk.get().toInt()
-        targetSdk = libs.versions.android.compile.sdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0.0"
-    }
+  defaultConfig {
+    applicationId = "com.composables.ui.demo"
+    minSdk = libs.versions.android.min.sdk.get().toInt()
+    targetSdk = libs.versions.android.compile.sdk.get().toInt()
+    versionCode = 1
+    versionName = "1.0.0"
+  }
 }
 
 compose.desktop {
-    application {
-        mainClass = "com.composables.ui.demo.MainKt"
+  application {
+    mainClass = "com.composables.ui.demo.MainKt"
 
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "composables-ui-demo"
-            packageVersion = "1.0.0"
-        }
+    nativeDistributions {
+      targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+      packageName = "composables-ui-demo"
+      packageVersion = "1.0.0"
     }
+  }
 }

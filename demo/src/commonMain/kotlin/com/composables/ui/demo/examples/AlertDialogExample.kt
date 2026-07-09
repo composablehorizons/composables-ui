@@ -41,41 +41,39 @@ import com.composables.ui.components.Text
 fun AlertDialogExample() {
   var visible by remember { mutableStateOf(false) }
   Column(
-    horizontalAlignment = Alignment.CenterHorizontally,
-    verticalArrangement = Arrangement.Center,
+      horizontalAlignment = Alignment.CenterHorizontally,
+      verticalArrangement = Arrangement.Center,
   ) {
-    Button(onClick = { visible = true }) {
-      Text(text = "Show dialog")
-    }
+    Button(onClick = { visible = true }) { Text(text = "Show dialog") }
 
     AlertDialog(
-      visible = visible,
-      onDismissRequest = { visible = false },
-      title = { Text("Enable notifications?", textAlign = TextAlign.Center) },
-      text = {
-        Text(
-          "Notifications help you keep up with important updates from this app.",
-          textAlign = TextAlign.Center,
-        )
-      },
-      positiveButton = {
-        Button(
-          onClick = { visible = false },
-          modifier = Modifier.fillMaxWidth(),
-          style = ButtonStyle.Primary,
-        ) {
-          Text("Allow")
-        }
-      },
-      negativeButton = {
-        Button(
-          onClick = { visible = false },
-          modifier = Modifier.fillMaxWidth(),
-          style = ButtonStyle.Secondary,
-        ) {
-          Text("Not now")
-        }
-      },
+        visible = visible,
+        onDismissRequest = { visible = false },
+        title = { Text("Enable notifications?", textAlign = TextAlign.Center) },
+        text = {
+          Text(
+              "Notifications help you keep up with important updates from this app.",
+              textAlign = TextAlign.Center,
+          )
+        },
+        positiveButton = {
+          Button(
+              onClick = { visible = false },
+              modifier = Modifier.fillMaxWidth(),
+              style = ButtonStyle.Primary,
+          ) {
+            Text("Allow")
+          }
+        },
+        negativeButton = {
+          Button(
+              onClick = { visible = false },
+              modifier = Modifier.fillMaxWidth(),
+              style = ButtonStyle.Secondary,
+          ) {
+            Text("Not now")
+          }
+        },
     )
   }
 }

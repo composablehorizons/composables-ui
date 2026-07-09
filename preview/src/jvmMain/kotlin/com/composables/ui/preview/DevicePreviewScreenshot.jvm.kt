@@ -35,10 +35,11 @@ import java.time.format.DateTimeFormatter
 import javax.imageio.ImageIO
 
 actual fun saveDevicePreviewScreenshot(image: ImageBitmap) {
-  val dialog = FileDialog(null as Frame?, "Save Preview Screenshot", FileDialog.SAVE).apply {
-    file = defaultPreviewScreenshotFilename()
-    isVisible = true
-  }
+  val dialog =
+      FileDialog(null as Frame?, "Save Preview Screenshot", FileDialog.SAVE).apply {
+        file = defaultPreviewScreenshotFilename()
+        isVisible = true
+      }
   val directory = dialog.directory ?: return
   val filename = dialog.file ?: return
   val file = File(directory, filename).withPngExtension()
@@ -48,8 +49,8 @@ actual fun saveDevicePreviewScreenshot(image: ImageBitmap) {
 
 actual fun copyDevicePreviewScreenshotToClipboard(image: ImageBitmap) {
   Toolkit.getDefaultToolkit()
-    .systemClipboard
-    .setContents(ImageTransferable(image.toAwtImage()), null)
+      .systemClipboard
+      .setContents(ImageTransferable(image.toAwtImage()), null)
 }
 
 private fun File.withPngExtension(): File {
@@ -64,10 +65,11 @@ private fun defaultPreviewScreenshotFilename(): String {
   return "Preview ${LocalDateTime.now().format(PreviewScreenshotTimestampFormatter)}.png"
 }
 
-private val PreviewScreenshotTimestampFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' HH.mm.ss")
+private val PreviewScreenshotTimestampFormatter =
+    DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' HH.mm.ss")
 
 private class ImageTransferable(
-  private val image: Image,
+    private val image: Image,
 ) : Transferable {
   override fun getTransferDataFlavors(): Array<DataFlavor> {
     return arrayOf(DataFlavor.imageFlavor)

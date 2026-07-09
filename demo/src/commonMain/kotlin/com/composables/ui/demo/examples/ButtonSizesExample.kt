@@ -41,75 +41,75 @@ import com.composables.ui.components.Text
 @Composable
 fun ButtonSizesExample() {
   Column(
-    verticalArrangement = Arrangement.spacedBy(12.dp),
-    horizontalAlignment = Alignment.Start,
+      verticalArrangement = Arrangement.spacedBy(12.dp),
+      horizontalAlignment = Alignment.Start,
   ) {
     Row(
-      horizontalArrangement = Arrangement.spacedBy(8.dp),
-      verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
       Button(
-        onClick = { /* TODO */ },
-        style = ButtonStyle.Secondary,
-        buttonSize = ButtonSize.Small,
+          onClick = { /* TODO */},
+          style = ButtonStyle.Secondary,
+          buttonSize = ButtonSize.Small,
       ) {
         Text("Button")
       }
       IconButton(
-        onClick = { /* TODO */ },
-        style = ButtonStyle.Secondary,
-        buttonSize = ButtonSize.Small,
+          onClick = { /* TODO */},
+          style = ButtonStyle.Secondary,
+          buttonSize = ButtonSize.Small,
       ) {
         Icon(
-          imageVector = Lucide.Plus,
-          contentDescription = "Add",
-          modifier = Modifier.size(18.dp),
+            imageVector = Lucide.Plus,
+            contentDescription = "Add",
+            modifier = Modifier.size(18.dp),
         )
       }
     }
     Row(
-      horizontalArrangement = Arrangement.spacedBy(8.dp),
-      verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
       Button(
-        onClick = { /* TODO */ },
-        style = ButtonStyle.Secondary,
-        buttonSize = ButtonSize.Regular,
+          onClick = { /* TODO */},
+          style = ButtonStyle.Secondary,
+          buttonSize = ButtonSize.Regular,
       ) {
         Text("Button")
       }
       IconButton(
-        onClick = { /* TODO */ },
-        style = ButtonStyle.Secondary,
-        buttonSize = ButtonSize.Regular,
+          onClick = { /* TODO */},
+          style = ButtonStyle.Secondary,
+          buttonSize = ButtonSize.Regular,
       ) {
         Icon(
-          imageVector = Lucide.Plus,
-          contentDescription = "Add",
-          modifier = Modifier.size(18.dp),
+            imageVector = Lucide.Plus,
+            contentDescription = "Add",
+            modifier = Modifier.size(18.dp),
         )
       }
     }
     Row(
-      horizontalArrangement = Arrangement.spacedBy(8.dp),
-      verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
       Button(
-        onClick = { /* TODO */ },
-        style = ButtonStyle.Secondary,
-        buttonSize = ButtonSize.Large,
+          onClick = { /* TODO */},
+          style = ButtonStyle.Secondary,
+          buttonSize = ButtonSize.Large,
       ) {
         Text("Button")
       }
       IconButton(
-        onClick = { /* TODO */ },
-        style = ButtonStyle.Secondary,
-        buttonSize = ButtonSize.Large,
+          onClick = { /* TODO */},
+          style = ButtonStyle.Secondary,
+          buttonSize = ButtonSize.Large,
       ) {
         Icon(
-          imageVector = Lucide.Plus,
-          contentDescription = "Add",
-          modifier = Modifier.size(18.dp),
+            imageVector = Lucide.Plus,
+            contentDescription = "Add",
+            modifier = Modifier.size(18.dp),
         )
       }
     }

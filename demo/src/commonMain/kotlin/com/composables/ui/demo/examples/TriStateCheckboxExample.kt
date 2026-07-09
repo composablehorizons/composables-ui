@@ -42,21 +42,22 @@ fun TriStateCheckboxExample() {
 
   val allSelected = marketing && product && security
   val noneSelected = !marketing && !product && !security
-  val state = when {
-    allSelected -> ToggleableState.On
-    noneSelected -> ToggleableState.Off
-    else -> ToggleableState.Indeterminate
-  }
+  val state =
+      when {
+        allSelected -> ToggleableState.On
+        noneSelected -> ToggleableState.Off
+        else -> ToggleableState.Indeterminate
+      }
 
   Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
     TriStateCheckbox(
-      state = state,
-      onStateChange = { nextState ->
-        val selected = nextState == ToggleableState.On
-        marketing = selected
-        product = selected
-        security = selected
-      },
+        state = state,
+        onStateChange = { nextState ->
+          val selected = nextState == ToggleableState.On
+          marketing = selected
+          product = selected
+          security = selected
+        },
     ) {
       Text("Select all")
     }
@@ -68,9 +69,7 @@ fun TriStateCheckboxExample() {
       Checkbox(checked = product, onCheckedChange = { product = it }) {
         Text("Product announcements")
       }
-      Checkbox(checked = security, onCheckedChange = { security = it }) {
-        Text("Security alerts")
-      }
+      Checkbox(checked = security, onCheckedChange = { security = it }) { Text("Security alerts") }
     }
   }
 }

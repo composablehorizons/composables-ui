@@ -30,6 +30,7 @@ import com.composeunstyled.UnstyledIcon
 
 /**
  * An ImageVector-based icon that tints from the current content color by default.
+ *
  * @param imageVector Vector asset drawn by the icon.
  * @param modifier Modifier applied to the icon.
  * @param contentDescription Accessible description announced for the icon.
@@ -37,15 +38,15 @@ import com.composeunstyled.UnstyledIcon
  */
 @Composable
 fun Icon(
-  imageVector: ImageVector,
-  modifier: Modifier = Modifier,
-  contentDescription: String? = null,
-  tint: Color = LocalContentColor.current,
+    imageVector: ImageVector,
+    modifier: Modifier = Modifier,
+    contentDescription: String? = null,
+    tint: Color = LocalContentColor.current,
 ) {
   UnstyledIcon(
-    imageVector = imageVector,
-    contentDescription = contentDescription,
-    modifier = modifier,
-    tint = tint,
+      imageVector = imageVector,
+      contentDescription = contentDescription,
+      modifier = modifier,
+      tint = tint,
   )
 }

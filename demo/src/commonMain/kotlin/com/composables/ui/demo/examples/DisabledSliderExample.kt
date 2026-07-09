@@ -29,9 +29,9 @@ import com.composables.ui.components.Slider
 @Composable
 fun DisabledSliderExample() {
   Slider(
-    value = 0.45f,
-    onValueChange = {},
-    enabled = false,
-    modifier = Modifier.fillMaxWidth(),
+      value = 0.45f,
+      onValueChange = {},
+      enabled = false,
+      modifier = Modifier.fillMaxWidth(),
   )
 }
