@@ -27,6 +27,7 @@ assertk = "0.28.1"
 
 [libraries]
 composables-unstyled = { module = "com.composables:composeunstyled", version.ref = "unstyled" }
+composables-unstyled-portal = { module = "com.composables:composeunstyled-portal", version.ref = "unstyled" }
 composables-unstyled-stack = { module = "com.composables:composeunstyled-stack", version.ref = "unstyled" }
 composables-unstyled-build-modifier = { module = "com.composables:composeunstyled-build-modifier", version.ref = "unstyled" }
 composables-unstyled-theming = { module = "com.composables:composeunstyled-theming", version.ref = "unstyled" }

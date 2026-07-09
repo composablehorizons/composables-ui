@@ -3,6 +3,8 @@ import org.apache.tools.ant.DirectoryScanner
 DirectoryScanner.removeDefaultExclude("**/.gitignore")
 
 pluginManagement {
+  includeBuild("devtools/gradle-plugin")
+
   repositories {
     google {
       mavenContent {
@@ -53,3 +55,7 @@ include(":preview-insets")
 include(":apps:social")
 
 include(":packages:cli")
+
+include(":devtools:runtime")
+
+include(":devtools:insets")
