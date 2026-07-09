@@ -77,6 +77,16 @@ kotlin {
       implementation(libs.composables.interaction.capabilities)
       implementation(libs.composables.ripple.indication)
     }
+
+    val jvmTest by getting {
+      dependencies {
+        implementation(kotlin("test"))
+        implementation(libs.assertk)
+        implementation(compose.desktop.currentOs) {
+          exclude(group = "org.jetbrains.compose.material", module = "material")
+        }
+      }
+    }
   }
 }
 

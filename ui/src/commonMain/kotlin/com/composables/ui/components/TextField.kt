@@ -41,11 +41,15 @@ import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -172,10 +176,12 @@ fun TextField(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     scrollState: ScrollState = rememberScrollState(),
 ) {
+  var decorationHasFocus by remember { mutableStateOf(false) }
+
   UnstyledTextField(
       state = state,
       enabled = enabled,
-      readOnly = readOnly,
+      readOnly = readOnly || decorationHasFocus,
       accessibilityLabel = accessibilityLabel,
       cursorBrush = cursorBrush,
       selectionColors = selectionColors,
@@ -227,6 +233,7 @@ fun TextField(
         contentPadding = contentPadding,
         leading = leading,
         trailing = trailing,
+        onDecorationFocusChanged = { decorationHasFocus = it },
     )
   }
 }
@@ -263,6 +270,7 @@ private fun UnstyledTextFieldScope.TextFieldContent(
     contentPadding: PaddingValues,
     leading: (@Composable () -> Unit)?,
     trailing: (@Composable () -> Unit)?,
+    onDecorationFocusChanged: (Boolean) -> Unit,
 ) {
   ProvideContentColor(contentColor) {
     ProvideTextStyle(textStyle) {
@@ -278,7 +286,10 @@ private fun UnstyledTextFieldScope.TextFieldContent(
       ) {
         if (leading != null) {
           Box(
-              modifier = Modifier.sizeIn(minWidth = 16.dp, minHeight = 16.dp),
+              modifier =
+                  Modifier.sizeIn(minWidth = 16.dp, minHeight = 16.dp).onFocusChanged {
+                    onDecorationFocusChanged(it.hasFocus)
+                  },
               contentAlignment = Alignment.Center,
           ) {
             leading()
@@ -290,7 +301,10 @@ private fun UnstyledTextFieldScope.TextFieldContent(
         )
         if (trailing != null) {
           Box(
-              modifier = Modifier.sizeIn(minWidth = 16.dp, minHeight = 16.dp),
+              modifier =
+                  Modifier.sizeIn(minWidth = 16.dp, minHeight = 16.dp).onFocusChanged {
+                    onDecorationFocusChanged(it.hasFocus)
+                  },
               contentAlignment = Alignment.Center,
           ) {
             trailing()
