@@ -138,7 +138,7 @@ fun Tooltip(
     enabled: Boolean = true,
     side: TooltipSide = TooltipSide.Top,
     alignment: TooltipAlignment = TooltipAlignment.Center,
-    sideOffset: Dp = 8.dp,
+    sideOffset: Dp = 2.dp,
     alignmentOffset: Dp = 0.dp,
     longPressShowDurationMillis: Long = 1500L,
     hoverDelayMillis: Long = 0L,
