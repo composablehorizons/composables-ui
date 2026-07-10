@@ -108,8 +108,7 @@ fun SignIn() {
       }
 
       Box(
-        modifier =
-          Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().imePadding(),
+        modifier = Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().imePadding(),
         contentAlignment =
           if (widthBreakpoint.value == Compact) Alignment.TopCenter else Alignment.Center,
       ) {
