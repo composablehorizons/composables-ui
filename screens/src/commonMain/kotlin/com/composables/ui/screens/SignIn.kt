@@ -171,7 +171,7 @@ fun SignIn() {
               val shape = RoundedCornerShape(16.dp)
               TextField(
                 state = emailState,
-                modifier = Modifier.fillMaxWidth().height(58.dp),
+                modifier = Modifier.fillMaxWidth(),
                 accessibilityLabel = "Email",
                 outputTransformation = null,
                 trailing = null,
@@ -192,7 +192,7 @@ fun SignIn() {
               val shape = RoundedCornerShape(16.dp)
               TextField(
                 state = passwordState,
-                modifier = Modifier.fillMaxWidth().height(58.dp),
+                modifier = Modifier.fillMaxWidth(),
                 accessibilityLabel = "Password",
                 outputTransformation = if (showPassword) null else PasswordOutputTransformation,
                 trailing = {
@@ -224,7 +224,7 @@ fun SignIn() {
             }
           }
 
-          Spacer(Modifier.height(24.dp))
+          VerticalSpacing(6)
 
           Button(
             onClick = {},
