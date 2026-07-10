@@ -98,7 +98,7 @@ fun SignIn() {
       var showPassword by remember { mutableStateOf(false) }
       val passwordVisibilityLabel = if (showPassword) "Hide password" else "Show password"
       val widthBreakpoint = currentWindowWidthBreakpoint()
-      val contentMaxWidth = if (widthBreakpoint isAtLeast Medium) 600.dp else 420.dp
+      val contentMaxWidth = if (widthBreakpoint isAtLeast Medium) 600.dp else 480.dp
       val horizontalPadding = if (widthBreakpoint isAtLeast Medium) 10 * Spacing else 6 * Spacing
       val topPadding = when {
         widthBreakpoint isAtLeast Expanded -> 18 * Spacing
