@@ -26,16 +26,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -70,6 +67,8 @@ import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
 import com.composables.ui.components.Text
 import com.composables.ui.components.TextField
+import com.composables.ui.components.Tooltip
+import com.composables.ui.components.TooltipPanel
 import com.composables.ui.theme.Compact
 import com.composables.ui.theme.Expanded
 import com.composables.ui.theme.HorizontalSpacing
@@ -190,16 +189,24 @@ fun SignIn() {
                 accessibilityLabel = "Password",
                 outputTransformation = if (showPassword) null else PasswordOutputTransformation,
                 trailing = {
-                  IconButton(
-                    onClick = { showPassword = !showPassword },
-                    style = ButtonStyle.Ghost,
-                    buttonSize = ButtonSize.Small
+                  Tooltip(
+                    panel = {
+                      TooltipPanel {
+                        Text(if (showPassword) "Hide password" else "Show password")
+                      }
+                    }
                   ) {
-                    Icon(
-                      if (showPassword) EyeOffIcon else EyeIcon,
-                      contentDescription = if (showPassword) "Hide password" else "Show password",
-                      tint = Theme[colors][onBackgroundColor],
-                    )
+                    IconButton(
+                      onClick = { showPassword = !showPassword },
+                      style = ButtonStyle.Ghost,
+                      buttonSize = ButtonSize.Small
+                    ) {
+                      Icon(
+                        if (showPassword) EyeOffIcon else EyeIcon,
+                        contentDescription = if (showPassword) "Hide password" else "Show password",
+                        tint = Theme[colors][onBackgroundColor],
+                      )
+                    }
                   }
                 },
                 shape = shape,
