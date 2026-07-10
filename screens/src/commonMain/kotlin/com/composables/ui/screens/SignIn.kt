@@ -72,6 +72,7 @@ import com.composables.ui.components.Icon
 import com.composables.ui.components.IconButton
 import com.composables.ui.components.Text
 import com.composables.ui.components.TextField
+import com.composables.ui.theme.Compact
 import com.composables.ui.theme.Expanded
 import com.composables.ui.theme.Medium
 import com.composables.ui.theme.colors
@@ -118,7 +119,7 @@ fun SignIn() {
           .statusBarsPadding()
           .navigationBarsPadding()
           .imePadding(),
-        contentAlignment = if (widthBreakpoint isAtLeast Expanded) Alignment.Center else Alignment.TopCenter,
+        contentAlignment = if (widthBreakpoint.value == Compact) Alignment.TopCenter else Alignment.Center,
       ) {
         Column(
           modifier =
@@ -129,7 +130,9 @@ fun SignIn() {
               .padding(horizontal = horizontalPadding, vertical = topPadding),
           horizontalAlignment = Alignment.Start,
         ) {
-          VerticalSpacing(20)
+          if (widthBreakpoint.value == Compact) {
+            VerticalSpacing(20)
+          }
           Text("Sign in", style = DisplayStyle)
           VerticalSpacing(10)
 
