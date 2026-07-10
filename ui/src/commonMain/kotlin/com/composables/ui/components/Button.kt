@@ -335,7 +335,7 @@ private fun BaseButton(
           modifier
               .bouncyPress(
                   interactionSource = interactionSource,
-                  enabled = enabled && style != ButtonStyle.Link,
+                  enabled = enabled,
               )
               .focusRing(
                   interactionSource = interactionSource,
