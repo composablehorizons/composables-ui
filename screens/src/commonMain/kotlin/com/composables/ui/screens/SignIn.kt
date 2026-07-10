@@ -48,6 +48,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -59,6 +60,7 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.composables.ui.ComposablesApp
@@ -81,6 +83,12 @@ import com.composables.ui.theme.onPanelColor
 import com.composables.ui.theme.panelColor
 import com.composeunstyled.currentWindowWidthBreakpoint
 import com.composeunstyled.theme.Theme
+
+val LocalGap = staticCompositionLocalOf { 4.dp }
+
+val Spacing: Dp
+  @Composable
+  get() = LocalGap.current
 
 @Composable
 fun SignIn() {
@@ -110,7 +118,7 @@ fun SignIn() {
           .statusBarsPadding()
           .navigationBarsPadding()
           .imePadding(),
-        contentAlignment = if(widthBreakpoint isAtLeast Expanded) Alignment.Center else Alignment.TopCenter,
+        contentAlignment = if (widthBreakpoint isAtLeast Expanded) Alignment.Center else Alignment.TopCenter,
       ) {
         Column(
           modifier =
@@ -121,12 +129,9 @@ fun SignIn() {
               .padding(horizontal = horizontalPadding, vertical = topPadding),
           horizontalAlignment = Alignment.Start,
         ) {
-          Text(
-            "Sign in",
-            style = DisplayStyle
-          )
-
-          Spacer(Modifier.height(80.dp))
+          VerticalSpacing(20)
+          Text("Sign in", style = DisplayStyle)
+          VerticalSpacing(10)
 
           Column(
             modifier = Modifier.fillMaxWidth(),
@@ -260,6 +265,17 @@ fun SignIn() {
     }
   }
 }
+
+@Composable
+fun VerticalSpacing(times: Int) {
+  Spacer(Modifier.height(Spacing * times))
+}
+
+@Composable
+fun HorizontalSpacing(times: Int) {
+  Spacer(Modifier.width(Spacing * times))
+}
+
 
 private object PasswordOutputTransformation : OutputTransformation {
   override fun TextFieldBuffer.transformOutput() {
