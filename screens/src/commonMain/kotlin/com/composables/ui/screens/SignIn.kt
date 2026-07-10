@@ -127,12 +127,22 @@ fun SignIn() {
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(12.dp),
           ) {
-            SocialSignInButton(onClick = {}) {
+            Button(
+              onClick = {},
+              style = ButtonStyle.Outlined,
+              buttonSize = ButtonSize.Large,
+              modifier = Modifier.fillMaxWidth(),
+            ) {
               Icon(AppleIcon, modifier = Modifier.size(20.dp))
               Text("Sign in with Apple")
             }
 
-            SocialSignInButton(onClick = {}) {
+            Button(
+              onClick = {},
+              style = ButtonStyle.Outlined,
+              buttonSize = ButtonSize.Large,
+              modifier = Modifier.fillMaxWidth(),
+            ) {
               Icon(GoogleIcon, tint = Color.Unspecified, modifier = Modifier.size(20.dp))
               Text("Sign in with Google")
             }
@@ -248,10 +258,34 @@ fun SignIn() {
             horizontalArrangement = Arrangement.spacedBy(28.dp),
             verticalAlignment = Alignment.CenterVertically,
           ) {
-            FooterLink("Home")
-            FooterLink("Privacy")
-            FooterLink("Terms")
-            FooterLink("EULA")
+            Button(
+              onClick = {},
+              style = ButtonStyle.Link,
+              contentPadding = PaddingValues(0.dp),
+            ) {
+              Text("Home", color = Theme[colors][mutedColor])
+            }
+            Button(
+              onClick = {},
+              style = ButtonStyle.Link,
+              contentPadding = PaddingValues(0.dp),
+            ) {
+              Text("Privacy", color = Theme[colors][mutedColor])
+            }
+            Button(
+              onClick = {},
+              style = ButtonStyle.Link,
+              contentPadding = PaddingValues(0.dp),
+            ) {
+              Text("Terms", color = Theme[colors][mutedColor])
+            }
+            Button(
+              onClick = {},
+              style = ButtonStyle.Link,
+              contentPadding = PaddingValues(0.dp),
+            ) {
+              Text("EULA", color = Theme[colors][mutedColor])
+            }
           }
         }
       }
@@ -259,35 +293,9 @@ fun SignIn() {
   }
 }
 
-@Composable
-private fun SocialSignInButton(
-  onClick: () -> Unit,
-  content: @Composable () -> Unit,
-) {
-  Button(
-    onClick = onClick,
-    style = ButtonStyle.Outlined,
-    buttonSize = ButtonSize.Large,
-    modifier = Modifier.fillMaxWidth(),
-  ) {
-    content()
-  }
-}
-
 private object PasswordOutputTransformation : OutputTransformation {
   override fun TextFieldBuffer.transformOutput() {
     repeat(length) { index -> replace(index, index + 1, "\u2022") }
-  }
-}
-
-@Composable
-private fun FooterLink(text: String) {
-  Button(
-    onClick = {},
-    style = ButtonStyle.Link,
-    contentPadding = PaddingValues(0.dp),
-  ) {
-    Text(text, color = Theme[colors][mutedColor])
   }
 }
 
