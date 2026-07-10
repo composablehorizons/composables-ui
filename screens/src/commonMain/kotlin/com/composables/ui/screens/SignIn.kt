@@ -198,7 +198,6 @@ fun SignIn() {
                     Icon(
                       if (showPassword) EyeOffIcon else EyeIcon,
                       contentDescription = if (showPassword) "Hide password" else "Show password",
-                      modifier = Modifier.size(18.dp),
                       tint = Theme[colors][onBackgroundColor],
                     )
                   }
