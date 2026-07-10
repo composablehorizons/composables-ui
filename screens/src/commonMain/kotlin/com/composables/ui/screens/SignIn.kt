@@ -95,15 +95,18 @@ fun SignIn() {
       val widthBreakpoint = currentWindowWidthBreakpoint()
       val contentMaxWidth = if (widthBreakpoint isAtLeast Medium) 460.dp else 420.dp
       val horizontalPadding = if (widthBreakpoint isAtLeast Medium) 40.dp else 24.dp
-      val topPadding =
-        when {
-          widthBreakpoint isAtLeast Expanded -> 72.dp
-          widthBreakpoint isAtLeast Medium -> 48.dp
-          else -> 28.dp
-        }
+      val topPadding = when {
+        widthBreakpoint isAtLeast Expanded -> 72.dp
+        widthBreakpoint isAtLeast Medium -> 48.dp
+        else -> 28.dp
+      }
 
       Box(
-        modifier = Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().imePadding(),
+        modifier = Modifier
+          .fillMaxSize()
+          .statusBarsPadding()
+          .navigationBarsPadding()
+          .imePadding(),
         contentAlignment = Alignment.TopCenter,
       ) {
         Column(
