@@ -232,7 +232,7 @@ fun SignIn() {
           Spacer(Modifier.height(72.dp))
 
           Button(
-            onClick = {},
+            onClick = { /* TODO */ },
             style = ButtonStyle.Link,
             modifier = Modifier.align(Alignment.CenterHorizontally),
           ) {
@@ -249,7 +249,7 @@ fun SignIn() {
             Text("No account?", color = Theme[colors][mutedColor])
             Spacer(Modifier.width(2.dp))
             Button(
-              onClick = {},
+              onClick = { /* TODO */ },
               style = ButtonStyle.Link,
               contentPadding = PaddingValues(0.dp),
             ) {
