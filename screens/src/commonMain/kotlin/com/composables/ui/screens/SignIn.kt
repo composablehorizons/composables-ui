@@ -48,7 +48,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -60,7 +59,6 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.composables.ui.ComposablesApp
@@ -75,6 +73,7 @@ import com.composables.ui.components.TextField
 import com.composables.ui.theme.Compact
 import com.composables.ui.theme.Expanded
 import com.composables.ui.theme.Medium
+import com.composables.ui.theme.VerticalSpacing
 import com.composables.ui.theme.colors
 import com.composables.ui.theme.destructiveColor
 import com.composables.ui.theme.fieldColor
@@ -84,12 +83,6 @@ import com.composables.ui.theme.onPanelColor
 import com.composables.ui.theme.panelColor
 import com.composeunstyled.currentWindowWidthBreakpoint
 import com.composeunstyled.theme.Theme
-
-val LocalGap = staticCompositionLocalOf { 4.dp }
-
-val Spacing: Dp
-  @Composable
-  get() = LocalGap.current
 
 @Composable
 fun SignIn() {
@@ -268,17 +261,6 @@ fun SignIn() {
     }
   }
 }
-
-@Composable
-fun VerticalSpacing(times: Int) {
-  Spacer(Modifier.height(Spacing * times))
-}
-
-@Composable
-fun HorizontalSpacing(times: Int) {
-  Spacer(Modifier.width(Spacing * times))
-}
-
 
 private object PasswordOutputTransformation : OutputTransformation {
   override fun TextFieldBuffer.transformOutput() {
