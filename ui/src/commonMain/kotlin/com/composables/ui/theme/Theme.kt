@@ -394,7 +394,7 @@ val LocalInteractionMode: ProvidableCompositionLocal<InteractionMode?> = staticC
   null
 }
 
-val LocalSpacingUnit = staticCompositionLocalOf { 0.dp }
+private val LocalSpacingUnit = staticCompositionLocalOf { 0.dp }
 
 val Spacing: Dp
   @Composable
