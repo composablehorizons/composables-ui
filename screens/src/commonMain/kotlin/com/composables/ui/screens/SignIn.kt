@@ -117,7 +117,6 @@ fun SignIn() {
             Modifier
               .widthIn(max = contentMaxWidth)
               .fillMaxWidth()
-//              .fillMaxSize()
               .verticalScroll(rememberScrollState())
               .padding(horizontal = horizontalPadding, vertical = topPadding),
           horizontalAlignment = Alignment.Start,
