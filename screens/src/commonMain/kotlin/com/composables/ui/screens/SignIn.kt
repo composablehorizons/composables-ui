@@ -40,11 +40,12 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.text.input.TextFieldBuffer
-import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -88,9 +89,9 @@ fun SignIn() {
       val emailState = rememberTextFieldState("alex@example.com")
       val passwordState = rememberTextFieldState()
       val loading = remember { mutableStateOf(false) }
-      val emailError = remember { mutableStateOf<String?>(null) }
-      val passwordError = remember { mutableStateOf<String?>(null) }
-      val showPassword = remember { mutableStateOf(false) }
+      val emailError by remember { mutableStateOf<String?>(null) }
+      val passwordError by remember { mutableStateOf<String?>(null) }
+      var showPassword by remember { mutableStateOf(false) }
       val widthBreakpoint = currentWindowWidthBreakpoint()
       val contentMaxWidth = if (widthBreakpoint isAtLeast Medium) 460.dp else 420.dp
       val horizontalPadding = if (widthBreakpoint isAtLeast Medium) 40.dp else 24.dp
@@ -143,25 +144,61 @@ fun SignIn() {
               modifier = Modifier.fillMaxWidth().padding(vertical = 14.dp),
             )
 
-            SignInField(
-              accessibilityLabel = "Email",
-              state = emailState,
-              placeholder = "name@example.com",
-              error = emailError.value,
-            )
-            SignInField(
-              accessibilityLabel = "Password",
-              state = passwordState,
-              placeholder = "Password",
-              error = passwordError.value,
-              outputTransformation = if (showPassword.value) null else PasswordOutputTransformation,
-              trailing = {
-                PasswordVisibilityToggle(
-                  passwordVisible = showPassword.value,
-                  onClick = { showPassword.value = !showPassword.value },
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+              val shape = RoundedCornerShape(16.dp)
+              TextField(
+                state = emailState,
+                modifier = Modifier.fillMaxWidth().height(58.dp),
+                accessibilityLabel = "Email",
+                outputTransformation = null,
+                trailing = null,
+                shape = shape,
+                backgroundColor = Theme[colors][fieldColor],
+                placeholder = { Text("name@example.com") },
+              )
+              val currentEmailError = emailError
+              if (currentEmailError != null) {
+                Text(
+                  currentEmailError,
+                  color = Theme[colors][destructiveColor],
+                  fontSize = 13.sp,
                 )
-              },
-            )
+              }
+            }
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+              val shape = RoundedCornerShape(16.dp)
+              TextField(
+                state = passwordState,
+                modifier = Modifier.fillMaxWidth().height(58.dp),
+                accessibilityLabel = "Password",
+                outputTransformation = if (showPassword) null else PasswordOutputTransformation,
+                trailing = {
+                  IconButton(
+                    onClick = { showPassword = !showPassword },
+                    style = ButtonStyle.Ghost,
+                    buttonSize = ButtonSize.Small,
+                  ) {
+                    Icon(
+                      if (showPassword) EyeOffIcon else EyeIcon,
+                      contentDescription = if (showPassword) "Hide password" else "Show password",
+                      modifier = Modifier.size(18.dp),
+                      tint = Theme[colors][onBackgroundColor],
+                    )
+                  }
+                },
+                shape = shape,
+                backgroundColor = Theme[colors][fieldColor],
+                placeholder = { Text("Password") },
+              )
+              val currentPasswordError = passwordError
+              if (currentPasswordError != null) {
+                Text(
+                  currentPasswordError,
+                  color = Theme[colors][destructiveColor],
+                  fontSize = 13.sp,
+                )
+              }
+            }
           }
 
           Spacer(Modifier.height(24.dp))
@@ -234,56 +271,6 @@ private fun SocialSignInButton(
     modifier = Modifier.fillMaxWidth(),
   ) {
     content()
-  }
-}
-
-@Composable
-private fun SignInField(
-  accessibilityLabel: String,
-  state: TextFieldState,
-  placeholder: String,
-  error: String?,
-  outputTransformation: OutputTransformation? = null,
-  trailing: (@Composable () -> Unit)? = null,
-) {
-  Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-    val shape = RoundedCornerShape(16.dp)
-    TextField(
-      state = state,
-      modifier = Modifier.fillMaxWidth().height(58.dp),
-      accessibilityLabel = accessibilityLabel,
-      outputTransformation = outputTransformation,
-      trailing = trailing,
-      shape = shape,
-      backgroundColor = Theme[colors][fieldColor],
-      placeholder = { Text(placeholder) },
-    )
-    if (error != null) {
-      Text(
-        error,
-        color = Theme[colors][destructiveColor],
-        fontSize = 13.sp,
-      )
-    }
-  }
-}
-
-@Composable
-private fun PasswordVisibilityToggle(
-  passwordVisible: Boolean,
-  onClick: () -> Unit,
-) {
-  IconButton(
-    onClick = onClick,
-    style = ButtonStyle.Ghost,
-    buttonSize = ButtonSize.Small,
-  ) {
-    Icon(
-      if (passwordVisible) EyeOffIcon else EyeIcon,
-      contentDescription = if (passwordVisible) "Hide password" else "Show password",
-      modifier = Modifier.size(18.dp),
-      tint = Theme[colors][onBackgroundColor],
-    )
   }
 }
 
