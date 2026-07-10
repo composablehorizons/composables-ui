@@ -154,7 +154,7 @@ fun SignIn() {
               "or",
               color = Theme[colors][mutedColor],
               textAlign = TextAlign.Center,
-              modifier = Modifier.fillMaxWidth().padding(vertical = 3.5f * Spacing),
+              modifier = Modifier.fillMaxWidth().padding(vertical = 4 * Spacing),
             )
 
             Column(verticalArrangement = Arrangement.spacedBy(2 * Spacing)) {
