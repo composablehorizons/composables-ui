@@ -37,10 +37,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.text.input.TextFieldBuffer
 import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,6 +56,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -115,13 +118,13 @@ fun SignIn() {
               .widthIn(max = contentMaxWidth)
               .fillMaxWidth()
               .fillMaxSize()
+              .verticalScroll(rememberScrollState())
               .padding(horizontal = horizontalPadding, vertical = topPadding),
           horizontalAlignment = Alignment.Start,
         ) {
           Text(
             "Sign in",
-            fontSize = 44.sp,
-            fontWeight = FontWeight.Bold,
+            style = DisplayStyle
           )
 
           Spacer(Modifier.height(80.dp))
@@ -253,43 +256,6 @@ fun SignIn() {
               Text("Sign up")
             }
           }
-
-          Spacer(Modifier.weight(1f))
-
-          Row(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            horizontalArrangement = Arrangement.spacedBy(28.dp),
-            verticalAlignment = Alignment.CenterVertically,
-          ) {
-            Button(
-              onClick = {},
-              style = ButtonStyle.Link,
-              contentPadding = PaddingValues(0.dp),
-            ) {
-              Text("Home", color = Theme[colors][mutedColor])
-            }
-            Button(
-              onClick = {},
-              style = ButtonStyle.Link,
-              contentPadding = PaddingValues(0.dp),
-            ) {
-              Text("Privacy", color = Theme[colors][mutedColor])
-            }
-            Button(
-              onClick = {},
-              style = ButtonStyle.Link,
-              contentPadding = PaddingValues(0.dp),
-            ) {
-              Text("Terms", color = Theme[colors][mutedColor])
-            }
-            Button(
-              onClick = {},
-              style = ButtonStyle.Link,
-              contentPadding = PaddingValues(0.dp),
-            ) {
-              Text("EULA", color = Theme[colors][mutedColor])
-            }
-          }
         }
       }
     }
@@ -301,6 +267,11 @@ private object PasswordOutputTransformation : OutputTransformation {
     repeat(length) { index -> replace(index, index + 1, "\u2022") }
   }
 }
+
+val DisplayStyle: TextStyle = TextStyle(
+  fontSize = 44.sp,
+  fontWeight = FontWeight.Bold,
+)
 
 val AppleIcon: ImageVector
   get() {
