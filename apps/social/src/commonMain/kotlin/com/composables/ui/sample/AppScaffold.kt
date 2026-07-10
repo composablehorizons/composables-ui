@@ -42,8 +42,7 @@ fun AppScaffold(
   appearance: Appearance = Appearance.System,
   content: @Composable () -> Unit,
 ) {
-  val colorScheme =
-    when (appearance) {
+  val colorScheme = when (appearance) {
       Appearance.System -> LocalColorScheme.current
       Appearance.Light -> ColorScheme.Light
       else -> ColorScheme.Dark
