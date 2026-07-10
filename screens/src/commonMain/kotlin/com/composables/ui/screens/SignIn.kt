@@ -96,7 +96,7 @@ fun SignIn() {
       val passwordError by remember { mutableStateOf<String?>(null) }
       var showPassword by remember { mutableStateOf(false) }
       val widthBreakpoint = currentWindowWidthBreakpoint()
-      val contentMaxWidth = if (widthBreakpoint isAtLeast Medium) 460.dp else 420.dp
+      val contentMaxWidth = if (widthBreakpoint isAtLeast Medium) 600.dp else 420.dp
       val horizontalPadding = if (widthBreakpoint isAtLeast Medium) 40.dp else 24.dp
       val topPadding = when {
         widthBreakpoint isAtLeast Expanded -> 72.dp
@@ -110,14 +110,14 @@ fun SignIn() {
           .statusBarsPadding()
           .navigationBarsPadding()
           .imePadding(),
-        contentAlignment = Alignment.TopCenter,
+        contentAlignment = if(widthBreakpoint isAtLeast Expanded) Alignment.Center else Alignment.TopCenter,
       ) {
         Column(
           modifier =
-            Modifier.align(Alignment.TopCenter)
+            Modifier
               .widthIn(max = contentMaxWidth)
               .fillMaxWidth()
-              .fillMaxSize()
+//              .fillMaxSize()
               .verticalScroll(rememberScrollState())
               .padding(horizontal = horizontalPadding, vertical = topPadding),
           horizontalAlignment = Alignment.Start,
