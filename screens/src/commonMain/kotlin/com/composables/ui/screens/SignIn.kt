@@ -94,7 +94,6 @@ fun SignIn() {
       val emailState = rememberTextFieldState("alex@example.com")
       val passwordState = rememberTextFieldState()
       val loading by remember { mutableStateOf(false) }
-      val emailError by remember { mutableStateOf<String?>(null) }
       val passwordError by remember { mutableStateOf<String?>(null) }
       var showPassword by remember { mutableStateOf(false) }
       val passwordVisibilityLabel = if (showPassword) "Hide password" else "Show password"
@@ -164,13 +163,6 @@ fun SignIn() {
                 accessibilityLabel = "Email",
                 placeholder = { Text("name@example.com") },
               )
-              emailError?.let { error ->
-                Text(
-                  error,
-                  color = Theme[colors][destructiveColor],
-                  fontSize = 13.sp,
-                )
-              }
             }
             Column(verticalArrangement = Arrangement.spacedBy(2 * Spacing)) {
               TextField(
