@@ -401,11 +401,11 @@ val Spacing: Dp
   get() = LocalSpacingUnit.current
 
 @Composable
-fun VerticalSpacing(times: Int) {
+fun VerticalSpacing(times: Int = 1) {
   Spacer(Modifier.height(Spacing * times))
 }
 
 @Composable
-fun HorizontalSpacing(times: Int) {
+fun HorizontalSpacing(times: Int = 1) {
   Spacer(Modifier.width(Spacing * times))
 }

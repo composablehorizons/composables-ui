@@ -72,6 +72,7 @@ import com.composables.ui.components.Text
 import com.composables.ui.components.TextField
 import com.composables.ui.theme.Compact
 import com.composables.ui.theme.Expanded
+import com.composables.ui.theme.HorizontalSpacing
 import com.composables.ui.theme.Medium
 import com.composables.ui.theme.VerticalSpacing
 import com.composables.ui.theme.colors
@@ -192,7 +193,7 @@ fun SignIn() {
                   IconButton(
                     onClick = { showPassword = !showPassword },
                     style = ButtonStyle.Ghost,
-                    buttonSize = ButtonSize.Small,
+                    buttonSize = ButtonSize.Small
                   ) {
                     Icon(
                       if (showPassword) EyeOffIcon else EyeIcon,
@@ -220,7 +221,7 @@ fun SignIn() {
           VerticalSpacing(6)
 
           Button(
-            onClick = {},
+            onClick = { /* TODO */ },
             enabled = loading.value.not(),
             style = ButtonStyle.Primary,
             buttonSize = ButtonSize.Large,
@@ -229,7 +230,7 @@ fun SignIn() {
             Text(if (loading.value) "Signing in..." else "Sign in")
           }
 
-          Spacer(Modifier.height(72.dp))
+          VerticalSpacing(18)
 
           Button(
             onClick = { /* TODO */ },
@@ -239,7 +240,7 @@ fun SignIn() {
             Text("Forgot password?")
           }
 
-          Spacer(Modifier.height(12.dp))
+          VerticalSpacing(3)
 
           Row(
             modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -247,7 +248,8 @@ fun SignIn() {
             verticalAlignment = Alignment.CenterVertically,
           ) {
             Text("No account?", color = Theme[colors][mutedColor])
-            Spacer(Modifier.width(2.dp))
+            HorizontalSpacing(1)
+
             Button(
               onClick = { /* TODO */ },
               style = ButtonStyle.Link,
