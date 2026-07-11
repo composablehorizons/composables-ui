@@ -38,11 +38,7 @@ import com.composeunstyled.TooltipHost
 fun ComposablesApp(content: @Composable () -> Unit) {
   ComposablesTheme {
     ProvideWindowBreakpoints(width = WidthBreakpoints, height = HeightBreakpoints) {
-      TooltipHost {
-        FocusVisibilityProvider {
-          content()
-        }
-      }
+      TooltipHost { FocusVisibilityProvider { content() } }
     }
   }
 }

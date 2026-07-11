@@ -160,6 +160,15 @@ val raisedShadow: ThemeToken<Shadow> = ThemeToken("raised_shadow")
 /** Shadow for overlay surfaces such as dialogs, sheets, and menus. */
 val overlayShadow: ThemeToken<Shadow> = ThemeToken("overlay_shadow")
 
+/** Theme property that contains text style tokens. */
+val typography: ThemeProperty<TextStyle> = ThemeProperty("typography")
+
+/** Display text style for prominent page or screen titles. */
+val displayStyle: ThemeToken<TextStyle> = ThemeToken("display")
+
+/** Body text style used as the default text style everywhere. */
+val bodyStyle: ThemeToken<TextStyle> = ThemeToken("body")
+
 val indications: ThemeProperty<Indication> = ThemeProperty("indications")
 
 /** Indication for controls. */
@@ -179,19 +188,19 @@ val textSelectionColors: ThemeProperty<TextSelectionColors> = ThemeProperty("tex
 
 /** Default handle and background colors for text selection. */
 val defaultTextSelectionColors: ThemeToken<TextSelectionColors> =
-  ThemeToken("default_text_selection_colors")
+    ThemeToken("default_text_selection_colors")
 
 @Composable
 private fun themeColor(useDarkColors: Boolean, light: Color, dark: Color): Color {
   return animateColorAsState(
-    targetValue = if (useDarkColors) dark else light,
-    animationSpec =
-      tween(
-        durationMillis = 180,
-        easing = FastOutSlowInEasing,
-      ),
-  )
-    .value
+          targetValue = if (useDarkColors) dark else light,
+          animationSpec =
+              tween(
+                  durationMillis = 180,
+                  easing = FastOutSlowInEasing,
+              ),
+      )
+      .value
 }
 
 /** Default Composables UI theme. */
@@ -200,143 +209,152 @@ val ComposablesTheme: ThemeComposable = buildTheme {
   val textSelectionHandleColor = if (useDarkColors) Color(0xFFE5E5E5) else Color.Black
   val textSelectionBackgroundColor = textSelectionHandleColor.copy(alpha = 0.24f)
   val interactionMode =
-    LocalInteractionMode.current
-      ?: if (currentInteractionCapabilities().hasPointer) InteractionMode.Pointer
-      else InteractionMode.Touch
+      LocalInteractionMode.current
+          ?: if (currentInteractionCapabilities().hasPointer) InteractionMode.Pointer
+          else InteractionMode.Touch
 
   val useTouchSizes = interactionMode == InteractionMode.Touch
 
   properties[colors] =
-    mapOf(
-      backgroundColor to
-        themeColor(useDarkColors, light = Color(0xFFF4F4F4), dark = Color(0xFF0A0A0A)),
-      onBackgroundColor to
-        themeColor(useDarkColors, light = Color.Black, dark = Color(0xFFE5E5E5)),
-      panelColor to themeColor(useDarkColors, light = Color.White, dark = Color(0xFF171717)),
-      onPanelColor to themeColor(useDarkColors, light = Color.Black, dark = Color(0xFFE5E5E5)),
-      mutedColor to
-        themeColor(useDarkColors, light = Color(0xFF777777), dark = Color(0xFFA3A3A3)),
-      primaryColor to themeColor(useDarkColors, light = Color.Black, dark = Color(0xFFF5F5F5)),
-      onPrimaryColor to
-        themeColor(useDarkColors, light = Color.White, dark = Color(0xFF171717)),
-      secondaryColor to
-        themeColor(useDarkColors, light = Color(0xFFF1F1F1), dark = Color(0xFF262626)),
-      onSecondaryColor to
-        themeColor(useDarkColors, light = Color.Black, dark = Color(0xFFE5E5E5)),
-      controlColor to
-        themeColor(useDarkColors, light = Color(0xFFE5E5E5), dark = Color(0xFF262626)),
-      onControlColor to
-        themeColor(useDarkColors, light = Color(0xFF777777), dark = Color(0xFFA3A3A3)),
-      thumbColor to themeColor(useDarkColors, light = Color.White, dark = Color(0xFFE5E5E5)),
-      switchTrackColor to
-        themeColor(
-          useDarkColors,
-          light = Color(0xFFE4E4E7),
-          dark = Color.White.copy(alpha = 0.05f),
-        ),
-      switchSelectedTrackColor to
-        themeColor(
-          useDarkColors,
-          light = Color(0xFF18181B),
-          dark = Color.White.copy(alpha = 0.25f),
-        ),
-      switchThumbColor to Color.White,
-      selectedControlColor to
-        themeColor(useDarkColors, light = Color(0xFFECECEC), dark = Color(0xFF404040)),
-      onSelectedControlColor to
-        themeColor(useDarkColors, light = Color.Black, dark = Color(0xFFF5F5F5)),
-      destructiveColor to if (useDarkColors) Color(0xFFF87171) else Color(0xFFDC2626),
-      onDestructiveColor to if (useDarkColors) Color(0xFF171717) else Color.White,
-      borderColor to
-        themeColor(useDarkColors, light = Color(0xFFE0E0E0), dark = Color(0xFF404040)),
-      fieldColor to
-        themeColor(useDarkColors, light = Color(0xFFF1F1F1), dark = Color(0xFF262626)),
-      onFieldColor to themeColor(useDarkColors, light = Color.Black, dark = Color(0xFFE5E5E5)),
-      scrimColor to Color.Black.copy(alpha = if (useDarkColors) 0.48f else 0.38f),
-      ringColor to
-        themeColor(
-          useDarkColors,
-          light = Color.Black.copy(alpha = 0.24f),
-          dark = Color(0xFFE5E5E5).copy(alpha = 0.28f),
-        ),
-    )
+      mapOf(
+          backgroundColor to
+              themeColor(useDarkColors, light = Color(0xFFF4F4F4), dark = Color(0xFF0A0A0A)),
+          onBackgroundColor to
+              themeColor(useDarkColors, light = Color.Black, dark = Color(0xFFE5E5E5)),
+          panelColor to themeColor(useDarkColors, light = Color.White, dark = Color(0xFF171717)),
+          onPanelColor to themeColor(useDarkColors, light = Color.Black, dark = Color(0xFFE5E5E5)),
+          mutedColor to
+              themeColor(useDarkColors, light = Color(0xFF777777), dark = Color(0xFFA3A3A3)),
+          primaryColor to themeColor(useDarkColors, light = Color.Black, dark = Color(0xFFF5F5F5)),
+          onPrimaryColor to
+              themeColor(useDarkColors, light = Color.White, dark = Color(0xFF171717)),
+          secondaryColor to
+              themeColor(useDarkColors, light = Color(0xFFF1F1F1), dark = Color(0xFF262626)),
+          onSecondaryColor to
+              themeColor(useDarkColors, light = Color.Black, dark = Color(0xFFE5E5E5)),
+          controlColor to
+              themeColor(useDarkColors, light = Color(0xFFE5E5E5), dark = Color(0xFF262626)),
+          onControlColor to
+              themeColor(useDarkColors, light = Color(0xFF777777), dark = Color(0xFFA3A3A3)),
+          thumbColor to themeColor(useDarkColors, light = Color.White, dark = Color(0xFFE5E5E5)),
+          switchTrackColor to
+              themeColor(
+                  useDarkColors,
+                  light = Color(0xFFE4E4E7),
+                  dark = Color.White.copy(alpha = 0.05f),
+              ),
+          switchSelectedTrackColor to
+              themeColor(
+                  useDarkColors,
+                  light = Color(0xFF18181B),
+                  dark = Color.White.copy(alpha = 0.25f),
+              ),
+          switchThumbColor to Color.White,
+          selectedControlColor to
+              themeColor(useDarkColors, light = Color(0xFFECECEC), dark = Color(0xFF404040)),
+          onSelectedControlColor to
+              themeColor(useDarkColors, light = Color.Black, dark = Color(0xFFF5F5F5)),
+          destructiveColor to if (useDarkColors) Color(0xFFF87171) else Color(0xFFDC2626),
+          onDestructiveColor to if (useDarkColors) Color(0xFF171717) else Color.White,
+          borderColor to
+              themeColor(useDarkColors, light = Color(0xFFE0E0E0), dark = Color(0xFF404040)),
+          fieldColor to
+              themeColor(useDarkColors, light = Color(0xFFF1F1F1), dark = Color(0xFF262626)),
+          onFieldColor to themeColor(useDarkColors, light = Color.Black, dark = Color(0xFFE5E5E5)),
+          scrimColor to Color.Black.copy(alpha = if (useDarkColors) 0.48f else 0.38f),
+          ringColor to
+              themeColor(
+                  useDarkColors,
+                  light = Color.Black.copy(alpha = 0.24f),
+                  dark = Color(0xFFE5E5E5).copy(alpha = 0.28f),
+              ),
+      )
   properties[textSelectionColors] =
-    mapOf(
-      com.composables.ui.theme.defaultTextSelectionColors to
-        TextSelectionColors(
-          handleColor = textSelectionHandleColor,
-          backgroundColor = textSelectionBackgroundColor,
-        ),
-    )
+      mapOf(
+          com.composables.ui.theme.defaultTextSelectionColors to
+              TextSelectionColors(
+                  handleColor = textSelectionHandleColor,
+                  backgroundColor = textSelectionBackgroundColor,
+              ),
+      )
   properties[shapes] =
-    mapOf(
-      smallShape to RoundedCornerShape(6.dp),
-      mediumShape to RoundedCornerShape(12.dp),
-      largeShape to RoundedCornerShape(16.dp),
-      buttonShape to RoundedCornerShape(if (useTouchSizes) 100.dp else 10.dp),
-      dialogShape to RoundedCornerShape(16.dp),
-      sheetShape to RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-      menuShape to RoundedCornerShape(16.dp),
-      fieldShape to RoundedCornerShape(if (useTouchSizes) 16.dp else 12.dp),
-    )
+      mapOf(
+          smallShape to RoundedCornerShape(6.dp),
+          mediumShape to RoundedCornerShape(12.dp),
+          largeShape to RoundedCornerShape(16.dp),
+          buttonShape to RoundedCornerShape(if (useTouchSizes) 100.dp else 10.dp),
+          dialogShape to RoundedCornerShape(16.dp),
+          sheetShape to RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+          menuShape to RoundedCornerShape(16.dp),
+          fieldShape to RoundedCornerShape(if (useTouchSizes) 16.dp else 12.dp),
+      )
   properties[shadows] =
-    mapOf(
-      raisedShadow to
-        Shadow(
-          radius = 16.dp,
-          color = Color.Black,
-          offset = DpOffset(x = 0.dp, y = 4.dp),
-          alpha = 0.14f,
-        ),
-      overlayShadow to
-        Shadow(
-          radius = 24.dp,
-          color = Color.Black,
-          offset = DpOffset(x = 0.dp, y = 8.dp),
-          alpha = if (useDarkColors) 0.36f else 0.22f,
-        ),
-    )
+      mapOf(
+          raisedShadow to
+              Shadow(
+                  radius = 16.dp,
+                  color = Color.Black,
+                  offset = DpOffset(x = 0.dp, y = 4.dp),
+                  alpha = 0.14f,
+              ),
+          overlayShadow to
+              Shadow(
+                  radius = 24.dp,
+                  color = Color.Black,
+                  offset = DpOffset(x = 0.dp, y = 8.dp),
+                  alpha = if (useDarkColors) 0.36f else 0.22f,
+              ),
+      )
   properties[alphas] =
-    mapOf(
-      disabledAlpha to 0.33f,
-    )
+      mapOf(
+          disabledAlpha to 0.33f,
+      )
 
-  val bodyStyle =
-    TextStyle(
-      fontSize = if (useTouchSizes) 17.sp else 15.sp,
-      lineHeight = if (useTouchSizes) 24.sp else 20.sp,
-      fontWeight = FontWeight.Normal,
-    )
-  defaultTextStyle = bodyStyle
+  val defaultBodyStyle =
+      TextStyle(
+          fontSize = if (useTouchSizes) 17.sp else 15.sp,
+          lineHeight = if (useTouchSizes) 24.sp else 20.sp,
+          fontWeight = FontWeight.Normal,
+      )
+  properties[typography] =
+      mapOf(
+          bodyStyle to defaultBodyStyle,
+          displayStyle to
+              TextStyle(
+                  fontSize = 44.sp,
+                  fontWeight = FontWeight.Bold,
+              ),
+      )
+  defaultTextStyle = defaultBodyStyle
 
   val defaultIndicationValue =
-    rememberRippleIndication(
-      if (useDarkColors) {
-        Color(0xFFE5E5E5).copy(alpha = 0.10f)
-      } else {
-        Color.Black.copy(alpha = 0.08f)
-      },
-    )
+      rememberRippleIndication(
+          if (useDarkColors) {
+            Color(0xFFE5E5E5).copy(alpha = 0.10f)
+          } else {
+            Color.Black.copy(alpha = 0.08f)
+          },
+      )
   val inverseIndicationValue =
-    rememberRippleIndication(
-      if (useDarkColors) {
-        Color(0xFF171717).copy(alpha = 0.10f)
-      } else {
-        Color.White.copy(alpha = 0.12f)
-      },
-    )
+      rememberRippleIndication(
+          if (useDarkColors) {
+            Color(0xFF171717).copy(alpha = 0.10f)
+          } else {
+            Color.White.copy(alpha = 0.12f)
+          },
+      )
   this.defaultIndication = defaultIndicationValue
   properties[indications] =
-    mapOf(
-      com.composables.ui.theme.defaultIndication to defaultIndicationValue,
-      inverseIndication to inverseIndicationValue,
-    )
+      mapOf(
+          com.composables.ui.theme.defaultIndication to defaultIndicationValue,
+          inverseIndication to inverseIndicationValue,
+      )
 
   extend { content ->
     CompositionLocalProvider(
-      LocalInteractionMode provides interactionMode,
-      LocalSpacingUnit provides 4.dp
-    ) { content() }
+        LocalInteractionMode provides interactionMode, LocalSpacingUnit provides 4.dp) {
+          content()
+        }
   }
 }
 
@@ -347,11 +365,11 @@ val ComposablesTheme: ThemeComposable = buildTheme {
 @JvmInline
 value class ColorScheme internal constructor(@Suppress("unused") private val value: Int) {
   override fun toString() =
-    when (this) {
-      Light -> "Light"
-      Dark -> "Dark"
-      else -> "Error"
-    }
+      when (this) {
+        Light -> "Light"
+        Dark -> "Dark"
+        else -> "Error"
+      }
 
   companion object {
     val Light = ColorScheme(0)
@@ -368,11 +386,11 @@ val LocalColorScheme: ProvidableCompositionLocal<ColorScheme> = staticCompositio
 @JvmInline
 value class InteractionMode internal constructor(@Suppress("unused") private val value: Int) {
   override fun toString() =
-    when (this) {
-      Touch -> "Touch"
-      Pointer -> "Pointer"
-      else -> "Error"
-    }
+      when (this) {
+        Touch -> "Touch"
+        Pointer -> "Pointer"
+        else -> "Error"
+      }
 
   companion object {
     val Touch = InteractionMode(1)
@@ -397,8 +415,7 @@ val LocalInteractionMode: ProvidableCompositionLocal<InteractionMode?> = staticC
 private val LocalSpacingUnit = staticCompositionLocalOf { 0.dp }
 
 val Spacing: Dp
-  @Composable
-  get() = LocalSpacingUnit.current
+  @Composable get() = LocalSpacingUnit.current
 
 @Composable
 fun VerticalSpacing(times: Int = 1) {
