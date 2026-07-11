@@ -22,9 +22,13 @@
 plugins {
   `kotlin-dsl`
   `java-gradle-plugin`
+  `maven-publish`
 }
 
 java { toolchain { languageVersion = JavaLanguageVersion.of(17) } }
+
+group = "com.composables"
+version = "0.1.0"
 
 dependencies {
   compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.0")

@@ -53,16 +53,26 @@ abstract class GenerateComposablesDevToolsMainTask : DefaultTask() {
       import androidx.compose.runtime.getValue
       import androidx.compose.runtime.mutableStateOf
       import androidx.compose.runtime.remember
+      import androidx.compose.runtime.rememberCoroutineScope
       import androidx.compose.runtime.setValue
       import androidx.compose.ui.unit.LayoutDirection
       import androidx.compose.ui.unit.dp
       import androidx.compose.ui.window.Window
       import androidx.compose.ui.window.application
       import androidx.compose.ui.window.rememberWindowState
-      import com.composables.devtools.DevToolsDevices
+      import androidx.datastore.core.DataStore
+      import androidx.datastore.preferences.core.Preferences
+      import androidx.datastore.preferences.core.edit
+      import androidx.datastore.preferences.core.floatPreferencesKey
+      import androidx.datastore.preferences.core.stringPreferencesKey
+      import androidx.datastore.preferences.core.PreferenceDataStoreFactory
       import com.composables.devtools.DevTools
+      import com.composables.devtools.DevToolsColorScheme
+      import com.composables.devtools.DevToolsDevice
+      import com.composables.devtools.DevToolsDevices
       import com.composables.devtools.DevToolsOrientation
       import com.composables.devtools.DevToolsZoom
+      import com.composables.devtools.DevToolsZoomLevels
       import com.composables.devtools.canRotate
       import com.composables.devtools.deviceForDevToolsShortcut
       import com.composables.devtools.devToolsZoomForShortcut
@@ -76,16 +86,36 @@ abstract class GenerateComposablesDevToolsMainTask : DefaultTask() {
       import com.composables.devtools.oppositeDevToolsLayoutDirection
       import com.composables.devtools.requestDevToolsHotReload
       import com.composables.devtools.rotated
+      import java.io.File
+      import kotlin.math.abs
+      import kotlinx.coroutines.flow.first
+      import kotlinx.coroutines.launch
+      import kotlinx.coroutines.runBlocking
+      import okio.Path.Companion.toPath
 
       fun main() = application {
         val windowState = rememberWindowState(width = 960.dp, height = 860.dp)
-        var selectedDevice by remember { mutableStateOf(DevToolsDevices.Desktop) }
-        var selectedOrientation by remember { mutableStateOf(DevToolsOrientation.Portrait) }
-        var selectedLayoutDirection by remember { mutableStateOf(LayoutDirection.Ltr) }
-        var selectedZoom by remember { mutableStateOf(DevToolsZoom.Default) }
+        val displaySettingsScope = rememberCoroutineScope()
+        val displaySettings = remember { loadDevToolsDisplaySettings() }
+        var selectedDevice by remember { mutableStateOf(displaySettings.device) }
+        var selectedOrientation by remember { mutableStateOf(displaySettings.orientation) }
+        var selectedLayoutDirection by remember { mutableStateOf(displaySettings.layoutDirection) }
+        var selectedColorScheme by remember { mutableStateOf(displaySettings.colorScheme) }
+        var selectedZoom by remember { mutableStateOf(displaySettings.zoom) }
         var toolbarVisible by remember { mutableStateOf(true) }
         var saveScreenshotRequest by remember { mutableStateOf(0) }
         var copyScreenshotRequest by remember { mutableStateOf(0) }
+        fun persistDisplaySettings() {
+          val settings =
+            DevToolsDisplaySettings(
+                device = selectedDevice,
+                orientation = selectedOrientation,
+                layoutDirection = selectedLayoutDirection,
+                colorScheme = selectedColorScheme,
+                zoom = selectedZoom,
+            )
+          displaySettingsScope.launch { saveDevToolsDisplaySettings(settings) }
+        }
 
         Window(
           onCloseRequest = ::exitApplication,
@@ -95,6 +125,7 @@ abstract class GenerateComposablesDevToolsMainTask : DefaultTask() {
             val shortcutDevice = deviceForDevToolsShortcut(event)
             if (shortcutDevice != null) {
               selectedDevice = shortcutDevice
+              persistDisplaySettings()
               true
             } else if (isDevToolsHotReloadShortcut(event) && isDevToolsHotReloadAvailable()) {
               runCatching { requestDevToolsHotReload() }
@@ -107,9 +138,11 @@ abstract class GenerateComposablesDevToolsMainTask : DefaultTask() {
               true
             } else if (isDevToolsRotationShortcut(event) && selectedDevice.canRotate) {
               selectedOrientation = selectedOrientation.rotated()
+              persistDisplaySettings()
               true
             } else if (isDevToolsLayoutDirectionShortcut(event)) {
               selectedLayoutDirection = selectedLayoutDirection.oppositeDevToolsLayoutDirection()
+              persistDisplaySettings()
               true
             } else if (isDevToolsToolbarShortcut(event)) {
               toolbarVisible = !toolbarVisible
@@ -118,6 +151,7 @@ abstract class GenerateComposablesDevToolsMainTask : DefaultTask() {
               val shortcutZoom = devToolsZoomForShortcut(event, selectedZoom)
               if (shortcutZoom != null) {
                 selectedZoom = shortcutZoom
+                persistDisplaySettings()
                 true
               } else {
                 false
@@ -126,15 +160,32 @@ abstract class GenerateComposablesDevToolsMainTask : DefaultTask() {
           },
         ) {
           DevTools(
-            initialDevice = DevToolsDevices.Desktop,
+            initialDevice = DevToolsDevices.Mobile,
             selectedDevice = selectedDevice,
-            onDeviceSelected = { selectedDevice = it },
+            onDeviceSelected = {
+              selectedDevice = it
+              persistDisplaySettings()
+            },
             selectedOrientation = selectedOrientation,
-            onOrientationSelected = { selectedOrientation = it },
+            onOrientationSelected = {
+              selectedOrientation = it
+              persistDisplaySettings()
+            },
             selectedLayoutDirection = selectedLayoutDirection,
-            onLayoutDirectionSelected = { selectedLayoutDirection = it },
+            onLayoutDirectionSelected = {
+              selectedLayoutDirection = it
+              persistDisplaySettings()
+            },
+            selectedColorScheme = selectedColorScheme,
+            onColorSchemeSelected = {
+              selectedColorScheme = it
+              persistDisplaySettings()
+            },
             selectedZoom = selectedZoom,
-            onZoomSelected = { selectedZoom = it },
+            onZoomSelected = {
+              selectedZoom = it
+              persistDisplaySettings()
+            },
             showControls = toolbarVisible,
             saveScreenshotRequest = saveScreenshotRequest,
             copyScreenshotRequest = copyScreenshotRequest,
@@ -143,6 +194,78 @@ abstract class GenerateComposablesDevToolsMainTask : DefaultTask() {
           }
         }
       }
+
+      private data class DevToolsDisplaySettings(
+        val device: DevToolsDevice = DevToolsDevices.Mobile,
+        val orientation: DevToolsOrientation = DevToolsOrientation.Portrait,
+        val layoutDirection: LayoutDirection = LayoutDirection.Ltr,
+        val colorScheme: DevToolsColorScheme = DevToolsColorScheme.Light,
+        val zoom: DevToolsZoom = DevToolsZoom.Default,
+      )
+
+      private val devToolsDisplayDataStore: DataStore<Preferences> by lazy {
+        PreferenceDataStoreFactory.createWithPath {
+          File(
+              System.getProperty("user.home"),
+              "Library/Application Support/Composables Dev Tools/display.preferences_pb",
+          )
+              .apply { parentFile.mkdirs() }
+              .absolutePath
+              .toPath()
+        }
+      }
+
+      private fun loadDevToolsDisplaySettings(): DevToolsDisplaySettings =
+        runBlocking {
+          val preferences = devToolsDisplayDataStore.data.first()
+          DevToolsDisplaySettings(
+            device = devToolsDeviceForId(preferences[DevicePreferenceKey] ?: DevToolsDevices.Mobile.id),
+            orientation = devToolsOrientationForId(preferences[OrientationPreferenceKey] ?: "portrait"),
+            layoutDirection = devToolsLayoutDirectionForId(preferences[LayoutDirectionPreferenceKey] ?: "ltr"),
+            colorScheme = devToolsColorSchemeForId(preferences[ColorSchemePreferenceKey] ?: "light"),
+            zoom = devToolsZoomForScale(preferences[ZoomPreferenceKey] ?: DevToolsZoom.Default.scale),
+          )
+        }
+
+      private suspend fun saveDevToolsDisplaySettings(settings: DevToolsDisplaySettings) {
+        devToolsDisplayDataStore.edit { preferences ->
+          preferences[DevicePreferenceKey] = settings.device.id
+          preferences[OrientationPreferenceKey] = settings.orientation.id
+          preferences[LayoutDirectionPreferenceKey] = settings.layoutDirection.id
+          preferences[ColorSchemePreferenceKey] = settings.colorScheme.id
+          preferences[ZoomPreferenceKey] = settings.zoom.scale
+        }
+      }
+
+      private fun devToolsDeviceForId(id: String): DevToolsDevice =
+        DevToolsDevices.Default.firstOrNull { it.id == id } ?: DevToolsDevices.Mobile
+
+      private fun devToolsOrientationForId(id: String): DevToolsOrientation =
+        if (id == "landscape") DevToolsOrientation.Landscape else DevToolsOrientation.Portrait
+
+      private val DevToolsOrientation.id: String
+        get() = if (this == DevToolsOrientation.Landscape) "landscape" else "portrait"
+
+      private fun devToolsLayoutDirectionForId(id: String): LayoutDirection =
+        if (id == "rtl") LayoutDirection.Rtl else LayoutDirection.Ltr
+
+      private val LayoutDirection.id: String
+        get() = if (this == LayoutDirection.Rtl) "rtl" else "ltr"
+
+      private fun devToolsColorSchemeForId(id: String): DevToolsColorScheme =
+        if (id == "dark") DevToolsColorScheme.Dark else DevToolsColorScheme.Light
+
+      private val DevToolsColorScheme.id: String
+        get() = if (this == DevToolsColorScheme.Dark) "dark" else "light"
+
+      private fun devToolsZoomForScale(scale: Float): DevToolsZoom =
+        DevToolsZoomLevels.Default.minBy { abs(it.scale - scale) }
+
+      private val DevicePreferenceKey = stringPreferencesKey("display.device")
+      private val OrientationPreferenceKey = stringPreferencesKey("display.orientation")
+      private val LayoutDirectionPreferenceKey = stringPreferencesKey("display.layoutDirection")
+      private val ColorSchemePreferenceKey = stringPreferencesKey("display.colorScheme")
+      private val ZoomPreferenceKey = floatPreferencesKey("display.zoom")
       """.trimIndent() + "\n",
     )
   }
@@ -175,7 +298,14 @@ class ComposablesDevToolsPlugin : Plugin<Project> {
           devCompilation.defaultSourceSet.apply {
             kotlin.srcDir(generateMain.map { it.outputDirectory })
             dependencies {
-              implementation(project.dependencies.project(mapOf("path" to DEV_TOOLS_RUNTIME_PATH)))
+              val runtimeDependency =
+                  if (project.findProject(DEV_TOOLS_RUNTIME_PATH) != null) {
+                    project.dependencies.project(mapOf("path" to DEV_TOOLS_RUNTIME_PATH))
+                  } else {
+                    DEV_TOOLS_RUNTIME_COORDINATES
+              }
+              implementation(runtimeDependency)
+              implementation(DEV_TOOLS_DATASTORE_PREFERENCES_COORDINATES)
               implementation(ComposePlugin.Dependencies(project).desktop.currentOs)
             }
           }
@@ -201,4 +331,7 @@ class ComposablesDevToolsPlugin : Plugin<Project> {
 }
 
 private const val DEV_TOOLS_RUNTIME_PATH = ":devtools:runtime"
+private const val DEV_TOOLS_RUNTIME_COORDINATES = "com.composables:runtime:0.1.0"
+private const val DEV_TOOLS_DATASTORE_PREFERENCES_COORDINATES =
+    "androidx.datastore:datastore-preferences:1.2.1"
 private const val DEV_TOOLS_MAIN_CLASS = "com.composables.devtools.generated.DevToolsMainKt"
