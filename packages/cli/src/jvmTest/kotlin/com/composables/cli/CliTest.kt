@@ -38,6 +38,10 @@ class CliTest {
       val gitignoreFile = File(projectDir, ".gitignore")
       val settingsFile = File(projectDir, "settings.gradle.kts")
       val appFile = File(projectDir, "shared/src/commonMain/kotlin/com/composables/demo/App.kt")
+      val homeScreenFile =
+          File(projectDir, "shared/src/commonMain/kotlin/com/composables/demo/HomeScreen.kt")
+      val detailsScreenFile =
+          File(projectDir, "shared/src/commonMain/kotlin/com/composables/demo/DetailsScreen.kt")
       val desktopMainFile =
           File(projectDir, "desktopApp/src/jvmMain/kotlin/com/composables/demo/main.kt")
 
@@ -50,6 +54,10 @@ class CliTest {
       assertThat(gitignoreFile.exists(), "Generated .gitignore should exist").isTrue()
       assertThat(settingsFile.exists(), "Generated settings file should exist").isTrue()
       assertThat(appFile.exists(), "App source should be moved to the requested package").isTrue()
+      assertThat(homeScreenFile.exists(), "Home screen source should be moved to the requested package")
+          .isTrue()
+      assertThat(detailsScreenFile.exists(), "Details screen source should be moved to the requested package")
+          .isTrue()
       assertThat(desktopMainFile.exists(), "Desktop launcher source should exist").isTrue()
 
       assertThat(
@@ -77,8 +85,11 @@ class CliTest {
       val gitignoreContent = gitignoreFile.readText()
       val settingsContent = settingsFile.readText()
       val appContent = appFile.readText()
+      val homeScreenContent = homeScreenFile.readText()
+      val detailsScreenContent = detailsScreenFile.readText()
 
       assertThat(sharedBuildContent).contains("jvm()")
+      assertThat(sharedBuildContent).contains("implementation(libs.androidx.navigation3.ui)")
       assertThat(sharedBuildContent).contains("implementation(libs.composables.ui)")
       assertThat(sharedBuildContent).contains("implementation(libs.composables.uri.painter)")
       assertThat(sharedBuildContent).contains("implementation(libs.compose.ui.tooling.preview)")
@@ -110,13 +121,32 @@ class CliTest {
 
       assertThat(appContent).contains("package com.composables.demo")
       assertThat(appContent).contains("import androidx.compose.ui.tooling.preview.Preview")
-      assertThat(appContent).contains("Hello Beautiful World!")
-      assertThat(appContent).contains("Go to App.kt to edit your app")
-      assertThat(appContent)
-          .contains(
-              "Pro tip: Use the `dev` configuration in your IDE to auto-reload your app when you edit your code")
+      assertThat(appContent).contains("import androidx.navigation3.runtime.NavBackStack")
+      assertThat(appContent).contains("import androidx.navigation3.ui.NavDisplay")
+      assertThat(appContent).contains("entry<HomeRoute>")
+      assertThat(appContent).contains("entry<DetailsRoute>")
+      assertThat(appContent).contains("modifier = Modifier.fillMaxSize(),")
+      assertThat(appContent).contains("data object HomeRoute : NavKey")
+      assertThat(appContent).contains("data object DetailsRoute : NavKey")
+      assertThat(appContent).doesNotContain("safeDrawingPadding")
+      assertThat(appContent).doesNotContain("fun HomeScreen")
+      assertThat(appContent).doesNotContain("fun DetailsScreen")
       assertThat(appContent).doesNotContain("{{app_name}}")
       assertThat(appContent).doesNotContain("{{namespace}}")
+      assertThat(homeScreenContent).contains("package com.composables.demo")
+      assertThat(homeScreenContent).contains("fun HomeScreen(onDetailsClick: () -> Unit)")
+      assertThat(homeScreenContent).doesNotContain("private fun HomeScreen")
+      assertThat(homeScreenContent).contains("Hello Beautiful World!")
+      assertThat(homeScreenContent).contains("Go to App.kt to edit your app")
+      assertThat(homeScreenContent)
+          .contains(
+              "Pro tip: Use the dev configuration in your IDE to auto-reload your app when you edit your code")
+      assertThat(homeScreenContent).doesNotContain("{{namespace}}")
+      assertThat(detailsScreenContent).contains("package com.composables.demo")
+      assertThat(detailsScreenContent).contains("fun DetailsScreen(onBackClick: () -> Unit)")
+      assertThat(detailsScreenContent).doesNotContain("private fun DetailsScreen")
+      assertThat(detailsScreenContent).contains("This screen is powered by a Navigation 3 back stack.")
+      assertThat(detailsScreenContent).doesNotContain("{{namespace}}")
     }
   }
 
@@ -312,6 +342,7 @@ class CliTest {
 
       assertThat(content.countOccurrences("""agp = "9.2.1"""")).isEqualTo(1)
       assertThat(content.countOccurrences("""iconsLucide = "1.0.0"""")).isEqualTo(1)
+      assertThat(content.countOccurrences("""navigation3 = "1.1.1"""")).isEqualTo(1)
       assertThat(
               content.countOccurrences(
                   """androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }"""))
@@ -327,6 +358,10 @@ class CliTest {
       assertThat(
               content.countOccurrences(
                   """compose-ui = { group = "org.jetbrains.compose.ui", name = "ui", version.ref = "compose" }"""))
+          .isEqualTo(1)
+      assertThat(
+              content.countOccurrences(
+                  """androidx-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation3" }"""))
           .isEqualTo(1)
       assertThat(
               content.countOccurrences(

@@ -173,6 +173,7 @@ internal data class ProjectConventions(
     val composablesUiDependency: String,
     val composablesIconsLucideDependency: String,
     val composablesUriPainterDependency: String,
+    val navigation3UiDependency: String,
     val androidxActivityComposeDependency: String,
     val androidCompileSdkExpression: String,
     val androidMinSdkExpression: String,
@@ -1828,6 +1829,7 @@ activityCompose = "1.13.0"
               """compose-ui = { group = "org.jetbrains.compose.ui", name = "ui", version.ref = "compose" }
 compose-ui-tooling = { group = "org.jetbrains.compose.ui", name = "ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { group = "org.jetbrains.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
+androidx-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
 
 """,
           "{{android_libraries}}" to
@@ -1883,6 +1885,7 @@ android.useAndroidX=true
                 """  sourceSets {
     commonMain.dependencies {
       implementation(libs.compose.ui.tooling.preview)
+      implementation(libs.androidx.navigation3.ui)
       implementation(libs.composables.icons.lucide)
       implementation(libs.composables.uri.painter)
       implementation(libs.composables.ui)
@@ -1891,6 +1894,7 @@ android.useAndroidX=true
               } else {
                 """  sourceSets {
     commonMain.dependencies {
+      implementation(${conventions.navigation3UiDependency})
       implementation(${conventions.composablesIconsLucideDependency})
       implementation(${conventions.composablesUriPainterDependency})
       implementation(${conventions.composablesUiDependency})
@@ -2113,6 +2117,11 @@ internal fun inferProjectConventions(projectRoot: File, targets: Set<String>): P
           ?: findDependencyExpression(buildFiles, "libs.composables.uri.painter")
           ?: "libs.composables.uri.painter"
 
+  val navigation3UiDependency =
+      libraryAccessor("org.jetbrains.androidx.navigation3:navigation3-ui")
+          ?: findDependencyExpression(buildFiles, "libs.androidx.navigation3.ui")
+          ?: "libs.androidx.navigation3.ui"
+
   val activityComposeDependency =
       if (normalizedTargets.contains(ANDROID)) {
         libraryAccessor("androidx.activity:activity-compose")
@@ -2165,6 +2174,7 @@ internal fun inferProjectConventions(projectRoot: File, targets: Set<String>): P
       composablesUiDependency = composablesUiDependency,
       composablesIconsLucideDependency = composablesIconsLucideDependency,
       composablesUriPainterDependency = composablesUriPainterDependency,
+      navigation3UiDependency = navigation3UiDependency,
       androidxActivityComposeDependency = activityComposeDependency,
       androidCompileSdkExpression = androidCompileSdkExpression,
       androidMinSdkExpression = androidMinSdkExpression,
@@ -2366,6 +2376,9 @@ fun updateVersionCatalog(
   if (!hasVersionVariable(versionsSection, "iconsLucide")) {
     newVersions.add("iconsLucide = \"1.0.0\"")
   }
+  if (!hasVersionVariable(versionsSection, "navigation3")) {
+    newVersions.add("navigation3 = \"1.1.1\"")
+  }
 
   // Add Android versions if android target is selected
   if (targets.contains("android")) {
@@ -2407,6 +2420,10 @@ fun updateVersionCatalog(
   if (!hasLibraryVariable(librariesSection, "compose-ui-tooling-preview")) {
     newLibraries.add(
         "compose-ui-tooling-preview = { group = \"org.jetbrains.compose.ui\", name = \"ui-tooling-preview\", version.ref = \"compose\" }")
+  }
+  if (!hasLibraryVariable(librariesSection, "androidx-navigation3-ui")) {
+    newLibraries.add(
+        "androidx-navigation3-ui = { module = \"org.jetbrains.androidx.navigation3:navigation3-ui\", version.ref = \"navigation3\" }")
   }
   if (targets.contains("android") &&
       !hasLibraryVariable(librariesSection, "androidx-activity-compose")) {
