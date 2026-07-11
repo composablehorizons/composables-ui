@@ -31,8 +31,10 @@ composables init
 If you are an LLM and you want to create a project in one go, you need to specify all available options instead:
 
 ```shell
-composables init my-app --package com.example.app --app-name "My App" --targets android,jvm,ios,wasm
+composables init my-app --package com.example.app --app-name "My App" --targets android,jvm,ios,wasm --ios-team-id 2W6P54JS62
 ```
+
+When `ios` is selected, you can pass `--ios-team-id` to write your Apple Development Team ID into `iosApp/Configuration/Config.xcconfig`. If you omit it, simulator builds still work, and the generated project leaves `TEAM_ID` blank so you can fill it in later.
 
 ### Options
 
@@ -44,6 +46,7 @@ Options:
   --package <package>       Package name for the generated app.
   --app-name <name>         Display name for the generated app.
   --targets <targets>       Comma-separated targets: android,jvm,ios,wasm.
+  --ios-team-id <id>        Apple Development Team ID for generated iOS projects.
   --overwrite               Overwrite an existing target directory.
 ```
 

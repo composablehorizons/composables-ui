@@ -217,6 +217,27 @@ class CliTest {
   }
 
   @Test
+  fun `cloneGradleProject writes iOS team id to generated config`() {
+    withTempDir { targetDir ->
+      cloneGradleProject(
+          targetDir = targetDir.absolutePath,
+          dirName = "newApp",
+          packageName = "com.composables.demo",
+          moduleName = "shared",
+          appName = "The App",
+          targets = setOf(IOS),
+          iosTeamId = "2W6P54JS62",
+      )
+
+      val projectDir = File(targetDir, "newApp")
+      val configContent = File(projectDir, "iosApp/Configuration/Config.xcconfig").readText()
+
+      assertThat(configContent).contains("TEAM_ID=2W6P54JS62")
+      assertThat(configContent).contains("PRODUCT_BUNDLE_IDENTIFIER=com.composables.demo$(TEAM_ID)")
+    }
+  }
+
+  @Test
   fun `parseTargets normalizes and de-duplicates targets`() {
     val targets = parseTargets("JVM, android, jvm, ios")
 

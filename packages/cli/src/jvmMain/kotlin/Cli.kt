@@ -317,6 +317,11 @@ class Init : CliktCommand("init") {
   private val appName by option("--app-name", help = "The display name for the generated app")
   private val targetsInput by
       option("--targets", help = "Comma-separated targets: android,jvm,ios,wasm")
+  private val iosTeamId by
+      option(
+          "--ios-team-id",
+          help = "Apple Development Team ID for generated iOS projects",
+      )
   private val overwrite by
       option("--overwrite", help = "Overwrite an existing target directory").flag(default = false)
 
@@ -326,6 +331,7 @@ class Init : CliktCommand("init") {
             packageName != null ||
             appName != null ||
             targetsInput != null ||
+            iosTeamId != null ||
             overwrite
     val workingDir = System.getProperty("user.dir")
 
@@ -333,6 +339,7 @@ class Init : CliktCommand("init") {
     val resolvedPackageName: String
     val resolvedAppName: String
     val targets: Set<String>
+    val resolvedIosTeamId: String
 
     if (!anyExplicitInput) {
       try {
@@ -340,6 +347,7 @@ class Init : CliktCommand("init") {
         resolvedPackageName = readNamespace()
         resolvedAppName = readAppName()
         targets = readTargets()
+        resolvedIosTeamId = if (targets.contains(IOS)) readIosTeamId() else ""
       } catch (error: RuntimeException) {
         if (error::class.simpleName == "ReadAfterEOFException" ||
             error.message?.contains("EOF has already been reached") == true) {
@@ -378,7 +386,11 @@ class Init : CliktCommand("init") {
             parseTargets(targetsInput!!)
           } catch (error: IllegalArgumentException) {
             throw UsageError(error.message ?: "Invalid targets")
-          }
+      }
+      resolvedIosTeamId = iosTeamId?.trim().orEmpty()
+      if (iosTeamId != null && !targets.contains(IOS)) {
+        throw UsageError("--ios-team-id requires the ios target.")
+      }
       target =
           resolveTargetDirectory(
               workingDir = workingDir,
@@ -397,6 +409,7 @@ class Init : CliktCommand("init") {
         appName = resolvedAppName,
         targets = targets,
         moduleName = SHARED_MODULE,
+        iosTeamId = resolvedIosTeamId,
     )
   }
 }
@@ -1407,6 +1420,11 @@ internal fun readTargets(): Set<String> {
   }
 }
 
+internal fun readIosTeamId(): String {
+  print("Apple Development Team ID (optional, needed to run on a physical iPhone): ")
+  return readln().trim()
+}
+
 internal fun isValidAppName(appName: String): Boolean {
   if (appName.isEmpty()) return false
   return appName.any { char -> char.isLetterOrDigit() }
@@ -1534,6 +1552,7 @@ fun cloneGradleProjectAndPrint(
     appName: String,
     targets: Set<String>,
     moduleName: String,
+    iosTeamId: String = "",
 ) {
   cloneGradleProjectAt(
       target = target,
@@ -1541,6 +1560,7 @@ fun cloneGradleProjectAndPrint(
       appName = appName,
       targets = targets,
       moduleName = moduleName,
+      iosTeamId = iosTeamId,
   )
   // Log project configuration summary
   infoln { "" }
@@ -1558,6 +1578,11 @@ fun cloneGradleProjectAndPrint(
   val startCommand = buildProjectStartCommand(targets = targets, gradleCommand = gradleScript)
   infoln { "\t$startCommand" }
   infoln { "" }
+  if (targets.contains(IOS) && iosTeamId.isBlank()) {
+    warnln {
+      "Warning: iOS Team ID was not set. Simulator builds will work, but running on a physical iPhone may require setting TEAM_ID in iosApp/Configuration/Config.xcconfig."
+    }
+  }
   debugln { "Happy coding!" }
 }
 
@@ -1568,6 +1593,7 @@ fun cloneGradleProject(
     appName: String,
     targets: Set<String>,
     moduleName: String,
+    iosTeamId: String = "",
 ) {
   val normalizedTargets = normalizeTargets(targets)
   val target = File(targetDir).resolve(dirName)
@@ -1577,6 +1603,7 @@ fun cloneGradleProject(
       appName = appName,
       targets = normalizedTargets,
       moduleName = moduleName,
+      iosTeamId = iosTeamId,
   )
 }
 
@@ -1586,6 +1613,7 @@ internal fun cloneGradleProjectAt(
     appName: String,
     targets: Set<String>,
     moduleName: String,
+    iosTeamId: String = "",
 ) {
   val normalizedTargets = normalizeTargets(targets)
   fun copyResource(resourcePath: String, targetFile: File) {
@@ -1720,6 +1748,7 @@ internal fun cloneGradleProjectAt(
                 appName = appName,
                 targets = normalizedTargets,
                 projectName = target.name,
+                iosTeamId = iosTeamId,
             )
         if (content != updatedContent) {
           file.writeText(updatedContent)
@@ -1748,6 +1777,7 @@ private fun renderProjectTemplate(
     targets: Set<String>,
     projectName: String = "",
     conventions: ProjectConventions? = null,
+    iosTeamId: String = "",
 ): String {
   val normalizedTargets = normalizeTargets(targets)
   val sharedModuleNamespace = toNamespaceSegment(moduleName)
@@ -1865,6 +1895,7 @@ android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.
               if (normalizedTargets.contains(JVM)) """include(":$DESKTOP_APP_MODULE")""" else "",
           "{{web_include}}" to
               if (normalizedTargets.contains(WASM)) """include(":$WEB_APP_MODULE")""" else "",
+          "{{ios_team_id}}" to iosTeamId,
           "{{android_properties}}" to
               if (normalizedTargets.contains(ANDROID)) {
                 """#Android

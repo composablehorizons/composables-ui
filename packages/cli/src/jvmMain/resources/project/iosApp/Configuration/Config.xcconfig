@@ -1,4 +1,4 @@
-TEAM_ID=
+TEAM_ID={{ios_team_id}}
 
 PRODUCT_NAME={{app_name}}
 PRODUCT_BUNDLE_IDENTIFIER={{namespace}}$(TEAM_ID)
