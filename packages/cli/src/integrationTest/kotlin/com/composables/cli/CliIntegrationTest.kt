@@ -179,6 +179,115 @@ class CliIntegrationTest {
   }
 
   @Test
+  fun `cli init writes iOS team id when provided`() {
+    val rootDir = createTempRoot("composables-cli-init-ios-team")
+    try {
+      val projectDir = File(rootDir, "sample-app")
+      val launcher = installedLauncher()
+
+      val createResult =
+          runProcess(
+              command =
+                  listOf(
+                      launcher.absolutePath,
+                      "init",
+                      projectDir.absolutePath,
+                      "--package",
+                      "com.example.sampleapp",
+                      "--app-name",
+                      "Sample App",
+                      "--targets",
+                      "ios",
+                      "--ios-team-id",
+                      "2W6P54JS62",
+                  ),
+              workingDir = rootDir,
+              timeoutSeconds = 60,
+          )
+
+      assertThat(createResult.finished).isTrue()
+      assertThat(createResult.exitCode).isEqualTo(0)
+      assertThat(createResult.output).contains("Success! Your new Compose app is ready")
+      val configContent = File(projectDir, "iosApp/Configuration/Config.xcconfig").readText()
+      assertThat(configContent).contains("TEAM_ID=2W6P54JS62")
+      assertThat(createResult.output).doesNotContain("Warning: iOS Team ID was not set")
+    } finally {
+      rootDir.deleteRecursively()
+    }
+  }
+
+  @Test
+  fun `cli init warns when iOS team id is blank`() {
+    val rootDir = createTempRoot("composables-cli-init-ios-team-warning")
+    try {
+      val projectDir = File(rootDir, "sample-app")
+      val launcher = installedLauncher()
+
+      val createResult =
+          runProcess(
+              command =
+                  listOf(
+                      launcher.absolutePath,
+                      "init",
+                      projectDir.absolutePath,
+                      "--package",
+                      "com.example.sampleapp",
+                      "--app-name",
+                      "Sample App",
+                      "--targets",
+                      "ios",
+                  ),
+              workingDir = rootDir,
+              timeoutSeconds = 60,
+          )
+
+      assertThat(createResult.finished).isTrue()
+      assertThat(createResult.exitCode).isEqualTo(0)
+      assertThat(createResult.output)
+          .contains(
+              "Warning: iOS Team ID was not set. Simulator builds will work, but running on a physical iPhone may require setting TEAM_ID in iosApp/Configuration/Config.xcconfig.")
+      val configContent = File(projectDir, "iosApp/Configuration/Config.xcconfig").readText()
+      assertThat(configContent).contains("TEAM_ID=")
+    } finally {
+      rootDir.deleteRecursively()
+    }
+  }
+
+  @Test
+  fun `cli init rejects iOS team id without iOS target`() {
+    val rootDir = createTempRoot("composables-cli-init-ios-team-without-ios")
+    try {
+      val launcher = installedLauncher()
+
+      val createResult =
+          runProcess(
+              command =
+                  listOf(
+                      launcher.absolutePath,
+                      "init",
+                      "sample-app",
+                      "--package",
+                      "com.example.sampleapp",
+                      "--app-name",
+                      "Sample App",
+                      "--targets",
+                      "jvm",
+                      "--ios-team-id",
+                      "2W6P54JS62",
+                  ),
+              workingDir = rootDir,
+              timeoutSeconds = 60,
+          )
+
+      assertThat(createResult.finished).isTrue()
+      assertThat(createResult.exitCode).isEqualTo(1)
+      assertThat(createResult.output).contains("--ios-team-id requires the ios target.")
+    } finally {
+      rootDir.deleteRecursively()
+    }
+  }
+
+  @Test
   fun `cli init with no args runs interactively and creates a jvm project that compiles`() {
     val rootDir = createTempRoot("composables-cli-init-interactive")
     try {
@@ -198,6 +307,7 @@ class CliIntegrationTest {
       assertThat(createResult.output).contains("Success! Your new Compose app is ready")
       assertThat(createResult.output)
           .contains("${projectGradleScript()} :desktopApp:hotRunJvm --auto")
+      assertThat(createResult.output).doesNotContain("Apple Development Team ID")
       assertJvmReadme(projectDir)
 
       val compileResult =
@@ -210,6 +320,33 @@ class CliIntegrationTest {
       assertThat(compileResult.finished).isTrue()
       assertThat(compileResult.exitCode).isEqualTo(0)
       assertThat(compileResult.output).contains("BUILD SUCCESSFUL")
+    } finally {
+      rootDir.deleteRecursively()
+    }
+  }
+
+  @Test
+  fun `cli init prompts for iOS team id interactively when iOS is selected`() {
+    val rootDir = createTempRoot("composables-cli-init-interactive-ios-team")
+    try {
+      val projectDir = File(rootDir, "sample-app")
+      val launcher = installedLauncher()
+
+      val createResult =
+          runProcess(
+              command = listOf(launcher.absolutePath, "init"),
+              workingDir = rootDir,
+              stdin = "sample-app\ncom.example.sampleapp\nSample App\nn\nn\ny\nn\n2W6P54JS62\n",
+              timeoutSeconds = 60,
+          )
+
+      assertThat(createResult.finished).isTrue()
+      assertThat(createResult.exitCode).isEqualTo(0)
+      assertThat(createResult.output)
+          .contains("Apple Development Team ID (optional, needed to run on a physical iPhone):")
+      assertThat(createResult.output).doesNotContain("Warning: iOS Team ID was not set")
+      val configContent = File(projectDir, "iosApp/Configuration/Config.xcconfig").readText()
+      assertThat(configContent).contains("TEAM_ID=2W6P54JS62")
     } finally {
       rootDir.deleteRecursively()
     }
