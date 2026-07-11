@@ -1,48 +1,48 @@
 package {{namespace}}
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.composables.ui.components.Text
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.ui.NavDisplay
 import com.composables.ui.theme.ComposablesTheme
 
 @Composable
 fun App() {
-  ComposablesTheme {
-    Box(
-      modifier = Modifier.safeDrawingPadding().fillMaxSize().padding(16.dp),
-      contentAlignment = Alignment.Center,
-    ) {
-      Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
-      ) {
-        Text(
-          text = "Hello Beautiful World!",
-          textAlign = TextAlign.Center,
-        )
-        Text(
-          text = "Go to App.kt to edit your app",
-          textAlign = TextAlign.Center,
-        )
-        Text(
-          text =
-            "Pro tip: Use the `dev` configuration in your IDE to auto-reload your app when you edit your code",
-          textAlign = TextAlign.Center,
-        )
-      }
+  val backStack = remember { NavBackStack<NavKey>(HomeRoute) }
+
+  fun navigate(route: NavKey) {
+    if (backStack.lastOrNull() != route) {
+      backStack.add(route)
     }
   }
+
+  fun popBackStack() {
+    if (backStack.size > 1) {
+      backStack.removeLastOrNull()
+    }
+  }
+
+  ComposablesTheme {
+    NavDisplay(
+        backStack = backStack,
+        modifier = Modifier.fillMaxSize(),
+        entryProvider =
+            entryProvider {
+              entry<HomeRoute> { HomeScreen(onDetailsClick = { navigate(DetailsRoute) }) }
+              entry<DetailsRoute> { DetailsScreen(onBackClick = { popBackStack() }) }
+            },
+    )
+  }
 }
+
+data object HomeRoute : NavKey
+
+data object DetailsRoute : NavKey
 
 @Preview
 @Composable

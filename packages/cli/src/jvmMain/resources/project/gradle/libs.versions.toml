@@ -3,6 +3,7 @@
 compose = "1.11.1"
 composablesUi = "0.1.0"
 iconsLucide = "1.0.0"
+navigation3 = "1.1.1"
 uriPainter = "1.0.4"
 
 # Kotlin

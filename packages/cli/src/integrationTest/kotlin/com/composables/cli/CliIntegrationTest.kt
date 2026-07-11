@@ -1057,12 +1057,30 @@ class CliIntegrationTest {
         File(projectDir, "shared/src/commonMain/kotlin/com/example/sampleapp/App.kt")
             .readText()
             .replace("\r\n", "\n")
-    assertThat(sharedApp)
-        .contains("modifier = Modifier.safeDrawingPadding().fillMaxSize().padding(16.dp),")
-    assertThat(sharedApp)
-        .contains(
-            "text =\n            \"Pro tip: Use the `dev` configuration in your IDE to auto-reload your app when you edit your code\",",
-        )
+    assertThat(sharedApp).contains("val backStack = remember { NavBackStack<NavKey>(HomeRoute) }")
+    assertThat(sharedApp).contains("entry<HomeRoute> { HomeScreen")
+    assertThat(sharedApp).contains("entry<DetailsRoute> { DetailsScreen")
+    assertThat(sharedApp).contains("modifier = Modifier.fillMaxSize(),")
+    assertThat(sharedApp).contains("data object HomeRoute : NavKey")
+    assertThat(sharedApp).contains("data object DetailsRoute : NavKey")
+    assertThat(sharedApp).doesNotContain("safeDrawingPadding")
+    assertThat(sharedApp).doesNotContain("fun HomeScreen")
+    assertThat(sharedApp).doesNotContain("fun DetailsScreen")
+
+    val homeScreen =
+        File(projectDir, "shared/src/commonMain/kotlin/com/example/sampleapp/HomeScreen.kt")
+            .readText()
+    assertThat(homeScreen).contains("fun HomeScreen(onDetailsClick: () -> Unit)")
+    assertThat(homeScreen).doesNotContain("private fun HomeScreen")
+
+    val detailsScreen =
+        File(projectDir, "shared/src/commonMain/kotlin/com/example/sampleapp/DetailsScreen.kt")
+            .readText()
+    assertThat(detailsScreen).contains("fun DetailsScreen(onBackClick: () -> Unit)")
+    assertThat(detailsScreen).doesNotContain("private fun DetailsScreen")
+
+    val sharedBuild = File(projectDir, "shared/build.gradle.kts").readText()
+    assertThat(sharedBuild).contains("implementation(libs.androidx.navigation3.ui)")
 
     val desktopMain =
         File(projectDir, "desktopApp/src/jvmMain/kotlin/com/example/sampleapp/main.kt").readText()
