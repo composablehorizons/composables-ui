@@ -23,6 +23,23 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
+val demoVersionName = libs.versions.ui.get()
+
+fun androidVersionCodeFrom(versionName: String): Int {
+  val parts = versionName.substringBefore("-").removePrefix("v").split(".").map { it.toInt() }
+
+  check(parts.size == 3) {
+    "Expected a semantic version with major, minor, and patch parts, got '$versionName'."
+  }
+
+  val (major, minor, patch) = parts
+  check(minor in 0..99 && patch in 0..99) {
+    "Android versionCode only supports minor and patch values from 0 to 99, got '$versionName'."
+  }
+
+  return major * 10_000 + minor * 100 + patch
+}
+
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
   alias(libs.plugins.compose)
@@ -85,12 +102,21 @@ android {
   namespace = "com.composables.ui.demo"
   compileSdk = libs.versions.android.compile.sdk.get().toInt()
 
+  signingConfigs {
+    getByName("debug") {
+      storeFile = layout.projectDirectory.file("demo-debug.keystore").asFile
+      storePassword = "android"
+      keyAlias = "demo-debug"
+      keyPassword = "android"
+    }
+  }
+
   defaultConfig {
     applicationId = "com.composables.ui.demo"
     minSdk = libs.versions.android.min.sdk.get().toInt()
     targetSdk = libs.versions.android.compile.sdk.get().toInt()
-    versionCode = 1
-    versionName = "1.0.0"
+    versionCode = androidVersionCodeFrom(demoVersionName)
+    versionName = demoVersionName
   }
 }
 
