@@ -35,9 +35,7 @@ import com.composeunstyled.TooltipHost
  * This applies theming and wires important stuff that are required by the rest of the components.
  */
 @Composable
-fun ComposablesApp(
-    content: @Composable () -> Unit,
-) {
+fun ComposablesApp(content: @Composable () -> Unit) {
   ComposablesTheme {
     ProvideWindowBreakpoints(width = WidthBreakpoints, height = HeightBreakpoints) {
       TooltipHost { FocusVisibilityProvider { content() } }

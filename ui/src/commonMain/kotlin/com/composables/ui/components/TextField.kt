@@ -29,6 +29,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
@@ -55,6 +57,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.isSpecified
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -254,6 +257,7 @@ private fun textFieldBorderColorFor(style: TextFieldStyle): Color {
 }
 
 private val TextFieldInputTextStyle = TextStyle()
+private val TextFieldDecorationPadding = 4.dp
 
 @Composable
 private fun textFieldMinHeight(): Dp {
@@ -272,10 +276,29 @@ private fun UnstyledTextFieldScope.TextFieldContent(
     trailing: (@Composable () -> Unit)?,
     onDecorationFocusChanged: (Boolean) -> Unit,
 ) {
+  val layoutDirection = LocalLayoutDirection.current
+  val resolvedContentPadding =
+      PaddingValues(
+          start =
+              if (leading != null) {
+                TextFieldDecorationPadding
+              } else {
+                contentPadding.calculateStartPadding(layoutDirection)
+              },
+          top = contentPadding.calculateTopPadding(),
+          end =
+              if (trailing != null) {
+                TextFieldDecorationPadding
+              } else {
+                contentPadding.calculateEndPadding(layoutDirection)
+              },
+          bottom = contentPadding.calculateBottomPadding(),
+      )
+
   ProvideContentColor(contentColor) {
     ProvideTextStyle(textStyle) {
       Row(
-          modifier = Modifier.heightIn(min = textFieldMinHeight()).padding(contentPadding),
+          modifier = Modifier.heightIn(min = textFieldMinHeight()).padding(resolvedContentPadding),
           horizontalArrangement = Arrangement.spacedBy(8.dp),
           verticalAlignment =
               if (lineLimits == TextFieldLineLimits.SingleLine) {

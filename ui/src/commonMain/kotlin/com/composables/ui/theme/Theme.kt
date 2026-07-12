@@ -25,17 +25,22 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Indication
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -154,6 +159,15 @@ val raisedShadow: ThemeToken<Shadow> = ThemeToken("raised_shadow")
 
 /** Shadow for overlay surfaces such as dialogs, sheets, and menus. */
 val overlayShadow: ThemeToken<Shadow> = ThemeToken("overlay_shadow")
+
+/** Theme property that contains text style tokens. */
+val typography: ThemeProperty<TextStyle> = ThemeProperty("typography")
+
+/** Display text style for prominent page or screen titles. */
+val displayStyle: ThemeToken<TextStyle> = ThemeToken("display")
+
+/** Body text style used as the default text style everywhere. */
+val bodyStyle: ThemeToken<TextStyle> = ThemeToken("body")
 
 val indications: ThemeProperty<Indication> = ThemeProperty("indications")
 
@@ -296,13 +310,22 @@ val ComposablesTheme: ThemeComposable = buildTheme {
           disabledAlpha to 0.33f,
       )
 
-  val bodyStyle =
+  val defaultBodyStyle =
       TextStyle(
           fontSize = if (useTouchSizes) 17.sp else 15.sp,
           lineHeight = if (useTouchSizes) 24.sp else 20.sp,
           fontWeight = FontWeight.Normal,
       )
-  defaultTextStyle = bodyStyle
+  properties[typography] =
+      mapOf(
+          bodyStyle to defaultBodyStyle,
+          displayStyle to
+              TextStyle(
+                  fontSize = 44.sp,
+                  fontWeight = FontWeight.Bold,
+              ),
+      )
+  defaultTextStyle = defaultBodyStyle
 
   val defaultIndicationValue =
       rememberRippleIndication(
@@ -328,7 +351,10 @@ val ComposablesTheme: ThemeComposable = buildTheme {
       )
 
   extend { content ->
-    CompositionLocalProvider(LocalInteractionMode provides interactionMode) { content() }
+    CompositionLocalProvider(
+        LocalInteractionMode provides interactionMode, LocalSpacingUnit provides 4.dp) {
+          content()
+        }
   }
 }
 
@@ -384,4 +410,19 @@ value class InteractionMode internal constructor(@Suppress("unused") private val
  */
 val LocalInteractionMode: ProvidableCompositionLocal<InteractionMode?> = staticCompositionLocalOf {
   null
+}
+
+private val LocalSpacingUnit = staticCompositionLocalOf { 0.dp }
+
+val Spacing: Dp
+  @Composable get() = LocalSpacingUnit.current
+
+@Composable
+fun VerticalSpacing(times: Int = 1) {
+  Spacer(Modifier.height(Spacing * times))
+}
+
+@Composable
+fun HorizontalSpacing(times: Int = 1) {
+  Spacer(Modifier.width(Spacing * times))
 }
