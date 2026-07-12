@@ -15,7 +15,7 @@ sections:
         slug: mcp
   - title: Components
     pages:
-      - title: Buttons
+      - title: Button
         slug: buttons
       - title: Alert Dialog
         slug: alert-dialog
