@@ -1,5 +1,5 @@
 ---
-title: Buttons
+title: Button
 description: Button components for primary actions, secondary actions, outlines, destructive actions, and icon-only controls.
 ---
 

@@ -9,7 +9,7 @@ Can't find what you are looking for? [Open a feature request](https://github.com
 
 ### All Components in Composables UI
 
-- [Buttons](buttons.md)
+- [Button](buttons.md)
 - [Alert Dialog](alert-dialog.md)
 - [Bottom Sheet](bottom-sheet.md)
 - [Checkbox](checkbox.md)
