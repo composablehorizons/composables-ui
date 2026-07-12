@@ -1,5 +1,13 @@
 # composables-cli
 
+## 0.11.0
+
+### Minor Changes
+
+- [#26](https://github.com/composablehorizons/composables-ui/pull/26) [`77dab30`](https://github.com/composablehorizons/composables-ui/commit/77dab30ff3fb5601b1bcb18ffcecc89e7c1d1c3a) Thanks [@alexstyl](https://github.com/alexstyl)! - Add a new --ios-team-id param to init for ios, so that you can provide the TEAM_ID when creating a new ios app. This is required when running on a physical device.
+
+- [#25](https://github.com/composablehorizons/composables-ui/pull/25) [`ef8db40`](https://github.com/composablehorizons/composables-ui/commit/ef8db40d09cb980acf15075151b4b5797cbf62a1) Thanks [@alexstyl](https://github.com/alexstyl)! - Add Navigation 3 as the navigation library of generated apps.
+
 ## 0.10.1
 
 ### Patch Changes
