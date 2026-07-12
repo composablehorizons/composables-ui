@@ -3,6 +3,10 @@
   "version": "0.10.1",
   "description": "Composables CLI",
   "license": "MIT",
+  "funding": {
+    "type": "organization",
+    "url": "https://composables.com/sponsor"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/composablehorizons/composables-ui.git"
