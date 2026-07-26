@@ -7,8 +7,10 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.named
@@ -21,8 +23,10 @@ import javax.inject.Inject
 
 abstract class ComposablesDevToolsExtension @Inject constructor(objects: ObjectFactory) {
   val appComposable: Property<String> = objects.property(String::class.java)
+  val runtimeDependencyPath: Property<String> = objects.property(String::class.java).convention(DEV_TOOLS_RUNTIME_PATH)
 }
 
+@DisableCachingByDefault(because = "The task writes a generated source file from a small extension value.")
 abstract class GenerateComposablesDevToolsMainTask : DefaultTask() {
   @get:Input
   abstract val appComposable: Property<String>
@@ -76,70 +80,74 @@ abstract class GenerateComposablesDevToolsMainTask : DefaultTask() {
       import com.composables.devtools.oppositeDevToolsLayoutDirection
       import com.composables.devtools.requestDevToolsHotReload
       import com.composables.devtools.rotated
+      import com.composables.devtools.startDevToolsAutomationServer
 
-      fun main() = application {
-        val windowState = rememberWindowState(width = 960.dp, height = 860.dp)
-        var selectedDevice by remember { mutableStateOf(DevToolsDevices.Desktop) }
-        var selectedOrientation by remember { mutableStateOf(DevToolsOrientation.Portrait) }
-        var selectedLayoutDirection by remember { mutableStateOf(LayoutDirection.Ltr) }
-        var selectedZoom by remember { mutableStateOf(DevToolsZoom.Default) }
-        var toolbarVisible by remember { mutableStateOf(true) }
-        var saveScreenshotRequest by remember { mutableStateOf(0) }
-        var copyScreenshotRequest by remember { mutableStateOf(0) }
+      fun main() {
+        startDevToolsAutomationServer()
+        application {
+          val windowState = rememberWindowState(width = 960.dp, height = 860.dp)
+          var selectedDevice by remember { mutableStateOf(DevToolsDevices.Desktop) }
+          var selectedOrientation by remember { mutableStateOf(DevToolsOrientation.Portrait) }
+          var selectedLayoutDirection by remember { mutableStateOf(LayoutDirection.Ltr) }
+          var selectedZoom by remember { mutableStateOf(DevToolsZoom.Default) }
+          var toolbarVisible by remember { mutableStateOf(true) }
+          var saveScreenshotRequest by remember { mutableStateOf(0) }
+          var copyScreenshotRequest by remember { mutableStateOf(0) }
 
-        Window(
-          onCloseRequest = ::exitApplication,
-          state = windowState,
-          title = "Composables Dev Tools",
-          onKeyEvent = { event ->
-            val shortcutDevice = deviceForDevToolsShortcut(event)
-            if (shortcutDevice != null) {
-              selectedDevice = shortcutDevice
-              true
-            } else if (isDevToolsHotReloadShortcut(event) && isDevToolsHotReloadAvailable()) {
-              runCatching { requestDevToolsHotReload() }
-              true
-            } else if (isDevToolsScreenshotSaveShortcut(event)) {
-              saveScreenshotRequest++
-              true
-            } else if (isDevToolsScreenshotCopyShortcut(event)) {
-              copyScreenshotRequest++
-              true
-            } else if (isDevToolsRotationShortcut(event) && selectedDevice.canRotate) {
-              selectedOrientation = selectedOrientation.rotated()
-              true
-            } else if (isDevToolsLayoutDirectionShortcut(event)) {
-              selectedLayoutDirection = selectedLayoutDirection.oppositeDevToolsLayoutDirection()
-              true
-            } else if (isDevToolsToolbarShortcut(event)) {
-              toolbarVisible = !toolbarVisible
-              true
-            } else {
-              val shortcutZoom = devToolsZoomForShortcut(event, selectedZoom)
-              if (shortcutZoom != null) {
-                selectedZoom = shortcutZoom
+          Window(
+            onCloseRequest = ::exitApplication,
+            state = windowState,
+            title = "Composables Dev Tools",
+            onKeyEvent = { event ->
+              val shortcutDevice = deviceForDevToolsShortcut(event)
+              if (shortcutDevice != null) {
+                selectedDevice = shortcutDevice
+                true
+              } else if (isDevToolsHotReloadShortcut(event) && isDevToolsHotReloadAvailable()) {
+                runCatching { requestDevToolsHotReload() }
+                true
+              } else if (isDevToolsScreenshotSaveShortcut(event)) {
+                saveScreenshotRequest++
+                true
+              } else if (isDevToolsScreenshotCopyShortcut(event)) {
+                copyScreenshotRequest++
+                true
+              } else if (isDevToolsRotationShortcut(event) && selectedDevice.canRotate) {
+                selectedOrientation = selectedOrientation.rotated()
+                true
+              } else if (isDevToolsLayoutDirectionShortcut(event)) {
+                selectedLayoutDirection = selectedLayoutDirection.oppositeDevToolsLayoutDirection()
+                true
+              } else if (isDevToolsToolbarShortcut(event)) {
+                toolbarVisible = !toolbarVisible
                 true
               } else {
-                false
+                val shortcutZoom = devToolsZoomForShortcut(event, selectedZoom)
+                if (shortcutZoom != null) {
+                  selectedZoom = shortcutZoom
+                  true
+                } else {
+                  false
+                }
               }
-            }
-          },
-        ) {
-          DevTools(
-            initialDevice = DevToolsDevices.Desktop,
-            selectedDevice = selectedDevice,
-            onDeviceSelected = { selectedDevice = it },
-            selectedOrientation = selectedOrientation,
-            onOrientationSelected = { selectedOrientation = it },
-            selectedLayoutDirection = selectedLayoutDirection,
-            onLayoutDirectionSelected = { selectedLayoutDirection = it },
-            selectedZoom = selectedZoom,
-            onZoomSelected = { selectedZoom = it },
-            showControls = toolbarVisible,
-            saveScreenshotRequest = saveScreenshotRequest,
-            copyScreenshotRequest = copyScreenshotRequest,
+            },
           ) {
-            $appComposableCall()
+            DevTools(
+              initialDevice = DevToolsDevices.Desktop,
+              selectedDevice = selectedDevice,
+              onDeviceSelected = { selectedDevice = it },
+              selectedOrientation = selectedOrientation,
+              onOrientationSelected = { selectedOrientation = it },
+              selectedLayoutDirection = selectedLayoutDirection,
+              onLayoutDirectionSelected = { selectedLayoutDirection = it },
+              selectedZoom = selectedZoom,
+              onZoomSelected = { selectedZoom = it },
+              showControls = toolbarVisible,
+              saveScreenshotRequest = saveScreenshotRequest,
+              copyScreenshotRequest = copyScreenshotRequest,
+            ) {
+              $appComposableCall()
+            }
           }
         }
       }
@@ -152,8 +160,10 @@ class ComposablesDevToolsPlugin : Plugin<Project> {
   override fun apply(project: Project) {
     val extension = project.extensions.create<ComposablesDevToolsExtension>("composablesDevTools")
     val generatedSourceDirectory = project.layout.buildDirectory.dir("generated/composablesDevTools/kotlin")
+    val mcpRuntimeConfiguration = project.configurations.create("devToolsMcpRuntime")
 
     project.pluginManager.apply("org.jetbrains.compose.hot-reload")
+    project.dependencies.add(mcpRuntimeConfiguration.name, DEV_TOOLS_MCP_RUNTIME_COORDINATES)
 
     val generateMain = project.tasks.register<GenerateComposablesDevToolsMainTask>("generateDevToolsMain") {
       appComposable.set(extension.appComposable)
@@ -175,18 +185,43 @@ class ComposablesDevToolsPlugin : Plugin<Project> {
           devCompilation.defaultSourceSet.apply {
             kotlin.srcDir(generateMain.map { it.outputDirectory })
             dependencies {
-              implementation(project.dependencies.project(mapOf("path" to DEV_TOOLS_RUNTIME_PATH)))
+              val runtimeDependencyPath = extension.runtimeDependencyPath.get()
+              val runtimeDependency = if (project.rootProject.findProject(runtimeDependencyPath) == null) {
+                DEV_TOOLS_RUNTIME_COORDINATES
+              } else {
+                project.dependencies.project(mapOf("path" to runtimeDependencyPath))
+              }
+              implementation(runtimeDependency)
               implementation(ComposePlugin.Dependencies(project).desktop.currentOs)
             }
           }
 
-          project.tasks.register<ComposeHotRun>("runDevTools") {
+          val runDevTools = project.tasks.register<ComposeHotRun>("runDevTools") {
             group = "compose dev tools"
             description = "Runs the configured Compose app composable inside the dev tools host with automatic hot reload."
             dependsOn(generateMain)
             compilation.set(devCompilation)
             mainClass.set(DEV_TOOLS_MAIN_CLASS)
             isAutoReloadEnabled.set(true)
+            systemProperty(DEV_TOOLS_PORT_FILE_PROPERTY, DEV_TOOLS_PORT_FILE_PATH)
+            runHotReloadDevToolsHeadless(project)
+          }
+
+          project.gradle.projectsEvaluated {
+            runDevTools.configure {
+              runHotReloadDevToolsHeadless(project)
+            }
+          }
+
+          project.tasks.register<JavaExec>("runDevToolsMcpServer") {
+            group = "compose dev tools"
+            description = "Runs an MCP server for controlling the running Compose dev tools host."
+            classpath = mcpRuntimeConfiguration
+            mainClass.set("com.composables.devtools.DevToolsMcpServer_jvmKt")
+            systemProperty(DEV_TOOLS_PORT_FILE_PROPERTY, DEV_TOOLS_PORT_FILE_PATH)
+            standardInput = System.`in`
+            standardOutput = System.out
+            errorOutput = System.err
           }
 
           project.tasks.register("checkDevToolsCompatibility") {
@@ -200,5 +235,29 @@ class ComposablesDevToolsPlugin : Plugin<Project> {
   }
 }
 
+private fun ComposeHotRun.runHotReloadDevToolsHeadless(project: Project) {
+  val enabled = project.providers.provider { true }
+  jvmArgumentProviders
+      .filter { arguments -> arguments.javaClass.name == HOT_RELOAD_ARGUMENTS_CLASS_NAME }
+      .forEach { arguments ->
+        arguments.invokeHotReloadArgumentSetter("setDevToolsEnabled", enabled)
+        arguments.invokeHotReloadArgumentSetter("setDevToolsHeadless", enabled)
+      }
+}
+
+private fun Any.invokeHotReloadArgumentSetter(name: String, value: Any) {
+  val setter =
+      javaClass.methods.firstOrNull { method ->
+        method.name == name && method.parameterTypes.size == 1
+      } ?: error("Compose Hot Reload no longer exposes $name on ${javaClass.name}.")
+
+  setter.invoke(this, value)
+}
+
 private const val DEV_TOOLS_RUNTIME_PATH = ":devtools:runtime"
+private const val DEV_TOOLS_RUNTIME_COORDINATES = "com.composables:runtime:0.1.0"
+private const val DEV_TOOLS_MCP_RUNTIME_COORDINATES = "com.composables:runtime-jvm:0.1.0"
 private const val DEV_TOOLS_MAIN_CLASS = "com.composables.devtools.generated.DevToolsMainKt"
+private const val DEV_TOOLS_PORT_FILE_PROPERTY = "composables.devtools.portFile"
+private const val DEV_TOOLS_PORT_FILE_PATH = "/tmp/composables-devtools.port"
+private const val HOT_RELOAD_ARGUMENTS_CLASS_NAME = "org.jetbrains.compose.reload.gradle.ComposeHotReloadArguments"

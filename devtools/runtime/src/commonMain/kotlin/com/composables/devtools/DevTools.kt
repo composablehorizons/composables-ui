@@ -150,6 +150,7 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 data class DevToolsDevice(
@@ -893,6 +894,12 @@ private fun DevToolsStage(
 
   RunOnRequestChange(saveScreenshotRequest) { saveCurrentDevToolsScreenshot(screenshotLayer) }
   RunOnRequestChange(copyScreenshotRequest) { copyCurrentDevToolsScreenshot(screenshotLayer) }
+
+  LaunchedEffect(screenshotLayer) {
+    registerDevToolsScreenshotProvider {
+      coroutineScope.async { screenshotLayer.toImageBitmap() }.await()
+    }
+  }
 
   LaunchedEffect(device.id, device.canRotate, orientation) {
     suspend fun animateFrameRotationTo(

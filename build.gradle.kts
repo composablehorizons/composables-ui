@@ -12,6 +12,11 @@ plugins {
   alias(libs.plugins.spotless)
 }
 
+allprojects {
+  group = "com.composables"
+  version = "0.1.0"
+}
+
 configure<com.diffplug.gradle.spotless.SpotlessExtension> {
   kotlinGradle {
     target("*.gradle.kts")

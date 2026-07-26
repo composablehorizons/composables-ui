@@ -29,10 +29,14 @@ import java.awt.Image
 import java.awt.Toolkit
 import java.awt.datatransfer.DataFlavor
 import java.awt.datatransfer.Transferable
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import javax.imageio.ImageIO
+import kotlinx.coroutines.runBlocking
+
+@Volatile private var devToolsScreenshotProvider: (suspend () -> ImageBitmap)? = null
 
 actual fun saveDevToolsScreenshot(image: ImageBitmap) {
   val dialog =
@@ -51,6 +55,22 @@ actual fun copyDevToolsScreenshotToClipboard(image: ImageBitmap) {
   Toolkit.getDefaultToolkit()
       .systemClipboard
       .setContents(ImageTransferable(image.toAwtImage()), null)
+}
+
+actual fun registerDevToolsScreenshotProvider(provider: (suspend () -> ImageBitmap)?) {
+  devToolsScreenshotProvider = provider
+}
+
+fun captureDevToolsScreenshotPng(): ByteArray? {
+  val provider = devToolsScreenshotProvider ?: return null
+  val image = runBlocking { provider() }
+  return image.toPngBytes()
+}
+
+private fun ImageBitmap.toPngBytes(): ByteArray {
+  val output = ByteArrayOutputStream()
+  ImageIO.write(toAwtImage(), "png", output)
+  return output.toByteArray()
 }
 
 private fun File.withPngExtension(): File {

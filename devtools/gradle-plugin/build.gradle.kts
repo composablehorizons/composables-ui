@@ -22,7 +22,12 @@
 plugins {
   `kotlin-dsl`
   `java-gradle-plugin`
+  `maven-publish`
 }
+
+group = "com.composables"
+
+version = "0.1.0"
 
 java { toolchain { languageVersion = JavaLanguageVersion.of(17) } }
 

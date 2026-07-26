@@ -26,3 +26,5 @@ import androidx.compose.ui.graphics.ImageBitmap
 expect fun saveDevToolsScreenshot(image: ImageBitmap)
 
 expect fun copyDevToolsScreenshotToClipboard(image: ImageBitmap)
+
+expect fun registerDevToolsScreenshotProvider(provider: (suspend () -> ImageBitmap)?)
